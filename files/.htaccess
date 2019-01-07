@@ -1,0 +1,3 @@
+<IfModule php7_module>
+   php_flag engine off
+</IfModule>

@@ -1,0 +1,537 @@
+[
+    {
+        "ID": "1",
+        "EN": "Tables",
+        "TR": "Tablolar"
+    },
+    {
+        "ID": "2",
+        "EN": "Management",
+        "TR": "Y\u00f6netim"
+    },
+    {
+        "ID": "3",
+        "EN": "Manual",
+        "TR": "K\u0131lavuz"
+    },
+    {
+        "ID": "4",
+        "EN": "Logout",
+        "TR": "Oturumu Kapat"
+    },
+    {
+        "ID": "5",
+        "EN": "User Management",
+        "TR": "Kullan\u0131c\u0131 Y\u00f6netimi"
+    },
+    {
+        "ID": "6",
+        "EN": "Role Management",
+        "TR": "Rol Y\u00f6netimi"
+    },
+    {
+        "ID": "7",
+        "EN": "Sessions of User",
+        "TR": "Kullan\u0131c\u0131n\u0131n Oturumlar\u0131"
+    },
+    {
+        "ID": "8",
+        "EN": "Add User",
+        "TR": "Kullan\u0131c\u0131 Ekle"
+    },
+    {
+        "ID": "9",
+        "EN": "Edit User",
+        "TR": "Kullan\u0131c\u0131y\u0131 d\u00fczenle"
+    },
+    {
+        "ID": "10",
+        "EN": "Remove User",
+        "TR": "Kullan\u0131c\u0131y\u0131 Sil"
+    },
+    {
+        "ID": "11",
+        "EN": "Add Role",
+        "TR": "Rol Ekle"
+    },
+    {
+        "ID": "12",
+        "EN": "Remove Role",
+        "TR": "Rol\u00fc Sil"
+    },
+    {
+        "ID": "13",
+        "EN": "New Table",
+        "TR": "Yeni Tablo"
+    },
+    {
+        "ID": "14",
+        "EN": "Add",
+        "TR": "Ekle"
+    },
+    {
+        "ID": "15",
+        "EN": "New Column",
+        "TR": "Yeni Kolon"
+    },
+    {
+        "ID": "16",
+        "EN": "Remove Table",
+        "TR": "Tabloyu Kald\u0131r"
+    },
+    {
+        "ID": "17",
+        "EN": "Options",
+        "TR": "Se\u00e7enekler"
+    },
+    {
+        "ID": "18",
+        "EN": "Roles of %s",
+        "TR": "%s kullan\u0131c\u0131s\u0131n\u0131n rolleri"
+    },
+    {
+        "ID": "19",
+        "EN": "This user not exists.",
+        "TR": "Bu kullan\u0131c\u0131 mevcut de\u011fil."
+    },
+    {
+        "ID": "20",
+        "EN": "Username",
+        "TR": "Kullan\u0131c\u0131 ad\u0131"
+    },
+    {
+        "ID": "21",
+        "EN": "Login",
+        "TR": "Oturum a\u00e7"
+    },
+    {
+        "ID": "22",
+        "EN": "Password",
+        "TR": "\u015eifre"
+    },
+    {
+        "ID": "23",
+        "EN": "Forget Password",
+        "TR": "\u015eifremi Unuttum"
+    },
+    {
+        "ID": "24",
+        "EN": "Wrong username or password.",
+        "TR": "Kullan\u0131c\u0131 ad\u0131 ya da \u015fifre yanl\u0131\u015f."
+    },
+    {
+        "ID": "25",
+        "EN": "Too many login fails. Please try again 10 minutes later.",
+        "TR": "\u00c7ok fazla hatal\u0131 giri\u015f yapt\u0131n\u0131z. 10 dk sonra tekrar deneyiniz."
+    },
+    {
+        "ID": "26",
+        "EN": "Please be sure that you written %s correct.",
+        "TR": "%s alan\u0131n\u0131 do\u011fru yazd\u0131\u011f\u0131n\u0131zdan emin olun."
+    },
+    {
+        "ID": "27",
+        "EN": "Name",
+        "TR": "\u0130sim"
+    },
+    {
+        "ID": "28",
+        "EN": "surname",
+        "TR": "soyisim"
+    },
+    {
+        "ID": "29",
+        "EN": "phone",
+        "TR": "telefon numaras\u0131"
+    },
+    {
+        "ID": "30",
+        "EN": "Please enter a valid e-mail address.",
+        "TR": "Ge\u00e7erli bir e-posta adresi giriniz."
+    },
+    {
+        "ID": "31",
+        "EN": "Invalid role.",
+        "TR": "Ge\u00e7ersiz rol belirteci."
+    },
+    {
+        "ID": "32",
+        "EN": "Updated successfuly.",
+        "TR": "Ba\u015far\u0131yla g\u00fcncellendi."
+    },
+    {
+        "ID": "33",
+        "EN": "User Information",
+        "TR": "Kullan\u0131c\u0131 Bilgileri"
+    },
+    {
+        "ID": "34",
+        "EN": "Last access",
+        "TR": "Son eri\u015fim"
+    },
+    {
+        "ID": "35",
+        "EN": "E-mail",
+        "TR": "E-posta"
+    },
+    {
+        "ID": "36",
+        "EN": "Roles",
+        "TR": "Roller"
+    },
+    {
+        "ID": "37",
+        "EN": "Save",
+        "TR": "Kaydet"
+    },
+    {
+        "ID": "38",
+        "EN": "Update Password",
+        "TR": "\u015eifre G\u00fcncelle"
+    },
+    {
+        "ID": "39",
+        "EN": "Current Password",
+        "TR": "Ge\u00e7erli \u015eifre"
+    },
+    {
+        "ID": "40",
+        "EN": "Password (again)",
+        "TR": "\u015eifre (tekrar)"
+    },
+    {
+        "ID": "41",
+        "EN": "This email address is currently used.",
+        "TR": "Bu e-posta adresi kullan\u0131lmaktad\u0131r."
+    },
+    {
+        "ID": "42",
+        "EN": "This username is used. ",
+        "TR": "Bu kullan\u0131c\u0131 ad\u0131 kullan\u0131lmaktad\u0131r."
+    },
+    {
+        "ID": "43",
+        "EN": "E-mail could not be sent.",
+        "TR": "E-posta g\u00f6nderilemedi."
+    },
+    {
+        "ID": "44",
+        "EN": "Username can only contain letters and numbers and must contain at least %d characters. ",
+        "TR": "Kullan\u0131c\u0131 ad\u0131 sadece harf ve rakam i\u00e7erebilir ve en az %d karakter i\u00e7ermelidir."
+    },
+    {
+        "ID": "45",
+        "EN": "You must specify a role to this user.",
+        "TR": "Bu kullan\u0131c\u0131 i\u00e7in bir rol belirtmelisiniz."
+    },
+    {
+        "ID": "46",
+        "EN": "Please be sure that you written password correct. ",
+        "TR": "\u015eifreyi do\u011fru yazd\u0131\u011f\u0131n\u0131zdan emin olun."
+    },
+    {
+        "ID": "47",
+        "EN": "The password must be at least 8 characters long and must contain uppercase letter, lowercase letter, punctioation and number. ",
+        "TR": "\u015eifre en az 8 karakter uzunlu\u011funda olmal\u0131. B\u00fcy\u00fck harf, k\u00fc\u00e7\u00fck harf, noktalama i\u015fareti ve rakam bulundurmal\u0131. ."
+    },
+    {
+        "ID": "48",
+        "EN": "Created Date",
+        "TR": "Olu\u015fturulma Tarihi"
+    },
+    {
+        "ID": "49",
+        "EN": "Role",
+        "TR": "Rol"
+    },
+    {
+        "ID": "50",
+        "EN": "Role Name",
+        "TR": "Rol Ad\u0131"
+    },
+    {
+        "ID": "51",
+        "EN": "Select a table to make a transaction.",
+        "TR": "\u0130\u015flem yapmak i\u00e7in bir tablo se\u00e7in."
+    },
+    {
+        "ID": "52",
+        "EN": "Info: ",
+        "TR": "Bilgi: "
+    },
+    {
+        "ID": "53",
+        "EN": "Error!",
+        "TR": "Hata!"
+    },
+    {
+        "ID": "54",
+        "EN": "Warning!",
+        "TR": "Uyar\u0131!"
+    },
+    {
+        "ID": "55",
+        "EN": "Search",
+        "TR": "Arama"
+    },
+    {
+        "ID": "56",
+        "EN": "Available characters: %s",
+        "TR": "Kullan\u0131labilir karakterler: %s"
+    },
+    {
+        "ID": "57",
+        "EN": "Column Name",
+        "TR": "Kolon Ad\u0131"
+    },
+    {
+        "ID": "58",
+        "EN": "Data Type",
+        "TR": "Veri Tipi"
+    },
+    {
+        "ID": "59",
+        "EN": "Unique",
+        "TR": "Benzersiz"
+    },
+    {
+        "ID": "60",
+        "EN": "Table Name",
+        "TR": "Tablo Ad\u0131"
+    },
+    {
+        "ID": "61",
+        "EN": "New Field",
+        "TR": "Yeni Alan"
+    },
+    {
+        "ID": "62",
+        "EN": "Length (max 255):",
+        "TR": "Uzunluk (en b\u00fcy\u00fck 255):"
+    },
+    {
+        "ID": "63",
+        "EN": "Reference Table:",
+        "TR": "\u0130li\u015fkili Tablo:"
+    },
+    {
+        "ID": "64",
+        "EN": "Back to mainpage.",
+        "TR": "Anasayfaya geri d\u00f6n."
+    },
+    {
+        "ID": "65",
+        "EN": "Document removed.",
+        "TR": "D\u00f6k\u00fcman silindi."
+    },
+    {
+        "ID": "66",
+        "EN": "A table with same name already created.",
+        "TR": "Bu isimde bir tablo zaten tan\u0131ml\u0131."
+    },
+    {
+        "ID": "67",
+        "EN": "Invalid operation.",
+        "TR": "Ge\u00e7ersiz i\u015flem."
+    },
+    {
+        "ID": "68",
+        "EN": "Table created successfully.",
+        "TR": "Tablo ba\u015far\u0131yla olu\u015fturuldu."
+    },
+    {
+        "ID": "69",
+        "EN": "%s table deleted.",
+        "TR": "%s tablosu silindi."
+    },
+    {
+        "ID": "70",
+        "EN": "%s deleted.",
+        "TR": "%s silindi."
+    },
+    {
+        "ID": "71",
+        "EN": "There is at least one user which is in this role.",
+        "TR": "Bu rol\u00fc kullanan en az bir kullan\u0131c\u0131 mevcut."
+    },
+    {
+        "ID": "72",
+        "EN": "Role removed.",
+        "TR": "Rol silindi."
+    },
+    {
+        "ID": "73",
+        "EN": "Password Reset",
+        "TR": "\u015eifre S\u0131f\u0131rlama"
+    },
+    {
+        "ID": "74",
+        "EN": "Wrong username or e-mail.",
+        "TR": "Kullan\u0131c\u0131 ad\u0131 ya da e-posta yanl\u0131\u015f."
+    },
+    {
+        "ID": "75",
+        "EN": "Reset",
+        "TR": "S\u0131f\u0131rla"
+    },
+    {
+        "ID": "76",
+        "EN": "Cancel",
+        "TR": "Vazge\u00e7"
+    },
+    {
+        "ID": "77",
+        "EN": "OK",
+        "TR": "Tamam"
+    },
+    {
+        "ID": "78",
+        "EN": "%s role defined.",
+        "TR": "%s rol tan\u0131m\u0131 yap\u0131ld\u0131."
+    },
+    {
+        "ID": "79",
+        "EN": "Nothing chosen.",
+        "TR": "Hi\u00e7bir \u015fey se\u00e7ilmedi."
+    },
+    {
+        "ID": "80",
+        "EN": "Please check wrong fields.",
+        "TR": "L\u00fctfen hatal\u0131 alanlar\u0131 kontrol edin."
+    },
+    {
+        "ID": "81",
+        "EN": "Are you sure to remove that record?",
+        "TR": "Bu kayd\u0131 silmek istedi\u011finize emin misiniz?"
+    },
+    {
+        "ID": "82",
+        "EN": "Delete",
+        "TR": "Sil"
+    },
+    {
+        "ID": "83",
+        "EN": "Browse",
+        "TR": "G\u00f6zat"
+    },
+    {
+        "ID": "84",
+        "EN": "Clean",
+        "TR": "Temizle"
+    },
+    {
+        "ID": "85",
+        "EN": "Update",
+        "TR": "G\u00fcncelle"
+    },
+    {
+        "ID": "86",
+        "EN": "Password reset successfully.",
+        "TR": "\u015eifre ba\u015far\u0131yla s\u0131f\u0131rland\u0131."
+    },
+    {
+        "ID": "87",
+        "EN": "This link maybe used before.",
+        "TR": "Bu ba\u011flant\u0131 daha \u00f6nce kullan\u0131lm\u0131\u015f olabilir."
+    },
+    {
+        "ID": "88",
+        "EN": "Password reset e-mail has send.",
+        "TR": "\u015eifre s\u0131f\u0131rlama e-postas\u0131 g\u00f6nderildi."
+    },
+    {
+        "ID": "89",
+        "EN": "Sorry",
+        "TR": "Maalesef"
+    },
+    {
+        "ID": "90",
+        "EN": "Page Not Found",
+        "TR": "Sayfa Bulunamad\u0131."
+    },
+    {
+        "ID": "91",
+        "EN": "Record inserted succesfully.",
+        "TR": "Kay\u0131t ba\u015far\u0131yla eklendi."
+    },
+    {
+        "ID": "92",
+        "EN": "%s user definition",
+        "TR": "%s kullan\u0131c\u0131 tan\u0131m\u0131"
+    },
+    {
+        "ID": "93",
+        "EN": "Are you sure want to drop table %s?",
+        "TR": "%s tablosunu kald\u0131rmak istedi\u011finize emin misiniz?"
+    },
+    {
+        "ID": "94",
+        "EN": "Out of %d records %d-%d is monitoring.",
+        "TR": "Toplan %d kay\u0131ttan %d-%d aras\u0131 g\u00f6r\u00fcnt\u00fcleniyor."
+    },
+    {
+        "ID": "95",
+        "EN": "Invalid key.",
+        "TR": "Ge\u00e7ersiz anahtar."
+    },
+    {
+        "ID": "96",
+        "EN": "Due to untrusted transactions, your IP has been blocked.",
+        "TR": "G\u00fcvenilmez istekler nedeniyle IP adresiniz engellenmi\u015ftir."
+    },
+    {
+        "ID": "97",
+        "EN": "Your user account has been blocked. Please login after reset password.",
+        "TR": "Hesab\u0131n\u0131z kilitlenmi\u015ftir. L\u00fctfen \u015fifrenizi s\u0131f\u0131rlayarak sisteme yeniden giri\u015f yap\u0131n."
+    },
+    {
+        "ID": "98",
+        "EN": "Are you sure want to remove user %s?",
+        "TR": "%s kullan\u0131c\u0131s\u0131n\u0131 silmek istedi\u011finize emin misiniz?"
+    },
+    {
+        "ID": "99",
+        "EN": "File cannot uploaded.",
+        "TR": "Dosya y\u00fcklenemedi."
+    },
+    {
+        "ID": "100",
+        "EN": "Translations",
+        "TR": "\u00c7eviri"
+    },
+    {
+        "ID": "101",
+        "EN": "Import",
+        "TR": "\u0130\u00e7e aktar"
+    },
+    {
+        "ID": "102",
+        "EN": "Export",
+        "TR": "D\u0131\u015fa aktar"
+    },
+    {
+        "ID": "103",
+        "EN": "This option only imports translations on translations\/translations.json file.",
+        "TR": "Bu se\u00e7enek sadece translations\/translations.json dosyas\u0131ndaki \u00e7evirileri i\u00e7e aktar\u0131r."
+    },
+    {
+        "ID": "104",
+        "EN": "This will exports translations on translations\/translations.json file.",
+        "TR": "Bu se\u00e7enek \u00e7evirileri, translations\/translations.json dosyas\u0131na d\u0131\u015fa aktar\u0131r."
+    },
+    {
+        "ID": "105",
+        "EN": "An error occured.",
+        "TR": "Bir hata olu\u015ftu."
+    },
+    {
+        "ID": "106",
+        "EN": "Exported succesfully.",
+        "TR": "Ba\u015far\u0131yla d\u0131\u015far\u0131 aktar\u0131ld\u0131."
+    },
+    {
+        "ID": "107",
+        "EN": "Imported successfully.",
+        "TR": "Ba\u015far\u0131yla i\u00e7e aktar\u0131ld\u0131."
+    }
+]
