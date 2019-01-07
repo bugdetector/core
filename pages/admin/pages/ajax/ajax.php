@@ -10,7 +10,7 @@ class Controller extends ServicePage{
      * Logging out user
      */
     private function logout(){
-        session_destroy();
+        unset($_SESSION[BASE_URL."-UID"]);
     }
     
     /**
