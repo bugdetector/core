@@ -14,7 +14,7 @@ session_start();
 
 date_default_timezone_set(TIMEZONE);
 
-$current_user = isset($_SESSION["UID"]) ? User::getUserById($_SESSION["UID"]) : new User();
+$current_user = isset($_SESSION[BASE_URL."-UID"]) ? User::getUserById($_SESSION[BASE_URL."-UID"]) : new User();
 
 $uri = trim(str_replace(SITE_ROOT, "", $_SERVER["REQUEST_URI"]),"/");
 $uri = explode("/", preg_replace("/\?.*/", "", $uri));

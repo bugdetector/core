@@ -134,7 +134,7 @@ class User extends DBObject{
         $current_user = $user;
         $current_user->ACCESS = get_current_date();
         $current_user->update();
-        $_SESSION["UID"] = $user->ID;
+        $_SESSION[BASE_URL."-UID"] = $user->ID;
         
         Watchdog::log("login", $user->USERNAME);
         
