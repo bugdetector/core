@@ -11,7 +11,8 @@ RewriteRule . index.php [L]
    php_flag display_errors On
    php_value max_execution_time 90
    php_value max_input_time 60
-   php_value max_input_vars 100000
+   php_value max_input_vars 1000
+   php_value post_max_size 40M
    php_value memory_limit 512M
    php_value session.gc_maxlifetime 600
    php_value upload_max_filesize 20M
