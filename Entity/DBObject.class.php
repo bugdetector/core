@@ -26,6 +26,13 @@ class DBObject{
     }
     
     public function delete(){
+        $table_description = get_table_description($this->table);
+        foreach ($table_description as $field) {
+            if($field[1] == "tinytext"){
+                $field_name = $field[0];
+                remove_uploaded_file($this->table, $field_name, $this->$field_name);
+            }
+        }
         return db_delete($this->table)->condition(" ID = :id ", ["id" => $this->ID])->execute();
     }
     

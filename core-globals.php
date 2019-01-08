@@ -88,6 +88,11 @@ function store_uploaded_file($table, $field_name, $file) {
     return move_uploaded_file($file["tmp_name"], $file_url);        
 }
 
+function remove_uploaded_file($table, $field_name, $file) {
+    $file_url = "files/uploaded/$table/$field_name/$file";
+    unlink($file_url);
+}
+
 function control_real_object_with_params($table, $id = 0) {
     $realObject = new DBObject($table);
     $realObject->getById($id != 0 ? $id : $_POST["ID"]);
