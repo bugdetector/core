@@ -3,9 +3,9 @@
     ?>
     <script>
         $(document).ready(function (){
+           control_table = "<?php echo $select_table;?>";
            var result = <?php echo json_encode($select); ?>;
            var table = array_to_table(result.values, result.skeleton);
-           control_table = "<?php echo $select_table;?>";
             $("#main_content").html("");
             $("#main_content").append(table);
             $(".list-group-item.tablelist a:textEquals('<?php echo $select_table;?>')").parent().addClass("active");

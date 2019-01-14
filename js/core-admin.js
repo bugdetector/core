@@ -226,15 +226,6 @@ $(document).ready(function () {
          var id = $(this).parents("tr").find("td:eq(1)").text();
          window.location = root + "/admin/insert/"+get_active_table()+"/"+id;
      });
-     
-     $(document).on("click",".dbl_click_file", function (){
-        var activetable = get_active_table();
-        var activecolumn = columns[$(this).index() -1];
-        var filename = $(this).text();
-        setTimeout(function () {
-            window.open(root + "/files/uploaded/"+activetable+"/"+activecolumn+"/"+filename,"_blank");
-        }, 300);
-     });
 });
 
 function alter(table_name, fields, form_build_id){
@@ -427,7 +418,11 @@ function array_to_table(tableData, skeleton, add_controls = true) {
         var row = $('<tr></tr>');
         row.append($('<td>'+getControls()+'</td>')); 
         $(rowData).each(function (j, cellData) {
-            row.append($('<td class="'+inputtypes[j]+'">'+cellData+'</td>'));
+            if(inputtypes[j] !== "dbl_click_file"){
+                row.append($('<td class="'+inputtypes[j]+'">'+cellData+'</td>'));
+            }else{
+                row.append($('<td class="'+inputtypes[j]+'"><a target="_blank" href="'+root + "/files/uploaded/"+get_active_table()+"/"+skeleton[j][0]+"/"+cellData+'">'+cellData+'</td>'));
+            }
         });
         tbody.append(row);
     });

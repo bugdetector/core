@@ -101,7 +101,7 @@ div .tablelist.active a{
     
 }
 
-.dbl_click_file, a.file, a.file:hover, a.file:focus{
+.dbl_click_file a, a.file, a.file:hover, a.file:focus{
     text-decoration: underline dotted red;
     color: red;
     cursor: pointer;
