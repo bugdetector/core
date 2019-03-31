@@ -30,7 +30,10 @@ class Router {
         if(!$this->page){
             $this->page = self::$mainPage;
         }
-        if(in_array($this->page, $this->getWhitelist())){
+        $content = new Content();
+        if($content->isExists()){
+            $content->echoContent();
+        }elseif(in_array($this->page, $this->getWhitelist())){
             $this->loadPage($this->page);
         }else{
             $this->loadPage(self::$notFound);

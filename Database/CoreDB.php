@@ -4,6 +4,7 @@ include 'SelectQueryPreparer.php';
 include 'InsertQueryPreparer.php';
 include 'UpdateQueryPreparer.php';
 include 'DeleteQueryPreparer.php';
+include 'DBObject.class.php';
 
 class CoreDB {
     private static $instance;
