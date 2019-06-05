@@ -39,6 +39,13 @@ $(document).ready(function () {
             });
    });
    
+   $(".tabletruncate").click(function (){
+       var tablename = getTableNameFromList($(this));
+        alertMessage(_t(109, [tablename]),_t(54), BootstrapDialog.TYPE_DANGER,function() {
+                truncatetable(tablename);
+            });
+   });
+   
    $(".tableadd").click(function (){
         var tablename = getTableNameFromList($(this));
         window.location = root +"/admin/table/new/"+tablename;
@@ -245,6 +252,20 @@ function alter(table_name, fields, form_build_id){
 function droptable(tablename){
     $.ajax({
        url: root + "/admin/ajax/drop",
+       type: 'POST',
+       dataType: 'json',
+       data : {tablename : tablename},
+       success: function (data, textStatus, jqXHR) {
+                alertMessage(data.message,_t(52), BootstrapDialog.TYPE_INFO, function () {
+                        location.reload();
+                    });
+       }
+    });
+}
+
+function truncatetable(tablename){
+    $.ajax({
+       url: root + "/admin/ajax/truncate",
        type: 'POST',
        dataType: 'json',
        data : {tablename : tablename},

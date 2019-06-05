@@ -155,6 +155,18 @@ class Controller extends ServicePage{
     }
     
     /**
+     * Truncates table
+     */
+    private function truncate(){
+        $tablename = $_POST["tablename"];
+        if(in_array($tablename, get_information_scheme())){
+            db_truncate($tablename);
+            echo json_encode(["status" => "true", "message" => _t(110, [$tablename])]);
+        }
+        CoreDB::getInstance()->commit();
+    }
+    
+    /**
      * Adds new column to table
      */
     private function alter_table(){

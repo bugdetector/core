@@ -26,6 +26,7 @@
                 <div class="dropdown-menu dropdown-menu-left">
                     <label class="form-control dropdown-item rowadd core-control"><span class="glyphicon glyphicon-floppy-disk"></span><?php echo _t(14); ?></label>
                     <label class="form-control dropdown-item tableadd core-control"><span class="glyphicon glyphicon-plus"></span><?php echo _t(15); ?></label>
+                    <label class="form-control dropdown-item tabletruncate core-control"><span class="glyphicon glyphicon-trash"></span><?php echo _t(108); ?></label>
                     <label class="form-control dropdown-item tabledrop core-control"><span class="glyphicon glyphicon-remove"></span><?php echo _t(16); ?></label>
                 </div>
             </div>
