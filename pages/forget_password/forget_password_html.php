@@ -3,7 +3,6 @@ function echo_forget_password_page(Forget_passwordController $controller) { ?>
 <div class="container-fluid">
     
     <div class="row">
-        <?php $controller->printMessages(); ?>
         <div class="col-sm-4"></div>
         <div class="col-sm-4">
             <form method="POST" role="form" style="margin-top: 100px">
@@ -13,7 +12,7 @@ function echo_forget_password_page(Forget_passwordController $controller) { ?>
                 <button class="btn btn-lg btn-warning btn-block" type="submit" ><?php echo _t(75); ?></button>
                 <a href="<?php echo SITE_ROOT."/login"; ?>" class="btn btn-lg btn-info btn-block"><?php echo _t(21); ?></a>
             </form>
-            <?php if($controller->is_username_or_email_false) { create_warning_message (_t(74)); } ?>
+            <?php $controller->printMessages(); ?>
         </div>
     </div>
 </div>

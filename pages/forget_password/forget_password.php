@@ -1,8 +1,6 @@
 <?php
 
 class Forget_passwordController extends Page{
-    
-    public $is_username_or_email_false = FALSE;
 
     protected function echoContent() {
         if(isset($_POST["username"]) && isset($_POST["email"]) ){
@@ -10,7 +8,7 @@ class Forget_passwordController extends Page{
                     ->condition("USERNAME = :username AND EMAIL = :email", ["username" => $_POST["username"], "email" => $_POST["email"]] )
                     ->execute()->fetch(PDO::FETCH_ASSOC);
             if(!$user){
-                $this->is_username_or_email_false = TRUE;
+                create_warning_message (_t(74));
             } else {
                 $reset_password = new DBObject(RESET_PASSWORD_QUEUE);
                 

@@ -2,9 +2,6 @@
 
 class Reset_passwordController extends Page{
     
-    public $is_passwords_not_matching = FALSE;
-    public $is_params_not_matching = FALSE;
-    
     const RESET_PASSWORD_ID = "RESET_PASSWORD_ID";
     const RESET_PASSWORD_USER = "RESET_PASSWORD_USER";
 
