@@ -82,7 +82,7 @@ div .tablelist.active a{
 }
 
 .core-control:hover {
-    transform: scale(2);
+    transform: scale(1.25);
     transition: 0.25s;
 }
 
