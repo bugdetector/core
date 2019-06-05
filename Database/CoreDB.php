@@ -292,7 +292,6 @@ function convert_object_to_array(&$object){
     return $object_as_array;
 }
 
-define("LOGINS", "LOGINS");
 define("ROLES", "ROLES");
 define("USERS", "USERS");
 define("USERS_ROLES", "USERS_ROLES");
@@ -301,7 +300,7 @@ define("TRANSLATIONS", "TRANSLATIONS");
 define("EMAILS", "EMAILS");
 define("BLOCKED_IPS", "BLOCKED_IPS");
 define("WATCHDOG", "WATCHDOG");
-$system_tables = [LOGINS, ROLES, USERS, RESET_PASSWORD_QUEUE, USERS_ROLES, TRANSLATIONS, BLOCKED_IPS, WATCHDOG];
+$system_tables = [ROLES, USERS, RESET_PASSWORD_QUEUE, USERS_ROLES, TRANSLATIONS, BLOCKED_IPS, WATCHDOG];
 
 function get_system_tables(){
     global $system_tables;

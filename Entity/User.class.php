@@ -102,10 +102,6 @@ class User extends DBObject{
         if($user && $user->STATUS == self::STATUS_BLOCKED){
             throw new Exception(_t(97));
         }
-        $login = new DBObject(LOGINS);
-        $login->LOGIN_DATE = get_current_date();
-        $login->IP_ADRESS = get_user_ip();
-        $login->USER_ID = isset($user->ID) ? $user->ID : 2; // 2 = guest user id
         if(isset($_SESSION[LOGIN_UNTRUSTED_ACTIONS]) && $_SESSION[LOGIN_UNTRUSTED_ACTIONS] > 10){
             if(get_login_try_count_of_ip() > 10){
                 block_ip_address();
@@ -117,7 +113,6 @@ class User extends DBObject{
             }
             throw new Exception(_t(96));            
         }
-        $login->insert();
         if(!$user || $user->PASSWORD != hash("SHA256",$password) ){
             if(isset($_SESSION[LOGIN_UNTRUSTED_ACTIONS])){
                 $_SESSION[LOGIN_UNTRUSTED_ACTIONS]++;
