@@ -533,5 +533,20 @@
         "ID": "107",
         "EN": "Imported successfully.",
         "TR": "Ba\u015far\u0131yla i\u00e7e aktar\u0131ld\u0131."
+    },
+    {
+        "ID": "108",
+        "EN": "Truncate Table",
+        "TR": "Tabloyu Bo\u015falt"
+    },
+    {
+        "ID": "109",
+        "EN": "Are you sure want to truncate table %s?",
+        "TR": "%s tablosunu bo\u015faltmak istedi\u011finize emin misiniz?"
+    },
+    {
+        "ID": "110",
+        "EN": "%s table truncated.",
+        "TR": "%s tablosu bo\u015falt\u0131ld\u0131."
     }
 ]

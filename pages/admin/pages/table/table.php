@@ -4,6 +4,8 @@ class TableController extends AdminPage{
     
     protected function echoContent() {
         $this->add_frontend_translation(93);
+        $this->add_frontend_translation(109);
+        
         if(isset($this->arguments[1]) && $this->arguments[1] == "new"){
             require 'new/new.php';
             $page = new NewTableController($this->arguments);
