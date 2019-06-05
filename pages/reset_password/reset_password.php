@@ -8,21 +8,16 @@ class Reset_passwordController extends Page{
     const RESET_PASSWORD_ID = "RESET_PASSWORD_ID";
     const RESET_PASSWORD_USER = "RESET_PASSWORD_USER";
 
-    public function echoPage() {
-        $this->echoHeader();
-        $this->echoContent();
-    }
-
     protected function echoContent() {
         if(!$_GET){
-            $this->is_params_not_matching = TRUE;
+            create_warning_message(_t(87), "alert-danger");
         }
         if(isset($_GET["USER"]) && isset($_GET["KEY"]) ){
             $query = db_select(RESET_PASSWORD_QUEUE)
                 ->condition("`USER` = :USER AND `KEY` = :KEY", $_GET);
             $reset_password_queue = $query->execute()->fetch(PDO::FETCH_ASSOC);
             if(!$reset_password_queue){
-                $this->is_params_not_matching = TRUE;
+                create_warning_message(_t(87), "alert-danger");
                 session_destroy();
             }else {
                 $_SESSION[self::RESET_PASSWORD_ID] = $reset_password_queue["ID"];
@@ -31,7 +26,7 @@ class Reset_passwordController extends Page{
         }
         if(isset($_POST["PASSWORD"]) && isset($_POST["PASSWORD2"])){
             if ($_POST["PASSWORD"] != $_POST["PASSWORD2"] || !preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/", $_POST["PASSWORD"]) ) {
-                $this->is_passwords_not_matching = TRUE;
+                create_warning_message(_t(47), "alert-info");
             } else {
                 $user = User::getUserById($_SESSION[self::RESET_PASSWORD_USER]);
                 $user->PASSWORD = hash("SHA256", $_POST["PASSWORD"]);
