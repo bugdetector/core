@@ -133,9 +133,6 @@ class User extends DBObject{
         
         Watchdog::log("login", $user->USERNAME);
         
-        db_delete(LOGINS)
-        ->condition(" IP_ADRESS = :ip OR USER_ID = :uid", [":ip" => get_user_ip(), ":uid" => $user->ID])
-        ->execute();
         unset($_SESSION[PASSWORD_FALSE_COUNT]);
         unset($_SESSION[LOGIN_UNTRUSTED_ACTIONS]);
         return $user;
