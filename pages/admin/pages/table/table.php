@@ -1,5 +1,5 @@
 <?php
-class Controller extends AdminPage{
+class TableController extends AdminPage{
     
     
     protected function echoContent() {

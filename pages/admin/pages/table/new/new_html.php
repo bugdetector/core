@@ -1,5 +1,5 @@
 <?php
-function echo_create_table_page(Controller $controller){
+function echo_create_table_page(NewTableController $controller){
     ?>
     <div class="container  scroll">
         <?php $controller->printMessages(); ?>

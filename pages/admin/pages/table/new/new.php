@@ -1,6 +1,6 @@
 <?php
 
-class NewTableController extends Controller{
+class NewTableController extends TableController{
     
     const FORM = "new_table";
 

@@ -1,6 +1,6 @@
 <?php
 
-class Controller extends Page{
+class Reset_passwordController extends Page{
     
     public $is_passwords_not_matching = FALSE;
     public $is_params_not_matching = FALSE;

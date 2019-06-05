@@ -1,4 +1,4 @@
-<?php function echo_profile_page(Controller $controller) { 
+<?php function echo_profile_page(UserController $controller) { 
     $user = $controller->user;?>
 <div class="container container-fluid">
     <div class="row">

@@ -1,6 +1,6 @@
 <?php
 
-class Controller extends AdminPage{
+class MainpageController extends AdminPage{
     
     public $search_results = NULL;
     protected function echoContent() {

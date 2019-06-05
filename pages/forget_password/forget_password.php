@@ -1,14 +1,8 @@
 <?php
 
-class Controller extends AdminPage{
+class Forget_passwordController extends Page{
     
     public $is_username_or_email_false = FALSE;
-
-
-    public function echoPage() {
-        $this->echoHeader();
-        $this->echoContent();
-    }
 
     protected function echoContent() {
         if(isset($_POST["username"]) && isset($_POST["email"]) ){

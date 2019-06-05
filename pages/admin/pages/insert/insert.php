@@ -1,6 +1,6 @@
 <?php
 
-class Controller extends AdminPage{
+class InsertController extends AdminPage{
 
     public $object = NULL;
     public $table;

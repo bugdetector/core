@@ -1,6 +1,6 @@
 <?php
 
-class Controller extends Page{
+class LoginController extends Page{
     
     const FORM_ID = "login_form";
     

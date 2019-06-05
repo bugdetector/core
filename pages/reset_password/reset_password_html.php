@@ -1,5 +1,5 @@
 <?php 
-function echo_reset_password_page(Controller $controller) { ?>
+function echo_reset_password_page(Reset_passwordController $controller) { ?>
 <div class="container-fluid">
     
     <div class="row">

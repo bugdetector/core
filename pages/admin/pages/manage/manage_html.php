@@ -1,5 +1,5 @@
 <?php
-function echo_manage_page(Controller $controller){ ?>
+function echo_manage_page(ManageController $controller){ ?>
     <div class="container-fluid text-center">    
         <div class="row content">
             <div class="col-sm-3 sidenav">

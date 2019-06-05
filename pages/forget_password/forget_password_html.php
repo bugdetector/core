@@ -1,5 +1,5 @@
 <?php 
-function echo_forget_password_page(Controller $controller) { ?>
+function echo_forget_password_page(Forget_passwordController $controller) { ?>
 <div class="container-fluid">
     
     <div class="row">

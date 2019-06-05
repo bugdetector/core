@@ -1,6 +1,6 @@
 <?php
 
-class Controller extends ServicePage{
+class AjaxController extends ServicePage{
     
     public function callService(string $service_name) {
         $this->$service_name();

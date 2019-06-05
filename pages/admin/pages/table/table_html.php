@@ -1,4 +1,4 @@
-<?php function echo_tablolar(Controller $controller,array $select = NULL, string $select_table = NULL, int $page = 1, int $offset = 1, string $query_link) {
+<?php function echo_tablolar(TableController $controller,array $select = NULL, string $select_table = NULL, int $page = 1, int $offset = 1, string $query_link) {
     if($select){
     ?>
     <script>

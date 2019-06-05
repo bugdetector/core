@@ -1,4 +1,4 @@
-<?php function echo_mainpage(Controller $controller) { ?>
+<?php function echo_mainpage(MainpageController $controller) { ?>
 
 <div class="container-fluid text-center">    
   <div class="row content">

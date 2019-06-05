@@ -1,5 +1,5 @@
 <?php
-function echo_insert_page(Controller $controller){
+function echo_insert_page(InsertController $controller){
     $controller->import_view("file_input");
     $description = get_table_description($controller->table);
     unset($description[0]);

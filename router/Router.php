@@ -41,7 +41,8 @@ class Router {
     }
      public function loadPage(string $page){
         require "pages/$page/$page.php";
-        $page = new Controller($this->arguments);
+        $page = mb_convert_case($page, MB_CASE_TITLE)."Controller";
+        $page = new $page($this->arguments);
         $page->echoPage();
     }
     

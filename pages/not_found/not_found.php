@@ -1,6 +1,6 @@
 <?php
 
-class Controller extends Page {
+class Not_foundController extends Page {
     
     protected function echoContent() {
         http_response_code(404);
