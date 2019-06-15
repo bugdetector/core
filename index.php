@@ -1,9 +1,9 @@
 <?php
 define("DIRECT_OBJECT_REF_SHIELD", TRUE);
 
-require './router/Router.php';
+require './kernel/router/Router.php';
 include './core-config.php';
-require "./Database/CoreDB.php";
+require "./kernel/database/CoreDB.php";
 include './core-globals.php';
 include_dir("Entity");
 include_dir("lib");
