@@ -1,7 +1,8 @@
 <?php
 class TableController extends AdminPage{
-    
-    
+    const TEXT_SIZE_LIMIT = 255;
+
+
     protected function echoContent() {
         $this->add_frontend_translation(93);
         $this->add_frontend_translation(109);
@@ -47,7 +48,19 @@ class TableController extends AdminPage{
                 $condition_query.= ($condition_query ? "AND " : "")."$key LIKE :$key ";
                 $index++;
             }
+            $select["skeleton"] = get_table_description($table);
+            $fields = [];
+            $functions = [];
+            foreach ($select["skeleton"] as $column){
+                if( in_array($column[1], ["longtext", "text"]) ){
+                    $functions[] = "CONCAT( SUBSTRING(`{$column[0]}`, 1, ".self::TEXT_SIZE_LIMIT."), IF(LENGTH(`{$column[0]}`)> ".self::TEXT_SIZE_LIMIT.", ' ...', '') ) AS `{$column[0]}` ";
+                }else{
+                    $fields[] = $column[0];
+                }
+            }
             $results = db_select($table)
+                    ->select($table, $fields, FALSE)
+                    ->select_with_function($table, $functions)
                     ->condition($condition_query)
                     ->params($params)
                     ->limit(PAGE_SIZE_LIMIT, $offset)->execute()->fetchAll(PDO::FETCH_NUM);
@@ -55,9 +68,8 @@ class TableController extends AdminPage{
                     ->condition($condition_query)
                     ->params($params)
                     ->select("", ["count(*)"])->execute()->fetch(PDO::FETCH_NUM);
-            $select = ["values" => $results];
+            $select["values"] = $results;
             $select["count"] = $count[0];
-            $select["skeleton"] = get_table_description($table);
             
             $query_link = "?".http_build_query($params);
         } else {

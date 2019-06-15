@@ -71,6 +71,16 @@ class SelectQueryPreparer extends CoreDBQueryPreparer{
         return $this;
     }
     
+    public function select_with_function($table, array $functions){
+        if(!$this->fields) {
+            $this->fields = array();
+        }
+        foreach ($functions as $function){
+            array_push($this->fields, $function);
+        }
+        return $this;
+    }
+    
     private function get_fields(){
         if(!$this->fields){
             return "*";
