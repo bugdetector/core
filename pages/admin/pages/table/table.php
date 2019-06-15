@@ -49,19 +49,15 @@ class TableController extends AdminPage{
                 $index++;
             }
             $select["skeleton"] = get_table_description($table);
-            $fields = [];
-            $functions = [];
+            $query = db_select($table);
             foreach ($select["skeleton"] as $column){
                 if( in_array($column[1], ["longtext", "text"]) ){
-                    $functions[] = "CONCAT( SUBSTRING(`{$column[0]}`, 1, ".self::TEXT_SIZE_LIMIT."), IF(LENGTH(`{$column[0]}`)> ".self::TEXT_SIZE_LIMIT.", ' ...', '') ) AS `{$column[0]}` ";
+                    $query->select_with_function($table, "CONCAT( SUBSTRING(`{$column[0]}`, 1, ".self::TEXT_SIZE_LIMIT."), IF(LENGTH(`{$column[0]}`)> ".self::TEXT_SIZE_LIMIT.", ' ...', '') ) AS `{$column[0]}` ");;
                 }else{
-                    $fields[] = $column[0];
+                    $query->select($table, [$column[0]]);
                 }
             }
-            $results = db_select($table)
-                    ->select($table, $fields, FALSE)
-                    ->select_with_function($table, $functions)
-                    ->condition($condition_query)
+            $results = $query->condition($condition_query)
                     ->params($params)
                     ->limit(PAGE_SIZE_LIMIT, $offset)->execute()->fetchAll(PDO::FETCH_NUM);
             $count = db_select($table)
