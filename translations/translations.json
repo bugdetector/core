@@ -558,5 +558,10 @@
         "ID": "112",
         "EN": "Remember me",
         "TR": "Beni Hat\u0131rla"
+    },
+    {
+        "ID": "113",
+        "EN": "Upload file",
+        "TR": "Dosya y\u00fckleyin"
     }
 ]

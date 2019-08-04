@@ -32,11 +32,14 @@ class AdminController extends Page {
         if(!is_subclass_of($this, AdminController::class) && is_dir(__DIR__."/pages/".$page)){
             require __DIR__."/pages/".$page."/".$page.".php";
             $pageControllerName = $page."Controller";
-            $this->subpage = new $pageControllerName($arguments);
+            $this->subpage = new $pageControllerName($arguments);            
             if(is_subclass_of($this->subpage, ServicePage::class)){
                 $this->subpage->echoPage();
                 die();
             }
+            $this->subpage->add_default_js_files();
+            $this->subpage->add_default_css_files();
+            $this->subpage->add_default_translations();
         }
         
         
@@ -74,6 +77,10 @@ class AdminController extends Page {
     }
     
     protected function echoTranslations() {
+        if($this->subpage){
+            $this->subpage->echoTranslations();
+            return;
+        }
         $this->add_frontend_translation(79);
         $this->add_frontend_translation(80);
         $this->add_frontend_translation(81);
