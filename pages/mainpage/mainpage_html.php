@@ -13,7 +13,9 @@
   <div class="row content">
     
         <?php if($controller->results){ 
-                 foreach ($controller->results as $result) {?>
+                 foreach ($controller->results as $result) {
+                     $result->body = htmlspecialchars_decode($result->body);
+                     ?>
                     <div class="col-sm-3">"
                         <div class="card">
                             <div class="card-container text-left"">
