@@ -109,9 +109,17 @@ class SelectQueryPreparer extends CoreDBQueryPreparer{
     }
     
     public function condition(string $condition, array $params = NULL){
-        $this->condition = $condition;
+        if(!$this->condition){
+            $this->condition = $condition;
+        }else{
+            $this->condition.= " AND $condition";
+        }
         if($params){
-            $this->params = $params;
+            if(empty($this->params)){
+                $this->params = $params;
+            } else {
+                $this->params = array_merge($this->params, $params);
+            }
         }
         return $this;
     }

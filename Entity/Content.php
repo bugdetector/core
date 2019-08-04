@@ -49,7 +49,11 @@ class Content extends DBObject {
     }
     
     public static function getContentList(string $filter = "", int $limit = PAGE_SIZE_LIMIT, string $orderBy = NULL) {
+        $site_id = db_select("available_sites")
+                ->condition("site_name = :site_name", [":site_name" => $_SERVER["HTTP_HOST"]])
+                ->execute()->fetchObject()->ID;
         $query = db_select(self::TABLE_NAME)->limit($limit);
+        $query->condition("site_name = :site_id", [":site_id" => $site_id]);
         if($orderBy){
             $query->orderBy($orderBy);
         }
