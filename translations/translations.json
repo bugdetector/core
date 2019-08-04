@@ -548,5 +548,15 @@
         "ID": "110",
         "EN": "%s table truncated.",
         "TR": "%s tablosu bo\u015falt\u0131ld\u0131."
+    },
+    {
+        "ID": "111",
+        "EN": "Last Posts",
+        "TR": "Son Yaz\u0131lar"
+    },
+    {
+        "ID": "112",
+        "EN": "Remember me",
+        "TR": "Beni Hat\u0131rla"
     }
 ]
