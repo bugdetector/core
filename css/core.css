@@ -249,3 +249,10 @@ span.glyphicon.glyphicon-list-alt{
 .file-field{
     margin-bottom: 5px !important;
 }
+.login-actions{
+    padding: 20px;
+}
+
+.content {
+    margin-top: 40px; 
+}

@@ -15,7 +15,7 @@ abstract class CoreDBQueryPreparer {
      * @return type
      */
     
-    abstract public function getQuery();
+    abstract public function getQuery() : string;
 
     public function params(array $params){
         $this->params = $params;

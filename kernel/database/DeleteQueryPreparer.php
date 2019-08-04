@@ -9,7 +9,7 @@ class DeleteQueryPreparer extends CoreDBQueryPreparer{
         $this->table = $table;
     }
 
-    public function getQuery() {
+    public function getQuery() : string {
         return "DELETE FROM `".$this->table."` ".
         $this->getCondition();
     }

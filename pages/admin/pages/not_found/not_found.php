@@ -1,5 +1,5 @@
 <?php
-class Not_foundController extends AdminPage {
+class Not_foundController extends AdminController {
     
     protected function echoContent() {
         http_response_code(404);

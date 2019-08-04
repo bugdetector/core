@@ -32,17 +32,12 @@ function get_message_header($type){
 
 /**
  * 
- * @global type $current_user
+ * @global User $current_user
  * @return User
  */
 function get_current_core_user() {
     global $current_user;
-    if($current_user){
-        return $current_user;
-    }else{
-        $current_user = new User();
-        return $current_user;
-    }
+    return $current_user;
 }
 
 function get_user_ip()
@@ -122,18 +117,18 @@ function HTMLMail($email,$subject,$message, $username) {
     $mail = new \PHPMailer\PHPMailer\PHPMailer();
     $mail->IsSMTP();
     $mail->SMTPAuth = true;
-    $mail->SMTPSecure = SMTP_SECURE; // Güvenli baglanti icin ssl normal baglanti icin tls
-    $mail->Host = SMTP_HOST; // Mail sunucusuna ismi
-    $mail->Port = SMTP_PORT; // Guvenli baglanti icin 465 Normal baglanti icin 587
+    $mail->SMTPSecure = SMTP_SECURE;
+    $mail->Host = SMTP_HOST;
+    $mail->Port = SMTP_PORT;
     $mail->IsHTML(true);
-    $mail->SetLanguage("tr", "phpmailer/language");
+    $mail->SetLanguage("en", "phpmailer/language");
     $mail->CharSet  ="utf-8";
-    $mail->Username = EMAIL; // Mail adresimizin kullanicı adi
-    $mail->Password = EMAIL_PASSWORD;//"1478963250"; // Mail adresimizin sifresi
-    $mail->SetFrom(EMAIL, EMAIL_USERNAME); // Mail attigimizda gorulecek ismimiz
-    $mail->AddAddress($email, $username); // Maili gonderecegimiz kisi yani alici
-    $mail->Subject = $subject; // Konu basligi
-    $mail->Body = $message; // Mailin icerigi
+    $mail->Username = EMAIL;
+    $mail->Password = EMAIL_PASSWORD;
+    $mail->SetFrom(EMAIL, EMAIL_USERNAME);
+    $mail->AddAddress($email, $username);
+    $mail->Subject = $subject;
+    $mail->Body = $message;
     return $mail->Send();
 }
 
@@ -161,4 +156,25 @@ function get_csrf(string $form_build_id, string $form_id) {
         unset($_SESSION[$form_build_id]);
         return $value;
     }
+}
+
+function prepare_select_box_from_query_result(PDOStatement $result, string $name, $null_element = NULL, $selected_value = "" ,array $classes = []){
+    $result_array = $result->fetchAll(PDO::FETCH_NUM);
+    $select_array = [];
+    foreach ($result_array as $row) {
+        $select_array[$row[0]] = $row[1];
+    }
+    return prepare_select_box($select_array, $name, $null_element, $selected_value ,$classes);
+}
+
+
+function prepare_select_box(array $elements, string $name, $null_element = NULL, $selected_value ,array $classes = []){
+    $out = "<select name='$name' class='selectpicker form-control".implode("",$classes)."'>".
+    ($null_element ? "<option value='0'>$null_element</option>" : "");
+
+    foreach($elements as $key => $value){
+        $out.="<option value='$key' ".($key == $selected_value ? "selected" : "").">$value</option>";
+    }
+    $out.="</select>";
+    return $out;
 }

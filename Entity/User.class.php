@@ -125,11 +125,19 @@ class User extends DBObject{
             throw new Exception(_t(24));
         }
         //login successful
-        global $current_user;
+         global $current_user;
         $current_user = $user;
         $current_user->ACCESS = get_current_date();
         $current_user->update();
         $_SESSION[BASE_URL."-UID"] = $user->ID;
+        if($_POST["remember-me"]){
+            $jwt = new JWT();
+            $jwt->setPayload($current_user);
+            setcookie("session-token", $jwt->createToken(), strtotime("tomorrow"));
+            setcookie("remember-me", true, strtotime("1 year later"));
+        }else{
+            setcookie("remember-me", false, strtotime("1 year later"));
+        }
         
         Watchdog::log("login", $user->USERNAME);
         
@@ -140,6 +148,10 @@ class User extends DBObject{
     
     public function isAdmin(){
         return $this->isUserInRole("ADMIN");
+    }
+    
+    public function isLoggedIn() : bool {
+        return $this->USERNAME != "guest";
     }
     
     public function getUserRoles(bool $force = FALSE ){

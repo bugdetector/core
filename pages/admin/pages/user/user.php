@@ -1,6 +1,6 @@
 <?php
 
-class UserController extends AdminPage{
+class UserController extends AdminController{
     public $user;
     public $current_user_roles;
     public $excluded_user_roles;

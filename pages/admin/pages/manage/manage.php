@@ -1,6 +1,6 @@
 <?php
 
-class ManageController extends AdminPage{
+class ManageController extends AdminController{
     public $operation;
     public $table_headers;
     public $table_content;

@@ -130,15 +130,6 @@ $(document).ready(function () {
          });
     });
     
-    $("#logout").click(function (){
-        $.ajax({
-            url: root+"/admin/ajax/logout",
-            success:function(response){
-                window.location = root;
-            } 
-        });
-    });
-    
     $(".rowadd").click(function (){
         var tablename = getTableNameFromList($(this));
         window.location = root+"/admin/insert/"+tablename;

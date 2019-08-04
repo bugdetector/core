@@ -2,9 +2,12 @@
 
 class Router {
     private $page, $arguments;
-    
-    public static $mainPage = "login";
+    private $controller;
+
+
+    public static $mainPage = "mainpage";
     public static $notFound = "not_found";
+    public static $accessDenied = "access_denied";
     
     private static $instance = NULL;
 
@@ -29,21 +32,25 @@ class Router {
     public function route(){
         if(!$this->page){
             $this->page = self::$mainPage;
+        }elseif(!in_array($this->page, $this->getWhitelist())){
+            $this->page = self::$notFound;
         }
-        $content = new Content();
-        if($content->isExists()){
-            $content->echoContent();
-        }elseif(in_array($this->page, $this->getWhitelist())){
-            $this->loadPage($this->page);
-        }else{
-            $this->loadPage(self::$notFound);
+        require "pages/{$this->page}/{$this->page}.php";
+        $page = mb_convert_case($this->page, MB_CASE_TITLE)."Controller";
+        $this->controller = new $page($this->arguments);
+        if(!$this->controller->check_access()){
+            if(!get_current_core_user()->isLoggedIn()){
+                core_go_to(BASE_URL."/login?destination=/". implode("/", $this->arguments));
+            }else{
+                require "pages/".self::$accessDenied."/".self::$accessDenied.".php";
+                $this->controller = new AccessDeniedController($this->arguments);
+            }
         }
+        $this->loadPage();
     }
-     public function loadPage(string $page){
-        require "pages/$page/$page.php";
-        $page = mb_convert_case($page, MB_CASE_TITLE)."Controller";
-        $page = new $page($this->arguments);
-        $page->echoPage();
+     public function loadPage(){
+        $this->controller->echoPage();
+        die();
     }
     
     private function getWhitelist(){

@@ -2,7 +2,6 @@
 
 abstract class Page {
     
-    protected $dir;
     protected $arguments;
     protected $js_files;
     protected $css_files;
@@ -12,11 +11,16 @@ abstract class Page {
         $this->arguments = $arguments;
     }
 
+    public function check_access():bool {
+        return TRUE;
+    }
+    
     public function echoPage(){
         $this->add_default_js_files();
         $this->add_default_css_files();
         $this->add_default_translations();
         
+        $this->add_access_log();
         $this->preprocessPage();
         echo "<!DOCTYPE html>";
         echo "<html>";
@@ -62,12 +66,12 @@ abstract class Page {
     protected function preprocessPage(){}
     abstract protected function echoContent();
     
-    protected function add_js_files($js_file_path){
-        array_push($this->js_files, $js_file_path);
+    protected function add_js_file($js_file_path){
+        $this->js_files[] = $js_file_path;
     }
     
-    protected function add_css_files($css_file_path){
-        array_push($this->css_files, $css_file_path);
+    protected function add_css_file($css_file_path){
+        $this->css_files[] = $css_file_path;
     }
     
     protected function add_frontend_translation(int $translation_id) {
@@ -85,9 +89,10 @@ abstract class Page {
         $this->import_view("footer");
     }
     
-    private function add_default_js_files(){
+    protected function add_default_js_files(){
         $default_js_files = [
             "js/jquery.js",
+            "js/core.js",
             "js/bootstrap.min.js",
             "js/bootstrap-select.js",
             "js/bootstrap-datetimepicker.min.js",
@@ -101,7 +106,7 @@ abstract class Page {
         }
         $this->js_files = $default_js_files;
     }
-    private function add_default_css_files(){
+    protected function add_default_css_files(){
         $default_css_files = [
             "css/core.css",
             "css/bootstrap.min.css",
@@ -113,7 +118,7 @@ abstract class Page {
         $this->css_files = $default_css_files;
     }
     
-    private function add_default_translations(){
+    protected function add_default_translations(){
         $this->add_frontend_translation(76);
         $this->add_frontend_translation(77);
         $this->add_frontend_translation(53);
@@ -124,6 +129,11 @@ abstract class Page {
     protected function echoTranslations() {
         echo "<script> var translations = ".json_encode($this->frontend_translations).";"
                 . "var language = '".Translator::$language."';</script>";
+    }
+    
+    protected function add_access_log(){
+        $log = new AccessLog();
+        $log->insert();
     }
 }
 

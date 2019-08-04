@@ -14,7 +14,7 @@ class DBObject{
             object_map($this, $result);
         }
     }
-    
+
     public function insert(){
         $statement = db_insert($this->table, convert_object_to_array($this))->execute();
         $this->ID = CoreDB::getInstance()->lastInsertId();

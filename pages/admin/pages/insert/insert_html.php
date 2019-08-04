@@ -27,7 +27,7 @@ function echo_insert_page(InsertController $controller){
               </div>
             
               <div class="col-sm-9 text-left">
-               <?php $supported_data_types[get_input_type($desc[1], $desc[3])]["input_field_callback"]($object, $desc, $controller->table); ?>
+               <?php echo $supported_data_types[get_input_type($desc[1], $desc[3])]["input_field_callback"]($object, $desc, $controller->table); ?>
             </div>
         </div>
         <?php } ?>  

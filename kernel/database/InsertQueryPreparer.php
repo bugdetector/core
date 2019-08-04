@@ -8,7 +8,7 @@ class InsertQueryPreparer extends CoreDBQueryPreparer{
         $this->fields = $fields;
     }
 
-    public function getQuery() {
+    public function getQuery() : string {
         return "INSERT INTO `".
                 $this->table."` ".
                 $this->getBackQuery();

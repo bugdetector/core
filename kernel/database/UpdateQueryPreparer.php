@@ -19,7 +19,7 @@ class UpdateQueryPreparer extends CoreDBQueryPreparer{
     }
 
 
-    public function getQuery() {
+    public function getQuery() : string {
         return "UPDATE `".$this->table.
                "` SET ".$this->fields." ".$this->getCondition();
     }

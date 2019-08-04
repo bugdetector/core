@@ -38,5 +38,8 @@ abstract class ServicePage extends Page {
     protected function echoContent() {
         
     }
+    
+    protected function add_access_log(){
+    }
 }
 

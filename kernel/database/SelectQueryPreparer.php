@@ -21,7 +21,7 @@ class SelectQueryPreparer extends CoreDBQueryPreparer{
         ));
     }
 
-    public function getQuery() {
+    public function getQuery() : string {
         return "SELECT ".$this->distinct.
                 $this->get_fields()." FROM ".
                 $this->getTables()." ".
@@ -71,7 +71,7 @@ class SelectQueryPreparer extends CoreDBQueryPreparer{
         return $this;
     }
     
-    public function select_with_function($table, array $functions){
+    public function select_with_function(array $functions){
         if(!$this->fields) {
             $this->fields = array();
         }
@@ -79,6 +79,11 @@ class SelectQueryPreparer extends CoreDBQueryPreparer{
             array_push($this->fields, $function);
         }
         return $this;
+    }
+
+    public function unset_fields(){
+        unset($this->fields);
+        $this->fields = array();
     }
     
     private function get_fields(){
@@ -115,7 +120,7 @@ class SelectQueryPreparer extends CoreDBQueryPreparer{
         return $this->condition ? "WHERE ".$this->condition: "";
     }
     
-    public function limit($limit, $offset = ""){
+    public function limit(int $limit, int $offset = 0){
         $this->limit = $limit;
         $this->offset = $offset;
         return $this;
