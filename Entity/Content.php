@@ -18,7 +18,7 @@ class Content extends DBObject {
 
 
     public $table = self::TABLE_NAME;
-    public $ID, $title, $body, $site_name, $url_alias, $type, $created, $view_count, $image;
+    public $ID, $title, $body, $url_alias, $type, $created, $view_count, $image;
     
     public function __construct() {
         parent::__construct($this->table);
@@ -26,13 +26,10 @@ class Content extends DBObject {
     
     public static function getByUrlAlias(string $url_alias) {
         $instance = new self();
-        $server_name = $_SERVER["SERVER_NAME"];
-        $server_name = strpos($server_name, "www.") == 0 ? str_replace("www.", "", $server_name): $server_name;
         $content = db_select($instance->table,"c")
                 ->select("c",["*"])
-                ->join("available_sites","avail")
-                ->condition("(c.url_alias = :alias OR c.ID = :alias ) AND avail.ID = c.site_name AND avail.site_name = :site_name", 
-                        [":alias" => $url_alias, ":site_name" => $server_name] )
+                ->condition("(c.url_alias = :alias OR c.ID = :alias )", 
+                        [":alias" => $url_alias] )
                 ->execute()->fetch(PDO::FETCH_ASSOC);
         
         
@@ -49,11 +46,7 @@ class Content extends DBObject {
     }
     
     public static function getContentList(string $filter = "", int $limit = PAGE_SIZE_LIMIT, string $orderBy = NULL) {
-        $site_id = db_select("available_sites")
-                ->condition("site_name = :site_name", [":site_name" => $_SERVER["HTTP_HOST"]])
-                ->execute()->fetchObject()->ID;
         $query = db_select(self::TABLE_NAME)->limit($limit);
-        $query->condition("site_name = :site_id", [":site_id" => $site_id]);
         if($orderBy){
             $query->orderBy($orderBy);
         }
