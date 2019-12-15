@@ -11,9 +11,12 @@ class LoginController extends Page{
         parent::__construct($arguments);
     }
 
+    public function check_access() : bool {
+        return TRUE;
+    }
     protected function preprocessPage(){
-        $userip = isset($_POST["form_build_id"]) ? get_csrf($_POST["form_build_id"], self::FORM_ID) : get_user_ip();
-        if($userip != get_user_ip()){
+        $userip = isset($_POST["form_build_id"]) ? get_csrf($_POST["form_build_id"], self::FORM_ID) : Utils::get_user_ip();
+        if($userip != Utils::get_user_ip()){
             if(isset($_SESSION[LOGIN_UNTRUSTED_ACTIONS])){
                 $_SESSION[LOGIN_UNTRUSTED_ACTIONS]++;
             }else{
@@ -26,17 +29,17 @@ class LoginController extends Page{
             }
         } catch (Exception $ex){
             http_response_code(400);
-            create_warning_message($ex->getMessage());
+            Utils::create_warning_message($ex->getMessage());
             return;
         }
-        if(get_current_core_user()->isAdmin() ){
+        if(get_current_core_user()->isLoggedIn() && get_current_core_user()->isAdmin() ){
             core_go_to(SITE_ROOT."/admin");
         }
     }
 
 
     protected function echoContent() {
-        $this->form_build_id = create_csrf(self::FORM_ID , get_user_ip());
+        $this->form_build_id = create_csrf(self::FORM_ID , Utils::get_user_ip());
         require 'login_html.php';
         echo_login_page($this);
     }

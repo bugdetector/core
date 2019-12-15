@@ -5,9 +5,11 @@ class SelectQueryPreparer extends CoreDBQueryPreparer{
     private $fields;
     private $condition;
     private $orderBy;
+    private $groupBy;
     private $limit, $offset;
     private $quote;
     private $distinct = "";
+    private $having;
 
     const ASC = "ASC";
     const DESC = "DESC";
@@ -26,6 +28,8 @@ class SelectQueryPreparer extends CoreDBQueryPreparer{
                 $this->get_fields()." FROM ".
                 $this->getTables()." ".
                 $this->getCondition()." ".
+                $this->getGroupBy()." ".
+                $this->getHaving()." ".
                 $this->getOrderBy()." ".
                 $this->getLimit();
     }
@@ -47,17 +51,31 @@ class SelectQueryPreparer extends CoreDBQueryPreparer{
             if($this->quote) {
                 $table[tableName] = "`$table[tableName]`";
             }
-            $tables.= ($index>0 ? ", ": "").$table[tableName].($table[alias] ? " AS ".$table[alias] : "");
+            $tables.= (isset($table["join"]) ? $table["join"]." JOIN " : " ").
+            $table[tableName].($table[alias] ? " AS ".$table[alias] : " ")
+            .(isset($table["on"]) && $table["on"] ? " ON ".$table["on"]." " : " ");
             $index++;
         }
         return $tables;
     }
     
-    public function join(string $table_name, string $alias = ""){
+    public function join(string $table_name, string $alias = "", string $on = "" ,string $join = "INNER"){
         array_push($this->tables, array(
             tableName => $table_name,
-            alias => $alias
+            alias => $alias,
+            "join" => $join,
+            "on" => $on
         ));
+        return $this;
+    }
+
+    public function leftjoin(string $table_name, string $alias = "", string $on = "" ){
+        $this->join($table_name, $alias, $on, "LEFT");
+        return $this;
+    }
+
+    public function rightjoin(string $table_name, string $alias = "", string $on = ""){
+        $this->join($table_name, $alias, $on,"RIGHT");
         return $this;
     }
     
@@ -107,19 +125,28 @@ class SelectQueryPreparer extends CoreDBQueryPreparer{
     private function getOrderBy(){
         return $this->orderBy ? "ORDER BY ".$this->orderBy : "";
     }
+
+    public function groupBy(string $groupBy){
+        $this->groupBy = $groupBy;
+        return $this;
+    }
+
+    private function getGroupBy(){
+        return $this->groupBy ? "GROUP BY $this->groupBy" : "";
+    }
+
+    public function having(string $having){
+        $this->having = $having;
+    }
+
+    private function getHaving(){
+        return $this->having ? "HAVING $this->having" : "";
+    }
     
-    public function condition(string $condition, array $params = NULL){
-        if(!$this->condition){
-            $this->condition = $condition;
-        }else{
-            $this->condition.= " AND $condition";
-        }
+    public function condition(string $condition, array $params = NULL, $connect = "AND"){
+        $this->condition = $this->condition ? "$this->condition $connect $condition" : $condition;
         if($params){
-            if(empty($this->params)){
-                $this->params = $params;
-            } else {
-                $this->params = array_merge($this->params, $params);
-            }
+            $this->params = empty($this->params) ? $params : array_merge($this->params,$params);
         }
         return $this;
     }
@@ -138,4 +165,3 @@ class SelectQueryPreparer extends CoreDBQueryPreparer{
         return $this->limit ? "LIMIT ".$this->limit.($this->offset ? " OFFSET ".$this->offset : "") : "";
     }
 }
-

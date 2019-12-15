@@ -15,7 +15,7 @@ class User extends DBObject{
     }
 
 
-    public static function getUserById(int $id){
+    public static function getUserById(int $id) {
         $user = new self();
         $result = db_select(self::TABLE)->condition("ID = :id")->params(["id" => $id])->execute()->fetch(PDO::FETCH_ASSOC);
         if(!$result){
@@ -127,10 +127,10 @@ class User extends DBObject{
         //login successful
          global $current_user;
         $current_user = $user;
-        $current_user->ACCESS = get_current_date();
+        $current_user->ACCESS = Utils::get_current_date();
         $current_user->update();
         $_SESSION[BASE_URL."-UID"] = $user->ID;
-        if($_POST["remember-me"]){
+        if(isset($_POST["remember-me"]) && $_POST["remember-me"]){
             $jwt = new JWT();
             $jwt->setPayload($current_user);
             setcookie("session-token", $jwt->createToken(), strtotime("tomorrow"));
@@ -204,17 +204,17 @@ class User extends DBObject{
 
 function block_ip_address() {
     $blocked_ip = new DBObject(BLOCKED_IPS);
-    $blocked_ip->IP = get_user_ip();
+    $blocked_ip->IP = Utils::get_user_ip();
     $blocked_ip->insert();    
 }
 function is_ip_address_blocked() {
-    return db_select(BLOCKED_IPS)->condition("IP = :ip", [":ip" => get_user_ip()])->limit(1)->execute()->rowCount();    
+    return db_select(BLOCKED_IPS)->condition("IP = :ip", [":ip" => Utils::get_user_ip()])->limit(1)->execute()->rowCount();    
 }
 
 function get_login_try_count_of_ip() {
     return db_select(LOGINS)
            ->select("", ["count(*)"])
-           ->condition("IP_ADRESS = :ip", [":ip" => get_user_ip()])
+           ->condition("IP_ADRESS = :ip", [":ip" => Utils::get_user_ip()])
            ->execute()->fetch(PDO::FETCH_NUM)[0];    
 }
 

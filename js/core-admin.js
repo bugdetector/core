@@ -2,34 +2,27 @@ var control_table;
 
 $(document).ready(function () {
    $(".newfield").click(function (){
-       var this_input_field = $(this).parents("div.row");
        $.ajax({
           url: root + "/admin/ajax/get_input_field",
+          method: "post",
+          data: {index: $("#result_table tbody tr").length },
           success : function (data) {
-                this_input_field.before($(data));
-                this_input_field.prev().find(".selectpicker").selectpicker();
-                this_input_field.prev().find("input[name='field_name']").focus();
+                let row = $(data);
+                $("#result_table tbody").append(row);
+                row.find(".selectpicker").selectpicker().find("input[name='field_name']").focus();
             }
        });
    });
    $(document).on("change","select.type-control", type_conrolchange);
-   $(document).on("click",".removefield", removefield);
+   $(document).on("click",".removefield", function () {
+       $(this).parents("tr").remove();
+   });
    
-   $(".save_table").click(function (){
-       if($(".has-error").length !== 0){
+   $("#new_table").submit(function (){
+       if($(".has-error input:enabled").length !== 0){
            alertMessage(_t(80));
-           return ;
-       }
-       var table_name = $("input[name='table_name']").val();
-       var fields = [];
-       $('div.field_definition').each(function() {
-           var data = {};
-           $(this).find(":input").serializeArray().map(function(x){data[x.name] = x.value;})
-           fields.push(data);
-        });
-        var form_build_id = $("input[name='form_build_id']").val();
-        define(table_name, fields, form_build_id);
-        
+           return false;
+       }        
    });
    
    $(".tabledrop").click(function (){
@@ -268,33 +261,21 @@ function truncatetable(tablename){
     });
 }
 
-function define(table_name, fields, form_build_id){
-    $.ajax({
-            url: root + "/admin/ajax/new_table_definition",
-            type: 'POST',
-            dataType: 'json',
-            data: {table_name : table_name, fields: fields, form_build_id: form_build_id },
-            success: function (data) {
-                    alertMessage(data.message, _t(52), BootstrapDialog.TYPE_INFO, function () {
-                        window.location += "/"+table_name;
-                    });
-            }
-        });
-}
 var type_conrolchange = function (){
    var value = $(this).val();
-   var optionalfield = $(this).parents(".row.content").find("div.optional");
-   var optionalexplainfield = $(this).parents(".row.content").find("div.optionalexplain");
+   var optionalfield = $(this).parents("tr").find("td:nth-child(6)");
+   var optionalexplainfield = $(this).parents("tr").find("td:nth-child(5)");
 
    if(value === "VARCHAR"){
        optionalexplainfield.html(_t(62))
        optionalfield.html("<input type='number' class='form-control' max='255' min='0' name='field_length' value='255'/>");
    }else if(value === "MUL"){
+       let index = $(this).parents("tr").index();
        $.ajax({
        url : root + "/admin/ajax/get_table_list",
         dataType: 'json',
        success: function (data, textStatus, jqXHR) {
-            var selectMenu = $('<select class="form-control selectpicker" data-live-search="true" name="mul_table"></select>');
+            var selectMenu = $('<select class="form-control selectpicker" data-live-search="true" name="fields['+index+'][mul_table]"></select>');
             var length = data.length;
             for(var i = 0; i<length; i++){
                 var option = $("<option value='"+data[i]+"'>"+data[i]+"</option>");
@@ -310,10 +291,6 @@ var type_conrolchange = function (){
        optionalexplainfield.html("");
    }
 };
-
-var removefield = function () {
-       $(this).parents(".field_definition, .comparation_definition, .select_definition").remove();
-   }
    
 function get_active_table() {
     if(control_table){

@@ -7,13 +7,6 @@ define("alias", "alias");
 
 abstract class CoreDBQueryPreparer {
     protected $params;
-
-  
-
-    /**
-     * 
-     * @return type
-     */
     
     abstract public function getQuery() : string;
 
@@ -22,11 +15,11 @@ abstract class CoreDBQueryPreparer {
         return $this;
     }
     
-    public function getParams(){
+    public function getParams() : array{
         return $this->params ? $this->params : array();
     }
     
-    public function execute(){
+    public function execute() : PDOStatement{
         return CoreDB::getInstance()->execute($this);
     }
 }

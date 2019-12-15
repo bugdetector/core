@@ -58,14 +58,14 @@ $(document).ready(function () {
     })
 
     $(document).submit(function () {
-        $(".loader").removeClass("hidden");
+        $("body").append("<div class='loader'></div>");
     }); 
     $(document).ajaxSend(function(){
-        $(".loader").removeClass("hidden");
+        $("body").append("<div class='loader'></div>");
     });
     $(document).ajaxComplete(function () {
         if($.active == 1){
-            $(".loader").addClass("hidden");
+            $(".loader").remove();
         }
     })
     
@@ -98,6 +98,8 @@ $(document).ready(function () {
             }
         }   
     });
+    
+    $(document).on("keyup", ".bootstrap-select.autocomplete .bs-searchbox input", autocompleteFilter);
 });
 
 function alertMessage(message, title = _t(54) , type = BootstrapDialog.TYPE_WARNING, callback = function () {}){
@@ -157,3 +159,62 @@ String.prototype.format = function () {
     }
     return a; // Make chainable
 };
+
+var filter_caller = null;
+function autocompleteFilter(event){
+    var input = String.fromCharCode(event.keyCode);
+    var text  = $(this).val();
+    //input key is not a character
+    if (text && !/[a-zA-Z0-9-_ ]/.test(input)){
+        return;
+    }
+    if(filter_caller){
+        clearInterval(filter_caller);
+    }
+    var select_field = $(this).parents(".bootstrap-select").find("select");
+    filter_caller = setTimeout(
+        function(){
+            let data = {
+                table : $(select_field).attr("data-reference-table"),
+                column : $(select_field).attr("data-reference-column"),
+                data : text
+            };
+            if($(select_field).attr("data-reference-filter-column")){
+                data["filter-column"] = $(select_field).attr("data-reference-filter-column");
+            }
+            if($(select_field).attr("data-reference-filter-value")){
+                data["filter-value"] = $(select_field).attr("data-reference-filter-value");
+            }
+            $.ajax({
+                url: root+"/ajax/AutoCompleteSelectBoxFilter",
+                method: "post",
+                data: data,
+                success: function(response){
+                    response_data = $.parseJSON(response);
+                    let options = "";
+                    let null_option = select_field.find("option[value='0']");
+                    options += null_option.length > 0 ? null_option[0].outerHTML : "";
+                    let selected_value = select_field.val();
+                    let selected_option = select_field.find("option[value='"+selected_value+"']")[0].outerHTML;
+                    let selected = false;
+                    for(data of response_data){
+                        if(data[0] == selected_value){
+                            selected = true;
+                        }
+                        options += "<option value='"+data[0]+"' "+(selected ? "selected" : "")+">"+data[1]+"</option>";
+                    }
+                    if(!selected && selected_value != 0){
+                        options +=selected_option;
+                    }
+                    select_field.html(options);
+                    if(select_field.hasClass("create_if_not_exist")){
+                        if($(select_field).find("option:contains('"+text_val+"')").length == 0){
+                            $(select_field).append("<option value='"+text_val+"'>"+text_val+"</option>");
+                        }
+                    }
+                    select_field.selectpicker("refresh");
+                }
+            });
+        }
+    , 500);
+}

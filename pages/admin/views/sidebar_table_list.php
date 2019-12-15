@@ -20,12 +20,12 @@
                 <span class="glyphicon glyphicon-list-alt"></span><?php echo $document; ?>
             </a>
             
-            <div class="dropup pull-right">
+            <div class="dropdown pull-right">
                 <a href="#" title="<?php echo _t(17); ?>" id="openmenu" class="dropdown-toogle" data-toggle="dropdown"/>
                     <span class="glyphicon glyphicon-option-vertical" ></span> </a>
                 <div class="dropdown-menu dropdown-menu-left">
-                    <label class="form-control dropdown-item rowadd core-control"><span class="glyphicon glyphicon-floppy-disk"></span><?php echo _t(14); ?></label>
-                    <label class="form-control dropdown-item tableadd core-control"><span class="glyphicon glyphicon-plus"></span><?php echo _t(15); ?></label>
+                    <a href="<?php echo BASE_URL."/admin/insert/$document"; ?>"><label class="form-control dropdown-item rowadd core-control"><span class="glyphicon glyphicon-floppy-disk"></span><?php echo _t(14); ?></label></a>
+                    <a href="<?php echo BASE_URL."/admin/table/new/$document"; ?>"><label class="form-control dropdown-item tableadd core-control"><span class="glyphicon glyphicon-plus"></span><?php echo _t(15); ?></label></a>
                     <label class="form-control dropdown-item tabletruncate core-control"><span class="glyphicon glyphicon-trash"></span><?php echo _t(108); ?></label>
                     <label class="form-control dropdown-item tabledrop core-control"><span class="glyphicon glyphicon-remove"></span><?php echo _t(16); ?></label>
                 </div>

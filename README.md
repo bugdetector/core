@@ -4,15 +4,19 @@
 
 -Veri tabanını kullanmak için sadece localhost üzerinden bağlanabilen özel bir mysql kullanıcısı oluşturun.
  create user core_multisite_user@localhost;
+MYSQL 8.0 : CREATE USER core_multisite_user@localhost IDENTIFIED WITH mysql_native_password BY "core_multisite1234";
 
 -Bu kullanıcıya sadece bu veritabanına tam erişim yetkisi verin ve kesinlikle güçlü bir şifre kullanın.
  GRANT ALL PRIVILEGES ON core_multisite.* To 'core_multisite_user'@'localhost' IDENTIFIED BY 'core_multisite1234';
+MYSQL 8.0: GRANT ALL PRIVILEGES ON core_multisite.* To 'core_multisite_user'@'localhost' WITH GRANT OPTION
 
--Daha sonra "core-config.php" dosyası üzerinden veritabanı bağlantısı için gerekli olan bilgiler girin.
+-Daha sonra "config_example.php" dosyasını kopyalayın üzerinden veritabanı bağlantısı için gerekli olan bilgiler girin.
 -Sitenin HTTP ya da HTTPS kulandığı bildirin.
--Sitenin sunucu üzerinde kurulduğu dizini SITE_ROOT ile bildirin.
+-SITE_NAME kısmına sitenin adını yazın
 -E-posta ayarlarını bildirin.
 -EMAIL_USERNAME, sistem e-posta gönderdiği zaman görülecek olan kullanıcı adıdır.
 -PAGE_SIZE_LIMIT, tablolar ekranında sayfalama yapılırken gösterilecek bir sayfa boyutunu gösterir.
 -TIMEZONE, varsayılan zaman dilimidir.
 -LANGUAGE, varsayılan dildir.
+ Ayarları yaptıktan sonra siteye gidin ve kurulumu gerçekleştirin.
+Varsayılan kullanıcı adı: root şifre: 1234

@@ -4,6 +4,8 @@ include 'SelectQueryPreparer.php';
 include 'InsertQueryPreparer.php';
 include 'UpdateQueryPreparer.php';
 include 'DeleteQueryPreparer.php';
+include 'CreateQueryPreparer.php';
+include 'AlterQueryPreparer.php';
 include 'DBObject.class.php';
 
 class CoreDB {
@@ -14,8 +16,7 @@ class CoreDB {
     private function __construct(){
         try{
             self::$instance = $this;
-            $this->connection = new PDO("mysql:host=".DB_SERVER.";dbname=".DB_NAME, DB_USER, DB_PASSWORD
-                    , array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'"));
+            $this->connection = new PDO("mysql:host=".DB_SERVER.";dbname=".DB_NAME, DB_USER, DB_PASSWORD);
             $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->connection->query("SET NAMES UTF8");
         } catch (PDOException $ex){
@@ -38,7 +39,7 @@ class CoreDB {
      * @param CoreDBQueryPreparer $query
      * @return PDOStatement
      */
-    public function execute(CoreDBQueryPreparer $query){
+    public function execute(CoreDBQueryPreparer $query) : PDOStatement{
         try {
             $statement = $this->connection->prepare($query->getQuery());
             $statement->execute($query->getParams());
@@ -56,9 +57,9 @@ class CoreDB {
      * @param string $query
      * @return PDOStatement
      */
-    public function query(string $query){
+    public function query(string $query) : PDOStatement{
         try{
-        return $this->connection->query($query);
+            return $this->connection->query($query);
         } catch (PDOException $ex){
             if($this->transactionSet){
                 $this->connection->rollBack();
@@ -88,7 +89,7 @@ class CoreDB {
      * 
      * @return int
      */
-    public function lastInsertId() {
+    public function lastInsertId() : int{
         return $this->connection->lastInsertId();
     }
     
@@ -100,7 +101,7 @@ class CoreDB {
  * @param string $alias
  * @return \SelectQueryPreparer
  */
-function db_select(string $tableName, string $alias = "", bool $quote = TRUE){
+function db_select(string $tableName, string $alias = "", bool $quote = TRUE) : SelectQueryPreparer{
     return new SelectQueryPreparer($tableName, $alias, $quote);
 }
 
@@ -110,7 +111,7 @@ function db_select(string $tableName, string $alias = "", bool $quote = TRUE){
  * @param array $fields
  * @return \InsertQueryPreparer
  */
-function db_insert(string $tableName, array $fields){
+function db_insert(string $tableName, array $fields) : InsertQueryPreparer{
     return new InsertQueryPreparer($tableName, $fields);
 }
 /**
@@ -119,7 +120,7 @@ function db_insert(string $tableName, array $fields){
  * @param array $fields
  * @return \UpdateQueryPreparer
  */
-function db_update(string $tableName, array $fields){
+function db_update(string $tableName, array $fields) : UpdateQueryPreparer{
     return new UpdateQueryPreparer($tableName, $fields);
 }
 /**
@@ -128,7 +129,7 @@ function db_update(string $tableName, array $fields){
  * @param string $alias
  * @return \DeleteQueryPreparer
  */
-function db_delete(string $tableName){
+function db_delete(string $tableName) : DeleteQueryPreparer{
     return new DeleteQueryPreparer($tableName);
 }
 
@@ -137,12 +138,24 @@ function db_delete(string $tableName){
  * @param string $query
  * @return PDOStatement
  */
-function db_query(string $query) {
+function db_query(string $query) : PDOStatement {
     return CoreDB::getInstance()->query($query);
+}
+
+function db_create(string $tableName) {
+    return new CreateQueryPreparer($tableName);
+}
+
+function db_alter(string $tableName){
+    return new AlterQueryPreparer($tableName);
 }
 
 function db_truncate(string $table_name) {
     return db_query("TRUNCATE TABLE `$table_name`;")->execute();
+}
+
+function get_field_from_object(&$object, $field) {
+    return isset($object->$field) ? $object->$field : "";
 }
 
 $data_types = [
@@ -154,7 +167,11 @@ $data_types = [
         ];
       },
       "input_field_callback" => function($object, $desc){
-      return "<input class='form-control' type='number' name='{$desc[0]}' value='".($object ? get_field_from_object($object, $desc[0]) : "")."'/>";
+          $field = new InputField($desc[0]);
+          $field->setType("number");
+          $field->setValue(get_field_from_object($object, $desc[0]));
+          $field->setLabel($desc[0]);
+          return [$field, "col-lg-3 col-md-4 col-sm-6"];
       }
       ],
   "DOUBLE" => [
@@ -165,7 +182,12 @@ $data_types = [
         ];
       },
       "input_field_callback" => function($object, $desc){
-      return "<input class='form-control' type='number' name='{$desc[0]}' value='".($object ? get_field_from_object($object, $desc[0]) : "")."'/>";
+          $field = new InputField($desc[0]);
+          $field->setType("number");
+          $field->setValue(get_field_from_object($object, $desc[0]));
+          $field->addAttribute("step", "0.01");
+          $field->setLabel($desc[0]);
+          return [$field, "col-lg-3 col-md-4 col-sm-6"];
       }
       ],
   "VARCHAR" => [
@@ -176,7 +198,10 @@ $data_types = [
         ];
       },
       "input_field_callback" => function($object, $desc){
-      return "<input class='form-control' type='text' name='{$desc[0]}' value='".($object ? get_field_from_object($object, $desc[0]) : "")."'/>";
+          $field = new InputField($desc[0]);
+          $field->setValue(get_field_from_object($object, $desc[0]));
+          $field->setLabel($desc[0]);
+          return [$field, "col-lg-3 col-md-4 col-sm-6"];
       }
       ],
   "TEXT" => [
@@ -187,7 +212,11 @@ $data_types = [
         ];
       },
       "input_field_callback" => function($object, $desc){
-      return "<textarea type='text' class='form-control' name='{$desc[0]}'>".($object ? get_field_from_object($object, $desc[0]) : "")."</textarea>";
+          $field = new TextareaField($desc[0]);
+          
+          $field->setValue(get_field_from_object($object, $desc[0]));
+          $field->setLabel($desc[0]);
+          return [$field, "col-xs-12"];
       }
       ],
   "LONGTEXT" => [
@@ -198,7 +227,11 @@ $data_types = [
         ];
       },
       "input_field_callback" => function($object, $desc){
-          return "<textarea class='summernote' name='{$desc[0]}'>".($object ? htmlspecialchars_decode(get_field_from_object($object, $desc[0])) : "")."</textarea>";
+          $field = new TextareaField($desc[0]);
+          $field->addClass("summernote");
+          $field->setLabel($desc[0]);
+          $field->setValue(htmlspecialchars_decode(get_field_from_object($object, $desc[0])));
+          return [$field, "col-xs-12"];
       }
       ],
   "DATE" => [
@@ -209,7 +242,11 @@ $data_types = [
         ];
       },
       "input_field_callback" => function($object, $desc){
-      echo "<input type='text' value='".($object ? get_field_from_object($object, $desc[0]) : get_current_date() )."' class='form-control datetimeinput' name='{$desc[0]}'/>";
+            $field = new InputField($desc[0]);
+            $field->addClass("dateinput");
+            $field->setLabel($desc[0]);
+            $field->setValue($object ? get_field_from_object($object, $desc[0]) : Utils::get_current_date());
+            return [$field, "col-lg-3 col-md-4 col-sm-6"];
       }
       ],
   "DATETIME" => [
@@ -220,7 +257,11 @@ $data_types = [
         ];
       },
       "input_field_callback" => function($object, $desc){
-      return "<input type='text' value='".($object ? get_field_from_object($object, $desc[0]) : get_current_date() )."' class='form-control datetimeinput' name='{$desc[0]}'/>";
+            $field = new InputField($desc[0]);
+            $field->addClass("datetimeinput");
+            $field->setLabel($desc[0]);
+            $field->setValue($object ? get_field_from_object($object, $desc[0]) : Utils::get_current_date());
+            return [$field, "col-lg-3 col-md-4 col-sm-6"];
       }
       ],
   "TIME" => [
@@ -231,7 +272,11 @@ $data_types = [
         ];
       },
       "input_field_callback" => function($object, $desc){
-      return "<input type='text' value='".($object ? get_field_from_object($object, $desc[0]) : get_current_date() )."' class='form-control datetimeinput' name='{$desc[0]}'/>";
+            $field = new InputField($desc[0]);
+            $field->addClass("timeinput");
+            $field->setLabel($desc[0]);
+            $field->setValue($object ? get_field_from_object($object, $desc[0]) : Utils::get_current_date());
+            return [$field, "col-lg-3 col-md-4 col-sm-6"];
       }
       ],
   "TINYTEXT" => [
@@ -242,10 +287,11 @@ $data_types = [
         ];
       },
       "input_field_callback" => function($object, $desc){
-        $file_name = $object ? get_field_from_object($object, $desc[0]) : "";
-        $output = $file_name ? "<a class='file' href='".BASE_URL."/files/uploaded/{$object->table}/{$desc[0]}/{$file_name}' target='_blank'>$file_name</a>"
-                . "<input value='$file_name' name='$desc[0]' style='display:none;'>" : "";
-        return $output.get_file_input($desc[0], $file_name);
+            $file_name = $object ? get_field_from_object($object, $desc[0]) : "";
+            $field = new FileField($desc[0], $file_name); 
+            $field->setLabel($desc[0]);
+            $file_name ? $field->setFileURL(BASE_URL."/files/uploaded/{$object->table}/{$desc[0]}/{$file_name}") : NOEXPR;
+            return [$field, "col-sm-12"];
       }
       ],
   "MUL" => [
@@ -256,22 +302,26 @@ $data_types = [
         ];
       },
       "input_field_callback" => function($object, $desc, $table){
-        $description = get_foreign_key_description($table, $desc[0])->fetch(PDO::FETCH_NUM);
-        $keys = db_select($description[0])->select("", [$description[1]])->orderBy("ID")->execute()->fetchAll(PDO::FETCH_NUM);
-        $entry = db_select($description[0])->orderBy("ID")->execute()->fetchAll(PDO::FETCH_NUM);
-        $length = count($keys);
-        $output = '<select class="form-control selectpicker" data-live-search="true" name="'.$desc[0].'">';
-            $selected_field = $object ? get_field_from_object($object, $desc[0]) : "";
-            for($i = 0; $i< $length; $i++){
-                $output.='<option value="'.$keys[$i][0].'" '.($selected_field == $keys[$i][0] ? "selected" : "").'>'.$entry[$i][1].'</option>';
-            }
-        $output.="</select>";
-        return $output;
+        $fk_description = get_foreign_key_description($table, $desc[0])->fetch(PDO::FETCH_NUM);
+        $table_description = get_table_description($fk_description[0]);;
+        $entries = db_select($fk_description[0])->orderBy("ID")->execute()->fetchAll(PDO::FETCH_NUM);
+        $options = [];
+        foreach ($entries as $entry){
+            $options[$entry[0]] = $entry[1];
+        }
+        $field = new SelectField($desc[0]);
+        $field->setLabel($desc[0]);
+        $field->setOptions($options)
+                ->setValue(get_field_from_object($object, $desc[0]))
+                ->addClass("autocomplete")
+                ->addAttribute("data-reference-table", $fk_description[0])
+                ->addAttribute("data-reference-column", $table_description[1][0]);
+        return [$field, "col-lg-3 col-md-4 col-sm-6"];
       }
       ]
 ];
 
-function get_supported_data_types() {
+function get_supported_data_types() : array{
     global $data_types;
     return $data_types;
 }
@@ -282,7 +332,7 @@ function object_map(&$object, array $array){
     }
 }
 
-function convert_object_to_array(&$object){
+function convert_object_to_array(&$object) : array{
     $object_as_array = (array) $object;
     unset($object_as_array["ID"]);
     unset($object_as_array["table"]);
@@ -299,7 +349,7 @@ define("BLOCKED_IPS", "BLOCKED_IPS");
 define("WATCHDOG", "WATCHDOG");
 $system_tables = [ROLES, USERS, RESET_PASSWORD_QUEUE, USERS_ROLES, TRANSLATIONS, BLOCKED_IPS, WATCHDOG];
 
-function get_system_tables(){
+function get_system_tables() : array{
     global $system_tables;
     return $system_tables;
 }
@@ -308,7 +358,7 @@ function get_system_tables(){
  * 
  * @return array
  */
-function get_information_scheme(){
+function get_information_scheme() : array{
     $results = CoreDB::getInstance()->query("SHOW TABLES")->fetchAll(PDO::FETCH_NUM);
     $tables = [];
     foreach ($results as $result){
@@ -322,7 +372,7 @@ function get_information_scheme(){
  * @param string $table
  * @return \strıng
  */
-function get_table_description(string $table, bool $mul_important = true) {
+function get_table_description(string $table, bool $mul_important = true) : array {
     $descriptions = db_query("DESCRIBE `$table`")->fetchAll(PDO::FETCH_NUM);
     foreach ($descriptions as $index => $desc){
         if($mul_important && $desc[3] == "UNI" && is_unique_foreign_key($table, $desc[0])){
@@ -337,7 +387,7 @@ function get_table_description(string $table, bool $mul_important = true) {
  * @param string $foreignKey
  * @return PDOStatement
  */
-function get_foreign_key_description(string $table, string $foreignKey) {
+function get_foreign_key_description(string $table, string $foreignKey) : PDOStatement {
     return db_select("INFORMATION_SCHEMA.KEY_COLUMN_USAGE", "", FALSE)
             ->select("", ["REFERENCED_TABLE_NAME","REFERENCED_COLUMN_NAME"])
             ->condition("REFERENCED_TABLE_SCHEMA = :scheme AND TABLE_NAME = :table AND COLUMN_NAME = :column")
@@ -348,7 +398,7 @@ function get_foreign_key_description(string $table, string $foreignKey) {
  * @param string $table
  * @return array
  */
-function get_references_to_table(string $table) {
+function get_references_to_table(string $table) : array {
     return db_select("INFORMATION_SCHEMA.KEY_COLUMN_USAGE", "", FALSE)
             ->select("", ["TABLE_NAME","COLUMN_NAME"])
             ->condition("REFERENCED_TABLE_SCHEMA = :scheme AND REFERENCED_TABLE_NAME = :table")
@@ -359,7 +409,7 @@ function get_references_to_table(string $table) {
  * @param string $table
  * @return PDOStatement
  */
-function get_table_references(string $table) {
+function get_table_references(string $table) : PDOStatement {
     return db_select("INFORMATION_SCHEMA.KEY_COLUMN_USAGE", "", FALSE)
             ->select("", ["REFERENCED_TABLE_NAME","REFERENCED_COLUMN_NAME"])
             ->condition("REFERENCED_TABLE_SCHEMA = :scheme AND TABLE_NAME = :table")
@@ -370,7 +420,7 @@ function get_table_references(string $table) {
  * Returns all foreign key descriptions in database
  * @return PDOStatement All defined references in database
  */
-function get_all_table_references() {
+function get_all_table_references() : PDOStatement {
     return db_select("INFORMATION_SCHEMA.KEY_COLUMN_USAGE", "", FALSE)
             ->select("", ["TABLE_NAME","COLUMN_NAME","REFERENCED_TABLE_NAME","REFERENCED_COLUMN_NAME"])
             ->condition("REFERENCED_TABLE_SCHEMA = :scheme")
@@ -383,11 +433,11 @@ function get_all_table_references() {
  * @param string $uni
  * @return bool
  */
-function is_unique_foreign_key(string $table, string $uni) {
+function is_unique_foreign_key(string $table, string $uni) : bool {
     return get_foreign_key_description($table, $uni)->rowCount() !== 0;
 }
 
-function get_file_input(string $file_field, string $file_name = "") {
+function get_file_input(string $file_field, string $file_name = "") : string {
     return
     "<div >
         <div class='btn btn-success col-sm-2 col-xs-12 file-field'>

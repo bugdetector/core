@@ -4,23 +4,32 @@ abstract class Page {
     
     protected $arguments;
     protected $js_files;
+    protected $js_codes;
     protected $css_files;
     protected $frontend_translations = [];
-    
+    protected $accessable_roles = ["USER"];
+    protected $title = SITE_NAME;
+
+
     public function __construct(array $arguments){
         $this->arguments = $arguments;
     }
 
-    public function check_access():bool {
-        return TRUE;
+    public function check_access(): bool {
+        $user_roles = get_current_core_user()->getUserRoles();
+        return array_diff($this->accessable_roles, $user_roles) == 0 ? TRUE : FALSE;
     }
-    
+
+    public function setTitle(string $title){
+        $this->title = $title;
+    }
+
+
     public function echoPage(){
         $this->add_default_js_files();
         $this->add_default_css_files();
         $this->add_default_translations();
         
-        $this->add_access_log();
         $this->preprocessPage();
         echo "<!DOCTYPE html>";
         echo "<html>";
@@ -30,12 +39,13 @@ abstract class Page {
         $this->echoContent();
         $this->echoFooter();
         $this->echoTranslations();
+        $this->echoJSCodes();
         echo '</body>';
         echo '</html>';
     }
     
     public function import_view($view_name) {
-        require "views/$view_name.php";
+        require __DIR__."/../views/$view_name.php";
     }
     
     public function printMessages() {
@@ -59,19 +69,35 @@ abstract class Page {
     
     public function printMessage($type, $message) {
         echo "<div class=\"alert $type \">
-            <strong>". get_message_header($type)."</strong> {$message}
+            <strong>". Utils::get_message_header($type)."</strong> {$message}
         </div>";
     }
     
     protected function preprocessPage(){}
     abstract protected function echoContent();
     
-    protected function add_js_file($js_file_path){
-        $this->js_files[] = $js_file_path;
+    protected function add_js_files($js_file_path){
+        if(is_array($js_file_path)){
+            $this->js_files = array_merge($this->css_files, $js_file_path);
+        }else{
+            $this->js_files[] = $js_file_path;
+        }
+    }
+
+    public function add_js(string $js_code){
+        if(!$this->js_codes){
+            $this->js_codes = [];
+        }
+        $this->js_codes[] = $js_code;
     }
     
-    protected function add_css_file($css_file_path){
-        $this->css_files[] = $css_file_path;
+    protected function add_css_files($css_file_path){
+        if(is_array($css_file_path)){
+            $this->css_files = array_merge($this->css_files, $css_file_path);
+        }else{
+            $this->css_files[] = $css_file_path;
+        }
+        
     }
     
     protected function add_frontend_translation(int $translation_id) {
@@ -80,14 +106,12 @@ abstract class Page {
 
     protected function echoHeader(){
         $this->import_view("header");
-        echo_header($this->js_files, $this->css_files);
+        echo_header($this->js_files, $this->css_files, $this->title);
     }
     protected function echoNavbar(){
         $this->import_view("navbar");
     }
-    protected function echoFooter(){
-        $this->import_view("footer");
-    }
+    protected function echoFooter(){}
     
     protected function add_default_js_files(){
         $default_js_files = [
@@ -101,19 +125,19 @@ abstract class Page {
             "js/summernote.js",
             "js/summernote-tr-TR.js",
         ];
-        if(Translator::$language != "EN"){
+        if(class_exists("Translator") && Translator::$language != "EN"){
             $default_js_files[] = "js/bootstrap-select.".Translator::$language.".js";
         }
         $this->js_files = $default_js_files;
     }
     protected function add_default_css_files(){
         $default_css_files = [
-            "css/core.css",
             "css/bootstrap.min.css",
             "css/bootstrap-select.min.css",
             "css/bootstrap-datetimepicker.min.css",
             "css/bootstrap-dialog.min.css",
-            "css/summernote.css"
+            "css/summernote.css",
+            "css/core.css"
         ];
         $this->css_files = $default_css_files;
     }
@@ -130,10 +154,15 @@ abstract class Page {
         echo "<script> var translations = ".json_encode($this->frontend_translations).";"
                 . "var language = '".Translator::$language."';</script>";
     }
-    
-    protected function add_access_log(){
-        $log = new AccessLog();
-        $log->insert();
+
+    protected function echoJSCodes()
+    {
+        if(!is_array($this->js_codes)){
+            return;
+        }
+        foreach($this->js_codes as $js_code){
+            echo "<script> $js_code </script>";
+        }
     }
 }
 

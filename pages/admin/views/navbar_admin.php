@@ -17,7 +17,7 @@
         <?php if(get_current_core_user()->isAdmin()){
         ?><li><a href="<?php echo SITE_ROOT."/admin/manage"; ?>"><span class="glyphicon glyphicon-cog"></span> <?php echo _t(2); ?></a></li>
             <?php } ?>
-        <li><a href="<?php echo SITE_ROOT."/admin/user"; ?>"><span class="glyphicon glyphicon-user"></span><?php $user = get_current_core_user(); echo $user->ID ? "$user->NAME $user->SURNAME": ""; ?></a></li>
+        <li><a href="<?php echo SITE_ROOT."/admin/user"; ?>"><span class="glyphicon glyphicon-user"></span><?php $user = get_current_core_user(); echo $user->isLoggedIn() ? "$user->NAME $user->SURNAME": _t(115); ?></a></li>
         <li><a href="<?php echo SITE_ROOT."/logout"; ?>" id="logout"><span class="glyphicon glyphicon-log-out"></span> <?php echo _t(4); ?></a></li>
       </ul>
     </div>

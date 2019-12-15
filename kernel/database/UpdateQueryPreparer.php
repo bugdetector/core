@@ -9,11 +9,13 @@ class UpdateQueryPreparer extends CoreDBQueryPreparer{
         $this->table = $table;
         $this->fields = "";
         $this->params = array();
-        $field_count = count($fields);
-        $index = 1;
+        $index = 0;
         foreach ($fields as $key => $field){
-            $this->fields .= "`$key` = :$key".($index<$field_count ? ", ": "");
-            $this->params[":".$key] = filter_var($field, FILTER_SANITIZE_SPECIAL_CHARS, FILTER_NULL_ON_FAILURE);
+            if($field === "NULL"){
+                $field = null;
+            }
+            $this->fields .= ($index>0 ? ", ": "")." `$key` = :$key";
+            $this->params[":".$key] = $field !== null ? filter_var($field, FILTER_SANITIZE_SPECIAL_CHARS, FILTER_NULL_ON_FAILURE) : null;
             $index++;
         }
     }

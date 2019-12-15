@@ -4,7 +4,7 @@
         <div class="error-template text-center">
             <h1> <?php echo _t(89); ?> <p> 403 </p> </h1>
             <h2 class="error-details">
-                <?php echo _t(114); ?>
+                <?php echo _t(117); ?>
             </h2>
         </div>
     </div>

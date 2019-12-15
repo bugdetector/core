@@ -1,6 +1,10 @@
 <?php
 
 class Forget_passwordController extends Page{
+    
+    public function check_access() : bool {
+        return !get_current_core_user()->isLoggedIn();
+    }
 
     protected function echoContent() {
         if(isset($_POST["username"]) && isset($_POST["email"]) ){
@@ -8,7 +12,7 @@ class Forget_passwordController extends Page{
                     ->condition("USERNAME = :username AND EMAIL = :email", ["username" => $_POST["username"], "email" => $_POST["email"]] )
                     ->execute()->fetch(PDO::FETCH_ASSOC);
             if(!$user){
-                create_warning_message (_t(74));
+                Utils::create_warning_message (_t(74));
             } else {
                 $reset_password = new DBObject(RESET_PASSWORD_QUEUE);
                 
@@ -20,7 +24,7 @@ class Forget_passwordController extends Page{
                     object_map($reset_password, $sended_key);
                 } else {
                     $reset_password->USER = intval($user["ID"]);
-                    $reset_password->KEY = hash("SHA256", get_current_date().json_encode($user));
+                    $reset_password->KEY = hash("SHA256", Utils::get_current_date().json_encode($user));
                     $reset_password->insert();
                 }
                 
@@ -30,9 +34,9 @@ class Forget_passwordController extends Page{
                 $message = _t_email("password_reset" ,[$reset_link, $reset_link]);
                 $username = $user["NAME"]." ".$user["SURNAME"];
                 
-                HTMLMail($email, $subject, $message, $username);
+                Utils::HTMLMail($email, $subject, $message, $username);
                 
-                create_warning_message(_t(88), "alert-success");
+                Utils::create_warning_message(_t(88), "alert-success");
                 return;
             }
         }

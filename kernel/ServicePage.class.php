@@ -1,17 +1,18 @@
 <?php
-function send_result($result, $label = "msg") {
-    echo json_encode([$label => $result]);
-}
-
-function throw_exception_as_json(string $msg) {
-    http_response_code(400);
-    die(json_encode(array('msg' => $msg)));   
-}
 
 abstract class ServicePage extends Page {
 
     function __construct(array $arguments) {
         parent::__construct($arguments);
+    }
+    
+    protected function send_result($result, $label = "msg") {
+        echo json_encode([$label => $result]);
+    }
+
+    protected function throw_exception_as_json(string $msg) {
+        http_response_code(400);
+        die(json_encode(array('msg' => $msg)));   
     }
     
     abstract function callService(string $service_name);
@@ -23,7 +24,7 @@ abstract class ServicePage extends Page {
 
 
     public function preprocessPage(){
-        $service_name = $this->arguments[1];
+        $service_name = $this->arguments[0];
         try {
             if($service_name == "__construct"){
                 throw new Exception(_t(67));
@@ -37,9 +38,6 @@ abstract class ServicePage extends Page {
     
     protected function echoContent() {
         
-    }
-    
-    protected function add_access_log(){
     }
 }
 
