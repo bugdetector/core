@@ -11,7 +11,7 @@ class UpdateQueryPreparer extends CoreDBQueryPreparer{
         $this->params = array();
         $index = 0;
         foreach ($fields as $key => $field){
-            if($field === "NULL"){
+            if($field === "NULL" || !$field){
                 $field = null;
             }
             $this->fields .= ($index>0 ? ", ": "")." `$key` = :$key";

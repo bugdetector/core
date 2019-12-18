@@ -21,7 +21,7 @@ class InsertQueryPreparer extends CoreDBQueryPreparer{
         $param_count = count($this->fields);
         $index = 0;
         foreach ($this->fields as $key => $field){
-            if($field === "NULL"){
+            if($field === "NULL" || !$field){
                 $field = null;
             }
             $fields.= ($index>0 ? ", `" : "`").$key."`";
