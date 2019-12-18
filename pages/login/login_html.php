@@ -5,7 +5,7 @@ function echo_login_page(LoginController $controller) { ?>
     <div class="row">
         <div class="col-sm-4"></div>
         <div class="col-sm-4 text-center">
-            <img src="<?php echo SITE_ROOT; ?>/assets/sonbellek_logo.png">
+            <img src="<?php echo SITE_ROOT; ?>/assets/Core_logo.png">
             <form id="loginForm" method="POST" role="form" style="margin-top: 10px">
                 <input type="text" class="hidden" name="form_build_id" value="<?php echo $controller->form_build_id; ?>"/>
                 <input name="username" class="form-control" placeholder="<?php echo _t(20); ?>" required autofocus>
