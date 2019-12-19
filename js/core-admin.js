@@ -265,15 +265,14 @@ var type_conrolchange = function (){
    var value = $(this).val();
    var optionalfield = $(this).parents("tr").find("td:nth-child(6)");
    var optionalexplainfield = $(this).parents("tr").find("td:nth-child(5)");
-
+   let index = $(this).parents("tr").index();
    if(value === "VARCHAR"){
        optionalexplainfield.html(_t(62))
-       optionalfield.html("<input type='number' class='form-control' max='255' min='0' name='field_length' value='255'/>");
+       optionalfield.html("<input type='number' class='form-control' max='255' min='0' name='fields["+index+"][field_length]' value='255'/>");
    }else if(value === "MUL"){
-       let index = $(this).parents("tr").index();
        $.ajax({
        url : root + "/admin/ajax/get_table_list",
-        dataType: 'json',
+       dataType: 'json',
        success: function (data, textStatus, jqXHR) {
             var selectMenu = $('<select class="form-control selectpicker" data-live-search="true" name="fields['+index+'][mul_table]"></select>');
             var length = data.length;
