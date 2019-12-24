@@ -28,14 +28,19 @@ class Router {
         return self::$instance;
     }
     
-    public function route(){
-        if(!$this->arguments[0]){
-            $this->arguments[0] = self::$mainPage;
+    public function route($route = NULL){
+        if($route){
+            $current_arguments = explode("/", $route);
+        }else{
+            if(!$this->arguments[0]){
+                $this->arguments[0] = self::$mainPage;
+            }
+            $current_arguments = $this->arguments;
         }
-        $current_arguments = $this->arguments;
+        
         $dir = "pages/";
         $controller_name = "";
-        foreach ($this->arguments as $page) {
+        foreach ($current_arguments as $page) {
             $dir = $dir.$page;
             $controller_file = $dir."/{$page}.php";
             if(is_dir($dir) && file_exists($controller_file) && in_array($page, $this->getWhitelist($dir."/.."))){

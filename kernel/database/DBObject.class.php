@@ -46,8 +46,18 @@ class DBObject{
     public function update(){
         return db_update($this->table, convert_object_to_array($this))->condition("ID = :id", ["id" => $this->ID])->execute();
     }
+    public function save(){
+        if($this->ID){
+            return $this->update();
+        }else{
+            return $this->insert();
+        }
+    }
     
     public function delete(){
+        if(!$this->ID){
+            return FALSE;
+        }
         $table_description = get_table_description($this->table);
         foreach ($table_description as $field) {
             if($field[1] == "tinytext"){
@@ -135,6 +145,7 @@ class DBObject{
             if($file["size"] != 0){
                 $file["name"] = $this->ID."_".filter_var($file["name"], FILTER_SANITIZE_SPECIAL_CHARS, FILTER_NULL_ON_FAILURE);
                 $this->$file_key = $file["name"];
+                remove_uploaded_file($this->table, $file_key, $file);
                 if(!store_uploaded_file($this->table, $file_key, $file)){
                     CoreDB::getInstance()->rollback();
                     throw new Exception(_t(99));
