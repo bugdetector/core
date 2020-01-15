@@ -34,7 +34,7 @@ class Utils{
         return date("Y-m-d H:i:s");
     }
     
-    public function get_user_ip()
+    public static function get_user_ip()
     {
         $client  = @$_SERVER['HTTP_CLIENT_IP'];
         $forward = @$_SERVER['HTTP_X_FORWARDED_FOR'];
