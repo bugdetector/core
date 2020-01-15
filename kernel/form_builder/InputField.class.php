@@ -8,7 +8,7 @@ class InputField extends FieldControl{
     }
 
     public function renderField() : string{
-        return (isset($this->label) ? "<label>{$this->label}</label>" : "").
+        return (isset($this->label) ? "<label ".(isset($this->attributes["id"]) ? "for='".$this->attributes["id"]."'" : "").">{$this->label}</label>" : "").
         "<input type='$this->type' name='$this->name' class='".$this->renderClasses()."' ".$this->renderAttributes()." value='$this->value'/>";
     }
 }

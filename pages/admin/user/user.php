@@ -10,8 +10,8 @@ class AdminUserController extends AdminController{
     protected function preprocessPage() {
         parent::preprocessPage();
         $this->operation = isset($_GET["q"]) ? $_GET["q"] : "update";
-        if(isset($this->arguments[1])){
-            $this->user = User::getUserByUsername($this->arguments[1]);
+        if(isset($this->arguments[0])){
+            $this->user = User::getUserByUsername($this->arguments[0]);
             if(!$this->user){
                 Utils::create_warning_message(_t(19));
                 return;
