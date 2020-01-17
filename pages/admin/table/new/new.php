@@ -9,6 +9,7 @@ class AdminTableNewController extends AdminTableController{
     
     protected function preprocessPage() {
         parent::preprocessPage();
+        $this->add_frontend_translation(118);
         if(isset($_POST["save_table"])){
             if(FormBuilder::get_csrf($_POST["form_build_id"], self::FORM) != ( isset($this->arguments[0]) ? $this->arguments[0]: "new")){
                 $this->create_warning_message(_t(67));

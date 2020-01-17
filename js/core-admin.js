@@ -17,6 +17,26 @@ $(document).ready(function () {
    $(document).on("click",".removefield", function () {
        $(this).parents("tr").remove();
    });
+
+   $(".dropfield").click(function(){
+       let tablename = $("input[name='table_name']").val();
+       let column = $(this).parent().next().children("input").val();
+       let row = $(this).parents("tr");
+       alertMessage(_t(118, [column]), _t(54), BootstrapDialog.TYPE_DANGER, function(){
+        $.ajax({
+            url: root + "/admin/ajax/dropfield",
+            method: "post",
+            dataType: "json",
+            data: {tablename : tablename, column: column},
+            success : function (data) {
+                if(data.status){
+                    alertMessage(data.message);
+                    row.fadeOut(1000);
+                }
+              }
+         });
+       })
+   })
    
    $("#new_table").submit(function (){
        if($(".has-error input:enabled").length !== 0){

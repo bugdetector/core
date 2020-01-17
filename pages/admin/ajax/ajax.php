@@ -95,10 +95,22 @@ class AdminAjaxController extends ServicePage{
     private function drop(){
         $tablename = $_POST["tablename"];
         if(in_array($tablename, get_information_scheme())){
-            CoreDB::getInstance()->query("DROP TABLE `$tablename`");
+            db_drop($tablename)->execute();
             echo json_encode(["status" => "true", "message" => _t(69, [$tablename])]);
         }
         CoreDB::getInstance()->commit();
+    }
+
+    /**
+     * Drops table or field
+     */
+    private function dropfield(){
+        $tablename = $_POST["tablename"];
+        $column = $_POST["column"];
+        if(in_array($tablename, get_information_scheme())){
+            db_drop($tablename)->setColumn($column)->execute();
+            echo json_encode(["status" => "true", "message" => _t(119, [$column])]);
+        }
     }
     
     /**
@@ -110,7 +122,6 @@ class AdminAjaxController extends ServicePage{
             db_truncate($tablename);
             echo json_encode(["status" => "true", "message" => _t(110, [$tablename])]);
         }
-        CoreDB::getInstance()->commit();
     }
     
     /**

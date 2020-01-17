@@ -6,6 +6,7 @@ include 'UpdateQueryPreparer.php';
 include 'DeleteQueryPreparer.php';
 include 'CreateQueryPreparer.php';
 include 'AlterQueryPreparer.php';
+include 'DropQueryPreparer.php';
 include 'DBObject.class.php';
 
 class CoreDB {
@@ -133,6 +134,9 @@ function db_delete(string $tableName) : DeleteQueryPreparer{
     return new DeleteQueryPreparer($tableName);
 }
 
+function db_drop(string $tableName, string $column = NULL) : DropQueryPreparer{
+    return new DropQueryPreparer($tableName, $column);
+}
 /**
  * 
  * @param string $query

@@ -9,7 +9,7 @@
         }
     }
     return [
-        $definition == NULL ? "<span class='glyphicon glyphicon-remove core-control removefield'></span>" : " ",
+        "<span class='glyphicon glyphicon-remove core-control ".($definition == NULL ? "removefield" : "dropfield")."'></span>",
         "<input type='text' class='form-control lowercase_filter' name='fields[$index][field_name]' ".($definition ? "value='$definition[0]' disabled" : " ")."/>",
         SelectField::prepare_select_box($data_types, [
             "name" => "fields[$index][field_type]", 

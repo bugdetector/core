@@ -39,12 +39,14 @@ class LoginController extends Page{
             $this->create_warning_message($ex->getMessage());
             return;
         }
-        if($user->isLoggedIn()){
-            //Clearing failed login actions
-            db_delete(LOGINS)->condition("USERNAME = :username", $user->USERNAME)->execute();
-        }
-        if($user->isLoggedIn() && $user->isAdmin() ){
-            Utils::core_go_to(SITE_ROOT."/admin");
+        if(isset($user)){
+            if($user->isLoggedIn()){
+                //Clearing failed login actions
+                db_delete(LOGINS)->condition("USERNAME = :username", [":username" =>$user->USERNAME])->execute();
+            }
+            if($user->isLoggedIn() && $user->isAdmin() ){
+                Utils::core_go_to(SITE_ROOT."/admin");
+            }
         }
     }
 
