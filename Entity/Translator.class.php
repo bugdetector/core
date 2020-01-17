@@ -64,4 +64,22 @@ class Translator {
         }
         return self::$available_languages;
     }
+
+    public static function import_translations(){
+        $translations = json_decode(file_get_contents(Translator::BACKUP_PATH));
+        CoreDB::getInstance()->beginTransaction();
+        db_truncate(TRANSLATIONS);
+        foreach ($translations as $translation){
+                db_insert(TRANSLATIONS, (array) $translation)->execute();
+        }
+        CoreDB::getInstance()->commit();
+    }
+
+    public static function export_translations(){
+        $translations = db_select(TRANSLATIONS)->execute()->fetchAll(PDO::FETCH_ASSOC);
+        if(file_exists(Translator::BACKUP_PATH)){
+            unlink(Translator::BACKUP_PATH);
+        }
+        file_put_contents(Translator::BACKUP_PATH, json_encode($translations, JSON_PRETTY_PRINT));
+    }
 }

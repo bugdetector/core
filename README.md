@@ -1,4 +1,3 @@
--Programı yüklemek için ilk önce verilen SQL dosyası MYSQL ile içe aktarın. İçe aktarılacak tablonun utf8_general_ci ile kodlanmış olması gerekiyor. 
 -Tablo oluşturmak için aşağıdaki komutu kullanabilirsiniz.
  CREATE DATABASE core_multisite CHARACTER SET utf8 COLLATE utf8_general_ci;
 
@@ -11,6 +10,9 @@ MYSQL 8.0 : CREATE USER core_multisite_user@localhost IDENTIFIED WITH mysql_nati
 MYSQL 8.0: GRANT ALL PRIVILEGES ON core_multisite.* To 'core_multisite_user'@'localhost' WITH GRANT OPTION
 
 -Daha sonra "config_example.php" dosyasını kopyalayın üzerinden veritabanı bağlantısı için gerekli olan bilgiler girin.
+-VERSION parametresinin 0 olması gerekmektedir. 
+-Daha sonra siteye tarayıcı üzerinden erişin ve yüklemeyi tamamlayın.
+
 -Sitenin HTTP ya da HTTPS kulandığı bildirin.
 -SITE_NAME kısmına sitenin adını yazın
 -E-posta ayarlarını bildirin.
