@@ -94,19 +94,20 @@ class User extends DBObject{
     
     public static function login($username, $password){
         //if ip address is blocked not let to login
-        if(is_ip_address_blocked()){
+        if(self::is_ip_address_blocked()){
             throw new Exception(_t(96));
         }
-        //if login fails for more than 10 times block this ip
         $user = self::getUserByUsername($username);
         if($user && $user->STATUS == self::STATUS_BLOCKED){
             throw new Exception(_t(97));
         }
+
+        //if login fails for more than 10 times block this ip
         if(isset($_SESSION[LOGIN_UNTRUSTED_ACTIONS]) && $_SESSION[LOGIN_UNTRUSTED_ACTIONS] > 10){
-            if(get_login_try_count_of_ip() > 10){
-                block_ip_address();
+            if(self::get_login_try_count_of_ip() > 10){
+                self::block_ip_address();
             }
-            if(get_login_try_count_of_user($username) > 10){
+            if(self::get_login_try_count_of_user($username) > 10){
                 //blocking user
                 $user->STATUS = self::STATUS_BLOCKED;
                 $user->update();
@@ -199,29 +200,72 @@ class User extends DBObject{
     public static function getIdOfRole(string $role){
         return db_select(ROLES)->select(ROLES, ["ID"])->condition("ROLE = :role", [":role" => $role])->execute()->fetch(PDO::FETCH_NUM)[0];
     }
-}
 
+    public static function get_user_ip()
+    {
+        $client  = @$_SERVER['HTTP_CLIENT_IP'];
+        $forward = @$_SERVER['HTTP_X_FORWARDED_FOR'];
+        $remote  = $_SERVER['REMOTE_ADDR'];
 
-function block_ip_address() {
-    $blocked_ip = new DBObject(BLOCKED_IPS);
-    $blocked_ip->IP = Utils::get_user_ip();
-    $blocked_ip->insert();    
-}
-function is_ip_address_blocked() {
-    return db_select(BLOCKED_IPS)->condition("IP = :ip", [":ip" => Utils::get_user_ip()])->limit(1)->execute()->rowCount();    
-}
+        if(filter_var($client, FILTER_VALIDATE_IP))
+        {
+            $ip = $client;
+        }
+        elseif(filter_var($forward, FILTER_VALIDATE_IP))
+        {
+            $ip = $forward;
+        }
+        else
+        {
+            $ip = $remote;
+        }
 
-function get_login_try_count_of_ip() {
-    return db_select(LOGINS)
-           ->select("", ["count(*)"])
-           ->condition("IP_ADRESS = :ip", [":ip" => Utils::get_user_ip()])
-           ->execute()->fetch(PDO::FETCH_NUM)[0];    
-}
+        return $ip;
+    }
 
-function get_login_try_count_of_user(string $username) {
-    return db_select(LOGINS,"l")
-            ->join(USERS,"u")
-           ->select("", ["count(*)"])
-           ->condition("l.USER_ID = u.ID AND u.USERNAME = :uname", [":uname" => $username])
-           ->execute()->fetch(PDO::FETCH_NUM)[0];    
+    public static function block_ip_address() {
+        $blocked_ip = new DBObject(BLOCKED_IPS);
+        $blocked_ip->IP = self::get_user_ip();
+        $blocked_ip->insert();    
+    }
+    public static function is_ip_address_blocked() {
+        return db_select(BLOCKED_IPS)->condition("IP = :ip", [":ip" => self::get_user_ip()])->limit(1)->execute()->rowCount();    
+    }
+    
+    public static function get_login_try_count_of_ip() {
+        return db_select(LOGINS)
+               ->select("", ["count(*)"])
+               ->condition("IP_ADDRESS = :ip", [":ip" => self::get_user_ip()])
+               ->execute()->fetch(PDO::FETCH_NUM)[0];    
+    }
+    
+    public static function get_login_try_count_of_user(string $username) {
+        return db_select(LOGINS,"l")
+               ->select("", ["count(*)"])
+               ->condition("l.USERNAME = :uname", [":uname" => $username])
+               ->execute()->fetch(PDO::FETCH_NUM)[0];    
+    }
+
+    /**
+     * 
+     * @global User $current_user
+     * @return User
+     */
+    public static function get_current_core_user() {
+        global $current_user;
+        if($current_user){
+            return $current_user;
+        } else {
+            if(isset($_SESSION[BASE_URL."-UID"])){
+                $current_user = User::getUserById($_SESSION[BASE_URL."-UID"]);
+            }elseif(isset($_COOKIE["session-token"])){
+                $jwt = JWT::createFromString($_COOKIE["session-token"]);
+                $current_user = User::getUserById($jwt->getPayload()->ID);
+                $_SESSION[BASE_URL."-UID"] = $current_user->ID;
+            }else{
+                $current_user = User::getUserByUsername("guest");
+            }
+        }
+        return $current_user;
+    }
 }

@@ -3,7 +3,7 @@
 class Forget_passwordController extends Page{
     
     public function check_access() : bool {
-        return !get_current_core_user()->isLoggedIn();
+        return !User::get_current_core_user()->isLoggedIn();
     }
 
     protected function echoContent() {
@@ -12,7 +12,7 @@ class Forget_passwordController extends Page{
                     ->condition("USERNAME = :username AND EMAIL = :email", ["username" => $_POST["username"], "email" => $_POST["email"]] )
                     ->execute()->fetch(PDO::FETCH_ASSOC);
             if(!$user){
-                Utils::create_warning_message (_t(74));
+                $this->create_warning_message (_t(74));
             } else {
                 $reset_password = new DBObject(RESET_PASSWORD_QUEUE);
                 
@@ -36,7 +36,7 @@ class Forget_passwordController extends Page{
                 
                 Utils::HTMLMail($email, $subject, $message, $username);
                 
-                Utils::create_warning_message(_t(88), "alert-success");
+                $this->create_warning_message(_t(88), "alert-success");
                 return;
             }
         }

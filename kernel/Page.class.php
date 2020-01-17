@@ -16,7 +16,7 @@ abstract class Page {
     }
 
     public function check_access(): bool {
-        $user_roles = get_current_core_user()->getUserRoles();
+        $user_roles = User::get_current_core_user()->getUserRoles();
         return array_diff($this->accessable_roles, $user_roles) == 0 ? TRUE : FALSE;
     }
 
@@ -65,6 +65,18 @@ abstract class Page {
                 }
             }
         }
+    }
+
+    public function create_warning_message(string $message, string $type = "alert-danger"){
+        if(!isset($_SESSION["messages"])){
+            $_SESSION["messages"] = [];
+        }
+        if( !isset($_SESSION["messages"][$type]) ){
+            $_SESSION["messages"][$type] = [];
+        }
+        $_SESSION["messages"][$type] = [
+            "message" => $message
+        ];
     }
     
     public function printMessage($type, $message) {

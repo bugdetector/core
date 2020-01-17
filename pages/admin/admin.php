@@ -7,12 +7,12 @@ class AdminController extends Page {
     const admin_mainpage = "mainpage";
     
     public function check_access() : bool {
-        return get_current_core_user()->isAdmin();
+        return User::get_current_core_user()->isAdmin();
     }
     
     protected function preprocessPage() {
         parent::preprocessPage();
-        if(get_current_core_user()->isAdmin()){
+        if(User::get_current_core_user()->isAdmin()){
             $this->add_js_files("js/core-admin.js");
         }
     }

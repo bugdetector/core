@@ -9,7 +9,7 @@ class Watchdog extends DBObject{
         $watchdog->EVENT = $event;
         $watchdog->VALUE = $value;
         $watchdog->DATE = Utils::get_current_date();
-        $watchdog->IP = Utils::get_user_ip();
+        $watchdog->IP = User::get_user_ip();
         $watchdog->insert();
     }
 }

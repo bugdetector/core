@@ -7,7 +7,7 @@ class AdminAjaxController extends ServicePage{
     }
     
     public function check_access() : bool {
-        return get_current_core_user()->isAdmin();
+        return User::get_current_core_user()->isAdmin();
     }
     
     /**
@@ -78,18 +78,6 @@ class AdminAjaxController extends ServicePage{
     }
     
     /**
-     * Removes a manual document
-     */
-    function remove_document(){
-        if( isset($_POST["id"]) ){
-            $document = new DBObject(DOCUMENTS);
-            $document->ID = intval($_POST["id"]);
-            $document->delete();
-            send_result(_t(65));
-        }
-    }
-    
-    /**
      * Returns field definition for new table definition
      */
     private function get_input_field(){
@@ -144,7 +132,7 @@ class AdminAjaxController extends ServicePage{
     private function remove_role(){
         $role = new DBObject(ROLES);
         $role->getById( User::getIdOfRole($_POST["ROLE"]));
-        $role->ROLE != $_POST["ROLE"] ? throw_exception_as_json(throw_exception_as_json(_t(67))) : NOEXPR;
+        $role->ROLE != $_POST["ROLE"] ? $this->throw_exception_as_json(_t(67)) : "";
         $user = db_select(USERS_ROLES)->condition("ROLE_ID = :role_id", ["role_id" => $role->ID])->limit(1)->execute()->fetchAll(PDO::FETCH_NUM);
         if(count($user) > 0){
             $this->throw_exception_as_json(_t(71));

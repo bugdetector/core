@@ -43,10 +43,10 @@ class AdminManageUpdateController extends AdminManageController{
         if(isset($_POST["update"])){
             Migration::update();
             $this->updates = Migration::getUpdates();
-            Utils::create_warning_message("Updated successfuly.", "alert-success");
+            $this->create_warning_message("Updated successfuly.", "alert-success");
             if(isset($_SESSION["install_key"])){
                 unset($_SESSION["install_key"]);
-                core_go_to(BASE_URL."/admin/manage/update");
+                Utils::core_go_to(BASE_URL."/admin/manage/update");
             }
         }
         $this->operation = "update";

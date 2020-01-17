@@ -58,8 +58,8 @@ class Router {
         $page = $controller_name."Controller";
         $this->controller = new $page($current_arguments);
         if(!$this->controller->check_access()){
-            if(!get_current_core_user()->isLoggedIn()){
-                core_go_to(BASE_URL."/login?destination=/". implode("/", $this->arguments));
+            if(!User::get_current_core_user()->isLoggedIn()){
+                Utils::core_go_to(BASE_URL."/login?destination=/". implode("/", $this->arguments));
             }else{
                 require "pages/".self::$accessDenied."/".self::$accessDenied.".php";
                 $this->controller = new AccessDeniedController($this->arguments);

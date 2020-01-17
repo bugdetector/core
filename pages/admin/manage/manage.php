@@ -17,7 +17,7 @@ class AdminManageController extends AdminController{
             $role = new DBObject(ROLES);
             $role->ROLE = $_POST["ROLE"];
             $role->insert(); 
-            Utils::create_warning_message(_t(78, [$role->ROLE]),"alert-success");
+            $this->create_warning_message(_t(78, [$role->ROLE]),"alert-success");
         }
         $this->add_frontend_translation(98);
         $this->add_frontend_translation(103);

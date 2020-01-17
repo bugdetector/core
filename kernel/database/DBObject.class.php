@@ -62,7 +62,7 @@ class DBObject{
         foreach ($table_description as $field) {
             if($field[1] == "tinytext"){
                 $field_name = $field[0];
-                remove_uploaded_file($this->table, $field_name, $this->$field_name);
+                Utils::remove_uploaded_file($this->table, $field_name, $this->$field_name);
             }
         }
         return db_delete($this->table)->condition(" ID = :id ", ["id" => $this->ID])->execute();
@@ -145,8 +145,8 @@ class DBObject{
             if($file["size"] != 0){
                 $file["name"] = $this->ID."_".filter_var($file["name"], FILTER_SANITIZE_SPECIAL_CHARS, FILTER_NULL_ON_FAILURE);
                 $this->$file_key = $file["name"];
-                remove_uploaded_file($this->table, $file_key, $file);
-                if(!store_uploaded_file($this->table, $file_key, $file)){
+                Utils::remove_uploaded_file($this->table, $file_key, $file);
+                if(!Utils::store_uploaded_file($this->table, $file_key, $file)){
                     CoreDB::getInstance()->rollback();
                     throw new Exception(_t(99));
                 }

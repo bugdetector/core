@@ -5,14 +5,7 @@ class AdminTableController extends AdminController{
 
     protected function echoContent() {
         $this->add_frontend_translation(93);
-        $this->add_frontend_translation(109);
-        
-        if(isset($this->arguments[1]) && $this->arguments[1] == "new"){
-            require 'new/new.php';
-            $page = new NewTableController($this->arguments);
-            $page->echoContent();
-            return;
-        }        
+        $this->add_frontend_translation(109);    
         $select = NULL;
         $table = NULL;
         $page = isset($_GET["page"]) ? intval($_GET["page"]) : 1;
@@ -24,7 +17,7 @@ class AdminTableController extends AdminController{
            $table_exist = in_array($this->arguments[0], get_information_scheme());
         }
         if(!$table_exist){
-            core_go_to(BASE_URL."/admin/table");
+            Utils::core_go_to(BASE_URL."/admin/table");
         }
         if(isset($this->arguments[0]) && isset($this->arguments[1]) && isset($this->arguments[2])){
             $description = get_foreign_key_description($this->arguments[0], $this->arguments[1])->fetch(PDO::FETCH_NUM);
@@ -70,7 +63,7 @@ class AdminTableController extends AdminController{
             
             $query_link = "?".http_build_query($params);
         } else {
-            Utils::create_warning_message(_t(51), "alert-info");
+            $this->create_warning_message(_t(51), "alert-info");
         }
         require 'table_html.php';
     }

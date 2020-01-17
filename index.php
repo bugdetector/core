@@ -20,13 +20,13 @@ session_start();
 if(!VERSION && empty(get_information_scheme())){
     if($_SERVER["REQUEST_URI"] != SITE_ROOT."/admin/manage/update".(isset($_SESSION["install_key"]) ? "?key=".$_SESSION["install_key"] : "")){
         $_SESSION["install_key"] = hash("SHA256", date("Y-m-d H:i:s"));
-        core_go_to(BASE_URL."/admin/manage/update?key=".$_SESSION["install_key"]);
+        Utils::core_go_to(BASE_URL."/admin/manage/update?key=".$_SESSION["install_key"]);
     }
 } else {
     Utils::include_dir("Entity");
     Utils::include_dir("lib");
     Utils::include_dir("src");
-    get_current_core_user();
+    User::get_current_core_user();
 }
 date_default_timezone_set(TIMEZONE);
 

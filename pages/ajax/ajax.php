@@ -7,7 +7,7 @@ class AjaxController extends ServicePage {
     }
     
     public function check_access() : bool {
-        return get_current_core_user()->isAdmin();
+        return User::get_current_core_user()->isAdmin();
     }
     
      private function AutoCompleteSelectBoxFilter(){

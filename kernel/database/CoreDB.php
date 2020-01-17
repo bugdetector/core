@@ -347,7 +347,8 @@ define("TRANSLATIONS", "TRANSLATIONS");
 define("EMAILS", "EMAILS");
 define("BLOCKED_IPS", "BLOCKED_IPS");
 define("WATCHDOG", "WATCHDOG");
-$system_tables = [ROLES, USERS, RESET_PASSWORD_QUEUE, USERS_ROLES, TRANSLATIONS, BLOCKED_IPS, WATCHDOG];
+define("LOGINS", "LOGINS");
+$system_tables = [ROLES, USERS, RESET_PASSWORD_QUEUE, USERS_ROLES, TRANSLATIONS, BLOCKED_IPS, WATCHDOG, LOGINS];
 
 function get_system_tables() : array{
     global $system_tables;
