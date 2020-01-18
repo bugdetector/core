@@ -40,11 +40,11 @@ class LoginController extends Page{
             return;
         }
         if(isset($user)){
-            if($user->isLoggedIn()){
-                //Clearing failed login actions
-                db_delete(LOGINS)->condition("USERNAME = :username", [":username" =>$user->USERNAME])->execute();
-            }
-            if($user->isLoggedIn() && $user->isAdmin() ){
+            //Clearing failed login actions
+            db_delete(LOGINS)->condition("USERNAME = :username", [":username" =>$user->USERNAME])->execute();
+            if(isset($_GET["destination"])){
+                Utils::core_go_to(SITE_ROOT.$_GET["destination"]);
+            }elseif($user->isAdmin() ){
                 Utils::core_go_to(SITE_ROOT."/admin");
             }else{
                 Utils::core_go_to(SITE_ROOT);
