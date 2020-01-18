@@ -9,7 +9,7 @@ class AdminTableController extends AdminController{
         $select = NULL;
         $table = NULL;
         $page = isset($_GET["page"]) ? intval($_GET["page"]) : 1;
-        $page == 0 ? ($page = 1) : NOEXPR;
+        $page = $page == 0 ? 1 : $page;
         $offset = ($page-1)*PAGE_SIZE_LIMIT;
         $query_link = "";
         $table_exist = TRUE;

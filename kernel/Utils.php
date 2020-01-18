@@ -25,7 +25,7 @@ class Utils{
         return date("Y-m-d H:i:s");
     }
     
-    public function HTMLMail($email,$subject,$message, $username) {
+    public static function HTMLMail($email,$subject,$message, $username) {
         $mail = new \PHPMailer\PHPMailer\PHPMailer();
         $mail->IsSMTP();
         $mail->SMTPAuth = true;
@@ -82,7 +82,7 @@ class Utils{
     }
     
     public static function remove_uploaded_file($table, $field_name, $file) {
-        $file_url = __DIR__."/files/uploaded/$table/$field_name/$file";
+        $file_url = __DIR__."/../files/uploaded/$table/$field_name/$file";
         if(is_file($file_url)) unlink($file_url);
     }
 }

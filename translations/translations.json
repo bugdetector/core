@@ -578,5 +578,15 @@
         "ID": "117",
         "EN": "Unauthorized Access",
         "TR": "Yetkisiz Eri\u015fim"
+    },
+    {
+        "ID": "118",
+        "EN": "Are you sure want to drop field %s?",
+        "TR": "%s kolonunu kald\u0131rmak istedi\u011finize emin misiniz?"
+    },
+    {
+        "ID": "119",
+        "EN": "%s field removed.",
+        "TR": "%s kolonu kald\u0131r\u0131ld\u0131."
     }
 ]

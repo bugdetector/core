@@ -68,7 +68,7 @@ class DBObject{
         return db_delete($this->table)->condition(" ID = :id ", ["id" => $this->ID])->execute();
     }
 
-    protected function get_file_url_for_field($field_name){
+    public function get_file_url_for_field($field_name){
         return BASE_URL."/files/uploaded/$this->table/$field_name/".$this->$field_name;
     }
     
@@ -145,7 +145,7 @@ class DBObject{
             if($file["size"] != 0){
                 $file["name"] = $this->ID."_".filter_var($file["name"], FILTER_SANITIZE_SPECIAL_CHARS, FILTER_NULL_ON_FAILURE);
                 $this->$file_key = $file["name"];
-                Utils::remove_uploaded_file($this->table, $file_key, $file);
+                Utils::remove_uploaded_file($this->table, $file_key, $this->$file_key);
                 if(!Utils::store_uploaded_file($this->table, $file_key, $file)){
                     CoreDB::getInstance()->rollback();
                     throw new Exception(_t(99));

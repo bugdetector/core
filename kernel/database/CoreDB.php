@@ -294,7 +294,7 @@ $data_types = [
             $file_name = $object ? get_field_from_object($object, $desc[0]) : "";
             $field = new FileField($desc[0], $file_name); 
             $field->setLabel($desc[0]);
-            $file_name ? $field->setFileURL(BASE_URL."/files/uploaded/{$object->table}/{$desc[0]}/{$file_name}") : NOEXPR;
+            $file_name ? $field->setFileURL(BASE_URL."/files/uploaded/{$object->table}/{$desc[0]}/{$file_name}") : "";
             return [$field, "col-sm-12"];
       }
       ],

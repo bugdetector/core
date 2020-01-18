@@ -32,7 +32,7 @@ abstract class ServicePage extends Page {
             $this->callService($service_name);
         } catch (Exception $ex) {
             http_response_code(500);
-            throw_exception_as_json($ex->getMessage());
+            $this->throw_exception_as_json($ex->getMessage());
         }
     }
     

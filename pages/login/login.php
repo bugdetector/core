@@ -46,6 +46,8 @@ class LoginController extends Page{
             }
             if($user->isLoggedIn() && $user->isAdmin() ){
                 Utils::core_go_to(SITE_ROOT."/admin");
+            }else{
+                Utils::core_go_to(SITE_ROOT);
             }
         }
     }

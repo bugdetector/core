@@ -54,7 +54,9 @@ class AdminInsertController extends AdminController{
     private function insertRecord(){
         $this->object = new DBObject($this->table);
         unset($_POST["insert?"]);
-        object_map($this->object, $_POST["object"]);
+        if(isset($_POST["object"])){
+            object_map($this->object, $_POST["object"]);
+        }
         try {
             CoreDB::getInstance()->beginTransaction();
             $this->object->insert();

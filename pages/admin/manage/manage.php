@@ -49,10 +49,10 @@ class AdminManageController extends AdminController{
     
     private function getUserTableInfo() {
         $query = db_select(USERS)
-        ->orderBy("ID");
+        ->orderBy("ID")->condition("USERNAME != 'guest'");
         $this->entry_count = $query->select_with_function(["COUNT(*) AS count"])->execute()->fetchObject()->count;
         $query->unset_fields();
-        $this->table_content = $query->limit(PAGE_SIZE_LIMIT, ($this->page-1)*PAGE_SIZE_LIMIT)->execute()->fetchAll(PDO::FETCH_NUM);
+        $this->table_content = $query->select(USERS, ["ID", "USERNAME", "NAME", "SURNAME", "EMAIL","PHONE", "CREATED_AT", "ACCESS"])->limit(PAGE_SIZE_LIMIT, ($this->page-1)*PAGE_SIZE_LIMIT)->execute()->fetchAll(PDO::FETCH_NUM);
         $this->table_headers = ["ID", _t(20), _t(27),mb_convert_case(_t(28),MB_CASE_TITLE), _t(35), mb_convert_case(_t(29), MB_CASE_TITLE), _t(48), _t(34)];
     }
     
@@ -67,11 +67,8 @@ class AdminManageController extends AdminController{
     }
     
     function getTranslationInfo() {
-        $query = db_select(TRANSLATIONS)
-        ->orderBy("ID");
-        $this->entry_count = $query->select_with_function(["COUNT(*) AS count"])->execute()->fetchObject()->count;
-        $query->unset_fields();
-        $this->table_content = $query->limit(PAGE_SIZE_LIMIT, ($this->page-1)*PAGE_SIZE_LIMIT)->execute()->fetchAll(PDO::FETCH_NUM);
+        $this->entry_count = 0;
+        $this->table_content = db_select(TRANSLATIONS)->orderBy("ID")->execute()->fetchAll(PDO::FETCH_NUM);
         $this->table_headers = ["ID", "EN", "TR"];
     }
 }

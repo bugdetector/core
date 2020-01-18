@@ -70,9 +70,9 @@ abstract class FieldControl {
             $input = new InputField($option["name"]);
             $input->setType($option["type"]);
         }
-        $option["label"] ? $input->setLabel($option["label"]) : NOEXPR;
-        $option["value"] ? $input->setValue($option["value"]) : NOEXPR;
-        $option["class"] ? $input->addClass($option["class"]) : NOEXPR;
+        $option["label"] ? $input->setLabel($option["label"]) : "";
+        $option["value"] ? $input->setValue($option["value"]) : "";
+        $option["class"] ? $input->addClass($option["class"]) : "";
         return $input;
     }
 }
