@@ -2,7 +2,7 @@
 
 class Not_foundController extends Page {
     
-    public function check_access() {
+    public function check_access() : bool{
         return TRUE;
     }
     

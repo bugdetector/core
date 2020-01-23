@@ -62,7 +62,7 @@ class Router {
                 Utils::core_go_to(BASE_URL."/login?destination=/". implode("/", $this->arguments));
             }else{
                 require "pages/".self::$accessDenied."/".self::$accessDenied.".php";
-                $this->controller = new AccessDeniedController($this->arguments);
+                $this->controller = new Access_DeniedController($this->arguments);
             }
         }
         $this->loadPage();

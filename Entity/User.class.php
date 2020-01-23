@@ -47,7 +47,7 @@ class User extends DBObject{
     public function insert(){
         $this->CREATED_AT = date("Y-m-d h:i:s");
         $this_as_array = convert_object_to_array($this);
-        unset($this_as_array["ROLES"]);
+        unset($this_as_array["ROLES"], $this_as_array["ALLROLES"]);
         if(db_insert(self::TABLE, $this_as_array)->execute()){
             $this->ID = CoreDB::getInstance()->lastInsertId();
             return TRUE;
@@ -56,7 +56,7 @@ class User extends DBObject{
     
     public function delete():bool {
         return db_delete(USERS_ROLES)->condition("USER_ID = :user_id", ["user_id" => $this->ID])->execute() &&
-        db_delete(LOGINS)->condition("USER_ID = :user_id", ["user_id" => $this->ID])->execute() &&
+        db_delete(LOGINS)->condition("USERNAME = :username", ["username" => $this->USERNAME])->execute() &&
         db_delete(RESET_PASSWORD_QUEUE)->condition("USER = :user_id", ["user_id" => $this->ID])->execute()
                 && parent::delete();
     }
@@ -76,7 +76,7 @@ class User extends DBObject{
 
     public function update(){
         $this_as_array = convert_object_to_array($this);
-        unset($this_as_array["ROLES"]);
+        unset($this_as_array["ROLES"], $this_as_array["ALLROLES"]);
         return db_update(self::TABLE, $this_as_array)->condition("ID = :id", ["id" => $this->ID])->execute();
     }
     

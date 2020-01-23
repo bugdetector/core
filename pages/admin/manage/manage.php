@@ -52,7 +52,13 @@ class AdminManageController extends AdminController{
         ->orderBy("ID")->condition("USERNAME != 'guest'");
         $this->entry_count = $query->select_with_function(["COUNT(*) AS count"])->execute()->fetchObject()->count;
         $query->unset_fields();
-        $this->table_content = $query->select(USERS, ["ID", "USERNAME", "NAME", "SURNAME", "EMAIL","PHONE", "CREATED_AT", "ACCESS"])->limit(PAGE_SIZE_LIMIT, ($this->page-1)*PAGE_SIZE_LIMIT)->execute()->fetchAll(PDO::FETCH_NUM);
+        $this->table_content = $query
+        ->select(USERS, ["ID", "USERNAME", "NAME", "SURNAME", "EMAIL","PHONE", "CREATED_AT", "ACCESS"])
+        ->select_with_function([
+            "CONCAT(\"<a href='".BASE_URL."/admin/user/\", USERNAME, \"'>"._t(9)."</a>\") AS edit_link",
+            "CONCAT(\"<a href='#' class='delete-user' data-username='\", USERNAME, \"'>"._t(10)."</a>\") AS remove_link"
+            ])
+        ->limit(PAGE_SIZE_LIMIT, ($this->page-1)*PAGE_SIZE_LIMIT)->execute()->fetchAll(PDO::FETCH_ASSOC);
         $this->table_headers = ["ID", _t(20), _t(27),mb_convert_case(_t(28),MB_CASE_TITLE), _t(35), mb_convert_case(_t(29), MB_CASE_TITLE), _t(48), _t(34)];
     }
     
@@ -61,7 +67,12 @@ class AdminManageController extends AdminController{
         ->orderBy("ID");
         $this->entry_count = $query->select_with_function(["COUNT(*) AS count"])->execute()->fetchObject()->count;
         $query->unset_fields();
-        $this->table_content = $query->limit(PAGE_SIZE_LIMIT, ($this->page-1)*PAGE_SIZE_LIMIT)->execute()->fetchAll(PDO::FETCH_NUM);
+        $this->table_content = $query
+        ->select(ROLES, ["*"])
+        ->select_with_function([
+            "CONCAT(\"<a href='#' class='remove-role' data-role-name='\", ROLE, \"'>"._t(12)."</a>\") AS remove_link"
+        ])
+        ->limit(PAGE_SIZE_LIMIT, ($this->page-1)*PAGE_SIZE_LIMIT)->execute()->fetchAll(PDO::FETCH_ASSOC);
         $this->table_headers = ["ID", _t(49)];
         require 'add_role_modal.php';
     }

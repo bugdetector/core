@@ -4,6 +4,8 @@ class Reset_passwordController extends Page{
     
     const RESET_PASSWORD_ID = "RESET_PASSWORD_ID";
     const RESET_PASSWORD_USER = "RESET_PASSWORD_USER";
+
+    private $reset_password_success = FALSE;
     
     public function check_access() : bool {
         return !User::get_current_core_user()->isLoggedIn();
@@ -43,14 +45,11 @@ class Reset_passwordController extends Page{
                 Utils::HTMLMail($user->EMAIL, _t(73), $message, $username);
                 
                 $this->create_warning_message(_t(86), "alert-success");
-                echo "<a href='".SITE_ROOT."/' class='btn btn-primary'>". _t(64)."</a>";
-                
-                return;
+                $this->reset_password_success = TRUE;
             }
             
         }
         require 'reset_password_html.php';
-        echo_reset_password_page($this);
     }
 
 }

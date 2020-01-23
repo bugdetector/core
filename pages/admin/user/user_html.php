@@ -84,7 +84,7 @@
                     </div>
 
                     <div class="col-sm-6 text-left">
-                        <input class="form-control" type="password" name="password[ORIGINAL_PASSWORD]"/>
+                        <input class="form-control" type="password" name="password[ORIGINAL_PASSWORD]" autocomplete="false"/>
                     </div>
                 </div>
                 <div class="row content">
@@ -93,7 +93,7 @@
                     </div>
 
                     <div class="col-sm-6 text-left">
-                        <input class="form-control" type="password" name="password[PASSWORD]"/>
+                        <input class="form-control" type="password" name="password[PASSWORD]" autocomplete="new-password"/>
                     </div>
                 </div>
                 <div class="row content">
@@ -102,7 +102,7 @@
                     </div>
 
                     <div class="col-sm-6 text-left">
-                        <input class="form-control" type="password" name="password[PASSWORD2]"/>
+                        <input class="form-control" type="password" name="password[PASSWORD2]" autocomplete="new-password"/>
                     </div>
                 </div>
                 <div class="row content">

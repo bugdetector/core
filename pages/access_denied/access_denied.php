@@ -1,6 +1,6 @@
 <?php
 
-class AccessDeniedController extends Page {
+class Access_DeniedController extends Page {
     
     public function check_access(): bool {
         return TRUE;

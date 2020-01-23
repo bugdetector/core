@@ -30,11 +30,6 @@
         "TR": "Rol Y\u00f6netimi"
     },
     {
-        "ID": "7",
-        "EN": "Sessions of User",
-        "TR": "Kullan\u0131c\u0131n\u0131n Oturumlar\u0131"
-    },
-    {
         "ID": "8",
         "EN": "Add User",
         "TR": "Kullan\u0131c\u0131 Ekle"
@@ -388,11 +383,6 @@
         "ID": "78",
         "EN": "%s role defined.",
         "TR": "%s rol tan\u0131m\u0131 yap\u0131ld\u0131."
-    },
-    {
-        "ID": "79",
-        "EN": "Nothing chosen.",
-        "TR": "Hi\u00e7bir \u015fey se\u00e7ilmedi."
     },
     {
         "ID": "80",

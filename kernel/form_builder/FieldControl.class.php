@@ -69,10 +69,18 @@ abstract class FieldControl {
         }else{
             $input = new InputField($option["name"]);
             $input->setType($option["type"]);
+            if($option["type"] == "checkbox"){
+                $input->removeClass("form-control");
+            }
         }
-        $option["label"] ? $input->setLabel($option["label"]) : "";
-        $option["value"] ? $input->setValue($option["value"]) : "";
-        $option["class"] ? $input->addClass($option["class"]) : "";
+        isset($option["label"]) ? $input->setLabel($option["label"]) : "";
+        isset($option["value"]) ? $input->setValue($option["value"]) : "";
+        isset($option["class"]) ? $input->addClass($option["class"]) : "";
+        if(isset($option["attributes"])){
+            foreach($option["attributes"] as $name => $value){
+                $input->addAttribute($name, $value);
+            }
+        }
         return $input;
     }
 }

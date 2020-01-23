@@ -146,11 +146,11 @@ function db_query(string $query) : PDOStatement {
     return CoreDB::getInstance()->query($query);
 }
 
-function db_create(string $tableName) {
+function db_create(string $tableName) : CreateQueryPreparer {
     return new CreateQueryPreparer($tableName);
 }
 
-function db_alter(string $tableName){
+function db_alter(string $tableName) : AlterQueryPreparer{
     return new AlterQueryPreparer($tableName);
 }
 
@@ -330,14 +330,35 @@ function get_supported_data_types() : array{
     return $data_types;
 }
 
-function object_map(&$object, array $array){
+/**
+ * Set fields of object using an array with same keys
+ * @param DBObject $object
+ * @return \array
+ */
+function object_map(DBObject &$object, array $array){
+    $object_class_name = get_class($object);
     foreach ($array as $key => $value){
-            $object->$key = $value;
+        if($object_class_name != "DBObject" && !property_exists($object,$key)){
+            continue;
+        }
+        $object->$key = $value;
     }
 }
 
-function convert_object_to_array(&$object) : array{
-    $object_as_array = (array) $object;
+/**
+ * Converts an object to array including private fields
+ * @param DBObject $object
+ * @return \array
+ */
+function convert_object_to_array(DBObject &$object) : array{
+    $reflector = new ReflectionObject($object);
+    $nodes = $reflector->getProperties();
+    $object_as_array = [];
+    foreach ($nodes as $node) {
+        $nod = $reflector->getProperty($node->getName());
+        $nod->setAccessible(true);
+        $object_as_array[$node->getName()] = $nod->getValue($object);
+    }
     unset($object_as_array["ID"]);
     unset($object_as_array["table"]);
     return $object_as_array;
@@ -440,17 +461,4 @@ function get_all_table_references() : PDOStatement {
  */
 function is_unique_foreign_key(string $table, string $uni) : bool {
     return get_foreign_key_description($table, $uni)->rowCount() !== 0;
-}
-
-function get_file_input(string $file_field, string $file_name = "") : string {
-    return
-    "<div >
-        <div class='btn btn-success col-sm-2 col-xs-12 file-field'>
-            "._t(83)."
-        </div>
-        <input type='file' name='$file_field' style='display: none;'/>
-        <div class='col-sm-10 col-xs-12'>
-            <input class='file-path form-control' type='text' value='$file_name' placeholder='"._t(113)."'/>
-        </div>
-    </div>";
 }

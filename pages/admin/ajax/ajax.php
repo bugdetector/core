@@ -133,7 +133,7 @@ class AdminAjaxController extends ServicePage{
             CoreDB::getInstance()->beginTransaction();
             $user_to_delete->delete();
             CoreDB::getInstance()->commit();
-            $this->send_result(_t(70, $user_to_delete->USERNAME));
+            $this->send_result(_t(70, [$user_to_delete->USERNAME]));
         }
     }
     

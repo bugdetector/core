@@ -80,67 +80,38 @@ $(document).ready(function () {
         alter(table_name, fields, form_build_id);
     });
     
-    $(".user-logins").click(function () {
-        var controlElement = $('input[name=chosen]:checked');
-        if(controlElement.length == 0){
-           alertMessage(_t(79), _t(54), BootstrapDialog.TYPE_WARNING);
-           return; 
-        }
-        var element = controlElement.parents("tr").find("td")[2];
-        var username = $(element).html();
-        window.location = root+"/admin/table/WATCHDOG?VALUE="+username;
-    });
-    
-    $(".edit-user").click(function () {
-        var controlElement = $('input[name=chosen]:checked');
-        if(controlElement.length == 0){
-           alertMessage(_t(79), _t(54), BootstrapDialog.TYPE_WARNING);
-           return; 
-        }
-        var element = controlElement.parents("tr").find("td")[2];
-        var username = $(element).html();
-        window.location = root+"/admin/user/"+username;
-    });
-    
-    $(".delete-user").click(function () {
-        var controlElement = $('input[name=chosen]:checked');
-        if(controlElement.length == 0){
-           alertMessage(_t(79), _t(54), BootstrapDialog.TYPE_WARNING);
-           return; 
-        }
-        var element = controlElement.parents("tr").find("td")[2];
-        var username = $(element).html();
+    $(".delete-user").click(function (e) {
+        e.preventDefault();
+        var controlElement = $(this);
+        var username = controlElement.attr("data-username");
         alertMessage(_t(98, [username]), _t(54), BootstrapDialog.TYPE_DANGER, function (){
             $.ajax({
                 url : root + "/admin/ajax/delete_user",
                 type: 'POST',
                 data : {"USERNAME" : username},
                 dataType: 'json',
-                success: function (data, textStatus, jqXHR) {
+                success: function (response) {
                      controlElement.parents("tr").remove();
                 }
              });
         });
     });
     
-    $(".remove-role").click(function () {
-        var controlElement = $('input[name=chosen]:checked');
-        if(controlElement.length == 0){
-           alertMessage(_t(79), _t(54), BootstrapDialog.TYPE_WARNING);
-           return; 
-        }
-        var element = controlElement.parents("tr").find("td")[2];
-        var role = $(element).html();
-        $.ajax({
-             url : root + "/admin/ajax/remove_role",
-             type: 'POST',
-             dataType: 'json',
-             data: {ROLE: role},
-             success: function (data, textStatus, jqXHR) {
-                     alertMessage(data.msg, _t(52), BootstrapDialog.TYPE_INFO);
-                     controlElement.parents("tr").remove();
-             }
-         });
+    $(".remove-role").click(function (e) {
+        e.preventDefault();
+        controlElement = $(this);
+        var role = $(this).attr("data-role-name");
+        alertMessage(_t(81), _t(54), BootstrapDialog.TYPE_DANGER, function(){
+            $.ajax({
+                url : root + "/admin/ajax/remove_role",
+                type: 'POST',
+                dataType: 'json',
+                data: {ROLE: role},
+                success: function (data, textStatus, jqXHR) {
+                        controlElement.parents("tr").remove();
+                }
+            });
+        })
     });
     
     $(".rowadd").click(function (){

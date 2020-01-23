@@ -60,7 +60,7 @@ class AdminInsertController extends AdminController{
         try {
             CoreDB::getInstance()->beginTransaction();
             $this->object->insert();
-            unset($_FILES["files"]);
+            unset($_FILES["files"]); //Summernote uses files index
             if(!empty($_FILES)){
                 $this->object->include_files($_FILES["object"]);
             }
