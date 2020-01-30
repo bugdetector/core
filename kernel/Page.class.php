@@ -128,7 +128,7 @@ abstract class Page {
     protected function add_default_js_files(){
         $default_js_files = [
             "js/jquery.js",
-            "js/core.js",
+            "js/popper.min.js",
             "js/bootstrap.min.js",
             "js/bootstrap-select.js",
             "js/bootstrap-datetimepicker.min.js",
@@ -136,6 +136,7 @@ abstract class Page {
             "js/bootstrap-dialog.min.js",
             "js/summernote.js",
             "js/summernote-tr-TR.js",
+            "js/core.js"
         ];
         if(class_exists("Translator") && Translator::$language != "EN"){
             $default_js_files[] = "js/bootstrap-select.".Translator::$language.".js";
@@ -145,6 +146,7 @@ abstract class Page {
     protected function add_default_css_files(){
         $default_css_files = [
             "css/bootstrap.min.css",
+            "css/glyphicons.css",
             "css/bootstrap-select.min.css",
             "css/bootstrap-datetimepicker.min.css",
             "css/bootstrap-dialog.min.css",

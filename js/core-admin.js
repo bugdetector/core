@@ -96,6 +96,29 @@ $(document).ready(function () {
              });
         });
     });
+
+    $(".add-role").click(function(e) {
+        e.preventDefault();
+        let modal_content = $(
+                '<form method="post" class="row">'+
+                    '<div class="col-sm-3">'+
+                        '<label>'+ _t(50) + '</label>'+
+                    '</div>'+
+                    '<div class="col-sm-9">'+
+                        '<input class="form-control uppercase_filter" type="text" name="ROLE"/>'+
+                    '</div>'+
+                '</form>');
+        BootstrapDialog.show({
+            message : modal_content,
+            title : _t(11),
+            buttons: [{
+                label: _t(14),
+                action: function(){
+                    modal_content.submit();
+                }
+            }]
+        });
+    })
     
     $(".remove-role").click(function (e) {
         e.preventDefault();

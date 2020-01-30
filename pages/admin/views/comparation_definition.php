@@ -54,10 +54,10 @@ function echo_comparation_definition($definition = NULL) {?>
             <option value="another_table" <?php echo $definition && $definition->comparation_type == "another_table" ? "selected" : "";?>>Başka bir alanla kıyas</option>
         </select>
     </div>
-    <div class="col-xs-2 <?php echo ($definition && $definition->comparation_type != "entry") ? "hidden": ""?>">
+    <div class="col-xs-2 <?php echo ($definition && $definition->comparation_type != "entry") ? "d-none": ""?>">
         <input class="form-control" type="text" name="comparation_entry" value="<?php echo $definition && $definition->comparation_type == "entry" ? $definition->comparation_entry : "";?>"/> 
     </div>
-    <div class="col-xs-2 compare_table <?php echo $definition && $definition->comparation_type == "another_table" ? "": "hidden"?>">
+    <div class="col-xs-2 compare_table <?php echo $definition && $definition->comparation_type == "another_table" ? "": "d-none"?>">
         <select class="form-control selectpicker table_selector" data-live-search="true" name="second_table">
         <?php 
         foreach ($tables  as $table){
@@ -66,7 +66,7 @@ function echo_comparation_definition($definition = NULL) {?>
             } ?>
         </select>
     </div>
-    <div class="col-xs-2 compare_table <?php echo $definition && $definition->comparation_type == "another_table" ? "": "hidden"?>">
+    <div class="col-xs-2 compare_table <?php echo $definition && $definition->comparation_type == "another_table" ? "": "d-none"?>">
         <select class="form-control selectpicker" data-live-search="true" name="second_table_column">
             <?php
             if($definition){

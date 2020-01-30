@@ -46,7 +46,7 @@ class AdminInsertController extends AdminController{
         $this->form->addField(
                 (new InputField("form-build-id"))
                 ->setValue(FormBuilder::create_csrf(self::FORM_ID, $this->table))
-                ->addClass("hidden")
+                ->addClass("d-none")
                );
         require 'insert_html.php';
     }

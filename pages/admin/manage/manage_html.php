@@ -28,53 +28,55 @@
                   </div>
                   <div  class="manage-controls" id="user-controls" <?php echo $this->operation != "user" ? "hidden" : ""; ?>>
                       <div class="list-group-item">
-                        <a href="<?php echo SITE_ROOT."/admin/user?q=add" ?>" class="btn btn-default form-control"><span class="glyphicon glyphicon-plus"></span> <?php echo _t(8); ?></a>
+                        <a href="<?php echo SITE_ROOT."/admin/user?q=add" ?>" class="btn btn-outline-primary form-control"><span class="glyphicon glyphicon-plus"></span> <?php echo _t(8); ?></a>
                       </div>
                   </div>
                   <div  class="manage-controls" id="role-controls" <?php echo $this->operation != "role" ? "hidden" : ""; ?>>
                       <div class="list-group-item">
-                        <a href="#add_role_modal" data-toggle="modal" class="btn btn-default form-control add-role"><span class="glyphicon glyphicon-plus"></span> <?php echo _t(11); ?></a>
+                        <a href="" class="btn btn-outline-primary form-control add-role"><span class="glyphicon glyphicon-plus"></span> <?php echo _t(11); ?></a>
                       </div>
                   </div>
                   <div  class="manage-controls" id="role-controls" <?php echo $this->operation != "translation" ? "hidden" : ""; ?>>
                       <div class="list-group-item">
-                        <a href="#" class="btn btn-default form-control lang-imp"><span class="glyphicon glyphicon-import"></span> <?php echo _t(101); ?></a>
+                        <a href="#" class="btn btn-outline-primary form-control lang-imp"><span class="glyphicon glyphicon-import"></span> <?php echo _t(101); ?></a>
                       </div>
                       <div class="list-group-item">
-                        <a href="#" class="btn btn-default form-control lang-exp"><span class="glyphicon glyphicon-export"></span> <?php echo _t(102); ?></a>
+                        <a href="#" class="btn btn-outline-primary form-control lang-exp"><span class="glyphicon glyphicon-export"></span> <?php echo _t(102); ?></a>
                       </div>
                   </div>
               </div>
           </div>
           <div class="col-sm-9">
-              <?php $this->printMessages(); ?>
-              <div class="form-group input-group search-group">
-                    <input type="text" class="form-control search-field" placeholder="Arama Yapın"/>
-                    <span class="input-group-btn">
-                        <button class="btn btn-info" type="button"><span class="glyphicon glyphicon-search"></span></button>
-                    </span>
-              </div>
-          </div>
-          <div class="col-sm-9 text-left scroll" id="main_content">
-              <?php 
-                $this->import_view("table_view");
-                if(get_class($this) == "AdminManageUpdateController"){
-                    echo "<div class='col-sm-6'>";
-                    echo_table($this->table_headers, $this->table_content);
-                    echo "<div>";
-                    $this->echoForm();
-                }else if($this->operation){
-                    echo_table($this->table_headers, $this->table_content);
+            <div class="col-sm-12">
+                <?php $this->printMessages(); ?>
+                <div class="form-group input-group search-group">
+                        <input type="text" class="form-control search-field" placeholder="Arama Yapın"/>
+                        <span class="input-group-btn">
+                            <button class="btn btn-info" type="button"><span class="glyphicon glyphicon-search"></span></button>
+                        </span>
+                </div>
+            </div>
+            <div class="col-sm-12 text-left scroll" id="main_content">
+                <?php 
+                    $this->import_view("table_view");
+                    if(get_class($this) == "AdminManageUpdateController"){
+                        echo "<div class='col-sm-6'>";
+                        echo_table($this->table_headers, $this->table_content);
+                        echo "<div>";
+                        $this->echoForm();
+                    }else if($this->operation){
+                        echo_table($this->table_headers, $this->table_content);
+                    }
+                ?>
+            </div>
+            <div class="col-sm-12">
+            <?php 
+                if($this->operation && get_class($this) == "AdminManageController"){
+                    $this->import_view("pagination");
+                    echo_pagination_view(BASE_URL."/admin/manage/{$this->operation}?", $this->page, $this->entry_count);
                 }
-              ?>
-          </div>
-    </div>
-    <div class="row">
-        <?php 
-        if($this->operation && get_class($this) == "AdminManageController"){
-            $this->import_view("pagination");
-            echo_pagination_view(BASE_URL."/admin/manage/{$this->operation}?", $this->page, $this->entry_count);
-        }
-        ?>
+                ?>
+            </div>
+        </div>
     </div>
 </div>

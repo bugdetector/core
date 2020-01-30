@@ -1,6 +1,6 @@
 
 
-<div class="col-sm-3 sidenav">
+<div class="col-md-3 sidenav">
     <a href="<?php echo SITE_ROOT;?>/admin/table/new" class="btn btn-success form-control" align="left">
         <span class="glyphicon glyphicon-hdd"></span> <?php echo _t(13); ?>
     </a>
@@ -15,12 +15,12 @@
         $tables = get_information_scheme();
         foreach ($tables as $document){
     ?>
-        <div class="list-group-item tablelist" align="left">
+        <div class="list-group-item tablelist text-left">
             <a href="<?php echo SITE_ROOT."/admin/table/$document"; ?>">
                 <span class="glyphicon glyphicon-list-alt"></span><?php echo $document; ?>
             </a>
             
-            <div class="dropdown pull-right">
+            <div class="dropdown float-right">
                 <a href="#" title="<?php echo _t(17); ?>" id="openmenu" class="dropdown-toogle" data-toggle="dropdown"/>
                     <span class="glyphicon glyphicon-option-vertical" ></span> </a>
                 <div class="dropdown-menu dropdown-menu-left">

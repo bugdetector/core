@@ -3,7 +3,7 @@ function echo_header(array $js_files, array $css_files, string $title){?>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-        <link rel="icon" href="/logo/housingbritain.png"/>
+        <link rel="icon" href="<?php echo BASE_URL; ?>/assets/favicon.png"/>
         <title> <?php echo $title;?> </title>
         <?php foreach ($js_files as $js_file) { ?>
         <script src="<?php echo strpos($js_file, "http") !== 0 ? BASE_URL."/$js_file?". hash("MD5", filemtime($js_file)): $js_file;?>"></script>

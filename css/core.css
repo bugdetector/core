@@ -4,6 +4,13 @@ footer {
     padding: 15px;
 }
 
+nav.navbar{
+    background-color: #458ce7;
+}
+nav img {
+    height: 30px;
+}
+
 .form-control {
     margin-bottom: 5px;
     width: 100%;

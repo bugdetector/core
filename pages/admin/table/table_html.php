@@ -13,7 +13,7 @@
 <div class="container-fluid text-center">    
     <div class="row content">
      <?php $this->import_view("sidebar_table_list");?>
-      <div class="col-sm-9">
+      <div class="col-md-9">
           <div class="row">
               <div class="form-group input-group search-group">
                   <input type="text" class="form-control search-field" placeholder="<?php echo _t(55); ?>"/>
@@ -23,12 +23,12 @@
               </div>
           </div>
           <div class="row">
-              <div class="col-sm-12 scroll text-left" id="main_content">
+              <div class="col-md-12 scroll text-left" id="main_content">
                 <?php $this->printMessages(); ?>
               </div>
           </div>
           <div class="row">
-              <div class="col-sm-12" id="pagination">
+              <div class="col-md-12" id="pagination">
                   <div class="text-right">
                    <?php 
                    if($select["count"] > 0){

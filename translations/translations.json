@@ -457,7 +457,7 @@
     {
         "ID": "94",
         "EN": "Out of %d records %d-%d is monitoring.",
-        "TR": "Toplan %d kay\u0131ttan %d-%d aras\u0131 g\u00f6r\u00fcnt\u00fcleniyor."
+        "TR": "Toplam %d kay\u0131ttan %d-%d aras\u0131 g\u00f6r\u00fcnt\u00fcleniyor."
     },
     {
         "ID": "95",
@@ -576,7 +576,7 @@
     },
     {
         "ID": "119",
-        "EN": "%s field removed.",
+        "EN": "%s field dropped.",
         "TR": "%s kolonu kald\u0131r\u0131ld\u0131."
     }
 ]

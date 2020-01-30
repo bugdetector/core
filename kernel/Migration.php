@@ -13,8 +13,8 @@ class Migration {
         $config = file_get_contents(".config.php");
         $new_version_number = NULL;
         try{
+            CoreDB::getInstance()->beginTransaction();
             foreach ($updates as $update) {
-                CoreDB::getInstance()->beginTransaction();
                 include self::MIGRATIONS_DIR."/".$update;
                 $new_version_number = (basename($update, ".php"));
                 $new_config = str_replace('define("VERSION", "'.VERSION.'");', 'define("VERSION", "'.$new_version_number.'");', $config);

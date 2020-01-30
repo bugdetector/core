@@ -1,8 +1,8 @@
 <?php
 function echo_pagination_view($query_link, $page, $entry_count) { ?>
-    <div class="col-sm-12" id="pagination">
+    <div class="col-sm-12 mt-4" id="pagination">
         <nav aria-label="...">
-          <ul class="pagination">
+          <ul class="pagination justify-content-center">
             <li class="page-item <?php echo $page == 1 ? "disabled" : "";?>">
               <a class="page-link"  href='<?php echo "$query_link&page=1" ?>'><<</a>
             </li>

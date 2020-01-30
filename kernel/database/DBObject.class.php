@@ -108,7 +108,7 @@ class DBObject{
             $delete_button = new InputField("");
             $delete_button->setType("button")->addClass("recordelete btn btn-danger")->setValue(_t(82));
             $hidden_delete_submit = new InputField("delete?");
-            $hidden_delete_submit->setType("submit")->addClass("hidden");
+            $hidden_delete_submit->setType("submit")->addClass("d-none");
             $col->addField($update_button)->addField($delete_button)->addField($hidden_delete_submit);
             $submit_section->addField($col);
             

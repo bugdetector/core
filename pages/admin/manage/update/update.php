@@ -68,12 +68,12 @@ class AdminManageUpdateController extends AdminManageController{
         $form = new FormBuilder("post");
         if(empty($this->updates)){
             $input = new InputField("ok");
-            $input->setType("submit")->setLabel("There is no update.")->addClass("hidden");
+            $input->setType("submit")->setLabel("There is no update.")->addClass("d-none");
             $form->addField($input);
         } else {
             $input = new InputField("update");
             $input->setType("submit")
-                    ->addClass("btn btn-primary")
+                    ->addClass("btn btn-success")
                     ->setLabel("System will update to version: ". basename(max($this->updates), ".php"))
                     ->setValue("Update");
             $form->addField($input);

@@ -22,6 +22,9 @@ class AdminManageController extends AdminController{
         $this->add_frontend_translation(98);
         $this->add_frontend_translation(103);
         $this->add_frontend_translation(104);
+        $this->add_frontend_translation(50);
+        $this->add_frontend_translation(11);
+        $this->add_frontend_translation(14);
         
         $this->page = isset($_GET["page"]) && $_GET["page"]>1 ? $_GET["page"] : 1;
         
@@ -74,7 +77,6 @@ class AdminManageController extends AdminController{
         ])
         ->limit(PAGE_SIZE_LIMIT, ($this->page-1)*PAGE_SIZE_LIMIT)->execute()->fetchAll(PDO::FETCH_ASSOC);
         $this->table_headers = ["ID", _t(49)];
-        require 'add_role_modal.php';
     }
     
     function getTranslationInfo() {

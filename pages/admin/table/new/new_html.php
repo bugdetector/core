@@ -1,7 +1,7 @@
 <div class="container  scroll">
     <?php $this->printMessages(); ?>
     <form class="container-fluid text-center" id="new_table" method="post">
-        <input type="text" name="form_build_id" value="<?php echo $this->form_build_id; ?>" class="hidden" />
+        <input type="text" name="form_build_id" value="<?php echo $this->form_build_id; ?>" class="d-none" />
         <div class="row content">
           <div class="col-xs-6 form-group has-error">
               <input class="form-control lowercase_filter" type="text" name="table_name" placeholder="<?php echo _t(60); ?>" <?php echo $this->request_table ? "value='$this->request_table' disabled" : "autofocus";?>/>

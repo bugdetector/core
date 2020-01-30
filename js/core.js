@@ -118,6 +118,7 @@ function alertMessage(message, title = _t(54) , type = BootstrapDialog.TYPE_WARN
                 },
                 {
                     label : _t(77),
+                    cssClass: "btn-primary",
                     action : function (dialog){
                         callback();
                         dialog.close();
