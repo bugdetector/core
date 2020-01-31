@@ -8,12 +8,13 @@ include 'CreateQueryPreparer.php';
 include 'AlterQueryPreparer.php';
 include 'DropQueryPreparer.php';
 include 'DBObject.class.php';
-
+/**
+ * @property \PDO $connection
+ */
 class CoreDB {
     private static $instance;
     private $connection;
-            
-    private $transactionSet = FALSE;
+
     private function __construct(){
         try{
             self::$instance = $this;
@@ -46,7 +47,7 @@ class CoreDB {
             $statement->execute($query->getParams());
             return $statement;    
         } catch (PDOException $ex) {
-            if($this->transactionSet){
+            if($this->connection->inTransaction()){
                 $this->connection->rollBack();
             }
             throw $ex;
@@ -62,7 +63,7 @@ class CoreDB {
         try{
             return $this->connection->query($query);
         } catch (PDOException $ex){
-            if($this->transactionSet){
+            if($this->connection->inTransaction()){
                 $this->connection->rollBack();
             }
             throw $ex;
@@ -70,18 +71,17 @@ class CoreDB {
     }
     
     public function rollback() {
-        if($this->transactionSet){
+        if($this->connection->inTransaction()){
             $this->connection->rollBack();
         }
     }
     
     public function beginTransaction(){
-        $this->transactionSet = TRUE;
         $this->connection->beginTransaction();
     }
 
     public function commit(){
-        if($this->transactionSet){
+        if($this->connection->inTransaction()){
             $this->connection->commit();
         }
     }
