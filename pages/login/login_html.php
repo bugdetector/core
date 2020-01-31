@@ -11,7 +11,7 @@ function echo_login_page(LoginController $controller) { ?>
                 <input name="username" class="form-control" placeholder="<?php echo _t(20); ?>" required autofocus>
                 <input name="password" class="form-control" type="password" placeholder="<?php echo _t(22); ?>" required>
                 <input type="submit" class="btn btn-lg btn-light btn-block" value="<?php echo _t(21); ?>" name="login">
-                <div class="col-xs-12 login-actions">
+                <div class="col-sm-12 login-actions">
                     <label class="float-left">
                         <input type="checkbox" value="remember-me" name="remember-me" <?php if(isset($_COOKIE["remember-me"]) && $_COOKIE["remember-me"]==true ) echo "checked"; ?>>
                         <?php echo _t(112); ?>

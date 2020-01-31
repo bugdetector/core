@@ -220,7 +220,7 @@ $data_types = [
           
           $field->setValue(get_field_from_object($object, $desc[0]));
           $field->setLabel($desc[0]);
-          return [$field, "col-xs-12"];
+          return [$field, "col-sm-12"];
       }
       ],
   "LONGTEXT" => [
@@ -235,7 +235,7 @@ $data_types = [
           $field->addClass("summernote");
           $field->setLabel($desc[0]);
           $field->setValue(htmlspecialchars_decode(get_field_from_object($object, $desc[0])));
-          return [$field, "col-xs-12"];
+          return [$field, "col-sm-12"];
       }
       ],
   "DATE" => [
