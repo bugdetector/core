@@ -9,18 +9,6 @@ class AdminAjaxController extends ServicePage{
     public function check_access() : bool {
         return User::get_current_core_user()->isAdmin();
     }
-    
-    /**
-     * Select from table
-     */
-    private function select(){
-        if(in_array( $_POST["table"], get_information_scheme()) ){
-            $columns = db_select($_POST["table"])->orderBy("ID")->execute()->fetchAll(PDO::FETCH_NUM);
-            $result = ["values" => $columns];
-            $result["skeleton"] = get_table_description($_POST["table"]);
-            echo json_encode($result);
-        }
-    }
 
      /**
      * Delete record
@@ -31,7 +19,7 @@ class AdminAjaxController extends ServicePage{
              unset($_POST["table"]);
              $values = $_POST;
              $object = new DBObject($table);
-             object_map($object, $values);
+             $object->map($values);
              $object->delete();
          }
     }
@@ -44,26 +32,6 @@ class AdminAjaxController extends ServicePage{
     }
     
     /**
-     * Returns table description
-     */
-    private function get_description(){
-        echo json_encode(get_table_description($_POST["table"]));
-    }
-    
-    /**
-     * returns foreign key description
-     */
-    private function get_fk_description(){
-        $table = $_POST["table"];
-        if(in_array($table, get_information_scheme())) {
-            $description = get_foreign_key_description($table, $_POST["key"])->fetch(PDO::FETCH_NUM);
-            $keys = db_select($description[0])->select("", [$description[1]])->orderBy("ID")->execute()->fetchAll(PDO::FETCH_NUM);
-            $entry = db_select($description[0])->orderBy("ID")->execute()->fetchAll(PDO::FETCH_NUM);
-            echo json_encode(["status" => "true", "keys" => $keys, "entry" => $entry]);
-        }
-    }
-    
-    /**
      * Returns foreign key entry
      */
     private function get_fk_entry() {
@@ -71,7 +39,7 @@ class AdminAjaxController extends ServicePage{
         $object = new DBObject($description[0]);
         $object->getById(intval($_POST["fk"]));
         $return_string = "";
-        foreach ( convert_object_to_array($object) as $key => $field){
+        foreach ( $object->toArray() as $key => $field){
             $return_string.= "$key = $field ";
         }
         echo $return_string;

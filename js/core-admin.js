@@ -58,27 +58,6 @@ $(document).ready(function () {
                 truncatetable(tablename);
             });
    });
-   
-   $(".tableadd").click(function (){
-        var tablename = getTableNameFromList($(this));
-        window.location = root +"/admin/table/new/"+tablename;
-    });
-    
-    $(".alter_table").click(function () {
-       if($("div.field_definition .has-error").length !== 0){
-           alertMessage(_t(80));
-           return ;
-       }
-       var table_name = $("input[name='table_name']").val();
-       var fields = [];
-       $('div.field_definition').each(function() {
-           var data = {};
-           $(this).find(":input").serializeArray().map(function(x){data[x.name] = x.value;})
-           fields.push(data);
-        });
-        var form_build_id = $("input[name='form_build_id']").val();
-        alter(table_name, fields, form_build_id);
-    });
     
     $(".delete-user").click(function (e) {
         e.preventDefault();
@@ -187,19 +166,21 @@ $(document).ready(function () {
     });
     
     $(document).on("click",".dbl_click_fk", function () {
-        var columnname = columns[$(this).index() - 1];
+        var columnname = columns[$(this).parents("td").index()];
         var activetable = get_active_table();
         var fk_val = $(this).text();
-        window.location = root +"/admin/table/"+activetable+"/"+columnname+"/"+fk_val;
+        window.location = root +"/admin/table/"+activetable+"/fk/"+columnname+"/"+fk_val;
     });
     
     $(document).on("mouseenter", ".dbl_click_fk",function () {
-        if($(this).find("span").attr("data-content")){
+        if($(this).attr("data-trigger")){
             return;
+        }else{
+            $(this).attr("data-trigger", true);
         }
         var activeelement = $("<span>"+$(this).html()+"</span>")
         $(this).html(activeelement);
-        var columnname = columns[$(this).index() - 1];
+        var columnname = columns[$(this).parents("td").index()];
         fk_hover = setTimeout(function () {
             var fk_val = activeelement.text();
             var activetable = get_active_table();
@@ -221,31 +202,41 @@ $(document).ready(function () {
     });
     
     $(document).on("click",".rowdelete",function (){
-         var element = $(this);
+         var controlElement = $(this);
          alertMessage(_t(81), _t(54), BootstrapDialog.TYPE_DANGER, function () {
-            do_control_operation(element, "delete", "glyphicon-remove");
+            var refresh = "glyphicon-refresh";
+            controlElement.removeClass(glypicon_class);
+            controlElement.addClass(refresh);
+            var data = new FormData();
+            var values = controlElement.parents("tr").find("td").each(function(i, td){
+                if(i===0) return;
+                data.append(columns[i-1], $(td).clone().find("a").remove().end().text() );
+            });
+            var activetable = get_active_table();
+            data.append("table", activetable);
+            $.ajax({
+                url: root+"/admin/ajax/delete",
+                type: "POST",
+                processData:false,
+                contentType:false,
+                data : data,
+                error: function(){
+                    controlElement.removeClass(refresh);
+                    controlElement.addClass(glypicon_class);
+                },
+                success : function(response){
+                    controlElement.removeClass(refresh);
+                    controlElement.addClass("glyphicon-ok");
+                    if(operation === "delete"){
+                        setTimeout(function (){
+                            controlElement.parents("tr").remove();
+                        }, 1000);
+                    }
+                }
+            });
         });
-     });
-     
-     $(document).on("click",".rowbrowse",function(){
-         var id = $(this).parents("tr").find("td:eq(1)").text();
-         window.location = root + "/admin/insert/"+get_active_table()+"/"+id;
      });
 });
-
-function alter(table_name, fields, form_build_id){
-    $.ajax({
-            url: root + "/admin/ajax/alter_table",
-            type: 'POST',
-            dataType: 'json',
-            data: {tablename : table_name, fields: fields, form_build_id: form_build_id},
-            success: function (data, textStatus, jqXHR) {
-                    alertMessage(data.message, _t(52), BootstrapDialog.TYPE_INFO, function () {
-                        location.reload();
-                    });
-            }
-        });
-}
 
 function droptable(tablename){
     $.ajax({
@@ -314,140 +305,4 @@ function get_active_table() {
 }
 function getTableNameFromList(element){
     return element.parents(".tablelist").children("a").text().trim();
-}
-
-function send_insert_form_to_service(currentelement ,service_name) {
-    var data = new FormData();
-    $("#insertForm").serializeArray().map(function(x){data.append(x.name, x.value)});
-    var files = $("#insertForm input[type='file']");
-    files.each(function (i, element){
-        data.append(element.name, element.files[0]);
-    });
-    currentelement.after('<span class="glyphicon glyphicon-refresh" style="font-size:30px;"></span>');
-    currentelement.hide();
-    var icon = "glyphicon-ok";
-    $.ajax({
-        url: root+"/admin/ajax/"+service_name,
-        type: "POST",
-        processData:false,
-        contentType:false,
-        data : data,
-        error: function(){
-            icon = "glyphicon-remove";
-        },
-        complete : function(response){
-            currentelement.next().remove();
-            currentelement.after('<span class="glyphicon '+icon+'" style="font-size:30px;"></span>');        
-            setTimeout(function (){
-                currentelement.show();
-                currentelement.next().remove();
-            }, 1500);
-        }
-    });
-}
-
-function do_control_operation(controlElement, operation, glypicon_class){
-    var refresh = "glyphicon-refresh";
-    controlElement.removeClass(glypicon_class);
-    controlElement.addClass(refresh);
-    var data = new FormData();
-    var values = controlElement.parents("tr").find("td").each(function(i, td){
-        if(i===0) return;
-        data.append(columns[i-1], $(td).clone().find("a").remove().end().text() );
-    });
-    if(operation !== "delete"){
-        var files = controlElement.parents("tr").find("input[type='file']");
-        files.each(function (i, element){
-            data.append(columns[$(element).parents("td").index()-1], element.files[0]);
-        });
-    }
-    var activetable = get_active_table();
-    data.append("table", activetable);
-    $.ajax({
-        url: root+"/admin/ajax/"+operation,
-        type: "POST",
-        processData:false,
-        contentType:false,
-        data : data,
-        error: function(){
-            controlElement.removeClass(refresh);
-            controlElement.addClass(glypicon_class);
-        },
-        success : function(response){
-            controlElement.removeClass(refresh);
-            controlElement.addClass("glyphicon-ok");
-            if(operation === "delete"){
-                setTimeout(function (){
-                    controlElement.parents("tr").remove();
-                }, 1000);
-            }
-        }
-    });
-}
-
-function create_input(element, inputtype){
-    var input = $('<input type="'+inputtype+'" value="'+element.text()+'"/>');
-    element.append(input);
-    input.focus();
-    input.focusout(function(){
-        $(this).parent().html($(this).val());
-    });
-}
-
-var columns = [];
-function array_to_table(tableData, skeleton, add_controls = true) {
-    var table = $('<table class="content" id="result_table"></table>');
-    var thead = $('<thead></thead>');
-    var headrow = $('<tr class="head"></tr>');
-    if(add_controls) {
-        headrow.append('<td></td>');
-    }
-    var inputtypes = [];
-    columns = [];
-    $(skeleton).each(function (i, columnData){
-        headrow.append('<td>'+columnData[0]+'</td>');
-        columns.push(columnData[0]);
-        if(i!=0){
-            inputtypes.push(getClassByDataType(columnData[1],columnData[3]));
-        }else{
-            inputtypes.push("");
-        }
-    });
-    thead.append(headrow);
-    table.append(thead);
-    var tbody = $("<tbody></tbody>");
-    $(tableData).each(function (i, rowData) {
-        var row = $('<tr></tr>');
-        row.append($('<td>'+getControls()+'</td>')); 
-        $(rowData).each(function (j, cellData) {
-            if(inputtypes[j] !== "dbl_click_file"){
-                row.append($('<td class="'+inputtypes[j]+'">'+cellData+'</td>'));
-            }else{
-                row.append($('<td class="'+inputtypes[j]+'"><a target="_blank" href="'+root + "/files/uploaded/"+get_active_table()+"/"+skeleton[j][0]+"/"+cellData+'">'+cellData+'</td>'));
-            }
-        });
-        tbody.append(row);
-    });
-    table.append(tbody);
-    return table;
-}
-
-function getControls(){
-    return '<a href="#" title="'+_t(82)+'"><span class="glyphicon glyphicon-remove rowdelete core-control"></span></a>'+
-           '<a href="#" title="'+_t(83)+'"><span class="glyphicon glyphicon-eye-open rowbrowse core-control"></span> </a>';
-}
-
-function getClassByDataType(type = "", constraint = ""){
-    if (constraint.includes("MUL")) {
-        return "dbl_click_fk";
-    } else if(type.includes("int")){
-        return 'dbl_click_num';
-    } else if(type.includes("datetime")){
-        return 'dbl_click_datetime';
-    } else if(type.includes("tinytext")){
-        return 'dbl_click_file';
-    } else if(type.includes("text")){
-        return 'dbl_click_text_long';
-    }
-    return 'dbl_click_text';
 }

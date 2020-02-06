@@ -100,6 +100,21 @@ $(document).ready(function () {
     });
     
     $(document).on("keyup", ".bootstrap-select.autocomplete .bs-searchbox input", autocompleteFilter);
+
+    $(".stage .stage_header").click(function(){
+        if($(this).attr("disabled")){
+            return;
+        }
+        $(this).next().slideToggle();
+        $(this).find("span").toggleClass("glyphicon-chevron-down glyphicon-chevron-up");
+    }).find("h3").append("<span class='glyphicon glyphicon-chevron-down float-right'></span>");
+
+    $(document).on("click", ".form-reset-button", function(e){
+        e.preventDefault();
+        $(this).parents("form").find("input:not([type='submit']):not([type='reset']),textarea").val("");
+        $(this).parents("form").find("select").val("NULL").selectpicker("refresh");
+        $(this).parents("form").find("input[type='checkbox']").prop("checked", false).change();
+    })
 });
 
 function alertMessage(message, title = _t(54) , type = BootstrapDialog.TYPE_WARNING, callback = function () {}){

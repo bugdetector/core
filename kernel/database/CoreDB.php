@@ -27,9 +27,9 @@ class CoreDB {
     }
     /**
      * 
-     * @return \self
+     * @return \CoreDB
      */
-    public static function getInstance(){
+    public static function getInstance() : CoreDB{
         if(self::$instance == NULL){
             return new self();
         }
@@ -94,6 +94,83 @@ class CoreDB {
         return $this->connection->lastInsertId();
     }
     
+    public static function quote(string $string){
+        return CoreDB::getInstance()->_quote($string);
+    }
+
+    private function _quote(string $string){
+        return $this->connection->quote($string);
+    }
+
+    public static function get_supported_data_types() : array{
+        global $data_types;
+        return $data_types;
+    }
+
+    /**
+     * returns table description
+     * @param string $table
+     * @return \strıng
+     */
+    public static function get_table_description(string $table, bool $mul_important = true) : array {
+        $descriptions = db_query("DESCRIBE `$table`")->fetchAll(PDO::FETCH_BOTH);
+        foreach ($descriptions as $index => $desc){
+            if($mul_important && $desc[3] == "UNI" && self::is_unique_foreign_key($table, $desc[0])){
+                $descriptions[$index][3] = "MUL-UNI";
+            }
+        }
+        return $descriptions;
+    }
+
+    public static function get_system_tables() : array{
+        global $system_tables;
+        return $system_tables;
+    }
+
+    /**
+     * Returns foreign keys referenced to table
+     * @param string $table
+     * @return array
+     */
+    public static function get_references_to_table(string $table) : array {
+        return db_select("INFORMATION_SCHEMA.KEY_COLUMN_USAGE", "", FALSE)
+                ->select("", ["TABLE_NAME","COLUMN_NAME"])
+                ->condition("REFERENCED_TABLE_SCHEMA = :scheme AND REFERENCED_TABLE_NAME = :table")
+                ->params(["scheme" => DB_NAME, "table" => $table])->execute()->fetchAll(PDO::FETCH_NUM);
+    }
+
+    /**
+     * Returns all foreign key descriptions in database
+     * @return PDOStatement All defined references in database
+     */
+    public static function get_all_table_references() : PDOStatement {
+        return db_select("INFORMATION_SCHEMA.KEY_COLUMN_USAGE", "", FALSE)
+                ->select("", ["TABLE_NAME","COLUMN_NAME","REFERENCED_TABLE_NAME","REFERENCED_COLUMN_NAME"])
+                ->condition("REFERENCED_TABLE_SCHEMA = :scheme")
+                ->params(["scheme" => DB_NAME])->execute();
+    }
+
+    /**
+     * Returns true if unique column is also a foreign key else returns false
+     * @param string $table
+     * @param string $uni
+     * @return bool
+     */
+    function is_unique_foreign_key(string $table, string $uni) : bool {
+        return get_foreign_key_description($table, $uni)->rowCount() !== 0;
+    }
+
+    /**
+     * Returns foreign keys on table
+     * @param string $table
+     * @return PDOStatement
+     */
+    public static function get_table_references(string $table) : PDOStatement {
+        return db_select("INFORMATION_SCHEMA.KEY_COLUMN_USAGE", "", FALSE)
+                ->select("", ["REFERENCED_TABLE_NAME","REFERENCED_COLUMN_NAME"])
+                ->condition("REFERENCED_TABLE_SCHEMA = :scheme AND TABLE_NAME = :table")
+                ->params(["scheme" => DB_NAME, "table" => $table])->execute();
+    }
 }
 
 /**
@@ -307,7 +384,7 @@ $data_types = [
       },
       "input_field_callback" => function($object, $desc, $table){
         $fk_description = get_foreign_key_description($table, $desc[0])->fetch(PDO::FETCH_NUM);
-        $table_description = get_table_description($fk_description[0]);;
+        $table_description = CoreDB::get_table_description($fk_description[0]);;
         $entries = db_select($fk_description[0])->orderBy("ID")->execute()->fetchAll(PDO::FETCH_NUM);
         $options = [];
         foreach ($entries as $entry){
@@ -325,45 +402,6 @@ $data_types = [
       ]
 ];
 
-function get_supported_data_types() : array{
-    global $data_types;
-    return $data_types;
-}
-
-/**
- * Set fields of object using an array with same keys
- * @param DBObject $object
- * @return \array
- */
-function object_map(DBObject &$object, array $array){
-    $object_class_name = get_class($object);
-    foreach ($array as $key => $value){
-        if($object_class_name != "DBObject" && !property_exists($object,$key)){
-            continue;
-        }
-        $object->$key = $value;
-    }
-}
-
-/**
- * Converts an object to array including private fields
- * @param DBObject $object
- * @return \array
- */
-function convert_object_to_array(DBObject &$object) : array{
-    $reflector = new ReflectionObject($object);
-    $nodes = $reflector->getProperties();
-    $object_as_array = [];
-    foreach ($nodes as $node) {
-        $nod = $reflector->getProperty($node->getName());
-        $nod->setAccessible(true);
-        $object_as_array[$node->getName()] = $nod->getValue($object);
-    }
-    unset($object_as_array["ID"]);
-    unset($object_as_array["table"]);
-    return $object_as_array;
-}
-
 define("ROLES", "ROLES");
 define("USERS", "USERS");
 define("USERS_ROLES", "USERS_ROLES");
@@ -374,11 +412,6 @@ define("BLOCKED_IPS", "BLOCKED_IPS");
 define("WATCHDOG", "WATCHDOG");
 define("LOGINS", "LOGINS");
 $system_tables = [ROLES, USERS, RESET_PASSWORD_QUEUE, USERS_ROLES, TRANSLATIONS, BLOCKED_IPS, WATCHDOG, LOGINS];
-
-function get_system_tables() : array{
-    global $system_tables;
-    return $system_tables;
-}
 
 /**
  * 
@@ -394,20 +427,6 @@ function get_information_scheme() : array{
 }
 
 /**
- * returns table description
- * @param string $table
- * @return \strıng
- */
-function get_table_description(string $table, bool $mul_important = true) : array {
-    $descriptions = db_query("DESCRIBE `$table`")->fetchAll(PDO::FETCH_NUM);
-    foreach ($descriptions as $index => $desc){
-        if($mul_important && $desc[3] == "UNI" && is_unique_foreign_key($table, $desc[0])){
-            $descriptions[$index][3] = "MUL-UNI";
-        }
-    }
-    return $descriptions;
-}
-/**
  * 
  * @param string $table
  * @param string $foreignKey
@@ -418,47 +437,4 @@ function get_foreign_key_description(string $table, string $foreignKey) : PDOSta
             ->select("", ["REFERENCED_TABLE_NAME","REFERENCED_COLUMN_NAME"])
             ->condition("REFERENCED_TABLE_SCHEMA = :scheme AND TABLE_NAME = :table AND COLUMN_NAME = :column")
             ->params(["scheme" => DB_NAME, "table" => $table, ":column" => $foreignKey])->execute();
-}
-/**
- * Returns foreign keys referenced to table
- * @param string $table
- * @return array
- */
-function get_references_to_table(string $table) : array {
-    return db_select("INFORMATION_SCHEMA.KEY_COLUMN_USAGE", "", FALSE)
-            ->select("", ["TABLE_NAME","COLUMN_NAME"])
-            ->condition("REFERENCED_TABLE_SCHEMA = :scheme AND REFERENCED_TABLE_NAME = :table")
-            ->params(["scheme" => DB_NAME, "table" => $table])->execute()->fetchAll(PDO::FETCH_NUM);
-}
-/**
- * Returns foreign keys on table
- * @param string $table
- * @return PDOStatement
- */
-function get_table_references(string $table) : PDOStatement {
-    return db_select("INFORMATION_SCHEMA.KEY_COLUMN_USAGE", "", FALSE)
-            ->select("", ["REFERENCED_TABLE_NAME","REFERENCED_COLUMN_NAME"])
-            ->condition("REFERENCED_TABLE_SCHEMA = :scheme AND TABLE_NAME = :table")
-            ->params(["scheme" => DB_NAME, "table" => $table])->execute();
-}
-
-/**
- * Returns all foreign key descriptions in database
- * @return PDOStatement All defined references in database
- */
-function get_all_table_references() : PDOStatement {
-    return db_select("INFORMATION_SCHEMA.KEY_COLUMN_USAGE", "", FALSE)
-            ->select("", ["TABLE_NAME","COLUMN_NAME","REFERENCED_TABLE_NAME","REFERENCED_COLUMN_NAME"])
-            ->condition("REFERENCED_TABLE_SCHEMA = :scheme")
-            ->params(["scheme" => DB_NAME])->execute();
-}
-
-/**
- * Returns true if unique column is also a foreign key else returns false
- * @param string $table
- * @param string $uni
- * @return bool
- */
-function is_unique_foreign_key(string $table, string $uni) : bool {
-    return get_foreign_key_description($table, $uni)->rowCount() !== 0;
 }

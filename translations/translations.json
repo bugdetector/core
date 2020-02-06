@@ -30,6 +30,11 @@
         "TR": "Rol Y\u00f6netimi"
     },
     {
+        "ID": "7",
+        "EN": "Sessions of User",
+        "TR": "Kullan\u0131c\u0131n\u0131n Oturumlar\u0131"
+    },
+    {
         "ID": "8",
         "EN": "Add User",
         "TR": "Kullan\u0131c\u0131 Ekle"
@@ -385,6 +390,11 @@
         "TR": "%s rol tan\u0131m\u0131 yap\u0131ld\u0131."
     },
     {
+        "ID": "79",
+        "EN": "Nothing chosen.",
+        "TR": "Hi\u00e7bir \u015fey se\u00e7ilmedi."
+    },
+    {
         "ID": "80",
         "EN": "Please check wrong fields.",
         "TR": "L\u00fctfen hatal\u0131 alanlar\u0131 kontrol edin."
@@ -578,5 +588,35 @@
         "ID": "119",
         "EN": "%s field dropped.",
         "TR": "%s kolonu kald\u0131r\u0131ld\u0131."
+    },
+    {
+        "ID": "120",
+        "EN": "Can&#39;t find anything",
+        "TR": "Hi\u00e7bir sonu\u00e7 bulunamad\u0131"
+    },
+    {
+        "ID": "121",
+        "EN": "Choose File",
+        "TR": "Dosya Se\u00e7in"
+    },
+    {
+        "ID": "122",
+        "EN": "Number of Members",
+        "TR": "\u00dcye Say\u0131s\u0131"
+    },
+    {
+        "ID": "123",
+        "EN": "System Version",
+        "TR": "Sistem Versiyonu"
+    },
+    {
+        "ID": "124",
+        "EN": "There is no update",
+        "TR": "G\u00fcncelleme mevcut de\u011fil"
+    },
+    {
+        "ID": "125",
+        "EN": "Update available",
+        "TR": "G\u00fcncelleme mevcut"
     }
 ]

@@ -55,7 +55,7 @@ class AdminInsertController extends AdminController{
         $this->object = new DBObject($this->table);
         unset($_POST["insert?"]);
         if(isset($_POST["object"])){
-            object_map($this->object, $_POST["object"]);
+            $this->object->map($_POST["object"]);
         }
         try {
             CoreDB::getInstance()->beginTransaction();
@@ -76,7 +76,7 @@ class AdminInsertController extends AdminController{
         unset($_POST["update?"]);
         try {
             CoreDB::getInstance()->beginTransaction();
-            object_map($this->object, $_POST["object"]);
+            $this->object->map($_POST["object"]);
             unset($_FILES["files"]);
             if(!empty($_FILES)){
                $this->object->include_files($_FILES["object"]);

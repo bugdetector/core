@@ -49,12 +49,6 @@
           <div class="col-sm-9">
             <div class="col-sm-12">
                 <?php $this->printMessages(); ?>
-                <div class="form-group input-group search-group">
-                        <input type="text" class="form-control search-field" placeholder="Arama Yapın"/>
-                        <span class="input-group-btn">
-                            <button class="btn btn-info" type="button"><span class="glyphicon glyphicon-search"></span></button>
-                        </span>
-                </div>
             </div>
             <div class="col-sm-12 text-left scroll" id="main_content">
                 <?php 
@@ -65,7 +59,10 @@
                         echo "<div>";
                         $this->echoForm();
                     }else if($this->operation){
-                        echo_table($this->table_headers, $this->table_content);
+                        echo_table($this->table_headers, $this->table_content,[
+                            "orderable" => true,
+                            "filter_options" => $this->filter_options
+                        ]);
                     }
                 ?>
             </div>

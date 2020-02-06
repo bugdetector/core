@@ -12,6 +12,11 @@ abstract class FieldControl {
         $this->setName($name);
     }
 
+    public static function create($name) : FieldControl{
+        $class_name = get_called_class();
+        return new $class_name($name);
+    }
+    
     public function setName(string $name) : self{
         $this->name = $name;
         return $this;

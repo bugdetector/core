@@ -21,7 +21,7 @@ class Forget_passwordController extends Page{
                         ->limit(1)
                         ->execute()->fetch(PDO::FETCH_ASSOC);
                 if(isset($sended_key["ID"]) && $sended_key["ID"]){
-                    object_map($reset_password, $sended_key);
+                    $reset_password->map($sended_key);
                 } else {
                     $reset_password->USER = intval($user["ID"]);
                     $reset_password->KEY = hash("SHA256", Utils::get_current_date().json_encode($user));

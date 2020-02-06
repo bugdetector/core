@@ -12,6 +12,7 @@ class FormBuilder extends FieldControl {
         foreach($fields as $field){
             $this->addField($field);
         }
+        $this->removeClass("form-control");
     }
 
     public function addField(FieldControl $field) : self{
@@ -29,7 +30,7 @@ class FormBuilder extends FieldControl {
     }
     
     public function renderField(): string {
-        return "<form method='$this->method' ".($this->enctype ? "enctype='$this->enctype'" : "").">".$this->renderFields()."</form>";
+        return "<form method='$this->method' ".($this->enctype ? "enctype='$this->enctype'" : "")." class='".$this->renderClasses()."' >".$this->renderFields()."</form>";
     }
 
     private function renderFields(){

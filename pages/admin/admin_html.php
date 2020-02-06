@@ -1,18 +1,17 @@
-<div class="container-fluid text-center">    
-  <div class="row content">
-    <div class="col-sm-3"></div>
-    <div class="col-sm-6">
-        <form method="POST" class="input-group">
-            <input type="text" name="search_param" class="form-control" placeholder="<?php echo _t(55); ?>"/>
-            <span class="input-group-btn">
-                <button class="btn btn-light" type="submit"><span class="glyphicon glyphicon-search"></span></button>
-            </span>
-        </form>
-    </div>
+<div class="container container-fluid text-center content">    
+  <div class="row row-eq-height">
+      <div class="col-sm-4 card p-3">
+        <a href="<?php echo BASE_URL."/admin/manage/user"; ?>">
+          <h4><span class="glyphicon glyphicon-user"></span></h4>
+          <h4><?php echo _t(122).": ".$this->number_of_members; ?></h4>
+        </a>
+      </div>
+      <div class="col-sm-4 card p-3">
+        <a href="<?php echo BASE_URL."/admin/manage/update"; ?>">
+          <h4><span class="glyphicon glyphicon-circle-arrow-up"></span></h4>
+          <h4><?php echo _t(123).": ".VERSION; ?></h4>
+          <span><?php echo empty(Migration::getUpdates()) ? _t(124) : _t(125).": ".array_pop(Migration::getUpdates()); ?></span>
+        </a>
+      </div>
   </div>
-  <div class="row content">
-    <div class="col-sm-3"></div>
-    <div class="col-sm-6">
-    </div>
-  </div>  
 </div>

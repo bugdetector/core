@@ -21,7 +21,7 @@ class User extends DBObject{
         if(!$result){
             return FALSE;
         }
-        object_map($user, $result);
+        $user->map($result);
         return $user;
     }
     public static function getUserByUsername(string $username){
@@ -30,7 +30,7 @@ class User extends DBObject{
         if(!$result){
             return FALSE;
         }
-        object_map($user, $result);
+        $user->map($result);
         return $user;
     }
     
@@ -40,13 +40,13 @@ class User extends DBObject{
         if(!$result){
             return FALSE;
         }
-        object_map($user, $result);
+        $user->map($result);
         return $user;
     }
     
     public function insert(){
         $this->CREATED_AT = date("Y-m-d h:i:s");
-        $this_as_array = convert_object_to_array($this);
+        $this_as_array = $this->toArray();
         unset($this_as_array["ROLES"], $this_as_array["ALLROLES"]);
         if(db_insert(self::TABLE, $this_as_array)->execute()){
             $this->ID = CoreDB::getInstance()->lastInsertId();
@@ -75,7 +75,7 @@ class User extends DBObject{
     }
 
     public function update(){
-        $this_as_array = convert_object_to_array($this);
+        $this_as_array = $this->toArray();
         unset($this_as_array["ROLES"], $this_as_array["ALLROLES"]);
         return db_update(self::TABLE, $this_as_array)->condition("ID = :id", ["id" => $this->ID])->execute();
     }

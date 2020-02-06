@@ -1,48 +1,33 @@
-<?php if($select){ ?>
-<script>
-    $(document).ready(function (){
-       control_table = "<?php echo $this->arguments[0];?>";
-       var result = <?php echo json_encode($select); ?>;
-       var table = array_to_table(result.values, result.skeleton);
-        $("#main_content").html("");
-        $("#main_content").append(table);
-        $(".list-group-item.tablelist a:textEquals('<?php echo $this->arguments[0];?>')").parent().addClass("active");
-    });
-</script>
-<?php }?>
 <div class="container-fluid text-center">    
     <div class="row content">
      <?php $this->import_view("sidebar_table_list");?>
       <div class="col-md-9">
           <div class="row">
-              <div class="form-group input-group search-group">
-                  <input type="text" class="form-control search-field" placeholder="<?php echo _t(55); ?>"/>
-                    <span class="input-group-btn">
-                        <button class="btn btn-info btn-search" type="button"><span class="glyphicon glyphicon-search"></span></button>
-                    </span>
-              </div>
-          </div>
-          <div class="row">
               <div class="col-md-12 scroll text-left" id="main_content">
-                <?php $this->printMessages(); ?>
+                <?php 
+                    $this->printMessages();
+                    echo_table($this->table_header ? : [], $this->table_content, [
+                        "orderable" => true,
+                        "filter_options" =>$this->filter_options
+                    ]);
+                ?>
               </div>
           </div>
           <div class="row">
               <div class="col-md-12" id="pagination">
                   <div class="text-right">
                    <?php 
-                   if($select["count"] > 0){
-                        $last_index = ($offset+PAGE_SIZE_LIMIT) > $select["count"] ? $select["count"] :($offset+PAGE_SIZE_LIMIT);
-                        echo _t(94, [$select["count"], ($offset+1), $last_index ]); 
+                   if($this->total_count > 0){
+                        echo _t(94, [$this->total_count, ($this->offset+1), $this->offset+count($this->table_content) ]); 
                    }?>
                   </div>
               </div>
           </div>
-          <?php if($select){ ?>
+          <?php if($this->table){ ?>
           <div class="row">
               <?php
               $this->import_view("pagination");
-              echo_pagination_view($query_link, $page, $select["count"]);
+              echo_pagination_view($this->query_link, $this->page, $this->total_count);
               ?>
           </div>
           <?php } ?>

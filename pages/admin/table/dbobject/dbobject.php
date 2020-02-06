@@ -14,7 +14,7 @@ class AdminTableDbobjectController extends AdminTableController{
         $this->author = get_current_user();
         $this->fields = "";
         $fields = [];
-        foreach (get_table_description($this->table) as $col){
+        foreach (CoreDB::get_table_description($this->table) as $col){
             $fields[] = "public $$col[0]";
         }
         $this->fields = implode($fields, ";\n    ");

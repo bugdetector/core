@@ -3,6 +3,7 @@
 class AdminController extends Page {
     
     private $subpage;
+    private $number_of_members;
     
     const admin_mainpage = "mainpage";
     
@@ -14,6 +15,12 @@ class AdminController extends Page {
         parent::preprocessPage();
         if(User::get_current_core_user()->isAdmin()){
             $this->add_js_files("js/core-admin.js");
+        }
+        if(get_called_class() == self::class){
+            $this->number_of_members = db_select(USERS)
+            ->select_with_function(["COUNT(*) as count"])
+            ->condition("USERNAME != :username", [":username" => "guest"])
+            ->execute()->fetchObject()->count;
         }
     }
     

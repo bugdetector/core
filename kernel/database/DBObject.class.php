@@ -11,8 +11,42 @@ class DBObject{
     public function getById(int $id){
         $result = db_select($this->table)->condition("ID = :id")->params(["id" => $id])->execute()->fetch(PDO::FETCH_ASSOC);
         if(is_array($result)){
-            object_map($this, $result);
+            $this->map($result);
         }
+    }
+
+    /**
+    * Set fields of object using an array with same keys
+    * @param DBObject $object
+    * @return \array
+    */
+    public function map(array $array){
+        $object_class_name = get_class($this);
+        foreach ($array as $key => $value){
+            if($object_class_name != "DBObject" && !property_exists($this,$key)){
+                continue;
+            }
+            $this->$key = $value;
+        }
+    }
+
+    /**
+     * Converts an object to array including private fields
+     * @param DBObject $object
+     * @return \array
+     */
+    public function toArray() : array{
+        $reflector = new ReflectionObject($this);
+        $nodes = $reflector->getProperties();
+        $object_as_array = [];
+        foreach ($nodes as $node) {
+            $nod = $reflector->getProperty($node->getName());
+            $nod->setAccessible(true);
+            $object_as_array[$node->getName()] = $nod->getValue($this);
+        }
+        unset($object_as_array["ID"]);
+        unset($object_as_array["table"]);
+        return $object_as_array;
     }
 
     public static function get(array $filter, string $table){
@@ -38,13 +72,13 @@ class DBObject{
     }
 
     public function insert(){
-        $statement = db_insert($this->table, convert_object_to_array($this))->execute();
+        $statement = db_insert($this->table, $this->toArray())->execute();
         $this->ID = CoreDB::getInstance()->lastInsertId();
         return $statement;
     }
     
     public function update(){
-        return db_update($this->table, convert_object_to_array($this))->condition("ID = :id", ["id" => $this->ID])->execute();
+        return db_update($this->table, $this->toArray())->condition("ID = :id", ["id" => $this->ID])->execute();
     }
     public function save(){
         if($this->ID){
@@ -58,7 +92,7 @@ class DBObject{
         if(!$this->ID){
             return FALSE;
         }
-        $table_description = get_table_description($this->table);
+        $table_description = CoreDB::get_table_description($this->table);
         foreach ($table_description as $field) {
             if($field[1] == "tinytext"){
                 $field_name = $field[0];
@@ -75,7 +109,7 @@ class DBObject{
     public function getForm(string $name = "") {
         $form = new FormBuilder("POST");
         $form->setEnctype("multipart/form-data");
-        $descriptions = get_table_description($this->table);
+        $descriptions = CoreDB::get_table_description($this->table);
         
         $row = new InputGroup("row");
         foreach ($descriptions as $index => $description){
@@ -92,7 +126,7 @@ class DBObject{
         return $form;
     }
     protected function getFieldInput($description) {
-        list($input, $wrapper_class) = get_supported_data_types()[$this->get_input_type($description[1], $description[3])]["input_field_callback"]($this, $description, $this->table);
+        list($input, $wrapper_class) = CoreDB::get_supported_data_types()[$this->get_input_type($description[1], $description[3])]["input_field_callback"]($this, $description, $this->table);
         if($description[0] === "ID"){
             $input->addAttribute("disabled", TRUE);
         }

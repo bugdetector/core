@@ -4,6 +4,9 @@ if(!Translator::$language){
     $language = strtoupper(preg_replace("/_.*/", "", $language));
     Translator::$language = $language && in_array($language, Translator::get_available_language_list()) ? $language : strtoupper(LANGUAGE);
     Translator::$cache = [];
+    foreach(json_decode(file_get_contents(Translator::BACKUP_PATH)) as $translation){
+        Translator::$cache[$translation->ID] = $translation->{Translator::$language};
+    }
 }
 /**
  * 
@@ -55,7 +58,7 @@ class Translator {
     
     public static function get_available_language_list(){
         if(!isset(self::$available_languages)){
-            $translation_table_description = get_table_description(TRANSLATIONS, false);
+            $translation_table_description = CoreDB::get_table_description(TRANSLATIONS, false);
             unset($translation_table_description[0]);
             self::$available_languages = [];
             foreach ($translation_table_description as $column_description){
