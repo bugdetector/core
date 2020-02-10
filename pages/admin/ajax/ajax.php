@@ -66,7 +66,6 @@ class AdminAjaxController extends ServicePage{
             db_drop($tablename)->execute();
             echo json_encode(["status" => "true", "message" => _t(69, [$tablename])]);
         }
-        CoreDB::getInstance()->commit();
     }
 
     /**

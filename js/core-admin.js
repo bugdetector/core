@@ -22,7 +22,7 @@ $(document).ready(function () {
        let tablename = $("input[name='table_name']").val();
        let column = $(this).parent().next().children("input").val();
        let row = $(this).parents("tr");
-       alertMessage(_t(118, [column]), _t(54), BootstrapDialog.TYPE_DANGER, function(){
+       alertMessage(_t(387, [column]), _t(54), BootstrapDialog.TYPE_DANGER, function(){
         $.ajax({
             url: root + "/admin/ajax/dropfield",
             method: "post",

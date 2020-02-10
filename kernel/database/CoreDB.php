@@ -211,6 +211,11 @@ function db_delete(string $tableName) : DeleteQueryPreparer{
     return new DeleteQueryPreparer($tableName);
 }
 
+/**
+ * @param string $tableName
+ * @param string $column
+ * @return \DropQueryPreparer
+ */
 function db_drop(string $tableName, string $column = NULL) : DropQueryPreparer{
     return new DropQueryPreparer($tableName, $column);
 }
