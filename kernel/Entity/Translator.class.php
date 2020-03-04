@@ -1,13 +1,5 @@
 <?php
-if(!Translator::$language){
-    $language = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? Locale::acceptFromHttp($_SERVER['HTTP_ACCEPT_LANGUAGE']) : "";
-    $language = strtoupper(preg_replace("/_.*/", "", $language));
-    Translator::$language = $language && in_array($language, Translator::get_available_language_list()) ? $language : strtoupper(LANGUAGE);
-    Translator::$cache = [];
-    foreach(json_decode(file_get_contents(Translator::BACKUP_PATH)) as $translation){
-        Translator::$cache[$translation->ID] = $translation->{Translator::$language};
-    }
-}
+
 /**
  * 
  * @param int $id
@@ -37,23 +29,37 @@ class Translator {
     static $cache;
     static $available_languages;
     
-    const BACKUP_PATH = __DIR__."/../translations/translations.json";
+    const BACKUP_PATH = __DIR__."/../../translations/translations.json";
+
+    public static function getLanguage()
+    {
+        if(!Translator::$language){
+            $language = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? Locale::acceptFromHttp($_SERVER['HTTP_ACCEPT_LANGUAGE']) : "";
+            $language = strtoupper(preg_replace("/_.*/", "", $language));
+            Translator::$language = $language && in_array($language, Translator::get_available_language_list()) ? $language : strtoupper(LANGUAGE);
+            Translator::$cache = [];
+            foreach(json_decode(file_get_contents(Translator::BACKUP_PATH)) as $translation){
+                Translator::$cache[$translation->ID] = $translation->{Translator::$language};
+            }
+        }
+        return self::$language;
+    }
 
     public static function getTranslation(int $id){
         if(!isset(self::$cache[$id])){
-            $obj = db_select(TRANSLATIONS)->select(TRANSLATIONS, [self::$language])->condition(" ID = :id", [":id" => $id])->limit(1)->execute()->fetch(PDO::FETCH_ASSOC);
-            self::$cache[$id] = isset($obj[self::$language]) ? $obj[self::$language] : "";
+            $obj = db_select(TRANSLATIONS)->select(TRANSLATIONS, [self::getLanguage()])->condition(" ID = :id", [":id" => $id])->limit(1)->execute()->fetch(PDO::FETCH_ASSOC);
+            self::$cache[$id] = isset($obj[self::getLanguage()]) ? $obj[self::getLanguage()] : "";
         }
         return self::$cache[$id];
     }
     
     public static function getEmailTranslation(string $key){
         $obj = db_select(EMAILS)
-                ->select(EMAILS, [self::$language])
+                ->select(EMAILS, [self::getLanguage()])
                 ->condition(" `KEY` = :key", [":key" => $key])
                 ->limit(1)
                 ->execute()->fetch(PDO::FETCH_ASSOC);
-        return $obj[self::$language];
+        return $obj[self::getLanguage()];
     }
     
     public static function get_available_language_list(){

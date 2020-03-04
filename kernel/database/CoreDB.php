@@ -113,13 +113,19 @@ class CoreDB {
      * @return \strıng
      */
     public static function get_table_description(string $table, bool $mul_important = true) : array {
-        $descriptions = db_query("DESCRIBE `$table`")->fetchAll(PDO::FETCH_BOTH);
-        foreach ($descriptions as $index => $desc){
-            if($mul_important && $desc[3] == "UNI" && self::is_unique_foreign_key($table, $desc[0])){
-                $descriptions[$index][3] = "MUL-UNI";
+        $cache = Cache::getByBundleAndKey("table_description", $table);
+        if($cache){
+            return json_decode(htmlspecialchars_decode($cache->value), TRUE);
+        }else{
+            $descriptions = db_query("DESCRIBE `$table`")->fetchAll(PDO::FETCH_BOTH);
+            foreach ($descriptions as $index => $desc){
+                if($mul_important && $desc[3] == "UNI" && self::is_unique_foreign_key($table, $desc[0])){
+                    $descriptions[$index][3] = "MUL-UNI";
+                }
             }
+            Cache::set("table_description", $table, json_encode($descriptions));
+            return $descriptions;
         }
-        return $descriptions;
     }
 
     public static function get_system_tables() : array{
@@ -157,7 +163,7 @@ class CoreDB {
      * @return bool
      */
     function is_unique_foreign_key(string $table, string $uni) : bool {
-        return get_foreign_key_description($table, $uni)->rowCount() !== 0;
+        return count(CoreDB::get_foreign_key_description($table, $uni)) !== 0;
     }
 
     /**
@@ -171,6 +177,41 @@ class CoreDB {
                 ->condition("REFERENCED_TABLE_SCHEMA = :scheme AND TABLE_NAME = :table")
                 ->params(["scheme" => DB_NAME, "table" => $table])->execute();
     }
+
+    /**
+     * 
+     * @param string $table
+     * @param string $foreignKey
+     * @return PDOStatement
+     */
+    public static function get_foreign_key_description(string $table, string $foreignKey) : array {
+        $cache = Cache::getByBundleAndKey("foreign_key_description", $table.$foreignKey);
+        if($cache){
+            return json_decode(htmlspecialchars_decode($cache->value), TRUE) ? : [];
+        }else{
+            $result = db_select("INFORMATION_SCHEMA.KEY_COLUMN_USAGE", "", FALSE)
+            ->select("", ["REFERENCED_TABLE_NAME","REFERENCED_COLUMN_NAME"])
+            ->condition("REFERENCED_TABLE_SCHEMA = :scheme AND TABLE_NAME = :table AND COLUMN_NAME = :column")
+            ->params(["scheme" => DB_NAME, "table" => $table, ":column" => $foreignKey])->execute()->fetch(PDO::FETCH_BOTH);
+            if($result){
+            Cache::set("foreign_key_description", $table.$foreignKey, json_encode($result));
+            }
+            return $result ? : [];
+        }
+    }
+    
+    /**
+    * 
+    * @return array
+    */
+    public static function get_information_scheme() : array{
+       $results = CoreDB::getInstance()->query("SHOW TABLES")->fetchAll(PDO::FETCH_NUM);
+       $tables = [];
+       foreach ($results as $result){
+           array_push($tables, $result[0]);
+       }
+       return $tables;
+   }
 }
 
 /**
@@ -388,7 +429,7 @@ $data_types = [
         ];
       },
       "input_field_callback" => function($object, $desc, $table){
-        $fk_description = get_foreign_key_description($table, $desc[0])->fetch(PDO::FETCH_NUM);
+        $fk_description = CoreDB::get_foreign_key_description($table, $desc[0]);
         $table_description = CoreDB::get_table_description($fk_description[0]);;
         $entries = db_select($fk_description[0])->orderBy("ID")->execute()->fetchAll(PDO::FETCH_NUM);
         $options = [];
@@ -416,30 +457,6 @@ define("EMAILS", "EMAILS");
 define("BLOCKED_IPS", "BLOCKED_IPS");
 define("WATCHDOG", "WATCHDOG");
 define("LOGINS", "LOGINS");
-$system_tables = [ROLES, USERS, RESET_PASSWORD_QUEUE, USERS_ROLES, TRANSLATIONS, BLOCKED_IPS, WATCHDOG, LOGINS];
-
-/**
- * 
- * @return array
- */
-function get_information_scheme() : array{
-    $results = CoreDB::getInstance()->query("SHOW TABLES")->fetchAll(PDO::FETCH_NUM);
-    $tables = [];
-    foreach ($results as $result){
-        array_push($tables, $result[0]);
-    }
-    return $tables;
-}
-
-/**
- * 
- * @param string $table
- * @param string $foreignKey
- * @return PDOStatement
- */
-function get_foreign_key_description(string $table, string $foreignKey) : PDOStatement {
-    return db_select("INFORMATION_SCHEMA.KEY_COLUMN_USAGE", "", FALSE)
-            ->select("", ["REFERENCED_TABLE_NAME","REFERENCED_COLUMN_NAME"])
-            ->condition("REFERENCED_TABLE_SCHEMA = :scheme AND TABLE_NAME = :table AND COLUMN_NAME = :column")
-            ->params(["scheme" => DB_NAME, "table" => $table, ":column" => $foreignKey])->execute();
-}
+define("CACHE", "CACHE");
+define("VARIABLES", "VARIABLES");
+$system_tables = [ROLES, USERS, RESET_PASSWORD_QUEUE, USERS_ROLES, TRANSLATIONS, BLOCKED_IPS, WATCHDOG, LOGINS, CACHE, VARIABLES];

@@ -12,7 +12,7 @@
     </div>
     <div class="list-group">
     <?php
-        $tables = get_information_scheme();
+        $tables = CoreDB::get_information_scheme();
         foreach ($tables as $document){
     ?>
         <div class="list-group-item tablelist text-left">

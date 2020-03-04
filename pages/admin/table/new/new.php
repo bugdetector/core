@@ -16,7 +16,7 @@ class AdminTableNewController extends AdminTableController{
             } else {
                 $table_name =  preg_replace("/[^a-z1-9_]+/", "", $_POST["table_name"]);
                 $fields = $_POST["fields"];
-                if(in_array($table_name, get_information_scheme())){
+                if(in_array($table_name, CoreDB::get_information_scheme())){
                     $this->create_warning_message(_t(66));
                 }else{
                     try {
@@ -47,7 +47,7 @@ class AdminTableNewController extends AdminTableController{
                 }
             }
         }
-        if(isset($this->arguments[0]) && in_array($this->arguments[0], get_information_scheme())){
+        if(isset($this->arguments[0]) && in_array($this->arguments[0], CoreDB::get_information_scheme())){
             $this->form_build_id = FormBuilder::create_csrf(self::FORM, $this->arguments[0]);
             $this->request_table = $this->arguments[0];
         }else if(!isset($this->arguments[0])){

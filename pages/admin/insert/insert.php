@@ -17,7 +17,7 @@ class AdminInsertController extends AdminController{
     
     protected function preprocessPage() {
         parent::preprocessPage();
-        if( !isset($this->arguments[0]) && !in_array($this->arguments[0], get_information_scheme())){
+        if( !isset($this->arguments[0]) && !in_array($this->arguments[0], CoreDB::get_information_scheme())){
             $this->create_warning_message(_t(67));
             return;
         }

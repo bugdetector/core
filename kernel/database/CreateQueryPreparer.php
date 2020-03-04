@@ -49,7 +49,7 @@ class CreateQueryPreparer extends CoreDBQueryPreparer {
                 $query.= "VARCHAR(".intval($field["field_length"]).")";
             }else if(in_array($field["field_type"], ["INT", "DOUBLE", "TEXT", "DATE", "DATETIME", "TIME", "TINYTEXT", "LONGTEXT"])){
                 $query.= $field["field_type"];
-            }else if($field["field_type"] == "MUL" && in_array($field["mul_table"], get_information_scheme())){
+            }else if($field["field_type"] == "MUL" && in_array($field["mul_table"], CoreDB::get_information_scheme())){
                 $query.= "INT";
                 array_push($references, [$field["field_name"], $field["mul_table"]]);
             }else {
@@ -66,7 +66,7 @@ class CreateQueryPreparer extends CoreDBQueryPreparer {
         foreach ($constants as $constant){
             $query.= ", UNIQUE (`$constant`) ";
         }
-        $query.= ") CHARACTER SET utf8 COLLATE utf8_general_ci;";
+        $query.= ") CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB;";
         return $query;
     }
     

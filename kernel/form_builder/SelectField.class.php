@@ -44,7 +44,7 @@ class SelectField extends FieldControl{
         foreach($attributes as $attribute => $value){
             $attributes_out.= " $attribute='$value' ";
         }
-        $out = "<select name='$name' class='selectpicker form-control "
+        $out = "<select name='$name' class='selectpicker "
         .implode(" ",$classes)."' $attributes_out >".
         ($null_element ? "<option value='NULL'>$null_element</option>" : "");
 

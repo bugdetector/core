@@ -10,14 +10,14 @@ class Migration {
 
     public static function update(){
         $updates = self::getUpdates();
-        $config = file_get_contents(".config.php");
+        $version = Variable::getByKey("version") ? : new Variable("version");
         $new_version_number = NULL;
         CoreDB::getInstance()->beginTransaction();
         foreach ($updates as $update) {
             include self::MIGRATIONS_DIR."/".$update;
             $new_version_number = (basename($update, ".php"));
-            $new_config = str_replace('define("VERSION", "'.VERSION.'");', 'define("VERSION", "'.$new_version_number.'");', $config);
-            file_put_contents(".config.php", $new_config);
+            $version->value = $new_version_number;
+            $version->save();
             self::$version = $new_version_number;
             CoreDB::getInstance()->commit();
         }

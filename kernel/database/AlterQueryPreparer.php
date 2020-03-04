@@ -5,7 +5,7 @@ class AlterQueryPreparer extends CoreDBQueryPreparer{
     private $query;
 
     public function __construct(string $table) {
-        if(!in_array($table, get_information_scheme())){
+        if(!in_array($table, CoreDB::get_information_scheme())){
             throw new Exception(_t(67));
         }
         $this->table = $table;
@@ -27,7 +27,7 @@ class AlterQueryPreparer extends CoreDBQueryPreparer{
             $this->query.= "VARCHAR(".intval($field["field_length"]).") CHARACTER SET utf8 COLLATE utf8_general_ci;";
         }else if(in_array($field["field_type"], ["INT", "DOUBLE", "TEXT", "DATE", "DATETIME", "TIME", "TINYTEXT", "LONGTEXT"])){
             $this->query.= $field["field_type"].";";
-        }else if($field["field_type"] == "MUL" && in_array($field["mul_table"], get_information_scheme())){
+        }else if($field["field_type"] == "MUL" && in_array($field["mul_table"], CoreDB::get_information_scheme())){
             $this->query .= "INT; ";
             $this->query .= "ALTER TABLE $this->table ADD FOREIGN KEY (`".$field["field_name"]."`) REFERENCES ".$field["mul_table"]."(ID)";
         }else {

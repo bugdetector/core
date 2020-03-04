@@ -14,7 +14,7 @@ class AdminAjaxController extends ServicePage{
      * Delete record
      */
     private function delete(){
-        if(in_array( $_POST["table"], get_information_scheme()) ){
+        if(in_array( $_POST["table"], CoreDB::get_information_scheme()) ){
              $table = $_POST["table"];
              unset($_POST["table"]);
              $values = $_POST;
@@ -28,14 +28,14 @@ class AdminAjaxController extends ServicePage{
      * Returns table list
      */
     private function get_table_list(){
-        echo json_encode(get_information_scheme());
+        echo json_encode(CoreDB::get_information_scheme());
     }
     
     /**
      * Returns foreign key entry
      */
     private function get_fk_entry() {
-        $description = get_foreign_key_description($_POST["table"], $_POST["column"])->fetch(PDO::FETCH_NUM);
+        $description = CoreDB::get_foreign_key_description($_POST["table"], $_POST["column"]);
         $object = new DBObject($description[0]);
         $object->getById(intval($_POST["fk"]));
         $return_string = "";
@@ -62,7 +62,7 @@ class AdminAjaxController extends ServicePage{
      */
     private function drop(){
         $tablename = $_POST["tablename"];
-        if(in_array($tablename, get_information_scheme())){
+        if(in_array($tablename, CoreDB::get_information_scheme())){
             db_drop($tablename)->execute();
             echo json_encode(["status" => "true", "message" => _t(69, [$tablename])]);
         }
@@ -74,7 +74,7 @@ class AdminAjaxController extends ServicePage{
     private function dropfield(){
         $tablename = $_POST["tablename"];
         $column = $_POST["column"];
-        if(in_array($tablename, get_information_scheme())){
+        if(in_array($tablename, CoreDB::get_information_scheme())){
             db_drop($tablename)->setColumn($column)->execute();
             echo json_encode(["status" => "true", "message" => _t(119, [$column])]);
         }
@@ -85,7 +85,7 @@ class AdminAjaxController extends ServicePage{
      */
     private function truncate(){
         $tablename = $_POST["tablename"];
-        if(in_array($tablename, get_information_scheme())){
+        if(in_array($tablename, CoreDB::get_information_scheme())){
             db_truncate($tablename);
             echo json_encode(["status" => "true", "message" => _t(110, [$tablename])]);
         }

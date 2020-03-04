@@ -74,8 +74,13 @@ class AdminManageUpdateController extends AdminManageController{
             $input = new InputField("update");
             $input->setType("submit")
                     ->addClass("btn btn-success")
-                    ->setLabel("System will update to version: ". basename(max($this->updates), ".php"))
-                    ->setValue("Update");
+                    ->setValue(VERSION ? "Update" : "Install ".SITE_NAME);
+            if(!VERSION){
+                $form->addClass("container justify-content-center align-items-center");
+                $input->setLabel("System will install to version: ". basename(max($this->updates), ".php"));
+            }else{
+                $input->setLabel("System will update to version: ". basename(max($this->updates), ".php"));
+            }
             $form->addField($input);
         }
         $this->content = $form;

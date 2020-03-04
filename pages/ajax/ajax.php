@@ -13,7 +13,7 @@ class AjaxController extends ServicePage {
      private function AutoCompleteSelectBoxFilter(){
         $table = $_POST["table"];
 
-        if(in_array($table, get_information_scheme()) ){
+        if(in_array($table, CoreDB::get_information_scheme()) ){
             $column = preg_replace('/[^a-zA-Z1-9_]*/', '', $_POST["column"]); ;
             $data = "%".$_POST["data"]."%";
             $query = db_select($table)

@@ -1,7 +1,7 @@
 <?php function get_field_row(int $index,array $definition = NULL, string $table = NULL) {
     $data_types = [];
     $selected = NULL;
-    $description = $definition[3] == "MUL" ? get_foreign_key_description($table, $definition[0])->fetch(PDO::FETCH_NUM) : NULL;
+    $description = $definition[3] == "MUL" ? CoreDB::get_foreign_key_description($table, $definition[0]) : NULL;
     foreach (CoreDB::get_supported_data_types() as $key => $value){
         $data_types[$key] = $value["value"];
         if($value["selected_callback"]($definition)["checked"]){

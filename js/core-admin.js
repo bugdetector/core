@@ -205,12 +205,12 @@ $(document).ready(function () {
          var controlElement = $(this);
          alertMessage(_t(81), _t(54), BootstrapDialog.TYPE_DANGER, function () {
             var refresh = "glyphicon-refresh";
-            controlElement.removeClass(glypicon_class);
+            controlElement.removeClass("glyphicon-remove");
             controlElement.addClass(refresh);
             var data = new FormData();
             var values = controlElement.parents("tr").find("td").each(function(i, td){
                 if(i===0) return;
-                data.append(columns[i-1], $(td).clone().find("a").remove().end().text() );
+                data.append(columns[i], $(td).clone().find("a").remove().end().text() );
             });
             var activetable = get_active_table();
             data.append("table", activetable);
@@ -222,16 +222,14 @@ $(document).ready(function () {
                 data : data,
                 error: function(){
                     controlElement.removeClass(refresh);
-                    controlElement.addClass(glypicon_class);
+                    controlElement.addClass("glyphicon-remove");
                 },
                 success : function(response){
                     controlElement.removeClass(refresh);
                     controlElement.addClass("glyphicon-ok");
-                    if(operation === "delete"){
-                        setTimeout(function (){
-                            controlElement.parents("tr").remove();
-                        }, 1000);
-                    }
+                    setTimeout(function (){
+                        controlElement.parents("tr").remove();
+                    }, 1000);
                 }
             });
         });

@@ -1,6 +1,5 @@
 <?php
 !defined("DIRECT_OBJECT_REF_SHIELD") ? die(http_response_code(403)) : "";
-define("VERSION", "0");
 
 define("SITE_NAME", "Core");
 

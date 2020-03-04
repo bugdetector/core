@@ -17,12 +17,12 @@ class AdminTableController extends AdminController{
         $this->page = isset($_GET["page"]) && intval($_GET["page"]) ? intval($_GET["page"]) : 1;
         $this->offset = ($this->page-1)*PAGE_SIZE_LIMIT;
 
-        if(isset($this->arguments[0]) && !in_array($this->arguments[0], get_information_scheme())){
+        if(isset($this->arguments[0]) && !in_array($this->arguments[0], CoreDB::get_information_scheme())){
             Utils::core_go_to(BASE_URL."/admin/table");
         }
         $query = NULL;
         if(count($this->arguments) == 4 && $this->arguments[1] == "fk"){
-            $description = get_foreign_key_description($this->arguments[0], $this->arguments[2])->fetch(PDO::FETCH_NUM);
+            $description = CoreDB::get_foreign_key_description($this->arguments[0], $this->arguments[2]);
             $this->table = $description[0];
             $query = db_select($this->table)
                     ->condition("ID = :id", [":id"=> intval($this->arguments[3]) ]);

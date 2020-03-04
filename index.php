@@ -14,15 +14,18 @@ define("SITE_ROOT", substr(str_replace(basename(__FILE__), "", $_SERVER["SCRIPT_
 define("BASE_URL", HTTP."://".$_SERVER["HTTP_HOST"].SITE_ROOT);
 
 Utils::include_dir("kernel/form_builder");
+Utils::include_dir("kernel/Entity");
 session_start();
 
 //Locating for installing system
-if(!VERSION && empty(get_information_scheme())){
+if(empty(CoreDB::get_information_scheme()) || !Variable::getByKey("version")){
+    define("VERSION", 0);
     if($_SERVER["REQUEST_URI"] != SITE_ROOT."/admin/manage/update".(isset($_SESSION["install_key"]) ? "?key=".$_SESSION["install_key"] : "")){
         $_SESSION["install_key"] = hash("SHA256", date("Y-m-d H:i:s"));
         Utils::core_go_to(BASE_URL."/admin/manage/update?key=".$_SESSION["install_key"]);
     }
 } else {
+    define("VERSION", Variable::getByKey("version")->value);
     Utils::include_dir("Entity");
     Utils::include_dir("lib");
     Utils::include_dir("src");

@@ -4,7 +4,7 @@ class AdminTableDbobjectController extends AdminTableController{
     protected $author, $class_name, $table, $fields;
 
     public function check_access() : bool {
-        return parent::check_access() && isset($this->arguments[0]) && in_array($this->arguments[0], get_information_scheme());
+        return parent::check_access() && isset($this->arguments[0]) && in_array($this->arguments[0], CoreDB::get_information_scheme());
     }
     
     protected function preprocessPage() {
