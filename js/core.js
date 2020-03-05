@@ -115,6 +115,33 @@ $(document).ready(function () {
         $(this).parents("form").find("select").val("NULL").selectpicker("refresh");
         $(this).parents("form").find("input[type='checkbox']").prop("checked", false).change();
     })
+
+    $(document).on("change",".multiple-file-field input[type='file']",function(e){
+        let new_input = $(this).parents(".multiple-file-field").clone();
+        let new_file_index = parseInt(new_input.attr("data-file-index"))+1;
+        let name = new_input.attr("data-name");
+        let wrapper = new_input.attr("data-wrapper");
+        new_input.attr("data-file-index", new_file_index);
+        new_input.find("input[type='file']").attr("name", name+"["+(new_file_index)+"]");
+        
+        let file_name = e.target.files[0].name;
+        let new_file_output = "<div class='"+wrapper+"'><a>"+file_name+"</a>"+
+        "<a href='' class='remove_new_file' data-connected-name='"+name+"["+(new_file_index-1)+"]'><span class='glyphicon glyphicon-remove core-control'></span></a>"+
+                        "</div></div>";
+        $(this).parents(".multiple-file-input-section").children(".file-list").append(new_file_output);
+        new_input.find("input[type='file']").val(null);
+        $(this).parents(".multiple-file-field").hide().before(new_input);
+    });
+
+    $(document).on("click", ".remove_new_file", function(e){
+        e.preventDefault();
+        remove_button = $(this);
+        $("input[name='"+remove_button.attr("data-connected-name")+"']").parents(".multiple-file-field").remove();
+        remove_button.parent().fadeOut(1000);
+        setTimeout(function(){
+            remove_button.remove();
+        }, 1000);
+    })
 });
 
 function alertMessage(message, title = _t(54) , type = BootstrapDialog.TYPE_WARNING, callback = function () {}){
