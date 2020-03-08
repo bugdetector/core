@@ -37,12 +37,17 @@ table {
     overflow: auto;
 }
 
-table.content td, table.content th {
+table#result_table.content > tbody > tr > td, table#result_table.content > thead > tr > td {
     border: 1px solid #dddddd;
     padding: 5px;
     text-align: left;
     min-width: 100px;
     white-space: nowrap;
+}
+
+table#result_table.content{
+    display: block;
+    overflow-x: scroll;
 }
 
 tr:nth-child(even) {
@@ -284,3 +289,5 @@ span.glyphicon.glyphicon-list-alt{
     padding-right: 10px;
     padding-bottom: 10px;
 }
+
+.subitems{display: none;}

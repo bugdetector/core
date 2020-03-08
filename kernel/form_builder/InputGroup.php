@@ -2,9 +2,10 @@
 
 class InputGroup extends FieldControl {
     private $wrapper_class;
-    private $fields;
+    private $fields = [];
     public function __construct(string $wrapper_class) {
         $this->wrapper_class = $wrapper_class;
+        $this->classes = [];
     }
 
     public function addField(FieldControl $field) : self{
@@ -13,7 +14,7 @@ class InputGroup extends FieldControl {
     }
 
     public function renderField() : string{
-        $render = "<div class='$this->wrapper_class' ".$this->renderAttributes().">";
+        $render = "<div class='$this->wrapper_class ".$this->renderClasses()." ' ".$this->renderAttributes().">";
         foreach($this->fields as $field){
             $render.= $field->renderField();
         }

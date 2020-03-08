@@ -6,6 +6,7 @@ abstract class FieldControl {
     protected $classes = ["form-control"];
     protected $attributes = [];
     protected $label;
+    protected $append = "";
 
     public function __construct(string $name)
     {
@@ -17,32 +18,32 @@ abstract class FieldControl {
         return new $class_name($name);
     }
     
-    public function setName(string $name) : self{
+    public function setName(string $name) : FieldControl{
         $this->name = $name;
         return $this;
     }
 
-    public function setValue(string $value) : self{
+    public function setValue(string $value) : FieldControl{
         $this->value = $value;
         return $this;
     }
 
-    public function addClass(string $class_name) : self{
+    public function addClass(string $class_name) : FieldControl{
         $this->classes[] = $class_name;
         return $this;
     }
 
-    public function removeClass(string $class_name) : self{
+    public function removeClass(string $class_name) : FieldControl{
         unset($this->classes[array_search($class_name, $this->classes)]);
         return $this;
     }
     
-    public function addAttribute(string $attribute_name, string $attribute_value) : self{
+    public function addAttribute(string $attribute_name, string $attribute_value) : FieldControl{
         $this->attributes[$attribute_name] = $attribute_value;
         return $this;
     }
 
-    public function removeAttribute(string $attribute_name) : self{
+    public function removeAttribute(string $attribute_name) : FieldControl{
         unset($this->attributes[$attribute_name]);
         return $this;
     }
@@ -59,18 +60,20 @@ abstract class FieldControl {
         return $render;
     }
 
-    public function setLabel(string $label) : self{
+    public function setLabel(string $label) : FieldControl{
         $this->label = $label;
         return $this;
     }
 
     abstract public function renderField() : string;
 
-    public static function createFromOption(array $option) : self{
+    public static function createFromOption(array $option) : FieldControl{
         if($option["type"] == "select"){
             $input = new SelectField($option["name"]);
             $input->setOptions($option["options"]);
-            $input->setLabel($option["label"]);
+            if(isset($option["null_element"])){
+                $input->setNullElement($option["null_element"]);
+            }
         }else{
             $input = new InputField($option["name"]);
             $input->setType($option["type"]);
@@ -87,5 +90,15 @@ abstract class FieldControl {
             }
         }
         return $input;
+    }
+
+    public function append(string $append) : self{
+        $this->append = $append;
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->renderField();
     }
 }

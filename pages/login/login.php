@@ -56,7 +56,6 @@ class LoginController extends Page{
     protected function echoContent() {
         $this->form_build_id = FormBuilder::create_csrf(self::FORM_ID , User::get_user_ip());
         require 'login_html.php';
-        echo_login_page($this);
     }
     
     public function echoNavbar(){}

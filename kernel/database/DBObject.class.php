@@ -162,7 +162,7 @@ class DBObject{
     }
 
 
-    private function get_input_type(string $dataType, $key = ""){
+    protected function get_input_type(string $dataType, $key = ""){
         if($key == "MUL"){
             return $key;
         }elseif(strpos($dataType, "int") === 0){

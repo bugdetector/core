@@ -138,8 +138,8 @@ abstract class Page {
             "js/summernote-tr-TR.js",
             "js/core.js"
         ];
-        if(class_exists("Translator") && Translator::$language != "EN"){
-            $default_js_files[] = "js/bootstrap-select.".Translator::$language.".js";
+        if(class_exists("Translator") && Translator::getLanguage() != "EN"){
+            $default_js_files[] = "js/bootstrap-select.".Translator::getLanguage().".js";
         }
         $this->js_files = $default_js_files;
     }

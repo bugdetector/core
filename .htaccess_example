@@ -1,0 +1,23 @@
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . index.php [L]
+</IfModule>
+
+<IfModule php7_module>
+   php_flag asp_tags Off
+   php_flag display_errors On
+   php_value max_execution_time 90
+   php_value max_input_time 60
+   php_value max_input_vars 1000
+   php_value post_max_size 40M
+   php_value memory_limit 512M
+   php_value session.gc_maxlifetime 600
+   php_value upload_max_filesize 20M
+</IfModule>
+
+Options -Indexes
+
+ErrorDocument 403 "403 Unauthorized"

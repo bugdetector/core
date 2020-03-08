@@ -12,19 +12,13 @@ class Migration {
         $updates = self::getUpdates();
         $version = Variable::getByKey("version") ? : new Variable("version");
         $new_version_number = NULL;
-        CoreDB::getInstance()->beginTransaction();
         foreach ($updates as $update) {
             include self::MIGRATIONS_DIR."/".$update;
             $new_version_number = (basename($update, ".php"));
             $version->value = $new_version_number;
             $version->save();
             self::$version = $new_version_number;
-            CoreDB::getInstance()->commit();
         }
-        if(!class_exists("Translator")){
-            Utils::include_dir("Entity");
-        }
-        Translator::import_translations();
     }
 
     public static function getUpdates() {

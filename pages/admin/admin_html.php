@@ -10,7 +10,9 @@
         <a href="<?php echo BASE_URL."/admin/manage/update"; ?>">
           <h4><span class="glyphicon glyphicon-circle-arrow-up"></span></h4>
           <h4><?php echo _t(123).": ".VERSION; ?></h4>
-          <span><?php echo empty(Migration::getUpdates()) ? _t(124) : _t(125).": ".array_pop(Migration::getUpdates()); ?></span>
+          <span><?php
+          $updates = Migration::getUpdates(); 
+          echo empty($updates) ? _t(124) : _t(125).": ".end($updates); ?></span>
         </a>
       </div>
   </div>

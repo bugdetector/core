@@ -142,6 +142,19 @@ $(document).ready(function () {
             remove_button.remove();
         }, 1000);
     })
+
+    $(".list-group > .list-group-item > a span.glyphicon").click(function(e){
+        e.preventDefault();
+        $(this).parents(".list-group-item").find(".subitems").slideToggle();
+        $(this).toggleClass("glyphicon-plus glyphicon-minus");
+    })
+
+    $(document).on("click", ".form-reset-button", function(e){
+        e.preventDefault();
+        $(this).parents("form").find("input:not([type='submit']):not([type='reset']),textarea").val("");
+        $(this).parents("form").find("select").val("NULL").selectpicker("refresh");
+        $(this).parents("form").find("input[type='checkbox']").prop("checked", false).change();
+    })
 });
 
 function alertMessage(message, title = _t(54) , type = BootstrapDialog.TYPE_WARNING, callback = function () {}){

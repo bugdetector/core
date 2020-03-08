@@ -15,6 +15,9 @@ define("BASE_URL", HTTP."://".$_SERVER["HTTP_HOST"].SITE_ROOT);
 
 Utils::include_dir("kernel/form_builder");
 Utils::include_dir("kernel/Entity");
+Utils::include_dir("Entity");
+Utils::include_dir("lib");
+Utils::include_dir("src");
 session_start();
 
 //Locating for installing system
@@ -26,9 +29,6 @@ if(empty(CoreDB::get_information_scheme()) || !Variable::getByKey("version")){
     }
 } else {
     define("VERSION", Variable::getByKey("version")->value);
-    Utils::include_dir("Entity");
-    Utils::include_dir("lib");
-    Utils::include_dir("src");
     User::get_current_core_user();
 }
 date_default_timezone_set(TIMEZONE);
