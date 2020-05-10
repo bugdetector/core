@@ -24,10 +24,10 @@ class AdminManageUpdateController extends AdminManageController{
             parent::echoNavbar();
         }
     }
-    
-    protected function echoFooter() {
+
+    public function echoSidebar() {
         if(!isset($_SESSION["install_key"])){
-            parent::echoFooter();
+            parent::echoSidebar();
         }
     }
     
@@ -39,51 +39,68 @@ class AdminManageUpdateController extends AdminManageController{
     
     private $content, $updates;
     protected function preprocessPage() {
+        try{
+            $title = _t("updates");
+            $success = _t("update_success");
+        }catch(Exception $ex){
+            $title = "Updates";
+            $success = "Installed successfuly.";
+        }
+        $this->setTitle($title);
         $this->updates = Migration::getUpdates();
         if(isset($_POST["update"])){
             Migration::update();
             $this->updates = Migration::getUpdates();
-            $this->create_warning_message("Updated successfuly.", "alert-success");
+            $this->create_warning_message($success, "alert-success");
             if(isset($_SESSION["install_key"])){
                 unset($_SESSION["install_key"]);
                 Utils::core_go_to(BASE_URL."/admin/manage/update");
             }
         }
         $this->operation = "update";
-        $this->table_headers = ["<b>Updates</b>"];
+        $this->table_headers = ["<b>$title</b>"];
         $this->table_content = array_map(function($el){
             return [basename($el, ".php")];
         }, $this->updates);
+        if(!empty($this->updates)){
+            $this->action_section = $this->getForm();
+        }
     }
     
     protected function echoContent() {
         if(!isset($_SESSION["install_key"])){
             parent::echoContent();
         } else if(isset ($_GET["key"]) && $_GET["key"] == $_SESSION["install_key"]) {
-            $this->echoForm();
+            echo $this->getForm();
         }
     }
     
-    public function echoForm(){
+    public function getForm(){
         $form = new FormBuilder("post");
+        try{
+            $no_update = _t("no_update");
+            $available_version = _t("available_version");
+        }catch(Exception $ex){
+            $no_update = "There is no update.";
+            $available_version = "System will update to version";
+        }
         if(empty($this->updates)){
             $input = new InputField("ok");
-            $input->setType("submit")->setLabel("There is no update.")->addClass("d-none");
+            $input->setType("submit")->setLabel($no_update)->addClass("d-none");
             $form->addField($input);
         } else {
             $input = new InputField("update");
             $input->setType("submit")
-                    ->addClass("btn btn-success")
+                    ->addClass("btn btn-sm btn-primary shadow-sm")
                     ->setValue(VERSION ? "Update" : "Install ".SITE_NAME);
             if(!VERSION){
                 $form->addClass("container justify-content-center align-items-center");
-                $input->setLabel("System will install to version: ". basename(max($this->updates), ".php"));
+                $input->setLabel("$available_version: ". basename(max($this->updates), ".php"));
             }else{
-                $input->setLabel("System will update to version: ". basename(max($this->updates), ".php"));
+                $input->setLabel("$available_version: ". basename(max($this->updates), ".php"));
             }
             $form->addField($input);
         }
-        $this->content = $form;
-        echo $form->renderField();
+        return $form;
     }
 }

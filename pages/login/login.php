@@ -1,62 +1,71 @@
 <?php
-
 class LoginController extends Page{
     
     const FORM_ID = "login_form";
     
-
-    public $form_build_id;
-    
     public function __construct($arguments) {
         parent::__construct($arguments);
+        $this->body_classes = ["bg-gradient-success"];
+    }
+
+    public function echoPage(){
+        $this->add_default_js_files();
+        $this->add_default_css_files();
+        $this->add_default_translations();
+        
+        $this->preprocessPage();
+        echo "<!DOCTYPE html>";
+        echo "<html>";
+        $this->echoHeader();
+        echo '<body class="'.implode(" ", $this->body_classes).'">';
+        $this->echoContent();
+        echo '</body>';
+        echo '</html>';
     }
 
     public function check_access() : bool {
         return TRUE;
     }
     protected function preprocessPage(){
-        $userip = isset($_POST["form_build_id"]) ? FormBuilder::get_csrf($_POST["form_build_id"], self::FORM_ID) : User::get_user_ip();
-        if($userip != User::get_user_ip()){
+        if(isset($_POST["login"]) && !$this->checkCsrfToken(self::FORM_ID)){
             if(isset($_SESSION[LOGIN_UNTRUSTED_ACTIONS])){
                 $_SESSION[LOGIN_UNTRUSTED_ACTIONS]++;
             }else{
                 $_SESSION[LOGIN_UNTRUSTED_ACTIONS] = 1;
             }
-        }
-        try{
-            if(isset($_POST["login"])){
-                $user = User::login($_POST["username"], $_POST["password"]);    
-            }
-        } catch (Exception $ex){
-            //Logging failed login actions
-            $login_log = new DBObject(LOGINS);
-            $login_log->IP_ADDRESS = User::get_user_ip();
-            $login_log->USERNAME = $_POST["username"];
-            $login_log->DATE = Utils::get_current_date();
-            $login_log->insert();
+        }else if(isset($_POST["login"])){
+            try{
+                $user = User::login($_POST["username"], $_POST["password"]);
+                db_delete("logins")->condition("username = :username", [":username" =>$user->USERNAME])->execute();
+            } catch (Exception $ex){
+                //Logging failed login actions
+                $login_log = new Logins();
+                $login_log->ip_address = User::get_user_ip();
+                $login_log->username = $_POST["username"];
+                $login_log->save();
 
-            http_response_code(400);
-            $this->create_warning_message($ex->getMessage());
-            return;
+                http_response_code(400);
+                $this->create_warning_message($ex->getMessage());
+                return;
+            }
         }
-        if(isset($user)){
+        if(User::get_current_core_user()->isLoggedIn()){
             //Clearing failed login actions
-            db_delete(LOGINS)->condition("USERNAME = :username", [":username" =>$user->USERNAME])->execute();
             if(isset($_GET["destination"])){
                 Utils::core_go_to(SITE_ROOT.$_GET["destination"]);
-            }elseif($user->isAdmin() ){
+            }elseif(User::get_current_core_user()->isAdmin() ){
                 Utils::core_go_to(SITE_ROOT."/admin");
             }else{
                 Utils::core_go_to(SITE_ROOT);
             }
         }
+        $this->form_build_id = $this->createCsrf(self::FORM_ID);
+        $this->form_token = $this->createFormToken($this->form_build_id);
     }
 
 
     protected function echoContent() {
-        $this->form_build_id = FormBuilder::create_csrf(self::FORM_ID , User::get_user_ip());
         require 'login_html.php';
     }
     
-    public function echoNavbar(){}
 }

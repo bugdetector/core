@@ -13,6 +13,7 @@
  */
 class CreateQueryPreparer extends CoreDBQueryPreparer {
     private $table_name;
+    private $table_comment;
     private $fields = [];
     public function __construct(string $table_name){
         $this->table_name = $table_name;
@@ -22,6 +23,10 @@ class CreateQueryPreparer extends CoreDBQueryPreparer {
         return $this;
     }
 
+    public function setComment(string $table_comment){
+        $this->table_comment = $table_comment;
+        return $this;
+    }
     public function addField(array $field_definition) : CreateQueryPreparer {
         /**
          * $field_definition format must be
@@ -60,13 +65,14 @@ class CreateQueryPreparer extends CoreDBQueryPreparer {
                 array_push($constants, $field["field_name"]);
             }
         }
+        $query .= ", created_at DATETIME DEFAULT CURRENT_TIMESTAMP, last_updated DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP";
         foreach ($references as $reference){
             $query.= ", FOREIGN KEY (`$reference[0]`) REFERENCES `$reference[1]`(ID) ";
         }
         foreach ($constants as $constant){
             $query.= ", UNIQUE (`$constant`) ";
         }
-        $query.= ") CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB;";
+        $query.= ") CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT='{$this->table_comment}';";
         return $query;
     }
     

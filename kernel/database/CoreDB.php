@@ -103,8 +103,180 @@ class CoreDB {
     }
 
     public static function get_supported_data_types() : array{
-        global $data_types;
-        return $data_types;
+        return [
+            "INT" => [
+                "value" => "INT",
+                "selected_callback" => function ($definition){
+                  return [
+                      "checked" => $definition && $definition["Type"] != "MUL" && strpos($definition["Type"], "int") === 0 ? "selected" : "",
+                  ];
+                },
+                "input_field_callback" => function($object, $desc){
+                    $field = new InputField($desc["Field"]);
+                    $field->setType("number");
+                    $field->setValue(get_field_from_object($object, $desc["Field"]));
+                    $field->setLabel($desc["Field"]);
+                    return [$field, "col-lg-3 col-md-4 col-sm-6"];
+                }
+                ],
+            "DOUBLE" => [
+                "value" => "DOUBLE",
+                "selected_callback" => function ($definition){
+                  return [
+                      "checked" => $definition && strpos($definition["Type"], "double") === 0 ? "selected" : "",
+                  ];
+                },
+                "input_field_callback" => function($object, $desc){
+                    $field = new InputField($desc["Field"]);
+                    $field->setType("number");
+                    $field->setValue(get_field_from_object($object, $desc["Field"]));
+                    $field->addAttribute("step", "0.01");
+                    $field->setLabel($desc["Field"]);
+                    return [$field, "col-lg-3 col-md-4 col-sm-6"];
+                }
+                ],
+            "VARCHAR" => [
+                "value" => "VARCHAR",
+                "selected_callback" => function ($definition){
+                  return [
+                      "checked" => $definition && strpos($definition["Type"], "varchar") === 0 ? "selected" : "",
+                  ];
+                },
+                "input_field_callback" => function($object, $desc){
+                    $field = new InputField($desc["Field"]);
+                    $field->setValue(get_field_from_object($object, $desc["Field"]));
+                    $field->setLabel($desc["Field"]);
+                    return [$field, "col-lg-3 col-md-4 col-sm-6"];
+                }
+                ],
+            "TEXT" => [
+                "value" => "TEXT",
+                "selected_callback" => function ($definition){
+                  return [
+                      "checked" => $definition && strpos($definition["Type"], "text") === 0 ? "selected" : "",
+                  ];
+                },
+                "input_field_callback" => function($object, $desc){
+                    $field = new TextareaField($desc["Field"]);
+                    
+                    $field->setValue(get_field_from_object($object, $desc["Field"]));
+                    $field->setLabel($desc["Field"]);
+                    return [$field, "col-sm-12"];
+                }
+                ],
+            "LONGTEXT" => [
+                "value" => "LONGTEXT",
+                "selected_callback" => function ($definition){
+                  return [
+                      "checked" => $definition && strpos($definition["Type"], "longtext") === 0 ? "selected" : "",
+                  ];
+                },
+                "input_field_callback" => function($object, $desc){
+                    $field = new TextareaField($desc["Field"]);
+                    $field->addClass("summernote");
+                    $field->setLabel($desc["Field"]);
+                    $field->setValue(get_field_from_object($object, $desc["Field"]));
+                    return [$field, "col-sm-12"];
+                }
+                ],
+            "DATE" => [
+                "value" => "DATE",
+                "selected_callback" => function ($definition){
+                  return [
+                      "checked" => $definition && strpos($definition["Type"], "date") === 0 ? "selected" : "",
+                  ];
+                },
+                "input_field_callback" => function($object, $desc){
+                      $field = new InputField($desc["Field"]);
+                      $field->addClass("dateinput datetimepicker-input");
+                      $field->addAttribute("id", $desc["Field"]);
+                      $field->addAttribute("data-target", "#".$desc["Field"]);
+                      $field->addAttribute("data-toggle", "datetimepicker");
+                      $field->addAttribute("autocomplete", "off");
+                      $field->setLabel($desc["Field"]);
+                      $field->setValue($object ? get_field_from_object($object, $desc["Field"]) : Utils::get_current_date());
+                      return [$field, "col-lg-3 col-md-4 col-sm-6"];
+                }
+                ],
+            "DATETIME" => [
+                "value" => "DATETIME",
+                "selected_callback" => function ($definition){
+                  return [
+                      "checked" => $definition && strpos($definition["Type"], "datetime") === 0 ? "selected" : "",
+                  ];
+                },
+                "input_field_callback" => function($object, $desc){
+                      $field = new InputField($desc["Field"]);
+                      $field->addClass("datetimeinput datetimepicker-input");
+                      $field->addAttribute("id", $desc["Field"]);
+                      $field->addAttribute("data-target", "#".$desc["Field"]);
+                      $field->addAttribute("data-toggle", "datetimepicker");
+                      $field->addAttribute("autocomplete", "off");
+                      $field->setLabel($desc["Field"]);
+                      $field->setValue($object ? get_field_from_object($object, $desc["Field"]) : Utils::get_current_date());
+                      return [$field, "col-lg-3 col-md-4 col-sm-6"];
+                }
+                ],
+            "TIME" => [
+                "value" => "TIME",
+                "selected_callback" => function ($definition){
+                  return [
+                      "checked" => $definition && strpos($definition["Type"], "time") === 0 ? "selected" : "",
+                  ];
+                },
+                "input_field_callback" => function($object, $desc){
+                      $field = new InputField($desc["Field"]);
+                      $field->addClass("timeinput datetimepicker-input");
+                      $field->addAttribute("id", $desc["Field"]);
+                      $field->addAttribute("data-target", "#".$desc["Field"]);
+                      $field->addAttribute("data-toggle", "datetimepicker");
+                      $field->addAttribute("autocomplete", "off");
+                      $field->setLabel($desc["Field"]);
+                      $field->setValue($object ? get_field_from_object($object, $desc["Field"]) : Utils::get_current_date());
+                      return [$field, "col-lg-3 col-md-4 col-sm-6"];
+                }
+                ],
+            "TINYTEXT" => [
+                "value" => "FILE",
+                "selected_callback" => function ($definition){
+                  return [
+                      "checked" => $definition && strpos($definition["Type"], "tinytext") === 0 ? "selected" : "",
+                  ];
+                },
+                "input_field_callback" => function($object, $desc){
+                      $file_name = $object ? get_field_from_object($object, $desc["Field"]) : "";
+                      $field = new FileField($desc["Field"], $file_name); 
+                      $field->setLabel($desc["Field"]);
+                      $file_name ? $field->setFileURL(BASE_URL."/files/uploaded/{$object->table}/{$desc["Field"]}/{$file_name}") : "";
+                      return [$field, "col-sm-12"];
+                }
+                ],
+            "MUL" => [
+                "value" => "REFERENCE",
+                "selected_callback" => function ($definition){
+                  return [
+                      "checked" => $definition && strpos($definition["Type"], "MUL") === 0 ? "selected" : "",
+                  ];
+                },
+                "input_field_callback" => function($object, $desc, $table){
+                  $fk_description = CoreDB::get_foreign_key_description($table, $desc["Field"]);
+                  $table_description = CoreDB::get_table_description($fk_description[0]);;
+                  $entries = db_select($fk_description[0])->orderBy("ID")->execute()->fetchAll(PDO::FETCH_NUM);
+                  $options = [];
+                  foreach ($entries as $entry){
+                      $options[$entry[0]] = $entry[1];
+                  }
+                  $field = new SelectField($desc["Field"]);
+                  $field->setLabel($desc["Field"]);
+                  $field->setOptions($options)
+                          ->setValue(get_field_from_object($object, $desc["Field"]))
+                          ->addClass("autocomplete")
+                          ->addAttribute("data-reference-table", $fk_description[0])
+                          ->addAttribute("data-reference-column", $table_description[1][0]);
+                  return [$field, "col-lg-3 col-md-4 col-sm-6"];
+                }
+                ]
+            ];
     }
 
     /**
@@ -115,22 +287,17 @@ class CoreDB {
     public static function get_table_description(string $table, bool $mul_important = true) : array {
         $cache = Cache::getByBundleAndKey("table_description", $table);
         if($cache){
-            return json_decode(htmlspecialchars_decode($cache->value), TRUE);
+            return json_decode($cache->value, TRUE);
         }else{
-            $descriptions = db_query("DESCRIBE `$table`")->fetchAll(PDO::FETCH_BOTH);
+            $descriptions = db_query("DESCRIBE `$table`")->fetchAll(PDO::FETCH_ASSOC);
             foreach ($descriptions as $index => $desc){
-                if($mul_important && $desc[3] == "UNI" && self::is_unique_foreign_key($table, $desc[0])){
-                    $descriptions[$index][3] = "MUL-UNI";
+                if($mul_important && $desc["Key"] == "UNI" && self::is_unique_foreign_key($table, $desc["Field"])){
+                    $descriptions[$index]["Key"] = "MUL-UNI";
                 }
             }
             Cache::set("table_description", $table, json_encode($descriptions));
             return $descriptions;
         }
-    }
-
-    public static function get_system_tables() : array{
-        global $system_tables;
-        return $system_tables;
     }
 
     /**
@@ -162,7 +329,7 @@ class CoreDB {
      * @param string $uni
      * @return bool
      */
-    function is_unique_foreign_key(string $table, string $uni) : bool {
+    public static function is_unique_foreign_key(string $table, string $uni) : bool {
         return count(CoreDB::get_foreign_key_description($table, $uni)) !== 0;
     }
 
@@ -187,7 +354,7 @@ class CoreDB {
     public static function get_foreign_key_description(string $table, string $foreignKey) : array {
         $cache = Cache::getByBundleAndKey("foreign_key_description", $table.$foreignKey);
         if($cache){
-            return json_decode(htmlspecialchars_decode($cache->value), TRUE) ? : [];
+            return json_decode($cache->value, TRUE) ? : [];
         }else{
             $result = db_select("INFORMATION_SCHEMA.KEY_COLUMN_USAGE", "", FALSE)
             ->select("", ["REFERENCED_TABLE_NAME","REFERENCED_COLUMN_NAME"])
@@ -212,6 +379,16 @@ class CoreDB {
        }
        return $tables;
    }
+
+   /**
+    * @return string
+    */
+    public static function getTableComment($table_name) : string{
+        return db_select("INFORMATION_SCHEMA.TABLES", "", false)
+        ->condition("table_schema = :schema AND table_name = :table_name", [":schema" => DB_NAME, ":table_name" => $table_name])
+        ->select("", ["table_comment AS comment"])
+        ->execute()->fetchObject()->comment;
+    }
 }
 
 /**
@@ -284,179 +461,3 @@ function db_truncate(string $table_name) {
 function get_field_from_object(&$object, $field) {
     return isset($object->$field) ? $object->$field : "";
 }
-
-$data_types = [
-  "INT" => [
-      "value" => "INT",
-      "selected_callback" => function ($definition){
-        return [
-            "checked" => $definition && $definition[1] != "MUL" && strpos($definition[1], "int") === 0 ? "selected" : "",
-        ];
-      },
-      "input_field_callback" => function($object, $desc){
-          $field = new InputField($desc[0]);
-          $field->setType("number");
-          $field->setValue(get_field_from_object($object, $desc[0]));
-          $field->setLabel($desc[0]);
-          return [$field, "col-lg-3 col-md-4 col-sm-6"];
-      }
-      ],
-  "DOUBLE" => [
-      "value" => "DOUBLE",
-      "selected_callback" => function ($definition){
-        return [
-            "checked" => $definition && strpos($definition[1], "double") === 0 ? "selected" : "",
-        ];
-      },
-      "input_field_callback" => function($object, $desc){
-          $field = new InputField($desc[0]);
-          $field->setType("number");
-          $field->setValue(get_field_from_object($object, $desc[0]));
-          $field->addAttribute("step", "0.01");
-          $field->setLabel($desc[0]);
-          return [$field, "col-lg-3 col-md-4 col-sm-6"];
-      }
-      ],
-  "VARCHAR" => [
-      "value" => "VARCHAR",
-      "selected_callback" => function ($definition){
-        return [
-            "checked" => $definition && strpos($definition[1], "varchar") === 0 ? "selected" : "",
-        ];
-      },
-      "input_field_callback" => function($object, $desc){
-          $field = new InputField($desc[0]);
-          $field->setValue(get_field_from_object($object, $desc[0]));
-          $field->setLabel($desc[0]);
-          return [$field, "col-lg-3 col-md-4 col-sm-6"];
-      }
-      ],
-  "TEXT" => [
-      "value" => "TEXT",
-      "selected_callback" => function ($definition){
-        return [
-            "checked" => $definition && strpos($definition[1], "text") === 0 ? "selected" : "",
-        ];
-      },
-      "input_field_callback" => function($object, $desc){
-          $field = new TextareaField($desc[0]);
-          
-          $field->setValue(get_field_from_object($object, $desc[0]));
-          $field->setLabel($desc[0]);
-          return [$field, "col-sm-12"];
-      }
-      ],
-  "LONGTEXT" => [
-      "value" => "LONGTEXT",
-      "selected_callback" => function ($definition){
-        return [
-            "checked" => $definition && strpos($definition[1], "longtext") === 0 ? "selected" : "",
-        ];
-      },
-      "input_field_callback" => function($object, $desc){
-          $field = new TextareaField($desc[0]);
-          $field->addClass("summernote");
-          $field->setLabel($desc[0]);
-          $field->setValue(htmlspecialchars_decode(get_field_from_object($object, $desc[0])));
-          return [$field, "col-sm-12"];
-      }
-      ],
-  "DATE" => [
-      "value" => "DATE",
-      "selected_callback" => function ($definition){
-        return [
-            "checked" => $definition && strpos($definition[1], "date") === 0 ? "selected" : "",
-        ];
-      },
-      "input_field_callback" => function($object, $desc){
-            $field = new InputField($desc[0]);
-            $field->addClass("dateinput");
-            $field->setLabel($desc[0]);
-            $field->setValue($object ? get_field_from_object($object, $desc[0]) : Utils::get_current_date());
-            return [$field, "col-lg-3 col-md-4 col-sm-6"];
-      }
-      ],
-  "DATETIME" => [
-      "value" => "DATETIME",
-      "selected_callback" => function ($definition){
-        return [
-            "checked" => $definition && strpos($definition[1], "datetime") === 0 ? "selected" : "",
-        ];
-      },
-      "input_field_callback" => function($object, $desc){
-            $field = new InputField($desc[0]);
-            $field->addClass("datetimeinput");
-            $field->setLabel($desc[0]);
-            $field->setValue($object ? get_field_from_object($object, $desc[0]) : Utils::get_current_date());
-            return [$field, "col-lg-3 col-md-4 col-sm-6"];
-      }
-      ],
-  "TIME" => [
-      "value" => "TIME",
-      "selected_callback" => function ($definition){
-        return [
-            "checked" => $definition && strpos($definition[1], "time") === 0 ? "selected" : "",
-        ];
-      },
-      "input_field_callback" => function($object, $desc){
-            $field = new InputField($desc[0]);
-            $field->addClass("timeinput");
-            $field->setLabel($desc[0]);
-            $field->setValue($object ? get_field_from_object($object, $desc[0]) : Utils::get_current_date());
-            return [$field, "col-lg-3 col-md-4 col-sm-6"];
-      }
-      ],
-  "TINYTEXT" => [
-      "value" => "FILE",
-      "selected_callback" => function ($definition){
-        return [
-            "checked" => $definition && strpos($definition[1], "tinytext") === 0 ? "selected" : "",
-        ];
-      },
-      "input_field_callback" => function($object, $desc){
-            $file_name = $object ? get_field_from_object($object, $desc[0]) : "";
-            $field = new FileField($desc[0], $file_name); 
-            $field->setLabel($desc[0]);
-            $file_name ? $field->setFileURL(BASE_URL."/files/uploaded/{$object->table}/{$desc[0]}/{$file_name}") : "";
-            return [$field, "col-sm-12"];
-      }
-      ],
-  "MUL" => [
-      "value" => "REFERENCE",
-      "selected_callback" => function ($definition){
-        return [
-            "checked" => $definition && strpos($definition[1], "MUL") === 0 ? "selected" : "",
-        ];
-      },
-      "input_field_callback" => function($object, $desc, $table){
-        $fk_description = CoreDB::get_foreign_key_description($table, $desc[0]);
-        $table_description = CoreDB::get_table_description($fk_description[0]);;
-        $entries = db_select($fk_description[0])->orderBy("ID")->execute()->fetchAll(PDO::FETCH_NUM);
-        $options = [];
-        foreach ($entries as $entry){
-            $options[$entry[0]] = $entry[1];
-        }
-        $field = new SelectField($desc[0]);
-        $field->setLabel($desc[0]);
-        $field->setOptions($options)
-                ->setValue(get_field_from_object($object, $desc[0]))
-                ->addClass("autocomplete")
-                ->addAttribute("data-reference-table", $fk_description[0])
-                ->addAttribute("data-reference-column", $table_description[1][0]);
-        return [$field, "col-lg-3 col-md-4 col-sm-6"];
-      }
-      ]
-];
-
-define("ROLES", "ROLES");
-define("USERS", "USERS");
-define("USERS_ROLES", "USERS_ROLES");
-define("RESET_PASSWORD_QUEUE", "RESET_PASSWORD_QUEUE");
-define("TRANSLATIONS", "TRANSLATIONS");
-define("EMAILS", "EMAILS");
-define("BLOCKED_IPS", "BLOCKED_IPS");
-define("WATCHDOG", "WATCHDOG");
-define("LOGINS", "LOGINS");
-define("CACHE", "CACHE");
-define("VARIABLES", "VARIABLES");
-$system_tables = [ROLES, USERS, RESET_PASSWORD_QUEUE, USERS_ROLES, TRANSLATIONS, BLOCKED_IPS, WATCHDOG, LOGINS, CACHE, VARIABLES];

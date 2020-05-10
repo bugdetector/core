@@ -79,5 +79,9 @@ class Router {
     public function get_arguments(){
         return $this->arguments;
     }
+
+    public function getController() : Page{
+        return $this->controller;
+    }
 }
 

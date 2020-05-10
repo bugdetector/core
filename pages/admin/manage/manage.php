@@ -1,225 +1,97 @@
 <?php
 
-class AdminManageController extends AdminController{
-    public $operation;
-    public $table_headers;
-    public $table_content;
-    private $filter_options;
-    public $entry_count;
-    public $page;
-    public function __construct($arguments) {
-        parent::__construct($arguments);
-        $this->operation = isset($this->arguments[0]) ? $this->arguments[0] : "";
-    }
-    
-    protected function preprocessPage() {
-        parent::preprocessPage();
-        if(isset($_POST["ROLE"])){
-            $role = new DBObject(ROLES);
-            $role->ROLE = $_POST["ROLE"];
-            $role->insert(); 
-            $this->create_warning_message(_t(78, [$role->ROLE]),"alert-success");
-        }
-        $this->add_frontend_translation(98);
-        $this->add_frontend_translation(103);
-        $this->add_frontend_translation(104);
-        $this->add_frontend_translation(50);
-        $this->add_frontend_translation(11);
-        $this->add_frontend_translation(14);
-        
-        $this->page = isset($_GET["page"]) && $_GET["page"]>1 ? $_GET["page"] : 1;
-        
-        switch ($this->operation){
-        case "user":
-            $this->getUserTableInfo();
-            $this->setTitle(_t(2).": "._t(5));
-            break;
-        case "role":
-            $this->getRoleTableInfo();
-            $this->setTitle(_t(2).": "._t(6));
-            break;
-        case "translation":
-            $this->getTranslationInfo();
-            $this->setTitle(_t(2).": "._t(100));
-            break;
-        default:
-            $this->setTitle(_t(2));
-        }
+/**
+ * @property FormBuilder $filter_options 
+ */
+class AdminManageController extends AdminController
+{
+    protected $page;
+    protected $table_headers = [];
+    protected $table_content = [];
+    protected $filter_options;
+    protected $action_section;
+    protected $total_count;
+
+    protected function preprocessPage()
+    {
+        $this->setTitle(_t("management"));
+        $this->page = isset($_GET["page"]) && $_GET["page"] > 1 ? $_GET["page"] : 1;
     }
 
-    protected function echoContent() {        
-        require 'manage_html.php';
-    }
-    
-    private function getUserTableInfo() {
-        $this->table_headers = [
-            "ID" => "ID", 
-            "USERNAME" => _t(20), 
-            "NAME" => _t(27),
-            "SURNAME" => mb_convert_case(_t(28),MB_CASE_TITLE), 
-            "EMAIL" => _t(35), 
-            "PHONE" => mb_convert_case(_t(29), MB_CASE_TITLE), 
-            "CREATED_AT" => _t(48), 
-            "ACCESS" => _t(34)
-        ];
-        $params = array_filter($_GET);
-        $order_by = isset($params["orderby"]) && in_array($params["orderby"], array_keys($this->table_headers)) ? $params["orderby"] : "ID";
-        $order_direction = isset($params["orderdirection"]) && $params["orderdirection"] == "DESC" ? "DESC" : "ASC";
-        unset($params["orderby"], $params["orderdirection"]);
-
-
-        $query = db_select(USERS)
-        ->orderBy($order_by." ".$order_direction)
-        ->condition("USERNAME != 'guest'");
-        foreach($params as $key => $value){
-            if(in_array($key, array_keys($this->table_headers))){
-                $query->condition(" $key LIKE :$key ", [":$key" => "%".$value."%"]);
-            }
+    protected function echoContent()
+    {
+        $table = new Table($this->table_headers, $this->table_content);
+        $table->setOrderable(true);
+        if (!$this->action_section) {
+            $this->action_section = TextElement::create("");
+        }
+        if (!$this->filter_options) {
+            $search_form = TextElement::create("");
+            $summary_text = "";
+        } else {
+            $this->filter_options->addField(
+                Group::create("col-sm-12 d-flex mt-2")
+                    ->addField(
+                        InputField::create("search")
+                            ->setType("submit")
+                            ->setValue(_t("search"))
+                            ->addClass("btn btn-primary mr-sm-1")
+                    )->addField(
+                        InputField::create("search")
+                            ->setType("reset")
+                            ->setValue(_t("reset"))
+                            ->addClass("btn btn-danger ml-sm-1")
+                    )
+            );
+            $search_form = Group::create("col-12")->addField(
+                CollapsableCard::create(_t("search"))
+                    ->setContent($this->filter_options)
+                    ->setId("search_form")
+            );
+            $end = $this->page * PAGE_SIZE_LIMIT <= $this->total_count ? $this->page * PAGE_SIZE_LIMIT : $this->total_count; 
+            $summary_text = _t("table_summary", [$this->total_count, ($this->page - 1) * PAGE_SIZE_LIMIT, $end]);
         }
 
-        $this->entry_count = $query->select_with_function(["COUNT(*) AS count"])->execute()->fetchObject()->count;
-        $query->unset_fields();
-        $this->table_content = $query
-        ->select(USERS, ["ID", "USERNAME", "NAME", "SURNAME", "EMAIL","PHONE", "CREATED_AT", "ACCESS"])
-        ->select_with_function([
-            "CONCAT(\"<a href='".BASE_URL."/admin/user/\", USERNAME, \"'>"._t(9)."</a>\") AS edit_link",
-            "CONCAT(\"<a href='#' class='delete-user' data-username='\", USERNAME, \"'>"._t(10)."</a>\") AS remove_link"
-            ])
-        ->limit(PAGE_SIZE_LIMIT, ($this->page-1)*PAGE_SIZE_LIMIT)->execute()->fetchAll(PDO::FETCH_ASSOC);
+        $nav_items = new NavPills();
+        $nav_items->addNavItem(_t("user_management"), BASE_URL . "/admin/manage/user", get_called_class() == "AdminManageUserController")
+            ->addNavItem(_t("role_management"), BASE_URL . "/admin/manage/role", get_called_class() == "AdminManageRoleController")
+            ->addNavItem(_t("translations"), BASE_URL . "/admin/manage/translation", get_called_class() == "AdminManageTranslationController")
+            ->addNavItem(_t("updates"), BASE_URL . "/admin/manage/update", get_called_class() == "AdminManageUpdateController");
 
-        $this->filter_options = [
-            [
-                "name" => "ID",
-                "type" => "number",
-                "label" => "ID",
-                "value" => isset($params["ID"]) ? $params["ID"] : ""
-            ],
-            [
-                "name" => "USERNAME",
-                "type" => "text",
-                "label" => "USERNAME",
-                "value" => isset($params["USERNAME"]) ? $params["USERNAME"] : ""
-            ],
-            [
-                "name" => "NAME",
-                "type" => "text",
-                "label" => "NAME",
-                "value" => isset($params["NAME"]) ? $params["NAME"] : ""
-            ],
-            [
-                "name" => "SURNAME",
-                "type" => "text",
-                "label" => "SURNAME",
-                "value" => isset($params["SURNAME"]) ? $params["SURNAME"] : ""
-            ],
-            [
-                "name" => "EMAIL",
-                "type" => "text",
-                "label" => "EMAIL",
-                "value" => isset($params["EMAIL"]) ? $params["EMAIL"] : ""
-            ],
-            [
-                "name" => "PHONE",
-                "type" => "text",
-                "label" => "PHONE",
-                "value" => isset($params["PHONE"]) ? $params["PHONE"] : ""
-            ],
-            [
-                "name" => "CREATED_AT",
-                "type" => "text",
-                "label" => "CREATED_AT",
-                "value" => isset($params["CREATED_AT"]) ? $params["CREATED_AT"] : "",
-                "class" => "datetimeinput"
-            ],
-            [
-                "name" => "ACCESS",
-                "type" => "text",
-                "label" => "ACCESS",
-                "value" => isset($params["ACCESS"]) ? $params["ACCESS"] : "",
-                "class" => "datetimeinput"
-            ]
-        ];
-    }
-    
-    private function getRoleTableInfo() {
-        $this->table_headers = ["ID" => "ID", "ROLE" => _t(49)];
-
-        $params = array_filter($_GET);
-        $order_by = isset($params["orderby"]) && in_array($params["orderby"], array_keys($this->table_headers)) ? $params["orderby"] : "ID";
-        $order_direction = isset($params["orderdirection"]) && $params["orderdirection"] == "DESC" ? "DESC" : "ASC";
-        unset($params["orderby"], $params["orderdirection"]);
-        
-        $query = db_select(ROLES)
-        ->orderBy($order_by." ".$order_direction);
-        foreach($params as $key => $value){
-            if(in_array($key, array_keys($this->table_headers))){
-                $query->condition(" $key LIKE :$key ", [":$key" => "%".$value."%"]);
-            }
-        }
-
-        $this->entry_count = $query->select_with_function(["COUNT(*) AS count"])->execute()->fetchObject()->count;
-        $query->unset_fields();
-        $this->table_content = $query
-        ->select(ROLES, ["*"])
-        ->select_with_function([
-            "CONCAT(\"<a href='#' class='remove-role' data-role-name='\", ROLE, \"'>"._t(12)."</a>\") AS remove_link"
-        ])
-        ->limit(PAGE_SIZE_LIMIT, ($this->page-1)*PAGE_SIZE_LIMIT)->execute()->fetchAll(PDO::FETCH_ASSOC);
-        
-        $this->filter_options = [
-            [
-                "name" => "ID",
-                "type" => "number",
-                "label" => "ID",
-                "value" => isset($params["ID"]) ? $params["ID"] : ""
-            ],
-            [
-                "name" => "ROLE",
-                "type" => "text",
-                "label" => "ROLE",
-                "value" => isset($params["ROLE"]) ? $params["ROLE"] : ""
-            ]
-        ];
-    }
-    
-    function getTranslationInfo() {
-        $this->table_headers = ["ID" => "ID", "EN" => "EN", "TR" => "TR"];
-
-        $params = array_filter($_GET);
-        $order_by = isset($params["orderby"]) && in_array($params["orderby"], array_keys($this->table_headers)) ? $params["orderby"] : "ID";
-        $order_direction = isset($params["orderdirection"]) && $params["orderdirection"] == "DESC" ? "DESC" : "ASC";
-        unset($params["orderby"], $params["orderdirection"]);
-
-        $query = db_select(TRANSLATIONS)->orderBy($order_by." ".$order_direction);
-        foreach($params as $key => $value){
-            if(in_array($key, array_keys($this->table_headers))){
-                $query->condition(" $key LIKE :$key ", [":$key" => "%".$value."%"]);
-            }
-        }
-
-        $this->entry_count = 0;
-        $this->table_content = $query->execute()->fetchAll(PDO::FETCH_NUM);
-        $this->table_headers = ["ID" => "ID", "EN" => "EN", "TR" => "TR"];
-
-        $this->filter_options = [
-            [
-                "name" => "ID",
-                "type" => "number",
-                "label" => "ID",
-                "value" => isset($params["ID"]) ? $params["ID"] : ""
-            ],
-            [
-                "name" => "EN",
-                "type" => "text",
-                "label" => "EN",
-                "value" => isset($params["EN"]) ? $params["EN"] : ""
-            ],
-            [
-                "name" => "TR",
-                "type" => "text",
-                "label" => "TR",
-                "value" => isset($params["TR"]) ? $params["TR"] : ""
-            ]
-        ];
+        $group = new Group("container-fluid");
+        $group->addField(
+            Group::create("d-sm-flex align-items-center justify-content-between mb-4")
+                ->addField(
+                    Group::create("h3 mb-0 text-gray-800")->setTagName("h1")
+                        ->addField(TextElement::create($this->title))
+                )->addField(
+                    $this->action_section
+                )
+        )->addField(
+            $this
+        )->addField(
+            $search_form
+        )->addField(
+            Group::create("card shadow mb-4")->addField(
+                Group::create("card-header py-3")
+                    ->addField($nav_items)
+                    ->addField(
+                        Group::create("float-right")->addField(
+                            TextElement::create($summary_text)
+                        )
+                    )
+            )->addField(
+                Group::create("col-12")->addField(
+                    Pagination::create($this->page)
+                        ->setTotalCount($this->total_count)
+                )->addField(
+                    $table
+                )
+            )->addField(
+                Pagination::create($this->page)
+                    ->setTotalCount($this->total_count)
+            )
+        );
+        echo $group;
     }
 }

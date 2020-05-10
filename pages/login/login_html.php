@@ -1,26 +1,46 @@
-<div class="container-fluid content">
-    
-    <div class="row">
-        <div class="col-sm-4"></div>
-        <div class="col-sm-4 text-center">
-            <img src="<?php echo SITE_ROOT; ?>/assets/Core_logo.png">
-            <form id="loginForm" method="POST" role="form" style="margin-top: 10px">
-                <input type="text" class="d-none" name="form_build_id" value="<?php echo $this->form_build_id; ?>"/>
-                <input name="username" class="form-control" placeholder="<?php echo _t(20); ?>" required autofocus>
-                <input name="password" class="form-control" type="password" placeholder="<?php echo _t(22); ?>" required>
-                <input type="submit" class="btn btn-lg btn-outline-info btn-block" value="<?php echo _t(21); ?>" name="login">
-                <div class="col-sm-12 login-actions">
-                    <label class="float-left">
-                        <input type="checkbox" value="remember-me" name="remember-me" <?php if(isset($_COOKIE["remember-me"]) && $_COOKIE["remember-me"]==true ) echo "checked"; ?>>
-                        <?php echo _t(112); ?>
-                    </label>
-                    <label class="float-right">
-                    <a href="<?php echo SITE_ROOT."/forget_password"; ?>" id="forgetPassword">
-                        <?php echo _t(23); ?></a>
-                    </label>
+<div class="container">
+    <!-- Outer Row -->
+    <div class="row justify-content-center">
+        <div class="col-xl-10 col-lg-12 col-md-9">
+            <div class="card o-hidden border-0 shadow-lg my-5">
+                <div class="card-body p-0">
+                    <!-- Nested Row within Card Body -->
+                    <div class="row">
+                        <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+                        <div class="col-lg-6">
+                            <div class="p-5">
+                                <div class="text-center">
+                                    <h1 class="h4 text-gray-900 mb-4"><?php echo _t("login_welcome"); ?>!</h1>
+                                    <?php $this->printMessages(); ?>
+                                </div>
+                                <form id="loginForm" method="POST" class="user">
+                                    <div class="form-group">
+                                    <input type="hidden" name="form_build_id" value="<?php echo $this->form_build_id; ?>"/>
+                                    <input type="hidden" name="form_token" value="<?php echo $this->form_token; ?>"/>
+                                    <input name="username" class="form-control form-control-user" aria-describedby="emailHelp" placeholder="<?php echo _t("username"); ?>" required autofocus>
+                                    </div>
+                                    <div class="form-group">
+                                    <input type="password" name="password" class="form-control form-control-user" placeholder="<?php echo _t("password"); ?>" required>
+                                    </div>
+                                    <div class="form-group">
+                                    <div class="custom-control custom-checkbox small">
+                                        <input type="checkbox" class="custom-control-input" id="remember-me" value="remember-me" name="remember-me" <?php if(isset($_COOKIE["remember-me"]) && $_COOKIE["remember-me"]==true ) echo "checked"; ?>>
+                                        <label class="custom-control-label" for="remember-me"><?php echo _t("remember_me"); ?></label>
+                                    </div>
+                                    <input type="submit" class="btn btn-primary btn-user btn-block" value="<?php echo _t("login"); ?>" name="login">
+                                    </div>
+                                    <hr>
+                                </form>
+                                <hr>
+                                <div class="text-center">
+                                    <a class="small" href="<?php echo SITE_ROOT."/forget_password"; ?>" id="forgetPassword">
+                                    <?php echo _t("forgot_password");?></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </form>
-            <?php $this->printMessages(); ?>
+            </div>
         </div>
     </div>
 </div>

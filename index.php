@@ -5,19 +5,21 @@ define("DIRECT_OBJECT_REF_SHIELD", TRUE);
 require './kernel/Router.php';
 include './.config.php';
 require "./kernel/database/CoreDB.php";
-include './kernel/Page.class.php';
-include './kernel/ServicePage.class.php';
+include './kernel/View.php';
+include './kernel/Page.php';
+include './kernel/ServicePage.php';
 include './kernel/Utils.php';
 include './kernel/Migration.php';
 
 define("SITE_ROOT", substr(str_replace(basename(__FILE__), "", $_SERVER["SCRIPT_NAME"]), 0, -1 ) );
 define("BASE_URL", HTTP."://".$_SERVER["HTTP_HOST"].SITE_ROOT);
 
-Utils::include_dir("kernel/form_builder");
 Utils::include_dir("kernel/Entity");
 Utils::include_dir("Entity");
-Utils::include_dir("lib");
+Utils::include_dir("src/lib");
 Utils::include_dir("src");
+Utils::include_dir("views");
+Utils::include_dir("views/form");
 session_start();
 
 //Locating for installing system

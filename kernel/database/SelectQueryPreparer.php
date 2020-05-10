@@ -102,6 +102,7 @@ class SelectQueryPreparer extends CoreDBQueryPreparer{
     public function unset_fields(){
         unset($this->fields);
         $this->fields = array();
+        return $this;
     }
     
     private function get_fields(){

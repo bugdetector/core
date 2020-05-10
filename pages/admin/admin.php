@@ -1,8 +1,7 @@
 <?php
 
 class AdminController extends Page {
-    
-    private $subpage;
+
     private $number_of_members;
     
     const admin_mainpage = "mainpage";
@@ -12,43 +11,42 @@ class AdminController extends Page {
     }
     
     protected function preprocessPage() {
-        parent::preprocessPage();
-        if(User::get_current_core_user()->isAdmin()){
-            $this->add_js_files("js/core-admin.js");
-        }
-        if(get_called_class() == self::class){
-            $this->number_of_members = db_select(USERS)
-            ->select_with_function(["COUNT(*) as count"])
-            ->condition("USERNAME != :username", [":username" => "guest"])
-            ->execute()->fetchObject()->count;
-        }
+        $this->setTitle(SITE_NAME." | "._t("dashboard"));
+        $this->number_of_members = db_select(User::TABLE)
+        ->select_with_function(["COUNT(*) as count"])
+        ->condition("USERNAME != :username", [":username" => "guest"])
+        ->execute()->fetchObject()->count;
     }
     
     protected function echoContent() {
-        include 'admin_html.php';
-    }
-    public function echoNavbar() {
-        $this->import_view("navbar_admin");
-    }
-    
-    public function import_view($view_name) {
-        if(file_exists(__DIR__."/views/$view_name.php")){
-            require "views/$view_name.php";
-        } else {
-            parent::import_view($view_name);
-        }
-    }
-    
-    protected function echoTranslations() {
-        $this->add_frontend_translation(79);
-        $this->add_frontend_translation(80);
-        $this->add_frontend_translation(81);
-        $this->add_frontend_translation(62);
-        $this->add_frontend_translation(63);
-        $this->add_frontend_translation(82);
-        $this->add_frontend_translation(83);
-        
-        parent::echoTranslations();
+        $group = new Group("container-fluid");
+        $group->addField(
+            Group::create("d-sm-flex align-items-center justify-content-between mb-4")
+                ->addField(
+                    Group::create("h3 mb-0 text-gray-800")->setTagName("h1")
+                    ->addField(TextElement::create(_t("dashboard")))
+                )
+            )->addField(
+                Group::create("row")
+                ->addField(
+                    BasicCard::create("")
+                    ->addClass("col-xl-3 col-md-6 mb-4")
+                    ->setBorderClass("border-left-primary")
+                    ->setHref(BASE_URL . "/admin/manage/user")
+                    ->setTitle(_t("number_of_members"))
+                    ->setDescription($this->number_of_members)
+                    ->setIconClass("fa-user")
+                )->addField(
+                    BasicCard::create("")
+                    ->addClass("col-xl-3 col-md-6 mb-4")
+                    ->setBorderClass("border-left-info")
+                    ->setHref(BASE_URL . "/admin/manage/update")
+                    ->setTitle(_t("system_version"))
+                    ->setDescription(VERSION)
+                    ->setIconClass("fa-arrow-alt-circle-up")
+                )
+            );
+        echo $group;
     }
 }
 

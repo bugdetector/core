@@ -26,10 +26,10 @@ class AdminTableDbobjectController extends AdminTableController{
                     [$this->author, $this->class_name,$this->table, $this->fields], 
                     file_get_contents("DBObject.example", TRUE)
                 );
-        $wrapper = new InputGroup("col-sm-12");
+        $wrapper = new Group("col-sm-12");
         $text_field = new TextareaField("");
         $text_field->setLabel("{$this->table} DBObject:")->setValue(htmlspecialchars($example))
                 ->addAttribute("rows", substr_count($example, "\n" ) + 1);
-        echo $wrapper->addField($text_field)->renderField();
+        echo $wrapper->addField($text_field);
     }
 }

@@ -18,15 +18,16 @@ class InsertQueryPreparer extends CoreDBQueryPreparer{
         $fields = "( ";
         $values = "VALUES (";
         $this->params = [];
-        $param_count = count($this->fields);
         $index = 0;
         foreach ($this->fields as $key => $field){
             if($field === "NULL" || !$field){
                 $field = null;
+            }else{
+                $field = Utils::cleanXSS($field);
             }
             $fields.= ($index>0 ? ", `" : "`").$key."`";
             $values.= ($index>0 ? ", " : "")." ? ";
-            $this->params[] = $field !== null ?  filter_var($field, FILTER_SANITIZE_SPECIAL_CHARS, FILTER_NULL_ON_FAILURE) : null;
+            $this->params[] = $field;
             $index++;
         }
         

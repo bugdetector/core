@@ -2,46 +2,68 @@
 
 class Forget_passwordController extends Page{
     
+    const FORM_ID = "forget_password";
+    public function __construct($arguments) {
+        parent::__construct($arguments);
+        $this->body_classes = ["bg-gradient-info"];
+    }
+
     public function check_access() : bool {
         return !User::get_current_core_user()->isLoggedIn();
     }
 
-    protected function echoContent() {
-        if(isset($_POST["username"]) && isset($_POST["email"]) ){
-            $user = db_select(User::TABLE)
-                    ->condition("USERNAME = :username AND EMAIL = :email", ["username" => $_POST["username"], "email" => $_POST["email"]] )
-                    ->execute()->fetch(PDO::FETCH_ASSOC);
+    public function echoPage(){
+        $this->add_default_js_files();
+        $this->add_default_css_files();
+        $this->add_default_translations();
+        
+        $this->preprocessPage();
+        echo "<!DOCTYPE html>";
+        echo "<html>";
+        $this->echoHeader();
+        echo '<body class="'.implode(" ", $this->body_classes).'">';
+        $this->echoContent();
+        echo '</body>';
+        echo '</html>';
+    }
+
+    protected function preprocessPage()
+    {
+        if( isset($_POST["reset"]) && $this->checkCsrfToken(self::FORM_ID) ){
+            /**
+             * @var User $user
+             */
+            $user = User::get(["username" => $_POST["username"], "email" => $_POST["email"]]);
             if(!$user){
-                $this->create_warning_message (_t(74));
+                $this->create_warning_message (_t("wrong_username_or_email"));
             } else {
-                $reset_password = new DBObject(RESET_PASSWORD_QUEUE);
-                
-                $sended_key = db_select(RESET_PASSWORD_QUEUE)
-                        ->condition("USER = :user_id",[":user_id" => $user["ID"]])
-                        ->limit(1)
-                        ->execute()->fetch(PDO::FETCH_ASSOC);
-                if(isset($sended_key["ID"]) && $sended_key["ID"]){
-                    $reset_password->map($sended_key);
-                } else {
-                    $reset_password->USER = intval($user["ID"]);
-                    $reset_password->KEY = hash("SHA256", Utils::get_current_date().json_encode($user));
-                    $reset_password->insert();
+                $reset_password = new DBObject("reset_password_queue");
+                /**
+                 * @var ResetPassword $reset_password
+                 */
+                $reset_password = ResetPassword::get(["user" => $user->ID]);
+                if( !$reset_password){
+                    $reset_password = new ResetPassword();
+                    $reset_password->user = $user->ID;
+                    $reset_password->key = hash("SHA256", Utils::get_current_date().json_encode($user));
+                    $reset_password->save();
                 }
                 
-                $email = $user["EMAIL"];
-                $subject = _t(73);
-                $reset_link = BASE_URL."/reset_password/?USER=".$user["ID"]."&KEY=".$reset_password->KEY;
+                $reset_link = BASE_URL."/reset_password/?USER=".$user->ID."&KEY=".$reset_password->key;
                 $message = _t_email("password_reset" ,[$reset_link, $reset_link]);
-                $username = $user["NAME"]." ".$user["SURNAME"];
+                $username = $user->getFullName();
                 
-                Utils::HTMLMail($email, $subject, $message, $username);
+                Utils::HTMLMail($user->email, _t("reset_password"), $message, $username);
                 
-                $this->create_warning_message(_t(88), "alert-success");
-                return;
+                $this->create_warning_message(_t("password_reset_mail_success"), "alert-success");
             }
         }
+        $this->form_build_id = $this->createCsrf(self::FORM_ID, User::get_user_ip());
+        $this->form_token = $this->createFormToken($this->form_build_id);
+    }
+
+    protected function echoContent() {
         require 'forget_password_html.php';
-        echo_forget_password_page($this);
     }
 
 }

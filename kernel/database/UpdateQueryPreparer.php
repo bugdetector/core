@@ -13,9 +13,11 @@ class UpdateQueryPreparer extends CoreDBQueryPreparer{
         foreach ($fields as $key => $field){
             if($field === "NULL" || !$field){
                 $field = null;
+            }else{
+                $field = Utils::cleanXSS($field);
             }
             $this->fields .= ($index>0 ? ", ": "")." `$key` = :$key";
-            $this->params[":".$key] = $field !== null ? filter_var($field, FILTER_SANITIZE_SPECIAL_CHARS, FILTER_NULL_ON_FAILURE) : null;
+            $this->params[":".$key] = $field;
             $index++;
         }
     }

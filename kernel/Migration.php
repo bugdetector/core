@@ -10,7 +10,7 @@ class Migration {
 
     public static function update(){
         $updates = self::getUpdates();
-        $version = Variable::getByKey("version") ? : new Variable("version");
+        $version = Variable::getByKey("version") ? : Variable::create("version");
         $new_version_number = NULL;
         foreach ($updates as $update) {
             include self::MIGRATIONS_DIR."/".$update;
@@ -19,6 +19,8 @@ class Migration {
             $version->save();
             self::$version = $new_version_number;
         }
+        db_truncate(Cache::TABLE);
+        Translation::importTranslations();
     }
 
     public static function getUpdates() {

@@ -5,11 +5,13 @@
  */
 
 class Cache extends DBObject{
-    const TABLE = CACHE;
+    const TABLE = "cache";
     public $ID;
     public $bundle;
     public $key;
     public $value;
+    public $created_at;
+    public $last_updated;
 
     public function __construct()
     {

@@ -5,15 +5,22 @@
  */
 
 class Variable extends DBObject{
-    const TABLE = VARIABLES;
+    const TABLE = "variables";
     public $ID;
     public $key;
     public $value;
-
-    public function __construct($key = null)
+    public $created_at;
+    public $last_updated;
+    
+    public function __construct()
     {
-        $this->key = $key;
         parent::__construct(self::TABLE);
+    }
+
+    public static function create($key) : Variable{
+        $variable = new Variable();
+        $variable->key = $key;
+        return $variable;
     }
 
     /**

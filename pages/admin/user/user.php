@@ -1,150 +1,151 @@
 <?php
 
-class AdminUserController extends AdminController{
+/**
+ * @property User $user
+ */
+class AdminUserController extends AdminController
+{
+    const FORM_ID = "admin_user_edit_form";
+    const PASSWORD_FORM_ID = "admin_user_change_password";
     public $user;
-    public $current_user_roles;
-    public $excluded_user_roles;
+    public $role_options = [];
     public $operation;
     public $form_build_id;
-    
-    protected function preprocessPage() {
+
+    protected function preprocessPage()
+    {
         parent::preprocessPage();
-        $this->operation = isset($_GET["q"]) ? $_GET["q"] : "update";
-        if(isset($this->arguments[0])){
+        if (isset($this->arguments[0])) {
             $this->user = User::getUserByUsername($this->arguments[0]);
-            if(!$this->user){
-                $this->create_warning_message(_t(19));
-                return;
+            if (!$this->user) {
+                Router::getInstance()->route(Router::$notFound);
             }
-        } else if($this->operation === "update") {
-            $this->user = User::get_current_core_user();
-        } else {
+            $this->setTitle(_t("edit_user") . " | " . $this->user->username);
+        } else if (isset($_GET["q"]) && $_GET["q"] == "insert") {
             $this->user = new User();
+            $this->setTitle(_t("add_user"));
+        } else {
+            $this->user = User::get_current_core_user();
+            $this->setTitle(_t("profile") . " | " . $this->user->username);
         }
-        if(isset($_POST["save"]) || isset($_POST["change_password"])){
-            try {
-                $username = FormBuilder::get_csrf($_POST["form_build_id"], "user_edit_form");
-                if($this->operation != "add" && $username != $this->user->USERNAME){
-                    $this->create_warning_message(_t(67));
-                    return;
-                }
-            } catch (Exception $ex) {
-                $this->create_warning_message($ex->getMessage());
-                return;
-            }
-            $submitted = isset($_POST["change_password"]) ? "change_password" : (isset($_POST["save"]) ? "save" : "");
-            switch ($submitted){
-                case "save":
-                    $user_info = $_POST["user_info"];
-                    if(isset($user_info["USERNAME"]) && (preg_match("/[^a-z_\-0-9]+/i", $user_info["USERNAME"]) || strlen($user_info["USERNAME"]) < 4) ){
-                        $this->create_warning_message(_t(44, [4]));
-                    }elseif (preg_match("/[^a-z\s\p{L}]+/iu", $user_info["NAME"]) ){
-                        $this->create_warning_message(_t(26, [mb_strtolower(_t(27))]));
-                    }elseif (preg_match("/[^a-z\s\p{L}]+/iu", $user_info["SURNAME"]) ) {
-                        $this->create_warning_message(_t(26, [_t(28)]));
-                    }elseif (preg_match("/[^0-9]+/i", $user_info["PHONE"]) || strlen($user_info["PHONE"]) != 10) {
-                        $this->create_warning_message(_t(26, [_t(29)]));
-                    }elseif(filter_var($user_info["EMAIL"], FILTER_VALIDATE_EMAIL) == ""){
-                        $this->create_warning_message(_t(30));
-                    }elseif (!isset ($user_info["ROLES"])) {
-                        $this->create_warning_message(_t(45));
-                    }elseif(count(array_diff($user_info["ROLES"], User::getAllAvailableUserRoles() ) ) ){
-                        $this->create_warning_message(_t(31));
-                    }else{
-                        if($this->perform_operation($user_info)){
-                            $this->create_warning_message(_t(32), "alert-success");
-                        }
-                    }
-                    break;
-                case "change_password":
-                    $password = $_POST["password"];
-                    if ($password["PASSWORD"] != $password["PASSWORD2"] || 
-                        !preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\p{P})[a-zA-Z\d\p{P}]{8,}$/", $password["PASSWORD"]) || 
-                        $this->user->PASSWORD != hash( "SHA256", $password["ORIGINAL_PASSWORD"]) ) {
-
-                        $this->create_warning_message(_t(46));
-                        $this->create_warning_message(_t(47), "alert-warning" );
-                    }else{
-                        $this->user->PASSWORD = hash("SHA256", $password["PASSWORD"]);
-                        $this->user->update();
-                        $this->create_warning_message(_t(32), "alert-success");
-                    }
-                    break;
-                default :
-                    $this->create_warning_message(_t(67));
+        if (isset($_POST["save"])) {
+            if (!$this->checkCsrfToken(self::FORM_ID)) {
+                $this->create_warning_message(_t("invalid_operation"));
+            } else {
+                $user_info = $_POST["user_info"];
+                $roles = isset($user_info["ROLES"]) ? $user_info["ROLES"] : [];
+                unset($user_info["ID"], $user_info["password"], $user_info["ROLES"]);
+                $success_message = $this->user->ID ? _t("update_success") : _t("insert_success");
+                try {
+                    $this->user->map($user_info);
+                    $this->user->save();
+                    $this->user->updateRoles($roles);
+                    $this->create_warning_message($success_message, "alert-success");
+                    Utils::core_go_to(BASE_URL . "/admin/user/{$this->user->username}");
+                } catch (Exception $ex) {
+                    $this->create_warning_message(_t("username_exist"));
                 }
             }
-        $this->current_user_roles = $this->user->getUserRoles();
-        $this->excluded_roles = array_diff(User::getAllAvailableUserRoles(), $this->current_user_roles);
-    }
-
-    protected function echoContent() {
-        $this->form_build_id = FormBuilder::create_csrf("user_edit_form", $this->user->USERNAME);
-        require 'user_html.php';
-    }
-    
-    private function perform_operation($user_info) {
-        $this->user->NAME = $user_info["NAME"];
-        $this->user->SURNAME = $user_info["SURNAME"];
-        $this->user->EMAIL = $user_info["EMAIL"];
-        $this->user->PHONE = $user_info["PHONE"];
-        $this->user->ROLES = $user_info["ROLES"];
-        
-        CoreDB::getInstance()->beginTransaction();
-        
-        $result = NULL;
-        if($this->operation == "add"){
-            $this->user->USERNAME = $user_info["USERNAME"];
-            $result = $this->insertUser();
-        }else{
-            $result = $this->user->update();
-        }
-        if($result){
-            $this->user->updateRoles($user_info["ROLES"]);
-        }
-        
-        CoreDB::getInstance()->commit();
-        
-        return $result;
-    }
-
-
-    private function insertUser(): bool{
-        if(!$this->user->checkUsernameInsertAvailable()){
-            $this->create_warning_message(_t(42));
-            return FALSE;
-        }elseif (!$this->user->checkEmailInsertAvailable()) {
-            $this->create_warning_message(_t(41));
-            return FALSE;
-        }
-        $this->user->STATUS = User::STATUS_ACTIVE;
-        if($this->user->insert()){
-            $reset_password = new DBObject(RESET_PASSWORD_QUEUE);
-            $reset_password->USER = intval($this->user->ID);
-            $reset_password->KEY = hash("SHA256", Utils::get_current_date().json_encode($this->user));
-            $reset_password->insert();
-
-            $email = $this->user->EMAIL;
-            $password_reset_link = BASE_URL."/reset_password/?USER=".$this->user->ID."&KEY=".$reset_password->KEY;
-            $message = _t_email("user_insert", [SITE_NAME, $this->user->USERNAME, $password_reset_link, $password_reset_link ]);
-            $username = $this->user->NAME." ".$this->user->SURNAME;
-            $subject = _t(92, [SITE_NAME]);
-
-            if(Utils::HTMLMail($email, $subject, $message, $username)){
-                return TRUE;
-            }else{
-                CoreDB::getInstance()->rollback();
-                $this->create_warning_message(_t(43));
+        } else if (isset($_POST["change_password"])) {
+            if (!$this->checkCsrfToken(self::PASSWORD_FORM_ID)) {
+                $this->create_warning_message(_t("invalid_operation"));
+            } else {
+                try {
+                    $password_info = $_POST["password"];
+                    if (($this->user->ID == User::get_current_core_user()->ID && $this->user->password != hash("SHA256", $password_info["current_pass"]))
+                        || $password_info["password"] != $password_info["password2"]
+                    ) {
+                        throw new Exception(_t("password_be_sure_correct"));
+                    } else {
+                        $this->user->password = hash("SHA256", $password_info["password"]);
+                        $this->user->save();
+                        $this->create_warning_message(_t("update_success"), "alert-success");
+                        Utils::core_go_to(BASE_URL . "/admin/user/{$this->user->username}");
+                    }
+                } catch (Exception $ex) {
+                    $this->create_warning_message($ex->getMessage());
+                }
             }
         }
-        return FALSE;
-    }
-    
-    private function update(){
-        if (!$this->user->checkEmailInsertAvailable()) {
-            $this->create_warning_message(_t(41));
-            return FALSE;
+        $current_user_roles = $this->user->getUserRoles();
+        $excluded_user_roles = array_diff(User::getAllAvailableUserRoles(), $current_user_roles);
+        foreach ($current_user_roles as $role) {
+            $this->role_options[] = (new OptionField($role, $role))->addAttribute("selected", "true");
         }
-        return $this->user->update();
+        foreach ($excluded_user_roles as $role) {
+            $this->role_options[] = (new OptionField($role, $role));
+        }
+
+        $this->form_build_id = $this->createCsrf(self::FORM_ID);
+        $this->form_token = $this->createFormToken($this->form_build_id);
+    }
+
+    protected function echoContent()
+    {
+        $password_form_build_id = $this->createCsrf(self::PASSWORD_FORM_ID);
+        $password_form_token = $this->createFormToken($password_form_build_id);
+
+        $password_entry = new FormBuilder("POST");
+        $password_entry->addClass("col-12");
+        if ($this->user->ID == User::get_current_core_user()->ID) {
+            $password_entry->addField(
+                InputField::create("password[current_pass]")
+                    ->setLabel(_t("current_pass"))
+                    ->setType("password")
+                    ->addAttribute("autocomplete", "off")
+            );
+        }
+        $password_entry->addField(
+            InputField::create("password[password]")
+                ->setLabel(_t("password"))
+                ->setType("password")
+                ->addAttribute("autocomplete", "new-password")
+        )->addField(
+            InputField::create("password[password2]")
+                ->setLabel(_t("password_again"))
+                ->setType("password")
+                ->addAttribute("autocomplete", "new-password")
+        )->addField(
+            InputField::create("change_password")
+                ->setValue(_t("update_password"))
+                ->setType("submit")
+                ->addClass("btn btn-outline-success")
+        )->addField(
+            InputField::create("form_build_id")->setValue($password_form_build_id)->setType("hidden")
+        )->addField(
+            InputField::create("form_token")->setValue($password_form_token)->setType("hidden")
+        );
+
+        $user_edit_form = $this->user->getForm("user_info");
+        $user_edit_form->addField(
+            InputField::create("form_build_id")->setValue($this->form_build_id)->setType("hidden")
+        )->addField(
+            InputField::create("form_token")->setValue($this->form_token)->setType("hidden")
+        )->addField(
+            SelectField::create("user_info[ROLES][]")
+                ->addAttribute("multiple", "true")
+                ->setOptions($this->role_options),
+            1
+        );
+
+        $container = new Group("container-fluid");
+        $container->addField(
+            Group::create("d-sm-flex align-items-center justify-content-between mb-4")
+                ->addField(
+                    Group::create("h3 mb-0 text-gray-800")->setTagName("h1")
+                        ->addField(TextElement::create($this->title))
+                )
+        )->addField(
+            Group::create("row")
+                ->addField(
+                    Group::create("col-12")->addField($this)
+                )
+                ->addField(
+                    Group::create("col-sm-6")->addField($user_edit_form)
+                )->addField(
+                    Group::create("col-sm-6")->addField($password_entry)
+                )
+        );
+        echo $container;
     }
 }

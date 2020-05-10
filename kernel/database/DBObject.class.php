@@ -2,7 +2,8 @@
 
 class DBObject{
     public $table;
-    
+    protected $changed_fields = [];
+
     public $ID;
     public function __construct(string $table) {
         $this->table = $table;
@@ -22,9 +23,16 @@ class DBObject{
     */
     public function map(array $array){
         $object_class_name = get_class($this);
+        $this->changed_fields = [];
         foreach ($array as $key => $value){
             if($object_class_name != "DBObject" && !property_exists($this,$key)){
                 continue;
+            }
+            if(get_field_from_object($this, $key) != $value){
+                $this->changed_fields[$key] = [
+                    "old_value" => get_field_from_object($this, $key),
+                    "new_value" => $value
+                ];
             }
             $this->$key = $value;
         }
@@ -36,16 +44,12 @@ class DBObject{
      * @return \array
      */
     public function toArray() : array{
-        $reflector = new ReflectionObject($this);
-        $nodes = $reflector->getProperties();
-        $object_as_array = [];
-        foreach ($nodes as $node) {
-            $nod = $reflector->getProperty($node->getName());
-            $nod->setAccessible(true);
-            $object_as_array[$node->getName()] = $nod->getValue($this);
-        }
+        $object_as_array = get_object_vars($this);
         unset($object_as_array["ID"]);
         unset($object_as_array["table"]);
+        unset($object_as_array["created_at"]);
+        unset($object_as_array["last_updated"]);
+        unset($object_as_array["changed_fields"]);
         return $object_as_array;
     }
 
@@ -57,7 +61,7 @@ class DBObject{
             $params[":$key"] = $value;
         }
         return db_select($table)->condition($condition_sentence)->params($params)->orderBy("ID")->execute()
-        ->fetchObject(get_called_class(), [$table]);
+        ->fetchObject(get_called_class(), [$table]) ? : null;
     }
 
     public static function getAll(array $filter, string $table){
@@ -71,13 +75,13 @@ class DBObject{
         ->fetchAll(PDO::FETCH_CLASS, get_called_class(), [$table]);
     }
 
-    public function insert(){
+    protected function insert(){
         $statement = db_insert($this->table, $this->toArray())->execute();
         $this->ID = CoreDB::getInstance()->lastInsertId();
         return $statement;
     }
     
-    public function update(){
+    protected function update(){
         return db_update($this->table, $this->toArray())->condition("ID = :id", ["id" => $this->ID])->execute();
     }
     public function save(){
@@ -94,8 +98,8 @@ class DBObject{
         }
         $table_description = CoreDB::get_table_description($this->table);
         foreach ($table_description as $field) {
-            if($field[1] == "tinytext"){
-                $field_name = $field[0];
+            if($field["Type"] == "tinytext"){
+                $field_name = $field["Field"];
                 Utils::remove_uploaded_file($this->table, $field_name, $this->$field_name);
             }
         }
@@ -106,17 +110,17 @@ class DBObject{
         return BASE_URL."/files/uploaded/$this->table/$field_name/".$this->$field_name;
     }
     
-    public function getForm(string $name = "") {
+    public function getForm(string $name = "") : FormBuilder {
         $form = new FormBuilder("POST");
         $form->setEnctype("multipart/form-data");
         $descriptions = CoreDB::get_table_description($this->table);
         
-        $row = new InputGroup("row");
+        $row = new Group("row");
         foreach ($descriptions as $index => $description){
             list($field, $wrapper_class) = $this->getFieldInput($description);
-            $col = new InputGroup($wrapper_class);
+            $col = new Group($wrapper_class);
             if($name){
-                $field->setName($name."[$description[0]]");
+                $field->setName($name."[{$description["Field"]}]");
             }
             $col->addField($field);
             $row->addField($col);
@@ -126,21 +130,21 @@ class DBObject{
         return $form;
     }
     protected function getFieldInput($description) {
-        list($input, $wrapper_class) = CoreDB::get_supported_data_types()[$this->get_input_type($description[1], $description[3])]["input_field_callback"]($this, $description, $this->table);
-        if($description[0] === "ID"){
+        list($input, $wrapper_class) = CoreDB::get_supported_data_types()[$this->get_input_type($description["Type"], $description["Key"])]["input_field_callback"]($this, $description, $this->table);
+        if($description["Field"] === "ID"){
             $input->addAttribute("disabled", TRUE);
         }
         return [$input, $wrapper_class];
     }
     
     protected function getSubmitSection() {
-        $submit_section = new InputGroup("row");
+        $submit_section = new Group("row");
         if($this->ID){
-            $col = new InputGroup("col-lg-3 col-md-4 col-sm-6");
+            $col = new Group("col-lg-3 col-md-4 col-sm-6");
             $update_button = new InputField("update?");
-            $update_button->setType("submit")->addClass("btn btn-warning")->setValue(_t(85));
+            $update_button->setType("submit")->addClass("btn btn-warning")->setValue(_t("update"));
             $delete_button = new InputField("");
-            $delete_button->setType("button")->addClass("recordelete btn btn-danger")->setValue(_t(82));
+            $delete_button->setType("button")->addClass("recordelete btn btn-danger")->setValue(_t("delete"));
             $hidden_delete_submit = new InputField("delete?");
             $hidden_delete_submit->setType("submit")->addClass("d-none");
             $col->addField($update_button)->addField($delete_button)->addField($hidden_delete_submit);
@@ -148,13 +152,13 @@ class DBObject{
             
         }
         
-        $col = new InputGroup("col-lg-3 col-md-4 col-sm-6");
+        $col = new Group("col-lg-3 col-md-4 col-sm-6");
         $insert_button = new InputField("insert?");
-        $insert_button->setType("submit")->addClass("btn btn-primary")->setValue(_t(14));
+        $insert_button->setType("submit")->addClass("btn btn-primary")->setValue(_t("add"));
         $col->addField($insert_button);
         if(!$this->ID){
             $reset = new InputField("");
-            $reset->setType("reset")->addClass("btn btn-danger")->setValue(_t(84));
+            $reset->setType("reset")->addClass("btn btn-danger")->setValue(_t("clean"));
             $col->addField($reset);
         }
         $submit_section->addField($col);
@@ -169,6 +173,8 @@ class DBObject{
             return "INT";
         }elseif (strpos($dataType, "varchar") === 0) {
             return "VARCHAR";
+        }elseif(strpos($dataType,"datetime")===0){
+            return "DATETIME";
         }else {
             return strtoupper($dataType);
         }
