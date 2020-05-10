@@ -15,7 +15,7 @@ CREATE TABLE `blocked_ips` (
   `ID` int NOT NULL,
   `ip` varchar(16) DEFAULT NULL,
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
-  `last_updated` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP
+  `last_updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Contains blocked IP adresses. These IP adresses can''t login to site.';
 
 -- --------------------------------------------------------
@@ -67,7 +67,7 @@ CREATE TABLE `logins` (
   `ip_address` varchar(16) DEFAULT NULL,
   `username` varchar(255) DEFAULT NULL,
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
-  `last_updated` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP
+  `last_updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Contains failed login attempts by user and IP address to site.';
 
 -- --------------------------------------------------------
