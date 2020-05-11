@@ -7,7 +7,7 @@ class Not_foundController extends Page {
     }
     
     protected function preprocessPage() {
-        $this->setTitle(_t(89).": "._t(90));
+        $this->setTitle(_t("sorry").": "._t("page_not_found"));
     }
     
     

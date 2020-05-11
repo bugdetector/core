@@ -8,7 +8,7 @@ class Access_DeniedController extends Page {
     
      protected function preprocessPage()
     {
-        $this->setTitle(_t(89).": "._t(117));
+        $this->setTitle(_t("sorry").": "._t("access_denied"));
     }
     
     

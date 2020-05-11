@@ -44,6 +44,22 @@ class AdminController extends Page {
                     ->setTitle(_t("system_version"))
                     ->setDescription(VERSION)
                     ->setIconClass("fa-arrow-alt-circle-up")
+                )->addField(
+                    BasicCard::create("")
+                    ->addClass("col-xl-3 col-md-6 mb-4")
+                    ->setBorderClass("border-left-info")
+                    ->setHref(BASE_URL . "/admin/table")
+                    ->setTitle(_t("table_count"))
+                    ->setDescription(count(CoreDB::get_information_scheme()))
+                    ->setIconClass("fa-table")
+                )->addField(
+                    BasicCard::create("")
+                    ->addClass("col-xl-3 col-md-6 mb-4")
+                    ->setBorderClass("border-left-info")
+                    ->setHref(BASE_URL . "/admin/manage/translation")
+                    ->setTitle(_t("translation_count"))
+                    ->setDescription(count(Translation::getAll([])))
+                    ->setIconClass("fa-language")
                 )
             );
         echo $group;

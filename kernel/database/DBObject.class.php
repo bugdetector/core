@@ -131,7 +131,7 @@ class DBObject{
     }
     protected function getFieldInput($description) {
         list($input, $wrapper_class) = CoreDB::get_supported_data_types()[$this->get_input_type($description["Type"], $description["Key"])]["input_field_callback"]($this, $description, $this->table);
-        if($description["Field"] === "ID"){
+        if(in_array($description["Field"], ["ID" ,"created_at", "last_updated"])){
             $input->addAttribute("disabled", TRUE);
         }
         return [$input, $wrapper_class];

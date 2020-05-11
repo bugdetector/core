@@ -36,10 +36,20 @@ class AdminUserController extends AdminController
                 $roles = isset($user_info["ROLES"]) ? $user_info["ROLES"] : [];
                 unset($user_info["ID"], $user_info["password"], $user_info["ROLES"]);
                 $success_message = $this->user->ID ? _t("update_success") : _t("insert_success");
+                $send_email = !$this->user->ID && isset($user_info["email"]);
                 try {
                     $this->user->map($user_info);
                     $this->user->save();
                     $this->user->updateRoles($roles);
+                    if($send_email){
+                        $reset_password = new ResetPassword();
+                        $reset_password->user = $this->user->ID;
+                        $reset_password->key = hash("SHA256", Utils::get_current_date().json_encode($this->user));
+                        $reset_password->save();
+                        $reset_link = BASE_URL."/reset_password/?USER=".$this->user->ID."&KEY=".$reset_password->key;
+                        $mail = _t_email("user_insert", [SITE_NAME, $this->user->username, $reset_link, $reset_link]);
+                        Utils::HTMLMail($this->user->email, _t("user_definition", [SITE_NAME]), $mail, $this->user->getFullName());
+                    }
                     $this->create_warning_message($success_message, "alert-success");
                     Utils::core_go_to(BASE_URL . "/admin/user/{$this->user->username}");
                 } catch (Exception $ex) {

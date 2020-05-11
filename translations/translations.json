@@ -370,6 +370,11 @@
         "tr": "Şifre başarıyla sıfırlandı."
     },
     {
+        "key": "reset_password",
+        "en": "Reset Password",
+        "tr": "Şifre Sıfırla"
+    },
+    {
         "key": "link_used",
         "en": "This link maybe used before.",
         "tr": "Bu bağlantı daha önce kullanılmış olabilir."
@@ -510,6 +515,16 @@
         "tr": "Sistem Versiyonu"
     },
     {
+        "key": "table_count",
+        "en": "Table Count",
+        "tr": "Tablo Sayısı"
+    },
+    {
+        "key": "translation_count",
+        "en": "Translated text count",
+        "tr": "Çeviri yapılmış metin sayısı"
+    },
+    {
         "key": "no_update",
         "en": "There is no update",
         "tr": "Güncelleme mevcut değil"
@@ -518,6 +533,11 @@
         "key": "available_version",
         "en": "Available version",
         "tr": "Erişilebilir versiyon"
+    },
+    {
+        "key": "user_definition",
+        "en": "%s user definition",
+        "tr": "%s kullanıcı tanımı"
     },
     {
         "key": "update_available",

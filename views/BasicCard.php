@@ -46,7 +46,7 @@ class BasicCard extends View
                                 <div class="h5 mb-0 font-weight-bold text-gray-800"><?php echo $this->description; ?></div>
                             </div>
                             <div class="col-auto">
-                                <i class="fas fa-2x text-gray-300 <?php echo $this->icon_class; ?>"></i>
+                                <i class="fas fa-2x text-gray-800 <?php echo $this->icon_class; ?>"></i>
                             </div>
                         </div>
                     </div>
