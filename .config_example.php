@@ -22,3 +22,5 @@ define("AUTOCOMPLETE_SELECT_BOX_LIMIT", 20);
 define("TIMEZONE", "Europe/Istanbul");
 
 define("LANGUAGE", "tr");
+
+define("TRUSTED_HOSTS", "localhost,127.0.0.1");
