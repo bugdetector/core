@@ -12,7 +12,8 @@ include './kernel/Utils.php';
 include './kernel/Migration.php';
 
 define("SITE_ROOT", substr(str_replace(basename(__FILE__), "", $_SERVER["SCRIPT_NAME"]), 0, -1 ) );
-define("BASE_URL", HTTP."://".$_SERVER["HTTP_HOST"].SITE_ROOT);
+$host = Utils::base_host();
+define("BASE_URL", HTTP."://".$host.SITE_ROOT);
 
 Utils::include_dir("kernel/Entity");
 Utils::include_dir("Entity");
@@ -35,7 +36,7 @@ if(empty(CoreDB::get_information_scheme()) || !Variable::getByKey("version")){
 }
 date_default_timezone_set(TIMEZONE);
 
-$uri = trim(str_replace(BASE_URL, "", HTTP."://".$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"]),"/");
+$uri = trim(str_replace(BASE_URL, "", HTTP."://".$host.$_SERVER["REQUEST_URI"]),"/");
 $uri = explode("/", preg_replace("/\?.*/", "", $uri));
 
 $router = new Router($uri);

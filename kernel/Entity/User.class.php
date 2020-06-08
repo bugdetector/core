@@ -149,7 +149,9 @@ class User extends DBObject{
         $_SESSION[BASE_URL."-UID"] = $user->ID;
         if(isset($_POST["remember-me"]) && $_POST["remember-me"]){
             $jwt = new JWT();
-            $jwt->setPayload($current_user);
+            $payload = new stdClass();
+            $payload->ID = $current_user->ID;
+            $jwt->setPayload($payload);
             setcookie("session-token", $jwt->createToken(), strtotime("tomorrow"));
             setcookie("remember-me", true, strtotime("1 year later"));
         }else{

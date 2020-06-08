@@ -133,4 +133,13 @@ class Utils
         // we are done...
         return strip_tags($dom->saveHTML(), "<strong><p><em><u><ul><li><a><img><blockquote><span><pre><code><br><h2><div>");
     }
+
+    public static function base_host(){
+        $trusted_hosts = explode(",", TRUSTED_HOSTS);
+        if(!in_array($_SERVER["HTTP_HOST"], $trusted_hosts)){
+            return $trusted_hosts[0];
+        }else{
+            return $_SERVER["HTTP_HOST"];
+        }
+    }
 }
