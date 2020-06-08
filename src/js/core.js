@@ -39,16 +39,37 @@ $(document).ready(function(){
         lang: language
     });
 
-    $(".timeinput").datetimepicker({
-        format: "HH:mm"
+    $(".timeinput").each(function(i, el){
+        el = $(el);
+        let default_value = el.val();
+        el.val("");
+        el.datetimepicker({
+            format: "HH:mm",
+            locale: language
+        });
+        el.val(default_value);
+    });
+    $(".dateinput").each(function(i, el){
+        el = $(el);
+        let default_value = el.val();
+        el.val("");
+        el.datetimepicker({
+            format: "YYYY-MM-DD",
+            locale: language
+        });
+        el.val(default_value);
+    });
+    $(".datetimeinput").each(function(i, el){
+        el = $(el);
+        let default_value = el.val();
+        el.val("");
+        el.datetimepicker({
+            format: "YYYY-MM-DD HH:mm",
+            locale: language
+        });
+        el.val(default_value);
     });
 
-    $(".dateinput").datetimepicker({
-        format: "YYYY-MM-DD"
-    });
-    $(".datetimeinput").datetimepicker({
-        format: "YYYY-MM-DD HH:mm"
-    });
     $(".daterangeinput").daterangepicker({
         autoUpdateInput: false,
         locale: {

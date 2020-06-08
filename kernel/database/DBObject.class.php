@@ -53,6 +53,11 @@ class DBObject{
         return $object_as_array;
     }
 
+    /**
+     * @param array $filter filter on key value pairs
+     * @param string $table table name
+     * @return DBObject
+     */
     public static function get(array $filter, string $table){
         $condition_sentence = "";
         $params = [];

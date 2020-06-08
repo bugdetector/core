@@ -69,7 +69,7 @@ class Translation extends DBObject
     /**
      * @Override
      */
-    public static function get(array $filter, string $table = self::TABLE)
+    public static function get(array $filter, string $table = self::TABLE) : ?Translation
     {
         return parent::get($filter, self::TABLE);
     }
@@ -93,11 +93,7 @@ class Translation extends DBObject
     public static function getTranslation($key)
     {
         if (!isset(self::$cache[$key])) {
-            if (is_int($key)) {
-                $translation = Translation::get(["ID" => $key]);
-            } else {
-                $translation = Translation::get(["key" => $key]);
-            }
+            $translation = Translation::get(["key" => $key]);
             self::$cache[$key] = $translation ? $translation->{Translation::getLanguage()} : $key;
         }
         return self::$cache[$key];

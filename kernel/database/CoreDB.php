@@ -260,7 +260,7 @@ class CoreDB {
                 },
                 "input_field_callback" => function($object, $desc, $table){
                   $fk_description = CoreDB::get_foreign_key_description($table, $desc["Field"]);
-                  $table_description = CoreDB::get_table_description($fk_description[0]);;
+                  $table_description = CoreDB::get_table_description($fk_description["REFERENCED_TABLE_NAME"]);;
                   $entries = db_select($fk_description[0])->orderBy("ID")->execute()->fetchAll(PDO::FETCH_NUM);
                   $options = [];
                   foreach ($entries as $entry){
@@ -271,8 +271,8 @@ class CoreDB {
                   $field->setOptions($options)
                           ->setValue(get_field_from_object($object, $desc["Field"]))
                           ->addClass("autocomplete")
-                          ->addAttribute("data-reference-table", $fk_description[0])
-                          ->addAttribute("data-reference-column", $table_description[1][0]);
+                          ->addAttribute("data-reference-table", $fk_description["REFERENCED_TABLE_NAME"])
+                          ->addAttribute("data-reference-column", $table_description[1]["Field"]);
                   return [$field, "col-lg-3 col-md-4 col-sm-6"];
                 }
                 ]

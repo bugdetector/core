@@ -638,5 +638,10 @@
         "key": "Importtant log of actions.",
         "en": "Importtant log of actions.",
         "tr": "Önemli hareketlerin kayıtları."
+    },
+    {
+        "key": "email_not_available",
+        "en": "This email address is currently used.",
+        "tr": "Bu e-posta adresi kullanılmaktadır."
     }
 ]

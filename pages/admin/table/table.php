@@ -165,7 +165,7 @@ class AdminTableController extends AdminController
 
     protected function echoContent()
     {
-        $content_group = Group::create("col-md-8")->addClass("order-md-first order-last")
+        $content_group = Group::create("card")->addClass("order-md-first order-last p-2")
             ->addField($this);
         if ($this->table_data !== null) {
             $content_group
@@ -203,7 +203,8 @@ class AdminTableController extends AdminController
         )->addField(
             Group::create("row")
                 ->addField(
-                    $content_group
+                    Group::create("col-md-8")
+                    ->addField($content_group)
                 )->addField(SideBarTableList::create($this->table_name))
         );
         echo $group;

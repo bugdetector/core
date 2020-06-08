@@ -28,7 +28,7 @@ class User extends DBObject{
     /**
      * @Override
      */
-    public static function get(array $filter, string $table = self::TABLE){
+    public static function get(array $filter, string $table = self::TABLE) : ?User{
         return parent::get($filter, self::TABLE);
     }
 
@@ -40,9 +40,6 @@ class User extends DBObject{
         return parent::getAll($filter, $table);
     }
 
-    public static function getUserById(int $id) {
-        return User::get(["ID" => $id]);
-    }
     public static function getUserByUsername(string $username){
         return User::get(["username" => $username]);
     }
@@ -51,12 +48,25 @@ class User extends DBObject{
         return User::get(["email" => $email]);
     }
     
-    public function insert(){
-        if(!$this->checkUsernameInsertAvailable()){
-            throw new Exception(_t("username_exist"));
+    protected function insert(){
+        if(get_called_class() === User::class){
+            if(!$this->checkUsernameInsertAvailable()){
+                throw new Exception(_t("username_exist"));
+            }else if(!$this->checkEmailInsertAvailable()){
+                throw new Exception(_t("email_not_available"));
+            }
+            $this->status = User::STATUS_ACTIVE;
         }
-        $this->status = User::STATUS_ACTIVE;
         return parent::insert();
+    }
+
+    protected function update(){
+        if(get_called_class() === User::class){
+            if(!$this->checkEmailUpdateAvailable()){
+                throw new Exception(_t("email_not_available"));
+            }
+        }
+        return parent::update();
     }
     
     public function delete():bool {
@@ -184,18 +194,15 @@ class User extends DBObject{
         return in_array($role, $this->getUserRoles());
     }
     
-    public function setRoles(array $roles){
-        $this->ROLES = $roles;
-    }
 
     public function add_role(string $role) {
         $this->ROLES = NULL;
-        return db_insert("users_roles", ["user_id" => $this->ID, "role_id" => self::getIdOfRole($role) ])->execute();
+        return db_insert("users_roles", ["user_id" => $this->ID, "role_id" => Role::get(["role" => $role])->ID ])->execute();
     }
     public function delete_role(string $role) {
         $this->ROLES = NULL;
         return db_delete("users_roles")
-                ->condition("user_id = :user_id AND ROLE_ID = :role_id", [":user_id" => $this->ID, ":role_id" => self::getIdOfRole($role)])
+                ->condition("user_id = :user_id AND role_id = :role_id", [":user_id" => $this->ID, ":role_id" => Role::get(["role" => $role])->ID])
                 ->execute();
     }
 
@@ -209,10 +216,6 @@ class User extends DBObject{
             }
         }
         return self::$ALLROLES;
-    }
-    
-    public static function getIdOfRole(string $role){
-        return db_select("roles")->select("roles", ["ID"])->condition("ROLE = :role", [":role" => $role])->execute()->fetch(PDO::FETCH_NUM)[0];
     }
 
     public static function get_user_ip()
@@ -265,10 +268,10 @@ class User extends DBObject{
             return $current_user;
         } else {
             if(isset($_SESSION[BASE_URL."-UID"])){
-                $current_user = User::getUserById($_SESSION[BASE_URL."-UID"]);
+                $current_user = User::get(["ID" => $_SESSION[BASE_URL."-UID"]]);
             }elseif(isset($_COOKIE["session-token"])){
                 $jwt = JWT::createFromString($_COOKIE["session-token"]);
-                $current_user = User::getUserById($jwt->getPayload()->ID);
+                $current_user = User::get(["ID" => ($jwt->getPayload())->ID]);
                 $_SESSION[BASE_URL."-UID"] = $current_user->ID;
             }else{
                 $current_user = User::getUserByUsername("guest");

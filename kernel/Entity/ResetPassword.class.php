@@ -20,7 +20,7 @@ class ResetPassword extends DBObject{
     /**
      * @Override
      */
-    public static function get(array $filter, string $table = self::TABLE){
+    public static function get(array $filter, string $table = self::TABLE) : ?ResetPassword{
         return parent::get($filter, self::TABLE);
     }
 

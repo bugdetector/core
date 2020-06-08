@@ -16,7 +16,7 @@ class {{class_name}} extends DBObject{
     /**
      * @Override
      */
-    public static function get(array $filter, string $table = self::TABLE){
+    public static function get(array $filter, string $table = self::TABLE) : ?{{class_name}} {
         return parent::get($filter, self::TABLE);
     }
 

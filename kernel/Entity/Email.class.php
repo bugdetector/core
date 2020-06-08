@@ -21,7 +21,7 @@ class Email extends DBObject{
     /**
      * @Override
      */
-    public static function get(array $filter, string $table = self::TABLE){
+    public static function get(array $filter, string $table = self::TABLE) : ?Email{
         return parent::get($filter, self::TABLE);
     }
 

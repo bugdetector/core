@@ -21,7 +21,7 @@ class Cache extends DBObject{
     /**
      * @Override
      */
-    public static function get(array $filter, string $table = self::TABLE){
+    public static function get(array $filter, string $table = self::TABLE) : ?Cache{
         return parent::get($filter, self::TABLE);
     }
 
@@ -41,7 +41,7 @@ class Cache extends DBObject{
         $cache->save();
     }
 
-    public static function getByBundleAndKey(string $bundle, string $key){
+    public static function getByBundleAndKey(string $bundle, string $key) : ?Cache{
         return Cache::get(["bundle" => $bundle, "key" => $key]);
     }
 }

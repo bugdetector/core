@@ -50,7 +50,7 @@ class JWT {
 
     /**
      * Returns payload
-     * @return string
+     * @return mixed
      */
     public function getPayload() {
         return $this->payload;
@@ -138,7 +138,7 @@ class JWT {
     
     /**
      * 
-     * @return type
+     * @return string
      */
     private function encrypt($pure_string) {
         $encrypted_string = openssl_encrypt($pure_string, $this->alg, self::ENCRYPTION_KEY, OPENSSL_RAW_DATA, self::IV);

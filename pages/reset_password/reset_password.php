@@ -40,7 +40,7 @@ class Reset_passwordController extends Page{
                 /**
                  * @var User $user
                  */
-                $this->user = User::getUserById($_GET["USER"]);
+                $this->user = User::get(["ID" => $_GET["USER"]]);
                 if(isset($_POST["reset"]) && $this->checkCsrfToken(self::FORM_ID) ){
                     if ($_POST["PASSWORD"] != $_POST["PASSWORD2"] || !User::validatePassword($_POST["PASSWORD"]) ) {
                         $this->create_warning_message(_t("password_validation_error"), "alert-info");

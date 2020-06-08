@@ -53,7 +53,7 @@ class AdminUserController extends AdminController
                     $this->create_warning_message($success_message, "alert-success");
                     Utils::core_go_to(BASE_URL . "/admin/user/{$this->user->username}");
                 } catch (Exception $ex) {
-                    $this->create_warning_message(_t("username_exist"));
+                    $this->create_warning_message($ex->getMessage());
                 }
             }
         } else if (isset($_POST["change_password"])) {

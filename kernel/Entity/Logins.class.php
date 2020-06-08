@@ -20,7 +20,7 @@ class Logins extends DBObject{
     /**
      * @Override
      */
-    public static function get(array $filter, string $table = self::TABLE){
+    public static function get(array $filter, string $table = self::TABLE) : ?Logins{
         return parent::get($filter, self::TABLE);
     }
 

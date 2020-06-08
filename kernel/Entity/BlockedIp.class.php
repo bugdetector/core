@@ -19,7 +19,7 @@ class BlockedIp extends DBObject{
     /**
      * @Override
      */
-    public static function get(array $filter, string $table = self::TABLE){
+    public static function get(array $filter, string $table = self::TABLE) : ?BlockedIp{
         return parent::get($filter, self::TABLE);
     }
 

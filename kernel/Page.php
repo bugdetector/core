@@ -173,6 +173,7 @@ abstract class Page extends View {
         ];
         if(class_exists("Translation") && Translation::getLanguage() != "en"){
             $default_js_files[] = "src/vendor/js/bootstrap-select.".Translation::getLanguage().".js";
+            $default_js_files[] = "src/vendor/js/moment.".Translation::getLanguage().".js";
         }
         $this->js_files = $default_js_files;
     }
