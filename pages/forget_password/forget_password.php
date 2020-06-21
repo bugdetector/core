@@ -45,7 +45,7 @@ class Forget_passwordController extends Page{
                 if( !$reset_password){
                     $reset_password = new ResetPassword();
                     $reset_password->user = $user->ID;
-                    $reset_password->key = hash("SHA256", Utils::get_current_date().json_encode($user));
+                    $reset_password->key = hash("SHA256", Utils::get_current_date().json_encode($user->ID));
                     $reset_password->save();
                 }
                 

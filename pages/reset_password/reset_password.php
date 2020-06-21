@@ -45,7 +45,7 @@ class Reset_passwordController extends Page{
                     if ($_POST["PASSWORD"] != $_POST["PASSWORD2"] || !User::validatePassword($_POST["PASSWORD"]) ) {
                         $this->create_warning_message(_t("password_validation_error"), "alert-info");
                     } else {
-                        $this->user->password = hash("SHA256", $_POST["PASSWORD"]);
+                        $this->user->password = password_hash($_POST["PASSWORD"], PASSWORD_BCRYPT);
                         $this->user->save();
                         
                         $reset_password_queue = ResetPassword::get(["user" => $this->user->ID, "key" => $_GET["KEY"]]);

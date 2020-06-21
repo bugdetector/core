@@ -49,8 +49,7 @@ class AdminAjaxController extends ServicePage
     private function get_fk_entry()
     {
         $description = CoreDB::get_foreign_key_description($_POST["table"], $_POST["column"]);
-        $object = new DBObject($description[0]);
-        $object->getById(intval($_POST["fk"]));
+        $object = DBObject::get(["ID" => intval($_POST["fk"])] ,$description[0]);
         $return_string = "";
         foreach ($object->toArray() as $key => $field) {
             $return_string .= "$key = $field ";

@@ -144,7 +144,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`ID`, `username`, `name`, `surname`, `email`, `phone`, `password`, `created_at`, `access`, `status`) VALUES
-(1, 'root', 'Root', 'Toor', 'bakiyucel38@gmail.com', '+905079158686', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', '2018-04-06 13:45:00', '2020-05-11 01:16:56', NULL),
+(1, 'root', 'Root', 'Toor', 'bakiyucel38@gmail.com', '+905079158686', '\$2y$10\$oOIa1ZThSnjxiiwFU.k16uSir2MtWfP4KTjIqAJ7hcAvQN8KEaHNu', '2018-04-06 13:45:00', '2020-05-11 01:16:56', NULL),
 (2, 'guest', '', '', '', '', '', '2018-04-06 13:45:00', '2018-12-31 11:38:23', 'active');
 
 -- --------------------------------------------------------

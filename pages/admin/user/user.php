@@ -44,7 +44,7 @@ class AdminUserController extends AdminController
                     if($send_email){
                         $reset_password = new ResetPassword();
                         $reset_password->user = $this->user->ID;
-                        $reset_password->key = hash("SHA256", Utils::get_current_date().json_encode($this->user));
+                        $reset_password->key = hash("SHA256", Utils::get_current_date().json_encode($this->user->ID));
                         $reset_password->save();
                         $reset_link = BASE_URL."/reset_password/?USER=".$this->user->ID."&KEY=".$reset_password->key;
                         $mail = _t_email("user_insert", [SITE_NAME, $this->user->username, $reset_link, $reset_link]);
@@ -62,12 +62,12 @@ class AdminUserController extends AdminController
             } else {
                 try {
                     $password_info = $_POST["password"];
-                    if (($this->user->ID == User::get_current_core_user()->ID && $this->user->password != hash("SHA256", $password_info["current_pass"]))
+                    if (($this->user->ID == User::get_current_core_user()->ID && !password_verify($password_info["current_pass"], $this->user->password) )
                         || $password_info["password"] != $password_info["password2"]
                     ) {
                         throw new Exception(_t("password_be_sure_correct"));
                     } else {
-                        $this->user->password = hash("SHA256", $password_info["password"]);
+                        $this->user->password = password_hash($password_info["password"], PASSWORD_BCRYPT);
                         $this->user->save();
                         $this->create_warning_message(_t("update_success"), "alert-success");
                         Utils::core_go_to(BASE_URL . "/admin/user/{$this->user->username}");

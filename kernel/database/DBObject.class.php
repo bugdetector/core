@@ -9,13 +9,6 @@ class DBObject{
         $this->table = $table;
     }
 
-    public function getById(int $id){
-        $result = db_select($this->table)->condition("ID = :id")->params(["id" => $id])->execute()->fetch(PDO::FETCH_ASSOC);
-        if(is_array($result)){
-            $this->map($result);
-        }
-    }
-
     /**
     * Set fields of object using an array with same keys
     * @param DBObject $object

@@ -67,15 +67,15 @@ class FieldDefinitionRow extends View
                 <label class="w-100"></label>
                 <input type='checkbox' class='float-right' name='fields[<?php echo $this->index; ?>][is_unique]' value='1' <?php echo $this->definition ? "disabled" : "";
                                                                                                                             echo " ";
-                                                                                                                            echo strpos($this->definition["Key"], "UNI") !== FALSE ? "checked" : ""; ?> />
+                                                                                                                            echo $this->definition && strpos($this->definition["Key"], "UNI") !== FALSE ? "checked" : ""; ?> />
             </div>
             <div class="col">
                 <?php
-                if(strpos($this->definition["Type"], "varchar") === 0){
+                if($this->definition && strpos($this->definition["Type"], "varchar") === 0){
                     $label = _t("length_varchar");
                     $explain = filter_var($this->definition["Type"], FILTER_SANITIZE_NUMBER_INT);
                     echo "<label class='w-100 text-primary'>$label</label>$explain";
-                }else if($this->definition["Key"] == "MUL"){
+                }else if($this->definition && $this->definition["Key"] == "MUL"){
                     $label = _t("reference_table");
                     $explain = CoreDB::get_foreign_key_description($this->table, $this->definition["Field"])[0];
                     echo "<label class='w-100 text-primary'>$label</label>$explain";
