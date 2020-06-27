@@ -1,24 +1,55 @@
--Tablo oluşturmak için aşağıdaki komutu kullanabilirsiniz.
- CREATE DATABASE core_multisite CHARACTER SET utf8 COLLATE utf8_general_ci;
+## Tablo oluşturma işlemleri
 
--Veri tabanını kullanmak için sadece localhost üzerinden bağlanabilen özel bir mysql kullanıcısı oluşturun.
- create user core_multisite_user@localhost;
-MYSQL 8.0 : CREATE USER core_multisite_user@localhost IDENTIFIED WITH mysql_native_password BY "core_multisite1234";
+ 1. Tablo oluşturmak için aşağıdaki komutu kullanabilirsiniz.
 
--Bu kullanıcıya sadece bu veritabanına tam erişim yetkisi verin ve kesinlikle güçlü bir şifre kullanın.
- GRANT ALL PRIVILEGES ON core_multisite.* To 'core_multisite_user'@'localhost' IDENTIFIED BY 'core_multisite1234';
-MYSQL 8.0: GRANT ALL PRIVILEGES ON core_multisite.* To 'core_multisite_user'@'localhost' WITH GRANT OPTION
+> CREATE DATABASE core_multisite CHARACTER SET utf8 COLLATE utf8_general_ci;
 
--Daha sonra "config_example.php" dosyasını kopyalayın üzerinden veritabanı bağlantısı için gerekli olan bilgiler girin.
--VERSION parametresinin 0 olması gerekmektedir. 
--Daha sonra siteye tarayıcı üzerinden erişin ve yüklemeyi tamamlayın.
+  2. Veri tabanını kullanmak için sadece localhost üzerinden bağlanabilen özel bir mysql kullanıcısı oluşturun.
+    
+   
 
--Sitenin HTTP ya da HTTPS kulandığı bildirin.
--SITE_NAME kısmına sitenin adını yazın
--E-posta ayarlarını bildirin.
--EMAIL_USERNAME, sistem e-posta gönderdiği zaman görülecek olan kullanıcı adıdır.
--PAGE_SIZE_LIMIT, tablolar ekranında sayfalama yapılırken gösterilecek bir sayfa boyutunu gösterir.
--TIMEZONE, varsayılan zaman dilimidir.
--LANGUAGE, varsayılan dildir.
- Ayarları yaptıktan sonra siteye gidin ve kurulumu gerçekleştirin.
-Varsayılan kullanıcı adı: root şifre: 1234
+> MYSQL 5.0 : create user core_multisite_user@localhost;
+> MYSQL 8.0 : CREATE USER core_multisite_user@localhost IDENTIFIED WITH mysql_native_password BY "core_multisite1234";
+
+    
+      
+    
+  3. Bu kullanıcıya sadece bu veritabanına tam erişim yetkisi verin ve kesinlikle güçlü bir şifre kullanın.
+    
+    
+
+> MYSQL 5.0: GRANT ALL PRIVILEGES ON core_multisite.* To 'core_multisite_user'@'localhost' IDENTIFIED BY  'core_multisite1234';
+> MYSQL 8.0: GRANT ALL PRIVILEGES ON core_multisite.* To 'core_multisite_user'@'localhost' WITH GRANT OPTION
+
+    
+      
+  ## Yapılandırma işlemleri
+   1. "config_example.php" dosyasını kopyalayın üzerinden veritabanı bağlantısı için gerekli olan bilgiler girin.
+
+> VERSION parametresinin 0 olması gerekmektedir.
+
+    
+   2. .htaccess_example dosyasını da .htaccess olarak kopyalayın ve istediğiniz şekilde düzenleyin.
+
+> Sitenin HTTP ya da HTTPS kulandığı bildirin.
+> SITE_NAME kısmına sitenin adını yazın
+> E-posta ayarlarını bildirin.
+> EMAIL_USERNAME, sistem e-posta gönderdiği zaman görülecek olan kullanıcı adıdır.
+>PAGE_SIZE_LIMIT, tablolar ekranında sayfalama yapılırken gösterilecek bir sayfa boyutunu gösterir.
+>TIMEZONE, varsayılan zaman dilimidir.
+> LANGUAGE, varsayılan sistem dilidir.
+
+    
+   4. Siteye tarayıcı üzerinden erişin ve yüklemeyi tamamlayın.
+    
+    
+   Varsayılan kullanıcı adı: root şifre: 1234
+   
+     
+   ## Önemli Kontroller
+   Dosya yükleme işlemleri için "files" dizinine yazma izni
+   verildiğinden emin olun.
+   
+   Sadece geliştirme ortamları için, canlı ortamlar için değil,
+   "kernel/migrations" ve "translations" dizinlerine yazma ve dosya
+   oluştutma izinlerini verin.
