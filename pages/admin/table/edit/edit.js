@@ -8,7 +8,7 @@ $(document).ready(function(){
            data: {index: index },
            success : function (data) {
                  let row = $(data);
-                 button.parents(".row").before(row);
+                 button.parents(".row").prev().append(row);
                  row.find(".selectpicker").selectpicker({container:"body"});
                  row.find(`input[name='fields[${index}][field_name]']`).focus();
              }

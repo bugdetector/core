@@ -29,9 +29,13 @@ class AdminTableController extends AdminController
 
             $this->search_form = new FormBuilder();
             $this->search_form->addClass("row");
+            $file_fields = [];
             foreach (CoreDB::get_table_description($this->table_name) as $column) {
+                if($column["Type"] == "tinytext"){
+                    $file_fields[] = $column["Field"];
+                }
                 $column_name = $column["Field"];
-                $this->table_headers[$column_name] = $column_name;
+                $this->table_headers[$column_name] = _t($column_name);
                 $search_input = null;
                 if (in_array($column["Type"], ["int", "double"])) {
                     if (CoreDB::is_unique_foreign_key($this->table_name, $column_name)) {
@@ -52,7 +56,7 @@ class AdminTableController extends AdminController
                             $options[$record->ID] = "{$record->ID} {$record->$first_column_name}";
                         }
                         $search_input = SelectField::create($column_name)
-                            ->setLabel($column_name)
+                            ->setLabel(_t($column_name))
                             ->setOptions($options)
                             ->addClass("autocomplete")
                             ->addAttribute("data-live-search", "true")
@@ -63,7 +67,7 @@ class AdminTableController extends AdminController
                          * Number input for integer field
                          */
                         $search_input = InputField::create($column_name)
-                            ->setLabel($column_name)
+                            ->setLabel(_t($column_name))
                             ->setType("number");
                     }
                     if (isset($params[$column_name])) {
@@ -74,7 +78,7 @@ class AdminTableController extends AdminController
                      * Adding daterange input for datetime and date fields
                      */
                     $search_input = InputField::create($column_name)
-                        ->setLabel($column_name)
+                        ->setLabel(_t($column_name))
                         ->addClass("daterangeinput");
                     if (isset($params[$column_name])) {
                         $dates = explode("&", $params[$column_name]);
@@ -91,14 +95,14 @@ class AdminTableController extends AdminController
                      * Adding time input for time field
                      */
                     $search_input = InputField::create($column_name)
-                        ->setLabel($column_name)
+                        ->setLabel(_t($column_name))
                         ->addClass("timeinput");
                 } else {
                     /**
                      * Text input for uncategorized or text fields
                      */
                     $search_input = InputField::create($column_name)
-                        ->setLabel($column_name);
+                        ->setLabel(_t($column_name));
                     if (isset($params[$column_name])) {
                         $query->condition("`{$column_name}` LIKE :{$column_name}", [":{$column_name}" => "%{$params[$column_name]}%"]);
                     }
@@ -143,6 +147,9 @@ class AdminTableController extends AdminController
                 ->limit(PAGE_SIZE_LIMIT, ($this->page - 1) * PAGE_SIZE_LIMIT)
                 ->execute()->fetchAll(PDO::FETCH_OBJ);
             foreach ($this->table_data as $row) {
+                foreach($file_fields as $field){
+                    $row->{$field} = "<a href='".BASE_URL."/files/uploaded/{$this->table_name}/{$field}/{$row->{$field}}' target='_blank'>{$row->{$field}}</a>";
+                }
                 $row->edit_buttons = Group::create("d-flex")
                     ->addField(
                         TextElement::create(

@@ -177,7 +177,7 @@ INSERT INTO `users_roles` (`ID`, `user_id`, `role_id`, `created_at`) VALUES
 CREATE TABLE `variables` (
   `ID` int NOT NULL,
   `key` varchar(255) DEFAULT NULL,
-  `value` text,
+  `value` longtext,
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `last_updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Contains less secure site Variables. For more security use .config.php. Connected vie Variable class.';

@@ -643,5 +643,10 @@
         "key": "email_not_available",
         "en": "This email address is currently used.",
         "tr": "Bu e-posta adresi kullanılmaktadır."
+    },
+    {
+        "key": "last_updated",
+        "en": "Last Updated",
+        "tr": "Son Güncelleme"
     }
 ]

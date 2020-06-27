@@ -114,16 +114,16 @@ class Utils
         $dom->loadHTML(mb_convert_encoding($data, 'HTML-ENTITIES', 'UTF-8'));
         $elements = $dom->getElementsByTagName('*');
         foreach ($elements as $element) {
-            $allowed_attribute = "";
+            $allowed_attributes = ["class", "style"];
             if ($element->tagName == "a") {
                 $element->setAttribute('href', htmlspecialchars($element->getAttribute('href')));
-                $allowed_attribute = "href";
+                $allowed_attributes[] = "href";
             } elseif ($element->tagName == "img") {
                 $element->setAttribute('src', htmlspecialchars($element->getAttribute('src')));
-                $allowed_attribute = "src";
+                $allowed_attributes[] = "src";
             }
             foreach ($element->attributes as $attribute) {
-                if ($attribute->name == $allowed_attribute) {
+                if (in_array($attribute->name, $allowed_attributes)) {
                     continue;
                 } else {
                     $element->removeAttribute($attribute->name);
@@ -131,7 +131,7 @@ class Utils
             }
         }
         // we are done...
-        return strip_tags($dom->saveHTML(), "<strong><p><em><u><ul><li><a><img><blockquote><span><pre><code><br><h2><div>");
+        return strip_tags($dom->saveHTML(), "<label><strong><p><em><i><u><ul><li><a><img><blockquote><span><pre><code><br><h1><h2><h3><h4><h5><h6><div>");
     }
 
     public static function base_host(){
