@@ -232,11 +232,9 @@ class User extends DBObject
     public static function getAllAvailableUserRoles()
     {
         if (!self::$ALLROLES) {
-            $query = db_select("roles")->select("roles", ["ROLE"])->execute();
-            self::$ALLROLES = [];
-            while ($role = $query->fetch(PDO::FETCH_NUM)[0]) {
-                self::$ALLROLES[] = $role;
-            }
+            self::$ALLROLES = array_map(function($el){
+                return $el->role;
+            }, db_select("roles")->execute()->fetchAll(PDO::FETCH_OBJ));
         }
         return self::$ALLROLES;
     }

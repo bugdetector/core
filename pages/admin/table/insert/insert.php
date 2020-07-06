@@ -38,7 +38,9 @@ class AdminTableInsertController extends AdminTableController
         if (isset($_POST["insert?"]) || isset($_POST["update?"])) {
             if ($this->checkCsrfToken(self::FORM_ID)) {
                 try {
-                    $this->object->map($_POST["object"]);
+                    if(isset($_POST["object"])){
+                        $this->object->map($_POST["object"]);
+                    }
                     $success_message = $this->object->ID ? _t("update_success") : _t("insert_success");
                     $this->object->save();
                     unset($_FILES["files"]); //Summernote uses files index
