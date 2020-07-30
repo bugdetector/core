@@ -53,3 +53,11 @@
    Sadece geliştirme ortamları için, canlı ortamlar için değil,
    "kernel/migrations" ve "translations" dizinlerine yazma ve dosya
    oluştutma izinlerini verin.
+
+  ## Bağımlılıklar
+  PHP v > 7.4
+
+  php-common
+  php-intl
+  php-mbstring
+  php-mysql

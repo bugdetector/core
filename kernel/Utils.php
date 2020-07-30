@@ -5,10 +5,15 @@ class Utils
 {
     const ENCRYPTION_METHOD = "aes128";
 
-    public static function include_dir($folder)
+    public static function include_dir(string $folder_path, bool $recursive = false)
     {
-        foreach (glob("{$folder}/*.php") as $filename) {
+        foreach (glob("{$folder_path}/*.php") as $filename) {
             include $filename;
+        }
+        if($recursive){
+            foreach(glob("{$folder_path}/*", GLOB_ONLYDIR) as $directory){
+                Utils::include_dir($directory, $recursive);
+            }
         }
     }
 
@@ -111,7 +116,7 @@ class Utils
         }
         $data = htmlspecialchars_decode($data);
         $dom = new DOMDocument();
-        $dom->loadHTML(mb_convert_encoding($data, 'HTML-ENTITIES', 'UTF-8'));
+        @$dom->loadHTML(mb_convert_encoding($data, 'HTML-ENTITIES', 'UTF-8'));
         $elements = $dom->getElementsByTagName('*');
         foreach ($elements as $element) {
             $allowed_attributes = ["class", "style"];

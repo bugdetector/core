@@ -2,25 +2,20 @@
 
 define("DIRECT_OBJECT_REF_SHIELD", TRUE);
 
-require './kernel/Router.php';
-include './.config.php';
-require "./kernel/database/CoreDB.php";
-include './kernel/View.php';
-include './kernel/Page.php';
-include './kernel/ServicePage.php';
-include './kernel/Utils.php';
-include './kernel/Migration.php';
+include __DIR__.'/.config.php';
+require __DIR__.'/kernel/Router.php';
+require __DIR__."/kernel/database/CoreDB.php";
+include __DIR__.'/kernel/View.php';
+include __DIR__.'/kernel/Page.php';
+include __DIR__.'/kernel/ServicePage.php';
+include __DIR__.'/kernel/Utils.php';
+include __DIR__.'/kernel/Migration.php';
 
-define("SITE_ROOT", substr(str_replace(basename(__FILE__), "", $_SERVER["SCRIPT_NAME"]), 0, -1 ) );
 $host = Utils::base_host();
 define("BASE_URL", HTTP."://".$host.SITE_ROOT);
 
-Utils::include_dir("kernel/Entity");
-Utils::include_dir("Entity");
-Utils::include_dir("src/lib");
-Utils::include_dir("src");
-Utils::include_dir("views");
-Utils::include_dir("views/form");
+Utils::include_dir(__DIR__."/src", true);
+Utils::include_dir(__DIR__."/views", true);
 session_start();
 
 //Locating for installing system

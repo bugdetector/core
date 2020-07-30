@@ -38,7 +38,7 @@ class Router {
             $current_arguments = $this->arguments;
         }
         
-        $dir = "pages/";
+        $dir = __DIR__."/../pages/";
         $controller_name = "";
         foreach ($current_arguments as $page) {
             $dir = $dir.$page;
