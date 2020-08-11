@@ -1,0 +1,44 @@
+<div class="table_wrapper">
+	<table class="{{ view.classes|join(" ") }}" {{ view.renderAttributes() }}>
+		<thead>
+			{% for key, header in view.table_headers %}
+				<th>
+					{% if view.orderable and not( key matches '/^\\d+$/') %}
+						<a href="?{{ view.filter_params|url_encode }}&orderBy={{key}}&orderDirection={{ view.orderBy == key and view.orderDirection == "DESC" ? "ASC" : "DESC" }}">
+							{{ header }}
+							{% if view.orderBy == key and view.orderDirection == "DESC" %}
+								<i class="fa fa-sort-down"></i>
+							{% else %}
+								<i class="fa fa-sort-up"></i>
+							{% endif %}
+						</a>
+					{% else %}
+						{{ header }}
+					{% endif %}
+				</th>
+			{% endfor %}
+		</thead>
+	</thead>
+	<tbody>
+		{% for row in view.table_data %}
+			<tr>
+				{% for key, data in row %}
+					<td>
+						{% if key == "edit_actions" %}
+							<div class="d-flex  ">
+								<a href="#" class="mr-2 rowdelete" data-table="{{ view.table_name }}" data-id="{{data}}">
+									<i class="fa fa-times text-danger core-control"></i>
+								</a>
+								<a href="{{ constant("BASE_URL") ~ "/admin/table/insert/" ~ view.table_name ~ "/" ~ data }}" class="ml-2">
+									<i class="fa fa-edit text-primary core-control row"></i>
+								</a>
+							</div>
+						{% else %}
+							{{ data }}
+						{% endif %}
+					</td>
+				{% endfor %}
+			</tr>
+		{% endfor %}
+	</tbody>
+</table></div>

@@ -1,0 +1,29 @@
+<div class="col-12 mt-4" id="pagination">
+	<nav aria-label="...">
+		<ul class="pagination justify-content-center">
+			<li class="page-item  {{ view.page == 1 ? "disabled" : "" }}">
+				<a class="page-link" href='{{ view.query_link ~ "&page=1" }}'>
+					<i class="fa fa-angle-double-left"></i>
+				</a>
+			</li>
+			<li class="page-item {{ view.page == 1 ? "disabled" : "" }}">
+				<a class="page-link" href='{{ view.query_link ~ "&page=" ~ (view.page - 1) }}'>
+					<i class="fa fa-angle-left"></i>
+				</a>
+			</li>
+			{% for i in  (view.page > 5 ? view.page - 4 : 1)..(view.page + 5 < view.getPageCount() ? view.page + 4 : view.getPageCount() ) %}
+                <li class='page-item {{ i == view.page ? "active" : "" }}'><a class='page-link' href='{{ view.query_link ~ "&page=" ~ i }}'>{{ i }}</a></li>
+            {% endfor %}
+			<li class="page-item {{ view.page == view.getPageCount() ? "disabled" : "" }}">
+				<a class="page-link" href='{{ view.query_link ~ "&page=" ~ (view.page + 1) }}'>
+					<i class="fa fa-angle-right"></i>
+				</a>
+			</li>
+			<li class="page-item {{ view.page == view.getPageCount() ? "disabled" : "" }}">
+				<a class="page-link" href='{{ view.query_link ~ "&page=" ~ view.getPageCount() }}'>
+					<i class="fa fa-angle-double-right"></i>
+				</a>
+			</li>
+		</ul>
+	</nav>
+</div>

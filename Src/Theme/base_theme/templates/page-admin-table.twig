@@ -1,0 +1,35 @@
+{% extends "page.twig" %}
+
+{% block title %}
+	<div class="d-sm-flex align-items-center justify-content-between mb-4">
+		<h1 class="h3 mb-0 text-gray-800">{{ controller.title }}</h1>
+		<div class="text-gray-600 ml-3 mr-auto">
+			{{ controller.table_comment }}
+		</div>
+        {% if controller.table_name %}
+            <a class="d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-1" href="{{ constant("BASE_URL") ~ "/admin/table/insert/" ~ controller.table_name }}">
+                <i class="fas fa-plus text-white-50"></i>
+                {{ Translation.getTranslation("add") }}
+            </a>
+        {% endif %}
+		<a class="d-sm-inline-block btn btn-sm btn-primary shadow-sm" href="{{ constant("BASE_URL") ~ "/admin/table/struct" }}">
+			<i class="fas fa-plus text-white-50"></i>
+			{{ Translation.getTranslation("new_table") }}
+		</a>
+	</div>
+{% endblock %}
+
+{% block content %}
+	<div class="row">
+        <div class="col-md-8 order-md-first order-last">
+            <div class="card p-2">
+                {{ controller.printMessages() }}
+                {{ controller.table_search }}
+                {{ controller.echoContent() }}
+            </div>
+        </div>
+        <div class="col-md-4">
+            {{ controller.side_table_list }}
+        </div>
+	</div>
+{% endblock %}

@@ -52,7 +52,7 @@
    
    Sadece geliştirme ortamları için, canlı ortamlar için değil,
    "kernel/migrations" ve "translations" dizinlerine yazma ve dosya
-   oluştutma izinlerini verin.
+   oluşturma izinlerini verin.
 
   ## Bağımlılıklar
   PHP v > 7.4

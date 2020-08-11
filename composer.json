@@ -1,0 +1,14 @@
+{
+    "require": {
+        "twig/twig": "^3.0",
+        "squizlabs/php_codesniffer": "*",
+        "phpmailer/phpmailer": "^6.1"
+    },
+    "autoload": {
+        "psr-4": {
+        "CoreDB\\Kernel\\":"Kernel/",
+        "Src\\" : "Src/",
+        "App\\Twig\\" : "Src/Twig"
+        }
+    }
+}

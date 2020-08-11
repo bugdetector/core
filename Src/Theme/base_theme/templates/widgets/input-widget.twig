@@ -1,0 +1,11 @@
+{% if widget.label %}
+	<label for="{{ widget.attributes["id"] }}">
+		{{ widget.label }}
+	</label>
+{% endif %}
+<input type='{{ widget.type }}' name='{{ widget.name }}' class='{{ widget.classes|join(" ") }}' {{ widget.renderAttributes()|raw }} value='{{ widget.value }}'/>
+{% if widget.description %}
+	<small for="{{ widget.attributes["id"] }}">
+		{{ widget.description }}
+	</small>
+{% endif %}

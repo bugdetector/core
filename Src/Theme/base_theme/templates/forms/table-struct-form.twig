@@ -1,0 +1,30 @@
+{% extends "forms/form.twig" %}
+
+{% block fields %}
+	{{ form.fields["form_id"] }}
+    {{ form.fields["form_build_id"] }}
+    {{ form.fields["form_token"] }}
+	<div class="row ml-1">
+		<div class="col-md-3 col-sm-6 col-xs-12 form-group text-left font-weight-bold">
+			{{ form.fields["table_name"] }}
+		</div>
+		<div class="col-md-9 col-sm-12 form-group text-left font-weight-bold">
+			{{ form.fields["table_comment"] }}
+		</div>
+	</div>
+    {% for column in form.columns %}
+        {{ column }}
+    {% endfor %}
+	<div class="row mt-4 mb-5">
+		<div class="col-sm-3">
+			{{ form.fields["new_field"] }}
+		</div>
+		<div class="col-sm-3">
+			{{ form.fields["save"] }}
+		</div>
+		<div class="col-sm-3">
+			{{ form.fields["drop_accept"] }}
+		</div>
+	</div>
+
+{% endblock %}

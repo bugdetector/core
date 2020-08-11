@@ -45,21 +45,6 @@
         "tr": "Kullanıcıyı düzenle"
     },
     {
-        "key": "remove_user",
-        "en": "Remove User",
-        "tr": "Kullanıcıyı Sil"
-    },
-    {
-        "key": "add_role",
-        "en": "Add Role",
-        "tr": "Rol Ekle"
-    },
-    {
-        "key": "remove_role",
-        "en": "Remove Role",
-        "tr": "Rolü Sil"
-    },
-    {
         "key": "new_table",
         "en": "New Table",
         "tr": "Yeni Tablo"
@@ -190,11 +175,6 @@
         "tr": "Rol"
     },
     {
-        "key": "role_name",
-        "en": "Role Name",
-        "tr": "Rol Adı"
-    },
-    {
         "key": "table_select_info",
         "en": "Select a table to make a transaction.",
         "tr": "işlem yapmak için bir tablo seçin."
@@ -290,16 +270,6 @@
         "tr": "%s silindi."
     },
     {
-        "key": "role_remove_error_user_exist",
-        "en": "There is at least one user which is in this role.",
-        "tr": "Bu rolü kullanan en az bir kullanıcı mevcut."
-    },
-    {
-        "key": "role_removed",
-        "en": "Role removed.",
-        "tr": "Rol silindi."
-    },
-    {
         "key": "forgot_password_question",
         "en": "Forgot Your Password",
         "tr": "Şifreni mi unuttun"
@@ -323,11 +293,6 @@
         "key": "ok",
         "en": "OK",
         "tr": "Tamam"
-    },
-    {
-        "key": "role_defined",
-        "en": "%s role defined.",
-        "tr": "%s rol tanımı yapıldı."
     },
     {
         "key": "check_wrong_fields",
@@ -423,11 +388,6 @@
         "key": "account_blocked",
         "en": "Your user account has been blocked. Please login after reset password.",
         "tr": "Hesabınız kilitlenmiştir. Lütfen şifrenizi sıfırlayarak sisteme yeniden giriş yapın."
-    },
-    {
-        "key": "remove_user_accept",
-        "en": "Are you sure want to remove user %s?",
-        "tr": "%s kullanıcısını silmek istediğinize emin misiniz?"
     },
     {
         "key": null,
@@ -648,5 +608,45 @@
         "key": "last_updated",
         "en": "Last Updated",
         "tr": "Son Güncelleme"
+    },
+    {
+        "key": "user",
+        "en": "User",
+        "tr": "Kullanıcı"
+    },
+    {
+        "key": "change_success",
+        "en": "All changes saved successfully",
+        "tr": "Tüm değişiklikler başarıyla kaydedildi"
+    },
+    {
+        "key": "drop_column",
+        "en": "Drop Column",
+        "tr": "Kolonu Kaldır"
+    },
+    {
+        "key": "at_least_one_column",
+        "en": "Please describe at least one column.",
+        "tr": "Lütfen en az bir kolon tanımlayın."
+    },
+    {
+        "key": "column_name_required",
+        "en": "Column name required.",
+        "tr": "Kolon ismi gereklidir."
+    },
+    {
+        "key": "add_role",
+        "en": "Add Role",
+        "tr": "Rol Ekle"
+    },
+    {
+        "key": "password_match_error",
+        "en": "Passwords not match.",
+        "tr": "Şifreler uyuşmuyor."
+    },
+    {
+        "key": "status",
+        "en": "Status",
+        "tr": "Durum"
     }
 ]

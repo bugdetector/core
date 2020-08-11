@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		{% include 'header.twig' %}
+	</head>
+	<body>
+		<div id="wrapper">
+			{% include 'sidebar.twig' %}
+			<div id="content-wrapper" class="d-flex flex-column">
+				{% block to_top %}
+					<a class='scroll-to-top rounded' href='#'>
+						<i class='fas fa-angle-up'></i>
+					</a>
+				{% endblock %}
+				{% include 'navbar.twig' %}
+				<div class='container-fluid'>
+					{% block title %}
+						<div class="d-sm-flex align-items-center justify-content-between mb-4">
+							<h1 class="h3 mb-0 text-gray-800">{{ controller.title }}</h1>
+						</div>
+					{% endblock %}
+					{% block content %}
+						{{ controller.echoContent() }}
+					{% endblock %}
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

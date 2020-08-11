@@ -1,0 +1,24 @@
+{% extends "forms/form.twig" %}
+
+{% block fields %}
+    {{ form.fields["form_id"] }}
+    {{ form.fields["form_build_id"] }}
+    {{ form.fields["form_token"] }}
+	<div class="form-group">
+		{{ form.fields["username"] }}
+	</div>
+	<div class="form-group">
+		{{ form.fields["password"] }}
+	</div>
+	<div class="form-group">
+		<div class="custom-control custom-checkbox small">
+			<input type="checkbox" class="custom-control-input" id="remember-me" value="remember-me" name="remember-me" <?php if(isset($_COOKIE["remember-me"]) && $_COOKIE["remember-me"]==true ) echo "checked"; ?>>
+			<label class="custom-control-label" for="remember-me">{{ Translation.getTranslation("remember_me") }}</label>
+		</div>
+		<input type="submit" class="btn btn-primary btn-user btn-block" value="{{ Translation.getTranslation("login") }}" name="login">
+	</div>
+	<div class="text-center">
+		<a class="small" href="{{ constant("BASE_URL") ~ "/forgetpassword" }}">
+			{{ Translation.getTranslation("forgot_password") }}</a>
+	</div>
+{% endblock %}
