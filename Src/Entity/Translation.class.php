@@ -2,10 +2,10 @@
 
 namespace Src\Entity;
 
-
+use CoreDB\Kernel\TableMapper;
 use Exception;
 
-class Translation extends DBObject
+class Translation extends TableMapper
 {
     private static $language;
     private static $cache;
@@ -47,17 +47,21 @@ class Translation extends DBObject
     /**
      * @Override
      */
-    public static function get(array $filter, string $table = self::TABLE) : ?Translation
+    public static function get(array $filter) : ?Translation
     {
-        return parent::get($filter, self::TABLE);
+        return parent::find($filter, self::TABLE);
     }
 
     /**
      * @Override
      */
-    public static function getAll(array $filter, string $table = self::TABLE): array
+    public static function getAll(array $filter): array
     {
-        return parent::getAll($filter, $table);
+        return parent::findAll($filter, self::TABLE);
+    }
+
+    public static function clear(){
+        parent::clearTable(self::TABLE);
     }
 
     public function map(array $array)

@@ -6,8 +6,8 @@ use Src\Controller\Admin\ManageController;
 use Src\Entity\Translation;
 use Src\Entity\User;
 use Src\Form\TableSearchForm;
-use Src\Theme\Views\TextElement;
-use Src\Theme\Views\ViewGroup;
+use Src\Views\TextElement;
+use Src\Views\ViewGroup;
 
 class UserController extends ManageController
 {

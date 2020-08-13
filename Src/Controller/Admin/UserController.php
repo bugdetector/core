@@ -7,7 +7,7 @@ use Src\Controller\AdminController;
 use Src\Entity\Translation;
 use Src\Entity\User;
 use Src\Form\UserInsertForm;
-use Src\Theme\Views\CollapsableCard;
+use Src\Views\CollapsableCard;
 
 class UserController extends AdminController
 {

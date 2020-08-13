@@ -9,8 +9,8 @@ use Exception;
 use Src\Controller\Admin\ManageController;
 use Src\Entity\Translation;
 use Src\Form\Widget\InputWidget;
-use Src\Theme\Views\Table;
-use Src\Theme\Views\ViewGroup;
+use Src\Views\Table;
+use Src\Views\ViewGroup;
 
 /**
  * /admin/update

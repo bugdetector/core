@@ -10,8 +10,8 @@ use Src\Entity\Cache;
 use Src\Form\Widget\InputWidget;
 use Src\Form\Widget\SelectWidget;
 use Src\Form\Widget\TextareaWidget;
-use Src\Theme\Views\TextElement;
-use Src\Theme\Views\ViewGroup;
+use Src\Views\TextElement;
+use Src\Views\ViewGroup;
 
 /**
  * @property \PDO $connection
@@ -400,6 +400,31 @@ class MySQLDriver implements DatabaseDriver
             ->condition("table_schema = :schema AND table_name = :table_name", [":schema" => DB_NAME, ":table_name" => $table_name])
             ->select("", ["table_comment AS comment"])
             ->execute()->fetchObject()->comment;
+    }
+
+
+    /**
+     * @inheritdoc
+     */
+    public static function getColumnComment(string $table_name, string $column_name): string{
+        $cache = Cache::getByBundleAndKey("column_comment", "{$table_name}-{$column_name}");
+        if($cache){
+            return strval($cache->value);
+        }else{
+            $comment_result = (new SelectQueryPreparer("INFORMATION_SCHEMA.COLUMNS", "", false))
+            ->condition("TABLE_SCHEMA = :table_schema", [":table_schema" => DB_NAME])
+            ->condition("TABLE_NAME = :table_name", [":table_name" => $table_name])
+            ->condition("COLUMN_NAME = :column_name", [":column_name" => $column_name])
+            ->select("", ["COLUMN_COMMENT"])
+            ->execute()->fetchObject();
+            if($comment_result){
+                $comment = strval($comment_result->COLUMN_COMMENT);
+            }else{
+                $comment = "";
+            }
+            Cache::set("column_comment", "{$table_name}-{$column_name}", $comment);
+            return $comment;
+        }
     }
 }
 

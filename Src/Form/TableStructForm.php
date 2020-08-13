@@ -11,7 +11,7 @@ use Exception;
 use Src\Entity\Cache;
 use Src\Entity\Translation;
 use Src\Form\Widget\InputWidget;
-use Src\Theme\Views\ColumnDefinition;
+use Src\Views\ColumnDefinition;
 
 class TableStructForm extends Form
 {

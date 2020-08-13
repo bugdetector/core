@@ -67,12 +67,23 @@ interface DatabaseDriver{
 
     /**
      * Returns table comment
-     * @param $table_name
+     * @param string $table_name
      *  Table name
      * @return string
      *  Table comment
      */
     public static function getTableComment(string $table_name): string;
+
+    /**
+     * Returns column comment
+     * @param string $table_name
+     *  Table name
+     * @param string $column_name
+     *  Column name
+     * @return string
+     *  Column comment
+     */
+    public static function getColumnComment(string $table_name, string $column_name): string;
 
     /**
      * Returns table description

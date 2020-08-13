@@ -8,7 +8,7 @@ use CoreDB\Kernel\Router;
 use Src\Controller\Admin\TableController;
 use Src\Entity\Translation;
 use Src\Form\TableInsertForm;
-use Src\Theme\Views\SideTableList;
+use Src\Views\SideTableList;
 
 class InsertController extends TableController
 {

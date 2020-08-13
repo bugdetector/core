@@ -13,7 +13,7 @@ use Src\Entity\Cache;
 use Src\Entity\DBObject;
 use Src\Entity\Translation;
 use Src\Entity\User;
-use Src\Theme\Views\ColumnDefinition;
+use Src\Views\ColumnDefinition;
 
 class AjaxController extends ServiceController
 {

@@ -7,7 +7,7 @@ use CoreDB\Kernel\Database\CoreDB;
 use CoreDB\Kernel\Database\SelectQueryPreparer;
 use Src\Entity\Translation;
 use Src\Entity\User;
-use Src\Theme\Views\BasicCard;
+use Src\Views\BasicCard;
 
 class AdminController extends BaseTheme {
 

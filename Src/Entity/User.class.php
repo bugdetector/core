@@ -2,19 +2,17 @@
 
 namespace Src\Entity;
 
-use CoreDB\Kernel\Database\CoreDB;
+use CoreDB\Kernel\Database\DeleteQueryPreparer;
 use CoreDB\Kernel\Database\SelectQueryPreparer;
-
+use CoreDB\Kernel\TableMapper;
 use Exception;
 use Src\JWT;
 use PDO;
-use Src\Form\Widget\InputWidget;
 use Src\Form\Widget\SelectWidget;
-use stdClass;
 
 define("PASSWORD_FALSE_COUNT", "PASSWORD_FALSE_COUNT");
 define("LOGIN_UNTRUSTED_ACTIONS", "LOGIN_UNTRUSTED_ACTIONS");
-class User extends DBObject
+class User extends TableMapper
 {
     const STATUS_ACTIVE = "active";
     const STATUS_BLOCKED = "blocked";
@@ -43,17 +41,21 @@ class User extends DBObject
     /**
      * @Override
      */
-    public static function get(array $filter, string $table = self::TABLE): ?User
+    public static function get(array $filter): ?User
     {
-        return parent::get($filter, self::TABLE);
+        return parent::find($filter, self::TABLE);
     }
 
     /**
      * @Override
      */
-    public static function getAll(array $filter, string $table = self::TABLE): array
+    public static function getAll(array $filter): array
     {
-        return parent::getAll($filter, $table);
+        return parent::findAll($filter, self::TABLE);
+    }
+
+    public static function clear(){
+        parent::clearTable(self::TABLE);
     }
 
     public static function getUserByUsername(string $username)
@@ -91,9 +93,9 @@ class User extends DBObject
 
     public function delete(): bool
     {
-        return db_delete("users_roles")->condition("user_id = :user_id", ["user_id" => $this->ID])->execute() &&
-            db_delete("logins")->condition("username = :username", ["username" => $this->username])->execute() &&
-            db_delete("reset_password_queue")->condition("USER = :user_id", ["user_id" => $this->ID])->execute()
+        return (new DeleteQueryPreparer("users_roles"))->condition("user_id = :user_id", ["user_id" => $this->ID])->execute() &&
+            (new DeleteQueryPreparer(Logins::TABLE))->condition("username = :username", ["username" => $this->username])->execute() &&
+            (new DeleteQueryPreparer(ResetPassword::TABLE))->condition("USER = :user_id", ["user_id" => $this->ID])->execute()
             && parent::delete();
     }
 
@@ -164,14 +166,20 @@ class User extends DBObject
     public function add_role(string $role)
     {
         $this->ROLES = null;
-        return db_insert("users_roles", ["user_id" => $this->ID, "role_id" => Role::get(["role" => $role])->ID])->execute();
+        $role = new DBObject("users_roles");
+        $role->map([
+            "user_id" => $this->ID, 
+            "role_id" => Role::get(["role" => $role])->ID
+            ]);
+        return $role->save();
     }
     public function delete_role(string $role)
     {
         $this->ROLES = null;
-        return db_delete("users_roles")
-            ->condition("user_id = :user_id AND role_id = :role_id", [":user_id" => $this->ID, ":role_id" => Role::get(["role" => $role])->ID])
-            ->execute();
+        return DBObject::get(
+            ["user_id" => $this->ID, 
+            "role_id" => Role::get(["role" => $role])->ID
+            ] ,"users_roles")->delete();
     }
 
 

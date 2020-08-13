@@ -65,7 +65,7 @@ abstract class BaseTheme extends BaseController
             $default_js_files[] = "src/vendor/js/bootstrap-select.".Translation::getLanguage().".js";
             $default_js_files[] = "src/vendor/js/moment.".Translation::getLanguage().".js";
         }
-        $this->js_files = $default_js_files;
+        $this->js_files = array_merge($default_js_files, $this->js_files);
     }
     protected function addDefaultCssFiles()
     {
@@ -80,7 +80,7 @@ abstract class BaseTheme extends BaseController
             "src/vendor/css/daterangepicker.css",
             "src/css/core.css"
         ];
-        $this->css_files = $default_css_files;
+        $this->css_files = array_merge($default_css_files, $this->css_files);
     }
     
     protected function addDefaultTranslations()

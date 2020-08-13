@@ -2,7 +2,7 @@
 
 namespace Views;
 
-namespace Src\Theme\Views;
+namespace Src\Views;
 
 
 use Src\Theme\View;

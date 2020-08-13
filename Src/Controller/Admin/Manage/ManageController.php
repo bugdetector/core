@@ -4,7 +4,7 @@ namespace Src\Controller\Admin;
 
 use Src\Controller\AdminController;
 use Src\Entity\Translation;
-use Src\Theme\Views\NavPills;
+use Src\Views\NavPills;
 
 /**
  * @property FormBuilder $filter_options 

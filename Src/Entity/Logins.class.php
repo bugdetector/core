@@ -2,12 +2,14 @@
 
 namespace Src\Entity;
 
+use CoreDB\Kernel\TableMapper;
+
 /**
  * Object relation with table logins
  * @author murat
  */
 
-class Logins extends DBObject
+class Logins extends TableMapper
 {
     const TABLE = "logins";
     public $ID;
@@ -24,16 +26,20 @@ class Logins extends DBObject
     /**
      * @Override
      */
-    public static function get(array $filter, string $table = self::TABLE) : ?Logins
+    public static function get(array $filter) : ?Logins
     {
-        return parent::get($filter, self::TABLE);
+        return parent::find($filter, self::TABLE);
     }
 
     /**
      * @Override
      */
-    public static function getAll(array $filter, string $table = self::TABLE) : array
+    public static function getAll(array $filter) : array
     {
-        return parent::getAll($filter, $table);
+        return parent::findAll($filter, self::TABLE);
+    }
+
+    public static function clear(){
+        parent::clearTable(self::TABLE);
     }
 }

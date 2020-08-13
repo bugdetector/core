@@ -1,8 +1,6 @@
 <?php
 
-namespace Src\Theme\Views;
-
-use CoreDB\Kernel\Database\CoreDB;
+namespace Src\Views;
 
 use Src\Theme\View;
 
@@ -14,6 +12,7 @@ class SideTableList extends View
     {
         $this->active_table = $active_table;
         $this->information_scheme = \CoreDB::database()::getTableList();
+        \CoreDB::controller()->addJsFiles("src/js/side_table_list.js");
     }
 
     public function getTemplateFile(): string

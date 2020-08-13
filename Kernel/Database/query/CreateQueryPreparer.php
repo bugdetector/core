@@ -63,7 +63,7 @@ class CreateQueryPreparer extends QueryPreparer
             } else {
                 throw new Exception(Translation::getTranslation("check_wrong_fields"));
             }
-            
+            $query .= " COMMENT '{$field["comment"]}'";
             if (isset($field["is_unique"]) && $field["is_unique"] == 1) {
                 array_push($constants, $field["field_name"]);
             }

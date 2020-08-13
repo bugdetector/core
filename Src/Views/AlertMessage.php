@@ -1,6 +1,6 @@
 <?php
 
-namespace Src\Theme\Views;
+namespace Src\Views;
 
 use Src\Entity\Translation;
 use Src\Theme\View;

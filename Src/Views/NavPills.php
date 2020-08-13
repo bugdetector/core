@@ -1,6 +1,6 @@
 <?php
 
-namespace Src\Theme\Views;
+namespace Src\Views;
 
 
 class NavPills extends ViewGroup

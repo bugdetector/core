@@ -2,12 +2,14 @@
 
 namespace Src\Entity;
 
+use CoreDB\Kernel\TableMapper;
+
 /**
  * Object relation with table blocked_ips
  * @author murat
  */
 
-class BlockedIp extends DBObject
+class BlockedIp extends TableMapper
 {
     const TABLE = "blocked_ips";
     public $ID;
@@ -23,16 +25,20 @@ class BlockedIp extends DBObject
     /**
      * @Override
      */
-    public static function get(array $filter, string $table = self::TABLE) : ?BlockedIp
+    public static function get(array $filter) : ?BlockedIp
     {
-        return parent::get($filter, self::TABLE);
+        return parent::find($filter, self::TABLE);
     }
 
     /**
      * @Override
      */
-    public static function getAll(array $filter, string $table = self::TABLE) : array
+    public static function getAll(array $filter) : array
     {
-        return parent::getAll($filter, $table);
+        return parent::findAll($filter, self::TABLE);
+    }
+
+    public static function clear(){
+        parent::clearTable(self::TABLE);
     }
 }

@@ -5,8 +5,8 @@ namespace CoreDB\Kernel;
 use Exception;
 use Src\Entity\Translation;
 use Src\Theme\CoreRenderer;
-use Src\Theme\Views\AlertMessage;
-use Src\Theme\Views\ViewGroup;
+use Src\Views\AlertMessage;
+use Src\Views\ViewGroup;
 
 abstract class BaseController implements ControllerInterface, BaseControllerInterface
 {
@@ -82,7 +82,9 @@ abstract class BaseController implements ControllerInterface, BaseControllerInte
     public function preprocessPage()
     {
         try {
-            $this->{$this->method}();
+            if($this->method){
+                $this->{$this->method}();
+            }
         } catch (Exception $ex) {
             $this->createMessage($ex->getMessage());
         }
@@ -91,7 +93,7 @@ abstract class BaseController implements ControllerInterface, BaseControllerInte
     public function addJsFiles($js_file_path)
     {
         if (is_array($js_file_path)) {
-            $this->js_files = array_merge($this->css_files, $js_file_path);
+            $this->js_files = array_merge($this->js_files, $js_file_path);
         } else {
             $this->js_files[] = $js_file_path;
         }

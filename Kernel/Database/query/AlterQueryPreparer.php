@@ -35,9 +35,9 @@ class AlterQueryPreparer extends QueryPreparer
         if ($field["field_type"] === "VARCHAR") {
             $this->query.= "VARCHAR(".intval($field["field_length"]).") CHARACTER SET utf8 COLLATE utf8_general_ci;";
         } elseif (in_array($field["field_type"], ["INT", "DOUBLE", "TEXT", "DATE", "DATETIME", "TIME", "TINYTEXT", "LONGTEXT"])) {
-            $this->query.= $field["field_type"].";";
+            $this->query.= "{$field["field_type"]} COMMENT '{$field["comment"]}';";
         } elseif ($field["field_type"] == "MUL" && in_array($field["reference_table"], \CoreDB::database()::getTableList())) {
-            $this->query .= "INT; ";
+            $this->query .= "INT COMMENT '{$field["comment"]}'; ";
             $this->query .= "ALTER TABLE $this->table ADD FOREIGN KEY (`".$field["field_name"]."`) REFERENCES ".$field["reference_table"]."(ID)";
         } else {
             throw new Exception(Translation::getTranslation("check_wrong_fields"));

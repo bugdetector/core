@@ -7,7 +7,7 @@ use CoreDB\Kernel\Messenger;
 use Src\Controller\AdminController;
 use Src\Entity\Translation;
 use Src\Form\TableSearchForm;
-use Src\Theme\Views\SideTableList;
+use Src\Views\SideTableList;
 
 class TableController extends AdminController
 {
@@ -24,7 +24,13 @@ class TableController extends AdminController
             $this->table_name = $this->arguments[0];
             $this->table_comment = \CoreDB::database()::getTableComment($this->table_name);
         }
+        
+    }
+
+    public function processPage()
+    {
         $this->side_table_list = new SideTableList($this->table_name);
+        parent::processPage();
     }
 
     public function preprocessPage()

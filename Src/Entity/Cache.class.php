@@ -3,13 +3,14 @@
 namespace Src\Entity;
 
 use CoreDB\Kernel\Database\TruncateQueryPreparer;
+use CoreDB\Kernel\TableMapper;
 
 /**
  * Object relation with table cache
  * @author murat
  */
 
-class Cache extends DBObject
+class Cache extends TableMapper
 {
     const TABLE = "cache";
     public $ID;
@@ -27,21 +28,21 @@ class Cache extends DBObject
     /**
      * @Override
      */
-    public static function get(array $filter, string $table = self::TABLE) : ?Cache
+    public static function get(array $filter) : ?Cache
     {
-        return parent::get($filter, self::TABLE);
+        return parent::find($filter, self::TABLE);
     }
 
     /**
      * @Override
      */
-    public static function getAll(array $filter, string $table = self::TABLE) : array
+    public static function getAll(array $filter) : array
     {
-        return parent::getAll($filter, $table);
+        return parent::findAll($filter, self::TABLE);
     }
 
     public static function clear(){
-        (new TruncateQueryPreparer(Cache::TABLE))->execute();
+        parent::clearTable(self::TABLE);
     }
 
     public static function set(string $bundle, string $key, string $value)

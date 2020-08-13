@@ -1,12 +1,13 @@
 <?php
 
-namespace Src\Theme\Views;
+namespace Src\Views;
 
-
+use CoreDB;
 use Src\Entity\Translation;
 use Src\Form\Widget\InputWidget;
 use Src\Form\Widget\OptionWidget;
 use Src\Form\Widget\SelectWidget;
+use Src\Form\Widget\TextareaWidget;
 
 class ColumnDefinition extends CollapsableCard
 {
@@ -77,6 +78,16 @@ class ColumnDefinition extends CollapsableCard
         ->setLabel(Translation::getTranslation("unique"))
         ->removeClass("form-control");
 
+        if($this->table_name){
+            $existing_comment = CoreDB::database()->getColumnComment($this->table_name, $this->definition["Field"]);
+        }else{
+            $existing_comment = "";
+        }
+        $column_comment = TextareaWidget::create("{$this->name}[comment]")
+        ->setValue($existing_comment)
+        ->addAttribute("placeholder", Translation::getTranslation("column_comment"))
+        ->addClass("my-2");
+
         $remove_button = ViewGroup::create("a", "btn btn-danger removefield")
         ->addAttribute("href", "#")
         ->addField(
@@ -92,6 +103,7 @@ class ColumnDefinition extends CollapsableCard
             $is_unique_checkbox->addAttribute("disabled", "true");
             $reference_table_select->addAttribute("disabled", "true");
             $field_length->addAttribute("disabled", "true");
+            $column_comment->addAttribute("disabled", "true");
             $remove_button->removeClass("removefield")
             ->addClass("dropfield");
 
@@ -125,6 +137,9 @@ class ColumnDefinition extends CollapsableCard
         )->addField(
             ViewGroup::create("div", "col-sm-3")
                 ->addField($is_unique_checkbox)
+        )->addField(
+            ViewGroup::create("div", "col-sm-12")
+                ->addField($column_comment)
         )->addField(
             ViewGroup::create("div", "col-sm-3")
                 ->addField($remove_button)

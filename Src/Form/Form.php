@@ -10,7 +10,7 @@ use Src\Form\Widget\FormWidget;
 use Src\Form\Widget\InputWidget;
 use Src\Theme\CoreRenderer;
 use Src\Theme\View;
-use Src\Theme\Views\AlertMessage;
+use Src\Views\AlertMessage;
 
 abstract class Form extends View
 {

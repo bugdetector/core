@@ -2,12 +2,15 @@
 
 namespace Src\Entity;
 
+use CoreDB\Kernel\TableMapper;
+use Exception;
+
 /**
  * Object relation with table variables
  * @author murat
  */
 
-class Variable extends DBObject
+class Variable extends TableMapper
 {
     const TABLE = "variables";
     public $ID;
@@ -31,17 +34,21 @@ class Variable extends DBObject
     /**
      * @Override
      */
-    public static function get(array $filter, string $table = self::TABLE) : ?Variable
+    public static function get(array $filter) : ?Variable
     {
-        return parent::get($filter, self::TABLE);
+        return parent::find($filter, self::TABLE);
     }
 
     /**
      * @Override
      */
-    public static function getAll(array $filter, string $table = self::TABLE) : array
+    public static function getAll(array $filter) : array
     {
-        return parent::getAll($filter, $table);
+        return parent::findAll($filter, self::TABLE);
+    }
+
+    public static function clear(){
+        parent::clearTable(self::TABLE);
     }
 
     public static function getByKey(string $key)

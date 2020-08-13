@@ -9,10 +9,10 @@ use PDO;
 use Src\Entity\Translation;
 use Src\Form\Widget\InputWidget;
 use Src\Form\Widget\SelectWidget;
-use Src\Theme\Views\CollapsableCard;
-use Src\Theme\Views\Pagination;
-use Src\Theme\Views\Table;
-use Src\Theme\Views\ViewGroup;
+use Src\Views\CollapsableCard;
+use Src\Views\Pagination;
+use Src\Views\Table;
+use Src\Views\ViewGroup;
 
 class TableSearchForm extends Form
 {
@@ -29,7 +29,7 @@ class TableSearchForm extends Form
         $this->search_input_group = new CollapsableCard(Translation::getTranslation("search"));
         $this->search_input_group->setId("search_input_group");
         $this->pagination = new Pagination(isset($_GET["page"]) ? $_GET["page"] : 1);
-        \CoreDB::controller()->addJsFiles("src/js/table.js");
+        \CoreDB::controller()->addJsFiles("src/js/table_search_form.js");
         \CoreDB::controller()->addFrontendTranslation("record_remove_accept");
     }
 
