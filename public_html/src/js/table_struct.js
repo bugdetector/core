@@ -30,6 +30,12 @@ $(document).ready(function(){
         }else {
             $(this).parents(".column_definition").find(".reference_table").parent().addClass("d-none");
         }
+        
+        if(value === "ENUM"){
+            $(this).parents(".column_definition").find(".list_values").parent().removeClass("d-none");
+        }else {
+            $(this).parents(".column_definition").find(".list_values").parent().addClass("d-none");
+        }
      });
     $(document).on("click",".removefield", function (e) {
         e.preventDefault();

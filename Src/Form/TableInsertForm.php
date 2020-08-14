@@ -2,8 +2,7 @@
 
 namespace Src\Form;
 
-
-use Src\Entity\DBObject;
+use CoreDB\Kernel\TableMapper;
 use Src\Entity\Translation;
 use Src\Form\Widget\InputWidget;
 
@@ -13,9 +12,9 @@ class TableInsertForm extends Form
 
     public bool $redirect = true;
 
-    protected DBObject $object;
+    protected TableMapper $object;
 
-    public function __construct(DBObject $object)
+    public function __construct(TableMapper $object)
     {
         parent::__construct();
         $this->object = $object;

@@ -1,4 +1,5 @@
 <?php
+
 namespace CoreDB\Kernel\Database;
 
 
@@ -18,8 +19,8 @@ class AlterQueryPreparer extends QueryPreparer
         }
         $this->table = $table;
     }
-    
-    public function addField(array $field) : AlterQueryPreparer
+
+    public function addField(array $field): AlterQueryPreparer
     {
         /**
          * $field_definition format must be
@@ -31,19 +32,21 @@ class AlterQueryPreparer extends QueryPreparer
          *  "reference_table" => $table_name # for references
          * ]
          */
-        $this->query = "ALTER TABLE `$this->table` ADD `".$field['field_name']."` ";
+        $this->query = "ALTER TABLE `$this->table` ADD `" . $field['field_name'] . "` ";
         if ($field["field_type"] === "VARCHAR") {
-            $this->query.= "VARCHAR(".intval($field["field_length"]).") CHARACTER SET utf8 COLLATE utf8_general_ci;";
+            $this->query .= "VARCHAR(" . intval($field["field_length"]) . ") CHARACTER SET utf8 COLLATE utf8_general_ci;";
         } elseif (in_array($field["field_type"], ["INT", "DOUBLE", "TEXT", "DATE", "DATETIME", "TIME", "TINYTEXT", "LONGTEXT"])) {
-            $this->query.= "{$field["field_type"]} COMMENT '{$field["comment"]}';";
+            $this->query .= "{$field["field_type"]} COMMENT '{$field["comment"]}';";
         } elseif ($field["field_type"] == "MUL" && in_array($field["reference_table"], \CoreDB::database()::getTableList())) {
             $this->query .= "INT COMMENT '{$field["comment"]}'; ";
-            $this->query .= "ALTER TABLE $this->table ADD FOREIGN KEY (`".$field["field_name"]."`) REFERENCES ".$field["reference_table"]."(ID)";
+            $this->query .= "ALTER TABLE $this->table ADD FOREIGN KEY (`" . $field["field_name"] . "`) REFERENCES " . $field["reference_table"] . "(ID);";
+        } elseif ($field["field_type"] == "ENUM") {
+            $this->query .= "ENUM ('".str_replace(",", "','", $field["list_values"])."') COMMENT '{$field["comment"]}'; ";
         } else {
             throw new Exception(Translation::getTranslation("check_wrong_fields"));
         }
         if (isset($field["is_unique"]) && $field["is_unique"] == 1) {
-            $this->query .= "ALTER TABLE $this->table ADD UNIQUE(`".$field['field_name']."`);";
+            $this->query .= "ALTER TABLE $this->table ADD UNIQUE(`" . $field['field_name'] . "`);";
         }
         return $this;
     }
@@ -53,8 +56,8 @@ class AlterQueryPreparer extends QueryPreparer
     {
         return $this->query;
     }
-    
-    public function execute() : PDOStatement
+
+    public function execute(): PDOStatement
     {
         $result = parent::execute();
         //Migration::addMigration($this);

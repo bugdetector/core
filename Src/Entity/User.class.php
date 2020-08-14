@@ -263,6 +263,9 @@ class User extends TableMapper
 
     protected function getFieldInput($description)
     {
+        if(strpos($description["Type"], "enum") !== FALSE){
+            $description["Type"] = "ENUM";
+        }
         $input = \CoreDB::database()::get_supported_data_types()[$this->get_input_type($description["Type"], $description["Key"])]["input_field_callback"]($this, $description, $this->table);
         if ($description["Field"] == "ID") {
             $input->addAttribute("disabled", "true");

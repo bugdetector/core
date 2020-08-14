@@ -4,3 +4,8 @@
 	</label>
 {% endif %}
 <textarea name='{{ widget.name }}' class='{{ widget.classes|join(" ") }}' {{ widget.renderAttributes()|raw }}>{{ widget.value|raw }}</textarea>
+{% if widget.description %}
+	<small for="{{ widget.attributes["id"] }}">
+		{{ widget.description }}
+	</small>
+{% endif %}

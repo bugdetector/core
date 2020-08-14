@@ -146,6 +146,9 @@ abstract class TableMapper {
 
     protected function getFieldInput($description)
     {
+        if(strpos($description["Type"], "enum") !== FALSE){
+            $description["Type"] = "ENUM";
+        }
         $input = \CoreDB::database()->get_supported_data_types()[$this->get_input_type($description["Type"], $description["Key"])]["input_field_callback"]($this, $description, $this->table);
         if (in_array($description["Field"], ["ID" ,"created_at", "last_updated"])) {
             $input->addAttribute("disabled", true);

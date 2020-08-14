@@ -65,7 +65,7 @@ class TableStructForm extends Form
         if (isset($this->request["save"])) {
             if ($this->table_name) {
                 $fields = isset($this->request["fields"]) ? $this->request["fields"] : [];
-                $db = \CoreDB::database()::getInstance();
+                $db = \CoreDB::database();
                 try {
                     $db->beginTransaction();
                     

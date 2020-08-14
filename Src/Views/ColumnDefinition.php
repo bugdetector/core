@@ -68,6 +68,12 @@ class ColumnDefinition extends CollapsableCard
         ->setNullElement(Translation::getTranslation("reference_table"))
         ->setOptions(\CoreDB::database()::getTableList());
 
+        $list_values_input = TextareaWidget::create("{$this->name}[list_values]")
+        ->addClass("list_values")
+        ->setLabel(Translation::getTranslation("list_values"))
+        ->addAttribute("placeholder", Translation::getTranslation("list_values") )
+        ->setDescription(Translation::getTranslation("list_values_description"));
+
         $field_length = InputWidget::create("{$this->name}[field_length]")
         ->addClass("field_length")
         ->setLabel(Translation::getTranslation("length_varchar"))
@@ -102,6 +108,7 @@ class ColumnDefinition extends CollapsableCard
             $data_type_select->addAttribute("disabled", "true");
             $is_unique_checkbox->addAttribute("disabled", "true");
             $reference_table_select->addAttribute("disabled", "true");
+            $list_values_input->addAttribute("disabled", "true");
             $field_length->addAttribute("disabled", "true");
             $column_comment->addAttribute("disabled", "true");
             $remove_button->removeClass("removefield")
@@ -117,6 +124,12 @@ class ColumnDefinition extends CollapsableCard
             if(strpos($this->definition["Type"], "varchar") !== false){
                 $field_length->setValue(filter_var($this->definition["Type"], FILTER_SANITIZE_NUMBER_INT));
             }
+
+            if(strpos($this->definition["Type"], "enum") !== false){
+                $options = CoreDB::database()->getEnumValues($this->table_name, $this->definition["Field"]);
+                $list_values_input->setValue( implode(",", $options) );
+            }
+            
         }else{
             $this->title = Translation::getTranslation("new_field");
         }
@@ -137,6 +150,9 @@ class ColumnDefinition extends CollapsableCard
         )->addField(
             ViewGroup::create("div", "col-sm-3")
                 ->addField($is_unique_checkbox)
+        )->addField(
+            ViewGroup::create("div", "col-sm-12 ".(!$list_values_input->value ? "d-none" : ""))
+                ->addField($list_values_input)
         )->addField(
             ViewGroup::create("div", "col-sm-12")
                 ->addField($column_comment)

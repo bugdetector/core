@@ -7,6 +7,7 @@ use \PDO;
 use \PDOException;
 use \PDOStatement;
 use Src\Entity\Cache;
+use Src\Entity\Translation;
 use Src\Form\Widget\InputWidget;
 use Src\Form\Widget\SelectWidget;
 use Src\Form\Widget\TextareaWidget;
@@ -291,8 +292,44 @@ class MySQLDriver implements DatabaseDriver
                         ->addAttribute("data-reference-column", $table_description[1]["Field"]);
                     return $field;
                 }
+            ],
+            "ENUM" => [
+                "value" => "LIST",
+                "selected_callback" => function ($definition) {
+                    return [
+                        "checked" => $definition && strpos($definition["Type"], "enum(") !== false ? "selected" : "",
+                    ];
+                },
+                "input_field_callback" => function ($object, $desc, $table) {
+                    $options = self::getInstance()->getEnumValues($table, $desc["Field"]);
+                    foreach($options as &$option){
+                        $option = Translation::getTranslation($option);
+                    }
+                    $field = new SelectWidget($desc["Field"]);
+                    $field->setOptions($options)
+                    ->addClass("autocomplete");
+                    return $field;
+                }
             ]
         ];
+    }
+
+    public function getEnumValues(string $table_name, string $column){
+        $cache = Cache::getByBundleAndKey("enum_values", "{$table_name}-{$column}");
+        if($cache){
+            return $cache->value ? json_decode($cache->value, true) : [];
+        }else{
+            $result = $this->query(
+                "SHOW COLUMNS FROM {$table_name} WHERE Field = '{$column}'"
+            )->fetch(PDO::FETCH_ASSOC);
+            preg_match("/^enum\(\'(.*)\'\)$/", $result["Type"], $matches);
+            $options = [];
+            foreach(explode("','", $matches[1]) as $option){
+                $options[$option] = $option;
+            }
+            Cache::set("enum_values", "{$table_name}-{$column}", json_encode($options));
+            return $options;
+        }
     }
 
     /**

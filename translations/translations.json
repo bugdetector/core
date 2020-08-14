@@ -648,5 +648,35 @@
         "key": "status",
         "en": "Status",
         "tr": "Durum"
+    },
+    {
+        "key": "active",
+        "en": "Active",
+        "tr": "Etkin"
+    },
+    {
+        "key": "blocked",
+        "en": "Blocked",
+        "tr": "Engellenmiş"
+    },
+    {
+        "key": "pending",
+        "en": "Pending",
+        "tr": "Onay Bekliyor"
+    },
+    {
+        "key": "column_comment",
+        "en": "Column Comment",
+        "tr": "Kolon Yorumu"
+    },
+    {
+        "key": "list_values",
+        "en": "List Values",
+        "tr": "Liste Değerleri"
+    },
+    {
+        "key": "list_values_description",
+        "en": "Enter values seperated with comma.",
+        "tr": "Virgülle ayrılmış değerler giriniz."
     }
 ]

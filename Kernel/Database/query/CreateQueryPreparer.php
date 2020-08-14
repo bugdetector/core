@@ -60,6 +60,8 @@ class CreateQueryPreparer extends QueryPreparer
             } elseif ($field["field_type"] == "MUL" && in_array($field["reference_table"], \CoreDB::database()::getTableList())) {
                 $query.= "INT";
                 array_push($references, [$field["field_name"], $field["reference_table"]]);
+            } elseif($field["field_type"] == "ENUM"){
+                $query.= "ENUM('".str_replace(",", "','", $field["list_values"])."')";
             } else {
                 throw new Exception(Translation::getTranslation("check_wrong_fields"));
             }
@@ -68,7 +70,7 @@ class CreateQueryPreparer extends QueryPreparer
                 array_push($constants, $field["field_name"]);
             }
         }
-        $query .= ", created_at DATETIME DEFAULT CURRENT_tIMESTAMP, last_updated DATETIME NOT NULL DEFAULT CURRENT_tIMESTAMP ON UPDATE CURRENT_tIMESTAMP";
+        $query .= ", created_at DATETIME DEFAULT CURRENT_TIMESTAMP, last_updated DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP";
         foreach ($references as $reference) {
             $query.= ", FOREIGN KEY (`$reference[0]`) REFERENCES `$reference[1]`(ID) ";
         }
