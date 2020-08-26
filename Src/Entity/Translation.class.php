@@ -2,6 +2,7 @@
 
 namespace Src\Entity;
 
+use CoreDB\Kernel\Database\DataType\DataTypeAbstract;
 use CoreDB\Kernel\TableMapper;
 use Exception;
 
@@ -94,13 +95,18 @@ class Translation extends TableMapper
 
     public static function getAvailableLanguageList()
     {
-        if (!isset(self::$available_languages)) {
+        if (true || !isset(self::$available_languages)) {
             try {
-                $translation_table_description = \CoreDB::database()::getTableDescription(Translation::TABLE);
-                unset($translation_table_description[0]); // ID column removed
+                $table_description = \CoreDB::database()::getTableDescription(Translation::TABLE);
                 self::$available_languages = [];
-                foreach ($translation_table_description as $column_description) {
-                    self::$available_languages[] = $column_description["Field"];
+                /**
+                 * @var DataTypeAbstract $column_description
+                 */
+                foreach ($table_description as $column_description) {
+                    if(in_array($column_description->column_name, ["ID", "key", "created_at", "last_updated"])){
+                        continue;
+                    }
+                    self::$available_languages[] = $column_description->column_name;
                 }
             } catch (Exception $ex) {
                 self::$available_languages[] = "en";

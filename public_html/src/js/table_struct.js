@@ -20,18 +20,18 @@ $(document).ready(function(){
     $(document).on("change","select.type-control", function (){
         var value = $(this).val();
         
-        if(value === "VARCHAR"){
+        if(value === "short_text"){
             $(this).parents(".column_definition").find(".field_length").parent().removeClass("d-none");
         }else{
             $(this).parents(".column_definition").find(".field_length").parent().addClass("d-none");
         }
-        if(value === "MUL"){
+        if(value === "table_reference"){
             $(this).parents(".column_definition").find(".reference_table").parent().removeClass("d-none");
         }else {
             $(this).parents(".column_definition").find(".reference_table").parent().addClass("d-none");
         }
         
-        if(value === "ENUM"){
+        if(value === "enumarated_list"){
             $(this).parents(".column_definition").find(".list_values").parent().removeClass("d-none");
         }else {
             $(this).parents(".column_definition").find(".list_values").parent().addClass("d-none");

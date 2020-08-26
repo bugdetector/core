@@ -21,7 +21,7 @@ class TableInsertForm extends Form
         $this->setEnctype("multipart/form-data");
         \CoreDB::controller()->addJsFiles("src/js/insert.js");
 
-        foreach($this->object->getFormFields($this->object->table) as $field){
+        foreach($this->object->getFormFields($this->object->table) as $column_name => $field){
             $this->addField($field);
         }
         $this->addField(

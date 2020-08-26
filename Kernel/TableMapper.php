@@ -2,11 +2,8 @@
 
 namespace CoreDB\Kernel;
 
-use CoreDB\Kernel\Database\DeleteQueryPreparer;
-use CoreDB\Kernel\Database\InsertQueryPreparer;
-use CoreDB\Kernel\Database\SelectQueryPreparer;
-use CoreDB\Kernel\Database\TruncateQueryPreparer;
-use CoreDB\Kernel\Database\UpdateQueryPreparer;
+use CoreDB;
+use CoreDB\Kernel\Database\DataType\DataTypeAbstract;
 use Exception;
 use PDO;
 use Src\Entity\Translation;
@@ -30,7 +27,7 @@ abstract class TableMapper {
 
     public static function find(array $filter, string $table) : ?TableMapper
     {
-        $query = new SelectQueryPreparer($table);
+        $query = CoreDB::database()->select($table);
         $params = [];
         foreach ($filter as $key => $value) {
             $query->condition("`$key` = :$key");
@@ -44,7 +41,7 @@ abstract class TableMapper {
 
     public static function findAll(array $filter, string $table) : array
     {
-        $query = new SelectQueryPreparer($table);
+        $query = CoreDB::database()->select($table);
         $params = [];
         foreach ($filter as $key => $value) {
             $query->condition("`$key` = :$key");
@@ -97,14 +94,14 @@ abstract class TableMapper {
 
     protected function insert()
     {
-        $statement = (new InsertQueryPreparer($this->table, $this->toArray()) )->execute();
+        $statement = CoreDB::database()->insert($this->table, $this->toArray())->execute();
         $this->ID = \CoreDB::database()->lastInsertId();
         return $statement;
     }
 
     protected function update()
     {
-        return ( new UpdateQueryPreparer($this->table, $this->toArray()) )->condition("ID = :id", ["id" => $this->ID])->execute();
+        return CoreDB::database()->update($this->table, $this->toArray())->condition("ID = :id", ["id" => $this->ID])->execute();
     }
 
     public function save()
@@ -122,38 +119,28 @@ abstract class TableMapper {
             return false;
         }
         $table_description = \CoreDB::database()::getTableDescription($this->table);
+        /**
+         * @var DataTypeAbstract $field
+         */
         foreach ($table_description as $field) {
-            if ($field["Type"] == "tinytext") {
-                $field_name = $field["Field"];
-                \CoreDB::removeUploadedFile($this->table, $field_name, $this->$field_name);
+            if ($field instanceof \CoreDB\Kernel\Database\DataType\File) {
+                \CoreDB::removeUploadedFile($this->table, $field->column_name, $this->{$field->column_name});
             }
         }
         return boolval(
-            (new DeleteQueryPreparer($this->table))->condition(" ID = :id ", ["id" => $this->ID])->execute()
+            CoreDB::database()->delete($this->table)->condition(" ID = :id ", ["id" => $this->ID])->execute()
         );
     }
 
     abstract public static function clear();
     protected static function clearTable($table){
-        (new TruncateQueryPreparer($table))->execute();
+        CoreDB::database()->truncate($table)->execute();
     }
 
 
     public function getFileUrlForField($field_name)
     {
         return BASE_URL."/files/uploaded/$this->table/$field_name/".$this->$field_name;
-    }
-
-    protected function getFieldInput($description)
-    {
-        if(strpos($description["Type"], "enum") !== FALSE){
-            $description["Type"] = "ENUM";
-        }
-        $input = \CoreDB::database()->get_supported_data_types()[$this->get_input_type($description["Type"], $description["Key"])]["input_field_callback"]($this, $description, $this->table);
-        if (in_array($description["Field"], ["ID" ,"created_at", "last_updated"])) {
-            $input->addAttribute("disabled", true);
-        }
-        return $input;
     }
 
     protected function get_input_type(string $dataType, $key = "")
@@ -175,15 +162,21 @@ abstract class TableMapper {
     {
         $fields = [];
         $descriptions = \CoreDB::database()::getTableDescription($this->table);
-        foreach ($descriptions as $description) {
+        /**
+         * @var DataTypeAbstract $description
+         */
+        foreach ($descriptions as $column_name => $description) {
+            if(in_array($column_name, ["ID", "created_at", "last_updated"])){
+                continue;
+            }
             /**
              * @var FormWidget $field
              */
-            $field = $this->getFieldInput($description);
-            $field->setName($name."[{$description["Field"]}]")
-            ->setLabel(Translation::getTranslation($description["Field"]))
-            ->setValue(isset($this->{$description["Field"]}) ? strval($this->{$description["Field"]}) : "");
-            $fields[] = $field;
+            $field = $description->getWidget();
+            $field->setName($name."[{$description->column_name}]")
+            ->setLabel(Translation::getTranslation($description->column_name))
+            ->setValue(isset($this->{$description->column_name}) ? strval($this->{$description->column_name}) : "");
+            $fields[$description->column_name] = $field;
         }
         return $fields;
     }

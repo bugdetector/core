@@ -3,6 +3,7 @@
 namespace Src\Views;
 
 use CoreDB;
+use CoreDB\Kernel\Database\DataType\DataTypeAbstract;
 use Src\Entity\Translation;
 use Src\Form\Widget\InputWidget;
 use Src\Form\Widget\OptionWidget;
@@ -11,30 +12,22 @@ use Src\Form\Widget\TextareaWidget;
 
 class ColumnDefinition extends CollapsableCard
 {
-    private $definition;
-    private $name;
-    private $table_name;
+    private ?DataTypeAbstract $dataType;
+    private string $name;
 
-    public function __construct($name, string $table_name = null, $definition = null)
+    public function __construct(string $name, DataTypeAbstract $dataType = null)
     {
         $this->name = $name;
-        $this->table_name = $table_name;
-        $this->definition = $definition;
+        $this->dataType = $dataType;
         
         $this->setId($this->name);
         $this->addClass("column_definition");
         $this->opened = true;
     }
 
-    public static function create($name, string $table_name = null, $definition = null): ColumnDefinition
+    public static function create($name, $dataType = null): ColumnDefinition
     {
-        return new ColumnDefinition($name, $table_name, $definition);
-    }
-
-    public function setTable(string $table)
-    {
-        $this->table = $table;
-        return $this;
+        return new ColumnDefinition($name, $dataType);
     }
 
     public function render()
@@ -48,13 +41,14 @@ class ColumnDefinition extends CollapsableCard
             ->setDescription(Translation::getTranslation("available_characters", ["a-z, _, 1-9"]));
 
         $data_type_options = [];
-        foreach (\CoreDB::database()::get_supported_data_types() as $key => $value) {
-            $option = new OptionWidget($key, $value["value"]);
-            if($value["selected_callback"]($this->definition)["checked"]){
-                $option->setSelected(true);
-            }
-            $data_type_options[] = $option;
+        $dataTypes = \CoreDB::database()::dataTypes();
+        foreach ($dataTypes as $key => $dataType) {
+            /**
+             * @var DataTypeAbstract $dataType
+             */
+            $data_type_options[$key] =  ($dataType)::getText();
         }
+
         $data_type_select = new SelectWidget("{$this->name}[field_type]");
         $data_type_select->setLabel(Translation::getTranslation("data_type"))
             ->setNullElement(null)
@@ -84,13 +78,7 @@ class ColumnDefinition extends CollapsableCard
         ->setLabel(Translation::getTranslation("unique"))
         ->removeClass("form-control");
 
-        if($this->table_name){
-            $existing_comment = CoreDB::database()->getColumnComment($this->table_name, $this->definition["Field"]);
-        }else{
-            $existing_comment = "";
-        }
         $column_comment = TextareaWidget::create("{$this->name}[comment]")
-        ->setValue($existing_comment)
         ->addAttribute("placeholder", Translation::getTranslation("column_comment"))
         ->addClass("my-2");
 
@@ -101,33 +89,33 @@ class ColumnDefinition extends CollapsableCard
         )
         ->addField(TextElement::create(Translation::getTranslation("drop_column")));
 
-        if ($this->definition) {
-            $this->title = $this->definition["Field"];
-            $field_name_input->setValue($this->definition["Field"])
-                ->addAttribute("disabled", "true");
-            $data_type_select->addAttribute("disabled", "true");
-            $is_unique_checkbox->addAttribute("disabled", "true");
+        if ($this->dataType) {
+            $this->title = $this->dataType->column_name;
+            $field_name_input->setValue($this->dataType->column_name);
+                //->addAttribute("disabled", "true");
+            $data_type_select//->addAttribute("disabled", "true")
+                ->setValue( array_search( get_class($this->dataType), $dataTypes));
+            /*$is_unique_checkbox->addAttribute("disabled", "true");
             $reference_table_select->addAttribute("disabled", "true");
             $list_values_input->addAttribute("disabled", "true");
-            $field_length->addAttribute("disabled", "true");
-            $column_comment->addAttribute("disabled", "true");
+            $field_length->addAttribute("disabled", "true");*/
+            $column_comment//->addAttribute("disabled", "true")
+                ->setValue($this->dataType->comment);
             $remove_button->removeClass("removefield")
-            ->addClass("dropfield");
+                ->addClass("dropfield");
 
-            if(strpos($this->definition["Key"], "UNI") !== false){
+            if($this->dataType->isUnique){
                 $is_unique_checkbox->addAttribute("checked", "true");
             }
-            if(strpos($this->definition["Key"], "MUL") !== false){
-                $fk_description = \CoreDB::database()::getForeignKeyDescription( $this->table_name, $this->definition["Field"] );
-                $reference_table_select->setValue($fk_description["REFERENCED_TABLE_NAME"]);
+            if($this->dataType instanceof \CoreDB\Kernel\Database\DataType\TableReference){
+                $reference_table_select->setValue($this->dataType->reference_table);
             }
-            if(strpos($this->definition["Type"], "varchar") !== false){
-                $field_length->setValue(filter_var($this->definition["Type"], FILTER_SANITIZE_NUMBER_INT));
+            if( $this->dataType instanceof \CoreDB\Kernel\Database\DataType\ShortText ){
+                $field_length->setValue(strval($this->dataType->length));
             }
 
-            if(strpos($this->definition["Type"], "enum") !== false){
-                $options = CoreDB::database()->getEnumValues($this->table_name, $this->definition["Field"]);
-                $list_values_input->setValue( implode(",", $options) );
+            if( $this->dataType instanceof \CoreDB\Kernel\Database\DataType\EnumaratedList ){
+                $list_values_input->setValue( implode(",", array_keys($this->dataType->values) ) );
             }
             
         }else{

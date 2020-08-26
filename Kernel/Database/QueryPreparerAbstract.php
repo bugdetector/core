@@ -5,8 +5,9 @@ namespace CoreDB\Kernel\Database;
 
 use PDOStatement;
 
-abstract class QueryPreparer
+abstract class QueryPreparerAbstract
 {
+    protected string $table;
     protected $params = [];
     
     abstract public function getQuery() : string;

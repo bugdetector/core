@@ -2,13 +2,15 @@
 
 namespace Src\Form;
 
-use CoreDB\Kernel\Database\CoreDB;
-use CoreDB\Kernel\Database\SelectQueryPreparer;
-
+use CoreDB;
+use CoreDB\Kernel\Database\DataType\DataTypeAbstract;
+use CoreDB\Kernel\Database\DataType\Date;
+use CoreDB\Kernel\Database\DataType\DateTime;
+use CoreDB\Kernel\Database\DataType\Time;
+use CoreDB\Kernel\Database\SelectQueryPreparerAbstract;
 use PDO;
 use Src\Entity\Translation;
 use Src\Form\Widget\InputWidget;
-use Src\Form\Widget\SelectWidget;
 use Src\Views\CollapsableCard;
 use Src\Views\Pagination;
 use Src\Views\Table;
@@ -22,7 +24,7 @@ class TableSearchForm extends Form
     public Table $table;
     public CollapsableCard $search_input_group;
     public Pagination $pagination;
-    private SelectQueryPreparer $query;
+    private SelectQueryPreparerAbstract $query;
     public function __construct()
     {
         parent::__construct();
@@ -39,83 +41,26 @@ class TableSearchForm extends Form
         $search_form = new TableSearchForm();
         $search_form->table_name = $table_name;
         $search_form->table_headers[] = "";
-        $search_form->query = new SelectQueryPreparer($table_name);
+        $search_form->query = CoreDB::database()->select($table_name);
         $search_form->query->select($table_name, ["ID AS edit_actions", "*"]);
         
         $search_input_group = new ViewGroup("div", "row");
-        foreach (\CoreDB::database()::getTableDescription($table_name) as $column) {
-            $column_name = $column["Field"];
-            $search_form->table_headers[$column_name] = Translation::getTranslation($column_name);
 
-            if ($column["Type"] == "tinytext") {
-                $file_fields[] = $column["Field"];
-            }
-            $search_input = null;
+        /**
+         * @var DataTypeAbstract $dataType
+         */
+        foreach (\CoreDB::database()::getTableDescription($table_name) as $dataType) {
+            $search_form->table_headers[$dataType->column_name] = Translation::getTranslation($dataType->column_name);
 
             $params = array_filter($_GET);
-            if (in_array($column["Type"], ["int", "double"])) {
-                if (\CoreDB::database()::isUniqueForeignKey($table_name, $column_name)) {
-                    /**
-                     * Creating referenced table select input for foreign keys
-                     */
-                    $fk_description = \CoreDB::database()::getForeignKeyDescription($table_name, $column_name);
-                    $fk_table = $fk_description["REFERENCED_TABLE_NAME"];
-                    $options = [];
-                    $first_column_name = \CoreDB::database()::getTableDescription($fk_table)[1]["Field"];
-                    $fk_query = new SelectQueryPreparer($fk_table);
-                    if (isset($params[$column_name])) {
-                        $fk_query->condition("ID = :id", [":id" => $params[$column_name]]);
-                    } else {
-                        $fk_query->limit(AUTOCOMPLETE_SELECT_BOX_LIMIT);
-                    }
-                    foreach ($fk_query->execute()->fetchAll(PDO::FETCH_OBJ) as $record) {
-                        $options[$record->ID] = "{$record->ID} {$record->$first_column_name}";
-                    }
-                    $search_input = SelectWidget::create($column_name)
-                        ->setLabel(Translation::getTranslation($column_name))
-                        ->setOptions($options)
-                        ->addClass("autocomplete")
-                        ->addAttribute("data-live-search", "true")
-                        ->addAttribute("data-reference-table", $fk_table)
-                        ->addAttribute("data-reference-column", $first_column_name);
-                } else {
-                    /**
-                     * Number input for integer field
-                     */
-                    $search_input = InputWidget::create($column_name)
-                        ->setLabel(Translation::getTranslation($column_name))
-                        ->setType("number");
-                }
-            } elseif (in_array($column["Type"], ["datetime", "date"])) {
-                /**
-                 * Adding daterange input for datetime and date fields
-                 */
-                $search_input = InputWidget::create($column_name)
-                    ->setLabel(Translation::getTranslation($column_name))
-                    ->addClass("daterangeinput");
-            } elseif (in_array($column["Type"], ["time"])) {
-                /**
-                 * Adding time input for time field
-                 */
-                $search_input = InputWidget::create($column_name)
-                    ->setLabel(Translation::getTranslation($column_name))
-                    ->addClass("timeinput");
-            } else {
-                /**
-                 * Text input for uncategorized or text fields
-                 */
-                $search_input = InputWidget::create($column_name)
-                    ->setLabel(Translation::getTranslation($column_name));
-            }
-            if (isset($params[$column_name])) {
-                $search_input->setValue(filter_var($params[$column_name], FILTER_SANITIZE_STRING));
-            }
-            $search_input->addAttribute("autocomplete", "off");
-            if (isset($params[$column_name])) {
-                $search_input->setValue($params[$column_name]);
-            }
             $search_input_group->addField(
-                ViewGroup::create("div", "col-sm-3")->addField($search_input)
+                ViewGroup::create("div", "col-sm-3")->addField(
+                    $dataType->getSearchWidget()
+                    ->setLabel(Translation::getTranslation($dataType->column_name))
+                    ->setValue( isset($params[$dataType->column_name]) ? strval($params[$dataType->column_name]) : "")
+                    ->setName($dataType->column_name)
+                    ->addAttribute("autocomplete", "off")
+                )
             );
         }
 
@@ -167,10 +112,13 @@ class TableSearchForm extends Form
             $this->query->orderBy("`$orderBy` $orderDirection");
         }
 
-        foreach (\CoreDB::database()::getTableDescription($this->table_name) as $column) {
-            $column_name = $column["Field"];
+        /**
+         * @var DataTypeAbstract $dataType
+         */
+        foreach (\CoreDB::database()::getTableDescription($this->table_name) as $dataType) {
+            $column_name = $dataType->column_name;
             if (isset($params[$column_name]) && $params[$column_name]) {
-                if (in_array($column["Type"], ["datetime", "date"])) {
+                if (in_array( get_class($dataType) , [DateTime::class, Date::class, Time::class])) {
                     $dates = explode("&", $params[$column_name]);
                     $this->query->condition(
                         "`{$column_name}` >= :{$column_name}_start AND `{$column_name}` <= :{$column_name}_end",

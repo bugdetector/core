@@ -6,7 +6,7 @@
  */
 namespace CoreDB\Kernel;
 
-use CoreDB\Kernel\Database\QueryPreparer;
+use CoreDB\Kernel\Database\QueryPreparerAbstract;
 use Src\Entity\Cache;
 use Src\Entity\Translation;
 use Src\Entity\Variable;
@@ -43,7 +43,7 @@ class Migration
         });
     }
     
-    public static function addMigration(QueryPreparer $query)
+    public static function addMigration(QueryPreparerAbstract $query)
     {
         $migration_file = self::MIGRATIONS_DIR."/".(doubleval(VERSION)+0.01).".php";
         if (!is_file($migration_file)) {

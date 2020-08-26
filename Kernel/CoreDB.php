@@ -1,7 +1,7 @@
 <?php
 
 use CoreDB\Kernel\BaseController;
-use CoreDB\Kernel\Database\MySQLDriver;
+use CoreDB\Kernel\Database\MySQL\MySQLDriver;
 use CoreDB\Kernel\DatabaseDriver;
 use CoreDB\Kernel\Messenger;
 use CoreDB\Kernel\Router;

@@ -2,9 +2,8 @@
 
 namespace Src\Controller;
 
+use CoreDB;
 use Src\Theme\BaseTheme\BaseTheme;
-use CoreDB\Kernel\Database\CoreDB;
-use CoreDB\Kernel\Database\SelectQueryPreparer;
 use Src\Entity\Translation;
 use Src\Entity\User;
 use Src\Views\BasicCard;
@@ -25,7 +24,7 @@ class AdminController extends BaseTheme {
     
     public function preprocessPage() {
         $this->setTitle(SITE_NAME." | ".Translation::getTranslation("dashboard"));
-        $this->number_of_members = (new SelectQueryPreparer(User::TABLE))
+        $this->number_of_members = CoreDB::database()->select(User::TABLE)
         ->select_with_function(["COUNT(*) as count"])
         ->condition("USERNAME != :username", [":username" => "guest"])
         ->execute()->fetchObject()->count;

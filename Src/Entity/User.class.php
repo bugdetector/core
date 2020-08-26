@@ -2,13 +2,11 @@
 
 namespace Src\Entity;
 
-use CoreDB\Kernel\Database\DeleteQueryPreparer;
-use CoreDB\Kernel\Database\SelectQueryPreparer;
+use CoreDB;
 use CoreDB\Kernel\TableMapper;
 use Exception;
 use Src\JWT;
 use PDO;
-use Src\Form\Widget\SelectWidget;
 
 define("PASSWORD_FALSE_COUNT", "PASSWORD_FALSE_COUNT");
 define("LOGIN_UNTRUSTED_ACTIONS", "LOGIN_UNTRUSTED_ACTIONS");
@@ -28,7 +26,7 @@ class User extends TableMapper
     public $phone;
     public $password;
     public $created_at;
-    public $access;
+    public $last_access;
     public $status;
 
     private $ROLES;
@@ -54,7 +52,8 @@ class User extends TableMapper
         return parent::findAll($filter, self::TABLE);
     }
 
-    public static function clear(){
+    public static function clear()
+    {
         parent::clearTable(self::TABLE);
     }
 
@@ -93,9 +92,9 @@ class User extends TableMapper
 
     public function delete(): bool
     {
-        return (new DeleteQueryPreparer("users_roles"))->condition("user_id = :user_id", ["user_id" => $this->ID])->execute() &&
-            (new DeleteQueryPreparer(Logins::TABLE))->condition("username = :username", ["username" => $this->username])->execute() &&
-            (new DeleteQueryPreparer(ResetPassword::TABLE))->condition("USER = :user_id", ["user_id" => $this->ID])->execute()
+        return CoreDB::database()->delete("users_roles")->condition("user_id = :user_id", ["user_id" => $this->ID])->execute() &&
+            CoreDB::database()->delete(Logins::TABLE)->condition("username = :username", ["username" => $this->username])->execute() &&
+            CoreDB::database()->delete(ResetPassword::TABLE)->condition("USER = :user_id", ["user_id" => $this->ID])->execute()
             && parent::delete();
     }
 
@@ -145,7 +144,7 @@ class User extends TableMapper
     public function getUserRoles(bool $force = false)
     {
         if (!$this->ROLES || $force) {
-            $query = (new SelectQueryPreparer("users_roles", "", true))
+            $query = CoreDB::database()->select("users_roles", "", true)
                 ->join("roles")
                 ->select("roles", ["ROLE"])
                 ->condition("user_id = :user_id AND role_id = roles.ID", [":user_id" => $this->ID])
@@ -168,18 +167,21 @@ class User extends TableMapper
         $this->ROLES = null;
         $role = new DBObject("users_roles");
         $role->map([
-            "user_id" => $this->ID, 
+            "user_id" => $this->ID,
             "role_id" => Role::get(["role" => $role])->ID
-            ]);
+        ]);
         return $role->save();
     }
     public function delete_role(string $role)
     {
         $this->ROLES = null;
         return DBObject::get(
-            ["user_id" => $this->ID, 
-            "role_id" => Role::get(["role" => $role])->ID
-            ] ,"users_roles")->delete();
+            [
+                "user_id" => $this->ID,
+                "role_id" => Role::get(["role" => $role])->ID
+            ],
+            "users_roles"
+        )->delete();
     }
 
 
@@ -258,31 +260,6 @@ class User extends TableMapper
     public function getFullName(): string
     {
         return "{$this->name} {$this->surname}";
-    }
-
-
-    protected function getFieldInput($description)
-    {
-        if(strpos($description["Type"], "enum") !== FALSE){
-            $description["Type"] = "ENUM";
-        }
-        $input = \CoreDB::database()::get_supported_data_types()[$this->get_input_type($description["Type"], $description["Key"])]["input_field_callback"]($this, $description, $this->table);
-        if ($description["Field"] == "ID") {
-            $input->addAttribute("disabled", "true");
-        } elseif ($description["Field"] == "password") {
-            $input->setType("password")
-            ->addAttribute("autocomplete", "new-password");
-        } elseif ($description["Field"] == "email") {
-            $input->setType("email");
-        } elseif ($description["Field"] == "phone") {
-            $input->setType("tel");
-        } else if($description["Field"] == "status") {
-            $input = SelectWidget::create("{$this->table}[status]")
-            ->setOptions(User::getStatuses())
-            ->setValue(strval($this->status));
-        }
-        $input->setLabel(Translation::getTranslation($description["Field"]));
-        return $input;
     }
 
     public static function getStatuses(): array

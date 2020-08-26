@@ -2,13 +2,14 @@
 
 namespace Src\Form;
 
-use CoreDB\Kernel\Database\AlterQueryPreparer;
-use CoreDB\Kernel\Database\CoreDB;
-use CoreDB\Kernel\Database\CreateQueryPreparer;
+use CoreDB;
+use CoreDB\Kernel\Database\DataType\DataTypeAbstract;
+use CoreDB\Kernel\Database\DataType\EnumaratedList;
+use CoreDB\Kernel\Database\DataType\ShortText;
+use CoreDB\Kernel\Database\DataType\TableReference;
+use CoreDB\Kernel\Database\TableDefinition;
 use CoreDB\Kernel\Messenger;
-
 use Exception;
-use Src\Entity\Cache;
 use Src\Entity\Translation;
 use Src\Form\Widget\InputWidget;
 use Src\Views\ColumnDefinition;
@@ -17,6 +18,7 @@ class TableStructForm extends Form
 {
     public string $method = "POST";
 
+    public TableDefinition $table_definition;
     public string $table_name;
     public string $table_comment;
     public array $columns = [];
@@ -24,9 +26,35 @@ class TableStructForm extends Form
     public function __construct(string $table_name, string $table_comment)
     {
         parent::__construct();
-        $this->table_name = $table_name;
-        $this->table_comment = $table_comment;
         \CoreDB::controller()->addJsFiles("src/js/table_struct.js");
+        if(!empty($this->request)){
+            $this->table_name =  preg_replace("/[^a-z1-9_]+/", "", $this->request["table_name"]);
+            $this->table_comment = htmlspecialchars($this->request["table_comment"]);
+
+            $this->table_definition = TableDefinition::getDefinition($this->table_name);
+            $this->table_definition->setComment($this->table_comment);
+            $fields = isset($this->request["fields"]) ? $this->request["fields"] : [];
+            $dataTypes = CoreDB::database()->dataTypes();
+            foreach ($fields as $field) {
+                /**
+                 * @var DataTypeAbstract
+                 */
+                $dataType = new $dataTypes[$field["field_type"]]($field["field_name"]);
+                $dataType->comment = $field["comment"];
+                $dataType->isUnique = boolval($field["is_unique"]);
+                if($dataType instanceof ShortText){
+                    $dataType->length = $field["field_length"];
+                }else if($dataType instanceof TableReference){
+                    $dataType->reference_table = $field["reference_table"];
+                }else if($dataType instanceof EnumaratedList){
+                    $dataType->values = explode(",", $field["list_values"]);
+                }
+                $this->table_definition->addField($dataType);
+            }
+        }else{
+            $this->table_definition = TableDefinition::getDefinition($table_name);
+            $this->table_definition->setComment($table_comment);
+        }
     }
 
     public function getFormId(): string
@@ -63,59 +91,34 @@ class TableStructForm extends Form
     public function submit()
     {
         if (isset($this->request["save"])) {
-            if ($this->table_name) {
-                $fields = isset($this->request["fields"]) ? $this->request["fields"] : [];
-                $db = \CoreDB::database();
-                try {
-                    $db->beginTransaction();
-                    
-                    $db->query("ALTER TABLE `{$this->table_name}` COMMENT = '{$this->request["table_comment"]}';");
-                    foreach ($fields as $field) {
-                        (new AlterQueryPreparer($this->table_name))->addField($field)->execute();
-                    }
-                    Cache::clear();
-                    $db->commit();
-                    \CoreDB::messenger()->createMessage(Translation::getTranslation("change_success"), Messenger::SUCCESS);
-                } catch (Exception $ex) {
-                    \CoreDB::messenger()->createMessage($ex->getMessage());
-                }
-                \CoreDB::goTo(BASE_URL . "/admin/table/struct/{$this->table_name}");
-            } else {
-                $table_name =  preg_replace("/[^a-z1-9_]+/", "", $this->request["table_name"]);
-                $table_comment = htmlspecialchars($this->request["table_comment"]);
-                if (in_array($table_name, \CoreDB::database()::getTableList())) {
-                    \CoreDB::messenger(Translation::getTranslation("table_exits"));
-                } else {
-                    try {
-                        $fields = $this->request["fields"];
-                        (new CreateQueryPreparer($table_name))->setFields($fields)->setComment($table_comment)->execute();
-                        Cache::clear();
-                    } catch (Exception $ex) {
-                        \CoreDB::messenger()->createMessage($ex->getMessage());
-                    }
-                    \CoreDB::messenger()->createMessage(Translation::getTranslation("table_create_success"), Messenger::SUCCESS);
-                    \CoreDB::goTo(BASE_URL . "/admin/table/struct/$table_name");
-                }
+            try{
+                $success_message = $this->table_definition->table_exist ? "change_success" : "table_create_success";
+                $this->table_definition->saveDefinition();
+                CoreDB::messenger()->createMessage(Translation::getTranslation($success_message), Messenger::SUCCESS);
+                CoreDB::goTo(BASE_URL."/admin/table/struct/{$this->table_name}");
+            }catch(Exception $ex){
+                $this->setError("table_name", $ex->getMessage());
             }
         }
     }
 
     public function processForm()
     {
+        parent::processForm();
         $this->addField(
             InputWidget::create("table_name")
-                ->setValue($this->table_name)
+                ->setValue($this->table_definition->table_name)
                 ->setLabel(Translation::getTranslation("table_name"))
                 ->addAttribute("autocomplete", "off")
                 ->addAttribute("required", "true")
                 ->setDescription(Translation::getTranslation("available_characters", ["a-z, _, 1-9"]))
         );
-        if($this->table_name){
-            $this->fields["table_name"]->addAttribute("disabled", "true");
+        if($this->table_definition->table_name){
+            $this->fields["table_name"]->addAttribute("readonly", "true");
         }
         $this->addField(
             InputWidget::create("table_comment")
-                ->setValue($this->table_comment)
+                ->setValue($this->table_definition->table_comment)
                 ->setLabel(Translation::getTranslation("table_comment"))
                 ->addAttribute("autocomplete", "off")
                 ->addAttribute("required", "true")
@@ -148,12 +151,12 @@ class TableStructForm extends Form
                 ->addAttribute("hidden", "true")
         );
 
-        parent::processForm();
-
-        if ($this->table_name) {
-            foreach (\CoreDB::database()::getTableDescription($this->table_name) as $index => $description) {
-                $this->columns[] = new ColumnDefinition("fields[{$index}]", $this->table_name ,$description);
+        foreach ($this->table_definition->fields as $column_name => $description) {
+            $column_definition = new ColumnDefinition("fields[{$column_name}]", $description);
+            if(in_array($column_name, ["ID", "created_at", "last_updated"])){
+                $column_definition->opened = false;
             }
+            $this->columns[] = $column_definition;
         }
     }
 }

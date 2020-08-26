@@ -2,8 +2,7 @@
 
 namespace Src\Form;
 
-use CoreDB\Kernel\Database\DeleteQueryPreparer;
-
+use CoreDB;
 use Src\Entity\Logins;
 use Src\Entity\Translation;
 use Src\Entity\User;
@@ -102,7 +101,7 @@ class LoginForm extends Form
         //login successful
         global $current_user;
         $current_user = $this->user;
-        $current_user->access = \CoreDB::get_current_date();
+        $current_user->last_access = \CoreDB::get_current_date();
         $current_user->save();
         $_SESSION[BASE_URL . "-UID"] = $this->user->ID;
         if (isset($_POST["remember-me"]) && $_POST["remember-me"]) {
@@ -122,7 +121,7 @@ class LoginForm extends Form
         unset($_SESSION[LOGIN_UNTRUSTED_ACTIONS]);
 
         //Clearing failed login actions
-        (new DeleteQueryPreparer(Logins::TABLE))
+        CoreDB::database()->delete(Logins::TABLE)
             ->condition("username = :username", [":username" => $this->user->username])
             ->execute();
         if (isset($_GET["destination"])) {

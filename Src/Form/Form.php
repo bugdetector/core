@@ -38,17 +38,16 @@ abstract class Form extends View
         )->addField(
             InputWidget::create("form_token")->setValue($this->form_token)->setType("hidden")
         );
-
-    }
-
-    
-    public function processForm()
-    {
         if ($this->method == "GET") {
             $this->request = $_GET;
         } elseif ($this->method == "POST") {
             $this->request = $_POST;
         }
+    }
+
+    
+    public function processForm()
+    {
         if (isset($this->request["form_id"]) && $this->request["form_id"] == $this->getFormId()) {
             if ($this->checkCsrfToken() && $this->validate() && empty($this->errors)) {
                 $this->submit();

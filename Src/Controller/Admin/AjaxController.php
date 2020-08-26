@@ -2,9 +2,7 @@
 
 namespace Src\Controller\Admin;
 
-use CoreDB\Kernel\Database\CoreDB;
-use CoreDB\Kernel\Database\DropQueryPreparer;
-use CoreDB\Kernel\Database\TruncateQueryPreparer;
+use CoreDB;
 use CoreDB\Kernel\Messenger;
 use CoreDB\Kernel\ServiceController;
 
@@ -69,7 +67,7 @@ class AjaxController extends ServiceController
     {
         $tablename = $_POST["tablename"];
         if (in_array($tablename, \CoreDB::database()::getTableList())) {
-            (new DropQueryPreparer($tablename))->execute();
+            CoreDB::database()->drop($tablename)->execute();
             Cache::clear();
             $this->createMessage(Translation::getTranslation("table_deleted", [$tablename]), Messenger::SUCCESS);
         }
@@ -83,8 +81,8 @@ class AjaxController extends ServiceController
         $tablename = $_POST["tablename"];
         $column = $_POST["column"];
         if (in_array($tablename, \CoreDB::database()::getTableList())) {
-            (new DropQueryPreparer($tablename))->setColumn($column)->execute();
-            (new TruncateQueryPreparer(Cache::TABLE))->execute();
+            CoreDB::database()->drop($tablename)->setColumn($column)->execute();
+            Cache::clear();
             $this->createMessage(Translation::getTranslation("field_dropped", [$column]), Messenger::SUCCESS);
         }
     }
@@ -96,7 +94,7 @@ class AjaxController extends ServiceController
     {
         $tablename = $_POST["tablename"];
         if (in_array($tablename, \CoreDB::database()::getTableList())) {
-            (new TruncateQueryPreparer($tablename))->execute();
+            DBObject::clear($tablename);
             $this->createMessage(Translation::getTranslation("table_truncated", [$tablename]), Messenger::SUCCESS);
         }
     }

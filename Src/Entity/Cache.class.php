@@ -2,7 +2,6 @@
 
 namespace Src\Entity;
 
-use CoreDB\Kernel\Database\TruncateQueryPreparer;
 use CoreDB\Kernel\TableMapper;
 
 /**

@@ -1,19 +1,15 @@
 <?php
 
-namespace CoreDB\Kernel\Database;
+namespace CoreDB\Kernel\Database\MySQL;
 
+use CoreDB\Kernel\Database\InsertQueryPreparerAbstract;
 
-
-class InsertQueryPreparer extends QueryPreparer
+class InsertQueryPreparer extends InsertQueryPreparerAbstract
 {
-    private $table;
-    private $fields;
-    public function __construct($table, array $fields)
-    {
-        $this->table = $table;
-        $this->fields = $fields;
-    }
 
+    /**
+     * @inheritdoc
+     */
     public function getQuery() : string
     {
         return "INSERT INTO `".
@@ -28,7 +24,7 @@ class InsertQueryPreparer extends QueryPreparer
         $this->params = [];
         $index = 0;
         foreach ($this->fields as $key => $field) {
-            if ($field === "NULL" || !$field) {
+            if($field === "NULL" || (!is_numeric($field) && !$field)){
                 $field = null;
             } else {
                 $field = \CoreDB::cleanXSS($field);

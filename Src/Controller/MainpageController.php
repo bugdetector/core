@@ -1,7 +1,6 @@
 <?php
 namespace Src\Controller;
 
-use Src\Entity\Watchdog;
 use Src\Theme\BaseTheme\BaseTheme;
 
 class MainpageController extends BaseTheme{
