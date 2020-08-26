@@ -26,7 +26,10 @@ abstract class View
 
     public function removeClass(string $class_name)
     {
-        unset($this->classes[array_search($class_name, $this->classes)]);
+        $class_index = array_search($class_name, $this->classes);
+        if($class_index){
+            unset($this->classes[$class_index]);
+        }
         return $this;
     }
     

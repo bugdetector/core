@@ -10,6 +10,7 @@ class CollapsableCard extends View
     public $content;
     public $id;
     public bool $opened = false;
+    public bool $sortable = false;
 
     public function __construct($title)
     {
@@ -39,8 +40,24 @@ class CollapsableCard extends View
         return $this;
     }
 
+    public function setSortable(bool $sortable)
+    {
+        $this->sortable = $sortable;
+        return $this;
+    }
+
     public function getTemplateFile(): string
     {
         return "collapsable_card.twig";
+    }
+
+    public function render()
+    {
+        if(!$this->sortable){
+            $this->addClass("sortable-disabled");
+        }else{
+            $this->addClass("sortable");
+        }
+        parent::render();
     }
 }

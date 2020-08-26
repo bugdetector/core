@@ -27,12 +27,14 @@ class TableStructForm extends Form
     {
         parent::__construct();
         \CoreDB::controller()->addJsFiles("src/js/table_struct.js");
+        \CoreDB::controller()->addJsFiles("src/vendor/js/sortable.min.js");
         if(!empty($this->request)){
             $this->table_name =  preg_replace("/[^a-z1-9_]+/", "", $this->request["table_name"]);
             $this->table_comment = htmlspecialchars($this->request["table_comment"]);
 
             $this->table_definition = TableDefinition::getDefinition($this->table_name);
             $this->table_definition->setComment($this->table_comment);
+            $this->table_definition->fields = [];
             $fields = isset($this->request["fields"]) ? $this->request["fields"] : [];
             $dataTypes = CoreDB::database()->dataTypes();
             foreach ($fields as $field) {
@@ -153,9 +155,10 @@ class TableStructForm extends Form
 
         foreach ($this->table_definition->fields as $column_name => $description) {
             $column_definition = new ColumnDefinition("fields[{$column_name}]", $description);
-            if(in_array($column_name, ["ID", "created_at", "last_updated"])){
-                $column_definition->opened = false;
+            if(!in_array($column_name, ["ID", "created_at", "last_updated"])){
+                $column_definition->setSortable(true);
             }
+            $column_definition->setOpened(false);
             $this->columns[] = $column_definition;
         }
     }

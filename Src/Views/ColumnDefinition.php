@@ -92,15 +92,8 @@ class ColumnDefinition extends CollapsableCard
         if ($this->dataType) {
             $this->title = $this->dataType->column_name;
             $field_name_input->setValue($this->dataType->column_name);
-                //->addAttribute("disabled", "true");
-            $data_type_select//->addAttribute("disabled", "true")
-                ->setValue( array_search( get_class($this->dataType), $dataTypes));
-            /*$is_unique_checkbox->addAttribute("disabled", "true");
-            $reference_table_select->addAttribute("disabled", "true");
-            $list_values_input->addAttribute("disabled", "true");
-            $field_length->addAttribute("disabled", "true");*/
-            $column_comment//->addAttribute("disabled", "true")
-                ->setValue($this->dataType->comment);
+            $data_type_select->setValue( array_search( get_class($this->dataType), $dataTypes));
+            $column_comment->setValue($this->dataType->comment);
             $remove_button->removeClass("removefield")
                 ->addClass("dropfield");
 

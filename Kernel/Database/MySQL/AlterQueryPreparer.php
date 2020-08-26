@@ -25,30 +25,34 @@ class AlterQueryPreparer extends AlterQueryPreparerAbstract
         $original_description = $this->db->getTableDescription($this->table_definition->table_name);
         /**
          * @var DataTypeAbstract $dataType
-         */
-        $previous_column = "ID";
+         */        
+        $old_order = array_keys($original_description);
+        $new_order = array_keys($this->table_definition->fields);
         foreach ($this->table_definition->fields as $column_name => $dataType) {
             if(in_array($column_name, ["ID", "created_at", "last_updated"])){
                 continue;
             }
-            else if (isset($original_description[$column_name])) {
-                if (!$dataType->equals($original_description[$column_name])) {
+            $old_index = array_search($column_name, $old_order);
+            $old_after = $old_index ? $old_order[$old_index-1] : null;
+            $new_after = $new_order[array_search($column_name, $new_order) - 1];
+            $order_changed = $old_after != $new_after;
+            if (isset($original_description[$column_name])) {
+                if (!$dataType->equals($original_description[$column_name]) || $order_changed) {
                     $differences[] = [
                         "old" => $original_description[$column_name],
                         "new" => $dataType,
-                        "after" => $previous_column
+                        "after" => $new_after
                     ];
                 }
             } else {
                 $differences[] = [
                     "old" => null,
                     "new" => $dataType,
-                    "after" => $previous_column
+                    "after" => $new_after
                 ];
             }
-            $previous_column = $column_name;
         }
-        if(empty($differences)){
+        if(empty($differences) && $old_order == $new_order){
             throw new Exception(Translation::getTranslation("no_change_on_table"));
         }
         foreach ($differences as $difference) {
@@ -75,7 +79,7 @@ class AlterQueryPreparer extends AlterQueryPreparerAbstract
                     $this->queries[] = "ALTER TABLE `{$this->table_definition->table_name}` ADD FOREIGN KEY (`{$new_column->column_name}`) REFERENCES `{$new_column->reference_table}`(ID);";
                 }
             }else{
-                $this->queries[] = "ALTER TABLE `{$this->table_definition->table_name}` CHANGE `{$new_column->column_name}` ". $this->db->getColumnDefinition($new_column) . ";";
+                $this->queries[] = "ALTER TABLE `{$this->table_definition->table_name}` CHANGE `{$new_column->column_name}` ". $this->db->getColumnDefinition($new_column) . " AFTER `{$after}`;";
                 if(!$old_column->isUnique && $new_column->isUnique){
                     $this->queries[] = "ALTER TABLE `{$this->table_definition->table_name}` ADD UNIQUE(`{$new_column->column_name}`);";
                 }

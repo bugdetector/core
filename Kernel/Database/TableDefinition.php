@@ -23,11 +23,6 @@ class TableDefinition {
             $definition->fields = CoreDB::database()->getTableDescription($table_name);
             $definition->table_exist = true;
         }else {
-            $id_field = (new Integer("ID"));
-            $id_field->isNull = false;
-            $id_field->primary_key = true;
-            $id_field->autoIncrement = true;
-            $definition->fields["ID"] = $id_field;
             $definition->table_exist = false;
         }
         return $definition;
@@ -40,6 +35,13 @@ class TableDefinition {
     public function addField(DataTypeAbstract $data_type){
         if(in_array($data_type->column_name, ["ID", "created_at", "last_updated"])){
             return;
+        }
+        if(!isset($this->fields["ID"])){
+            $id_field = (new Integer("ID"));
+            $id_field->isNull = false;
+            $id_field->primary_key = true;
+            $id_field->autoIncrement = true;
+            $this->fields["ID"] = $id_field;
         }
         $this->fields[$data_type->column_name] = $data_type;
     }
