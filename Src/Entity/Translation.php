@@ -61,7 +61,8 @@ class Translation extends TableMapper
         return parent::findAll($filter, self::TABLE);
     }
 
-    public static function clear(){
+    public static function clear()
+    {
         parent::clearTable(self::TABLE);
     }
 
@@ -73,7 +74,7 @@ class Translation extends TableMapper
         }
     }
 
-    public static function getTranslation($key, array $arguments = NULL)
+    public static function getTranslation($key, array $arguments = null)
     {
         if (!isset(self::$cache[$key])) {
             $translation = Translation::get(["key" => $key]);
@@ -86,7 +87,7 @@ class Translation extends TableMapper
     {
         $mail = Email::get(["key" => $key]);
         $translation = $mail->{Translation::getLanguage()};
-        if($translation && $arguments){
+        if ($translation && $arguments) {
             $translation = str_replace("http://%s", "%s", $translation);
             $translation = vsprintf($translation, $arguments);
         }
@@ -103,7 +104,7 @@ class Translation extends TableMapper
                  * @var DataTypeAbstract $column_description
                  */
                 foreach ($table_description as $column_description) {
-                    if(in_array($column_description->column_name, ["ID", "key", "created_at", "last_updated"])){
+                    if (in_array($column_description->column_name, ["ID", "key", "created_at", "last_updated"])) {
                         continue;
                     }
                     self::$available_languages[] = $column_description->column_name;

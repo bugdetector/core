@@ -1,22 +1,34 @@
 <?php
+
 namespace Src\Entity;
 
 use CoreDB\Kernel\TableMapper;
+use Exception;
 
-class Watchdog extends TableMapper
+/**
+ * Object relation with table variables
+ * @author murat
+ */
+
+class Variable extends TableMapper
 {
-    const TABLE = "watchdog";
+    const TABLE = "variables";
     public $ID;
-    public $event;
+    public $key;
     public $value;
-    public $ip;
     public $created_at;
     public $last_updated;
     
-
     public function __construct()
     {
         parent::__construct(self::TABLE);
+    }
+
+    public static function create($key) : Variable
+    {
+        $variable = new Variable();
+        $variable->key = $key;
+        return $variable;
     }
 
     /**
@@ -35,16 +47,17 @@ class Watchdog extends TableMapper
         return parent::findAll($filter, self::TABLE);
     }
 
-    public static function clear(){
+    public static function clear()
+    {
         parent::clearTable(self::TABLE);
     }
-    
-    public static function log(string $event, string $value)
+
+    public static function getByKey(string $key)
     {
-        $watchdog = new Watchdog(self::TABLE);
-        $watchdog->event = $event;
-        $watchdog->value = $value;
-        $watchdog->ip = User::get_user_ip();
-        $watchdog->save();
+        try {
+            return self::get(["key" => $key]);
+        } catch (Exception $ex) {
+            return null;
+        }
     }
 }

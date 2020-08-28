@@ -10,9 +10,9 @@ class DBObject extends TableMapper
     public $ID;
 
     /**
-     * @param array $filter 
+     * @param array $filter
      *  Filter on key value pairs
-     * @param string $table 
+     * @param string $table
      *  Table name
      * @return DBObject
      */
@@ -26,7 +26,8 @@ class DBObject extends TableMapper
         return parent::findAll($filter, $table);
     }
 
-    public static function clear($table = null){
+    public static function clear($table = null)
+    {
         parent::clearTable($table);
     }
 

@@ -1,8 +1,9 @@
 <?php
 
 use CoreDB\Kernel\BaseController;
+use CoreDB\Kernel\ConfigurationManager;
 use CoreDB\Kernel\Database\MySQL\MySQLDriver;
-use CoreDB\Kernel\DatabaseDriver;
+use CoreDB\Kernel\Database\DatabaseDriver;
 use CoreDB\Kernel\Messenger;
 use CoreDB\Kernel\Router;
 
@@ -72,6 +73,21 @@ class CoreDB
         return $_SERVER["REDIRECT_URL"];
     }
 
+    public static function cleanDirectory(string $path, bool $includeDirs = false)
+    {
+        foreach (new DirectoryIterator($path) as $fileInfo) {
+            if (!$fileInfo->isDot()) {
+                if ($fileInfo->isDir()) {
+                    self::cleanDirectory($fileInfo->getPathname(), $includeDirs);
+                    if ($includeDirs) {
+                        rmdir($fileInfo->getPathname());
+                    }
+                } else {
+                    unlink($fileInfo->getPathname());
+                }
+            }
+        }
+    }
     public static function storeUploadedFile($table, $field_name, $file)
     {
         if ($file["error"]) {
@@ -135,7 +151,8 @@ class CoreDB
     }
 
 
-    public static function database() : DatabaseDriver{
+    public static function database() : DatabaseDriver
+    {
         return MySQLDriver::getInstance();
     }
 
@@ -144,7 +161,8 @@ class CoreDB
      * @return Messenger
      *  Messenger Instance
      */
-    public static function messenger() : Messenger{
+    public static function messenger() : Messenger
+    {
         return Messenger::getInstance();
     }
 
@@ -153,7 +171,18 @@ class CoreDB
      * @return BaseController
      * Active Controller
      */
-    public static function controller() : BaseController{
+    public static function controller() : BaseController
+    {
         return Router::getInstance()->getController();
+    }
+
+    /**
+     * Returns configuration manager
+     * @return ConfigurationManager
+     * Configuration Manager
+     */
+    public static function config() : ConfigurationManager
+    {
+        return ConfigurationManager::getInstance();
     }
 }

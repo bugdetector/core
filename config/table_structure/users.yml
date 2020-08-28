@@ -1,0 +1,85 @@
+table_name: users
+table_comment: ''
+fields:
+  username:
+    type: short_text
+    length: '20'
+    column_name: username
+    primary_key: false
+    autoIncrement: false
+    isNull: false
+    isUnique: true
+    default: null
+    comment: ''
+  name:
+    type: short_text
+    length: '50'
+    column_name: name
+    primary_key: false
+    autoIncrement: false
+    isNull: false
+    isUnique: false
+    default: null
+    comment: ''
+  surname:
+    type: short_text
+    length: '50'
+    column_name: surname
+    primary_key: false
+    autoIncrement: false
+    isNull: false
+    isUnique: false
+    default: null
+    comment: ''
+  email:
+    type: short_text
+    length: '50'
+    column_name: email
+    primary_key: false
+    autoIncrement: false
+    isNull: false
+    isUnique: true
+    default: null
+    comment: ''
+  phone:
+    type: short_text
+    length: '20'
+    column_name: phone
+    primary_key: false
+    autoIncrement: false
+    isNull: false
+    isUnique: false
+    default: null
+    comment: ''
+  password:
+    type: short_text
+    length: '255'
+    column_name: password
+    primary_key: false
+    autoIncrement: false
+    isNull: false
+    isUnique: false
+    default: null
+    comment: ''
+  last_access:
+    type: datetime
+    column_name: last_access
+    primary_key: false
+    autoIncrement: false
+    isNull: false
+    isUnique: false
+    default: null
+    comment: ''
+  status:
+    type: enumarated_list
+    values:
+      active: active
+      blocked: blocked
+      pending: pending
+    column_name: status
+    primary_key: false
+    autoIncrement: false
+    isNull: false
+    isUnique: false
+    default: null
+    comment: ''

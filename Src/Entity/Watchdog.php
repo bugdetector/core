@@ -1,21 +1,18 @@
 <?php
-
 namespace Src\Entity;
 
 use CoreDB\Kernel\TableMapper;
 
-/**
- * Object relation with table blocked_ips
- * @author murat
- */
-
-class BlockedIp extends TableMapper
+class Watchdog extends TableMapper
 {
-    const TABLE = "blocked_ips";
+    const TABLE = "watchdog";
     public $ID;
+    public $event;
+    public $value;
     public $ip;
     public $created_at;
     public $last_updated;
+    
 
     public function __construct()
     {
@@ -25,7 +22,7 @@ class BlockedIp extends TableMapper
     /**
      * @Override
      */
-    public static function get(array $filter) : ?BlockedIp
+    public static function get(array $filter) : ?Variable
     {
         return parent::find($filter, self::TABLE);
     }
@@ -38,7 +35,17 @@ class BlockedIp extends TableMapper
         return parent::findAll($filter, self::TABLE);
     }
 
-    public static function clear(){
+    public static function clear()
+    {
         parent::clearTable(self::TABLE);
+    }
+    
+    public static function log(string $event, string $value)
+    {
+        $watchdog = new Watchdog(self::TABLE);
+        $watchdog->event = $event;
+        $watchdog->value = $value;
+        $watchdog->ip = User::get_user_ip();
+        $watchdog->save();
     }
 }

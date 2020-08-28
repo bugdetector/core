@@ -19,7 +19,7 @@ class StructController extends TableController
         $this->form->processForm();
         if ($this->table_name) {
             $this->setTitle(Translation::getTranslation("edit_table") . " | {$this->table_name}");
-        } else if (!isset($this->arguments[0])) {
+        } elseif (!isset($this->arguments[0])) {
             $this->setTitle(Translation::getTranslation("new_table"));
         } else {
             \CoreDB::goTo(BASE_URL . "/admin/table/struct");

@@ -57,7 +57,7 @@ class TableSearchForm extends Form
                 ViewGroup::create("div", "col-sm-3")->addField(
                     $dataType->getSearchWidget()
                     ->setLabel(Translation::getTranslation($dataType->column_name))
-                    ->setValue( isset($params[$dataType->column_name]) ? strval($params[$dataType->column_name]) : "")
+                    ->setValue(isset($params[$dataType->column_name]) ? strval($params[$dataType->column_name]) : "")
                     ->setName($dataType->column_name)
                     ->addAttribute("autocomplete", "off")
                 )
@@ -118,7 +118,7 @@ class TableSearchForm extends Form
         foreach (\CoreDB::database()::getTableDescription($this->table_name) as $dataType) {
             $column_name = $dataType->column_name;
             if (isset($params[$column_name]) && $params[$column_name]) {
-                if (in_array( get_class($dataType) , [DateTime::class, Date::class, Time::class])) {
+                if (in_array(get_class($dataType), [DateTime::class, Date::class, Time::class])) {
                     $dates = explode("&", $params[$column_name]);
                     $this->query->condition(
                         "`{$column_name}` >= :{$column_name}_start AND `{$column_name}` <= :{$column_name}_end",

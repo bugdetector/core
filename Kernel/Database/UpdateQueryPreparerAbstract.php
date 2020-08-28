@@ -2,8 +2,6 @@
 
 namespace CoreDB\Kernel\Database;
 
-
-
 abstract class UpdateQueryPreparerAbstract extends QueryPreparerAbstract
 {
     protected array $fields = [];

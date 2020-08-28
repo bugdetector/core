@@ -8,32 +8,36 @@ use Src\Form\ForgetPasswordForm;
 use Src\Form\LoginForm;
 use Src\Theme\BaseTheme\BaseTheme;
 
-class ForgetpasswordController extends BaseTheme{
+class ForgetpasswordController extends BaseTheme
+{
 
     public $form;
     
-    public function __construct($arguments) {
+    public function __construct($arguments)
+    {
         parent::__construct($arguments);
         $this->body_classes = ["bg-gradient-info"];
         $this->setTitle(Translation::getTranslation("forgot_password_question")."?");
     }
-    public function getTemplateFile() : string{
+    public function getTemplateFile() : string
+    {
         return "page-login.twig";
     }
 
-    public function checkAccess() : bool {
+    public function checkAccess() : bool
+    {
         return !User::get_current_core_user()->isLoggedIn();
     }
-    public function preprocessPage(){
+    public function preprocessPage()
+    {
 
         $this->form = new ForgetPasswordForm();
         $this->form->processForm();
     }
 
 
-    public function echoContent() {
+    public function echoContent()
+    {
         return $this->form;
     }
-
 }
-

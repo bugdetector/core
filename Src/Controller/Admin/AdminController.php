@@ -8,12 +8,14 @@ use Src\Entity\Translation;
 use Src\Entity\User;
 use Src\Views\BasicCard;
 
-class AdminController extends BaseTheme {
+class AdminController extends BaseTheme
+{
 
     public $number_of_members;
     public $cards = [];
     
-    public function checkAccess() : bool {
+    public function checkAccess() : bool
+    {
         return User::get_current_core_user()->isAdmin();
     }
 
@@ -22,7 +24,8 @@ class AdminController extends BaseTheme {
         return "page-admin.twig";
     }
     
-    public function preprocessPage() {
+    public function preprocessPage()
+    {
         $this->setTitle(SITE_NAME." | ".Translation::getTranslation("dashboard"));
         $this->number_of_members = CoreDB::database()->select(User::TABLE)
         ->select_with_function(["COUNT(*) as count"])
@@ -58,7 +61,7 @@ class AdminController extends BaseTheme {
         ->setIconClass("fa-language");
     }
     
-    public function echoContent() {}
+    public function echoContent()
+    {
+    }
 }
-
-

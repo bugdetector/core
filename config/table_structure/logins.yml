@@ -1,0 +1,23 @@
+table_name: logins
+table_comment: ''
+fields:
+  ip_address:
+    type: short_text
+    length: '16'
+    column_name: ip_address
+    primary_key: false
+    autoIncrement: false
+    isNull: false
+    isUnique: false
+    default: null
+    comment: ''
+  username:
+    type: short_text
+    length: '255'
+    column_name: username
+    primary_key: false
+    autoIncrement: false
+    isNull: false
+    isUnique: false
+    default: null
+    comment: ''

@@ -50,7 +50,7 @@ class ResetPasswordForm extends Form
     public function validate(): bool
     {
         if (isset($this->request["reset"])) {
-            if($this->request["password"] != $this->request["password2"]){
+            if ($this->request["password"] != $this->request["password2"]) {
                 $this->setError("password", Translation::getTranslation("password_match_error"));
             }
             if (!User::validatePassword($_POST["password"])) {

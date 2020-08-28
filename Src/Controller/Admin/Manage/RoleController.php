@@ -8,7 +8,8 @@ use Src\Form\TableSearchForm;
 use Src\Views\TextElement;
 use Src\Views\ViewGroup;
 
-class RoleController extends ManageController{
+class RoleController extends ManageController
+{
     
     public function preprocessPage()
     {

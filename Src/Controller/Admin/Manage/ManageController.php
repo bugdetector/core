@@ -7,7 +7,7 @@ use Src\Entity\Translation;
 use Src\Views\NavPills;
 
 /**
- * @property FormBuilder $filter_options 
+ * @property FormBuilder $filter_options
  */
 class ManageController extends AdminController
 {
@@ -23,8 +23,7 @@ class ManageController extends AdminController
         $this->nav_items = new NavPills();
         $this->nav_items->addNavItem(Translation::getTranslation("user_management"), BASE_URL . "/admin/manage/user", get_called_class() == "Src\Controller\Admin\Manage\UserController")
         ->addNavItem(Translation::getTranslation("role_management"), BASE_URL . "/admin/manage/role", get_called_class() == "Src\Controller\Admin\Manage\RoleController")
-        ->addNavItem(Translation::getTranslation("translations"), BASE_URL . "/admin/manage/translation", get_called_class() == "Src\Controller\Admin\Manage\TranslationController")
-        ->addNavItem(Translation::getTranslation("updates"), BASE_URL . "/admin/manage/update", get_called_class() == "Src\Controller\Admin\Manage\UpdateController");
+        ->addNavItem(Translation::getTranslation("translations"), BASE_URL . "/admin/manage/translation", get_called_class() == "Src\Controller\Admin\Manage\TranslationController");
     }
 
     public function getTemplateFile(): string

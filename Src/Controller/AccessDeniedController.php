@@ -5,16 +5,19 @@ namespace Src\Controller;
 use Src\Entity\Translation;
 use Src\Theme\BaseTheme\BaseTheme;
 
-class AccessdeniedController extends BaseTheme {
+class AccessdeniedController extends BaseTheme
+{
 
     public $error_code = 403;
     public $message;
     
-    public function checkAccess() : bool{
-        return TRUE;
+    public function checkAccess() : bool
+    {
+        return true;
     }
     
-    public function preprocessPage() {
+    public function preprocessPage()
+    {
         $this->message =Translation::getTranslation("access_denied");
         $this->setTitle(Translation::getTranslation("sorry").": ".Translation::getTranslation("access_denied"));
         http_response_code($this->error_code);
@@ -24,5 +27,4 @@ class AccessdeniedController extends BaseTheme {
     {
         return "page-error.twig";
     }
-
 }

@@ -1,7 +1,8 @@
 <?php
 
-namespace CoreDB\Kernel;
+namespace CoreDB\Kernel\Database;
 
+use CoreDB\Kernel\Database\DatabaseDriverInterface;
 use CoreDB\Kernel\Database\DataType\Date;
 use CoreDB\Kernel\Database\DataType\DateTime;
 use CoreDB\Kernel\Database\DataType\TableReference;
@@ -13,7 +14,6 @@ use CoreDB\Kernel\Database\DataType\LongText;
 use CoreDB\Kernel\Database\DataType\ShortText;
 use CoreDB\Kernel\Database\DataType\Text;
 use CoreDB\Kernel\Database\DataType\Time;
-use CoreDB\Kernel\DatabaseDriverInterface;
 
 abstract class DatabaseDriver implements DatabaseDriverInterface
 {

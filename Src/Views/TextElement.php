@@ -13,7 +13,8 @@ class TextElement extends View
         $this->text = $text;
     }
 
-    public static function create($text) : TextElement{
+    public static function create($text) : TextElement
+    {
         return new TextElement($text);
     }
 

@@ -2,8 +2,6 @@
 
 namespace CoreDB\Kernel\Database;
 
-
-
 abstract class InsertQueryPreparerAbstract extends QueryPreparerAbstract
 {
     protected $fields;

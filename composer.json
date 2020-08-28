@@ -2,7 +2,8 @@
     "require": {
         "twig/twig": "^3.0",
         "squizlabs/php_codesniffer": "*",
-        "phpmailer/phpmailer": "^6.1"
+        "phpmailer/phpmailer": "^6.1",
+        "symfony/yaml": "^5.1"
     },
     "autoload": {
         "psr-4": {

@@ -12,14 +12,16 @@ class DateTime extends DataTypeAbstract
     /**
      * @inheritdoc
      */
-    public static function getText(): string{
+    public static function getText(): string
+    {
         return Translation::getTranslation("datetime");
     }
 
     /**
      * @inheritdoc
      */
-    public function getWidget(): FormWidget{
+    public function getWidget(): FormWidget
+    {
         $rand_id = random_int(0, 100);
         return InputWidget::create("")
         ->addClass("datetimeinput datetimepicker-input")
@@ -32,7 +34,8 @@ class DateTime extends DataTypeAbstract
     /**
      * @inheritdoc
      */
-    public function getSearchWidget() : FormWidget{
+    public function getSearchWidget() : FormWidget
+    {
         return InputWidget::create("")
         ->addClass("daterangeinput");
     }

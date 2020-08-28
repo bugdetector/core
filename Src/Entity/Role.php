@@ -5,16 +5,15 @@ namespace Src\Entity;
 use CoreDB\Kernel\TableMapper;
 
 /**
- * Object relation with table reset_password_queue
+ * Object relation with table roles
  * @author murat
  */
 
-class ResetPassword extends TableMapper
+class Role extends TableMapper
 {
-    const TABLE = "reset_password_queue";
+    const TABLE = "roles";
     public $ID;
-    public $user;
-    public $key;
+    public $role;
     public $created_at;
     public $last_updated;
 
@@ -26,7 +25,7 @@ class ResetPassword extends TableMapper
     /**
      * @Override
      */
-    public static function get(array $filter) : ?ResetPassword
+    public static function get(array $filter) : ?Role
     {
         return parent::find($filter, self::TABLE);
     }
@@ -39,7 +38,8 @@ class ResetPassword extends TableMapper
         return parent::findAll($filter, self::TABLE);
     }
 
-    public static function clear(){
+    public static function clear()
+    {
         parent::clearTable(self::TABLE);
     }
 }

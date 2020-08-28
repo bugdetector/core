@@ -15,7 +15,7 @@ class InsertController extends TableController
 
     const FORM_ID = "insert_form";
 
-    public $object = NULL;
+    public $object = null;
     public $insert_form;
 
     public function __construct(array $arguments)
@@ -35,7 +35,7 @@ class InsertController extends TableController
                 Router::getInstance()->route(Router::NOT_FOUND);
             }
             $this->setTitle(Translation::getTranslation("edit") . " | " . $this->table_name . " ID: {$this->object->ID}");
-        } else if (!isset($_POST["delete?"])) {
+        } elseif (!isset($_POST["delete?"])) {
             $this->object = new DBObject($this->table_name);
             $this->setTitle(Translation::getTranslation("add") . " | " . $this->table_name);
         } else {

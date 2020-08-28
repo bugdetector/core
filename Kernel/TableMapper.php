@@ -8,7 +8,8 @@ use Exception;
 use PDO;
 use Src\Entity\Translation;
 
-abstract class TableMapper {
+abstract class TableMapper
+{
     public $table;
     
     public $ID;
@@ -50,7 +51,7 @@ abstract class TableMapper {
         return $query->params($params)
         ->orderBy("ID")
         ->execute()
-        ->fetchAll(PDO::FETCH_CLASS,get_called_class(), [$table]) ? : [];
+        ->fetchAll(PDO::FETCH_CLASS, get_called_class(), [$table]) ? : [];
     }
 
     /**
@@ -133,7 +134,8 @@ abstract class TableMapper {
     }
 
     abstract public static function clear();
-    protected static function clearTable($table){
+    protected static function clearTable($table)
+    {
         CoreDB::database()->truncate($table)->execute();
     }
 
@@ -166,7 +168,7 @@ abstract class TableMapper {
          * @var DataTypeAbstract $description
          */
         foreach ($descriptions as $column_name => $description) {
-            if(in_array($column_name, ["ID", "created_at", "last_updated"])){
+            if (in_array($column_name, ["ID", "created_at", "last_updated"])) {
                 continue;
             }
             /**

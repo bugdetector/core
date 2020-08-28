@@ -21,12 +21,12 @@ class CreateQueryPreparer extends CreateQueryPreparerAbstract
         /**
          * @var DataTypeAbstract
          */
-        foreach($this->definition->fields as $field){
+        foreach ($this->definition->fields as $field) {
             $fields_query[] = $db->getColumnDefinition($field);
-            if($field->isUnique){
+            if ($field->isUnique) {
                 $unique_query[] = "UNIQUE(`{$field->column_name}`)";
             }
-            if($field instanceof TableReference){
+            if (!$this->excludeForeignKeys && ($field instanceof TableReference)) {
                 /**
                  * @var TableReference $field
                  */

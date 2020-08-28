@@ -51,14 +51,14 @@ abstract class Form extends View
         if (isset($this->request["form_id"]) && $this->request["form_id"] == $this->getFormId()) {
             if ($this->checkCsrfToken() && $this->validate() && empty($this->errors)) {
                 $this->submit();
-            }else if(!empty($this->errors)){
-                foreach($this->errors as $field_name => $value){
-                    if(isset($this->fields[$field_name])){
+            } elseif (!empty($this->errors)) {
+                foreach ($this->errors as $field_name => $value) {
+                    if (isset($this->fields[$field_name])) {
                         $this->fields[$field_name]->addClass("has-error");
                     }
                 }
-                foreach($this->fields as $field_name => $field){
-                    if( !in_array($field_name, ["form_id", "form_build_id", "form_token"]) && isset($this->request[$field_name])){
+                foreach ($this->fields as $field_name => $field) {
+                    if (!in_array($field_name, ["form_id", "form_build_id", "form_token"]) && isset($this->request[$field_name])) {
                         $this->fields[$field_name]->setValue($this->request[$field_name]);
                     }
                 }

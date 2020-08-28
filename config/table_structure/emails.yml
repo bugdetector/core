@@ -1,0 +1,31 @@
+table_name: emails
+table_comment: ''
+fields:
+  key:
+    type: short_text
+    length: '255'
+    column_name: key
+    primary_key: false
+    autoIncrement: false
+    isNull: false
+    isUnique: true
+    default: null
+    comment: ''
+  en:
+    type: long_text
+    column_name: en
+    primary_key: false
+    autoIncrement: false
+    isNull: false
+    isUnique: false
+    default: null
+    comment: ''
+  tr:
+    type: long_text
+    column_name: tr
+    primary_key: false
+    autoIncrement: false
+    isNull: false
+    isUnique: false
+    default: null
+    comment: ''

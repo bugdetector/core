@@ -12,11 +12,12 @@ class UpdateQueryPreparer extends UpdateQueryPreparerAbstract
                "` SET ".$this->getFields()." ".$this->getCondition();
     }
 
-    private function getFields() : string{
+    private function getFields() : string
+    {
         $fields = "";
         $index = 0;
         foreach ($this->fields as $key => $field) {
-            if($field === "NULL" || (!is_numeric($field) && !$field)){
+            if ($field === "NULL" || (!is_numeric($field) && !$field)) {
                 $field = null;
             } else {
                 $field = \CoreDB::cleanXSS($field);

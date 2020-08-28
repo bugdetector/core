@@ -12,21 +12,24 @@ class ShortText extends DataTypeAbstract
     /**
      * @inheritdoc
      */
-    public static function getText(): string{
+    public static function getText(): string
+    {
         return Translation::getTranslation("short_text");
     }
 
     /**
      * @inheritdoc
      */
-    public function getWidget(): FormWidget{
+    public function getWidget(): FormWidget
+    {
         return InputWidget::create("");
     }
 
     /**
      * @inheritdoc
      */
-    public function getSearchWidget() : FormWidget{
+    public function getSearchWidget() : FormWidget
+    {
         return $this->getWidget();
     }
 
@@ -35,7 +38,7 @@ class ShortText extends DataTypeAbstract
      */
     public function equals(DataTypeAbstract $dataType): bool
     {
-        return parent::equals($dataType) && 
+        return parent::equals($dataType) &&
             (isset($dataType->length) ? $dataType->length == $this->length : false);
     }
 }

@@ -25,7 +25,7 @@ class UserController extends AdminController
                 Router::getInstance()->route(Router::NOT_FOUND);
             }
             $this->setTitle(Translation::getTranslation("edit_user") . " | " . $this->user->username);
-        } else if (isset($_GET["q"]) && $_GET["q"] == "insert") {
+        } elseif (isset($_GET["q"]) && $_GET["q"] == "insert") {
             $this->user = new User();
             $this->setTitle(Translation::getTranslation("add_user"));
         } else {

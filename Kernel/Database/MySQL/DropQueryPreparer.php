@@ -26,12 +26,13 @@ class DropQueryPreparer extends DropQueryPreparerAbstract
         return $this->query;
     }
 
-    public function checkForeignKeyConstraints(){
+    public function checkForeignKeyConstraints()
+    {
         $select_contsraints = MySQLDriver::getInstance()->select("information_schema.KEY_COLUMN_USAGE", "kcu", false)
         ->select("kcu", ["CONSTRAINT_NAME"])
         ->condition("REFERENCED_TABLE_SCHEMA = :schema AND TABLE_NAME = :table", [":schema" => DB_NAME, ":table" => $this->table])
         ->condition("COLUMN_NAME = :column", [":column" => $this->column]);
-        foreach($select_contsraints->execute()->fetchAll(PDO::FETCH_COLUMN) as $constraint){
+        foreach ($select_contsraints->execute()->fetchAll(PDO::FETCH_COLUMN) as $constraint) {
             $this->query .= "ALTER TABLE `{$this->table}` DROP FOREIGN KEY `{$constraint}`;";
         }
     }

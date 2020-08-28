@@ -1,0 +1,33 @@
+table_name: watchdog
+table_comment: ''
+fields:
+  event:
+    type: short_text
+    length: '255'
+    column_name: event
+    primary_key: false
+    autoIncrement: false
+    isNull: false
+    isUnique: false
+    default: null
+    comment: ''
+  value:
+    type: short_text
+    length: '255'
+    column_name: value
+    primary_key: false
+    autoIncrement: false
+    isNull: false
+    isUnique: false
+    default: null
+    comment: ''
+  ip:
+    type: short_text
+    length: '16'
+    column_name: ip
+    primary_key: false
+    autoIncrement: false
+    isNull: false
+    isUnique: false
+    default: null
+    comment: ''

@@ -2,7 +2,8 @@
 
 namespace CoreDB\Kernel;
 
-interface MesengerInterface {
+interface MesengerInterface
+{
     const ERROR = 0;
     const WARNING = 1;
     const INFO = 2;

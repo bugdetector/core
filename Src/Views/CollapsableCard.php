@@ -53,9 +53,9 @@ class CollapsableCard extends View
 
     public function render()
     {
-        if(!$this->sortable){
+        if (!$this->sortable) {
             $this->addClass("sortable-disabled");
-        }else{
+        } else {
             $this->addClass("sortable");
         }
         parent::render();

@@ -28,7 +28,7 @@ class TableStructForm extends Form
         parent::__construct();
         \CoreDB::controller()->addJsFiles("src/js/table_struct.js");
         \CoreDB::controller()->addJsFiles("src/vendor/js/sortable.min.js");
-        if(!empty($this->request)){
+        if (!empty($this->request)) {
             $this->table_name =  preg_replace("/[^a-z1-9_]+/", "", $this->request["table_name"]);
             $this->table_comment = htmlspecialchars($this->request["table_comment"]);
 
@@ -44,16 +44,16 @@ class TableStructForm extends Form
                 $dataType = new $dataTypes[$field["field_type"]]($field["field_name"]);
                 $dataType->comment = $field["comment"];
                 $dataType->isUnique = boolval($field["is_unique"]);
-                if($dataType instanceof ShortText){
+                if ($dataType instanceof ShortText) {
                     $dataType->length = $field["field_length"];
-                }else if($dataType instanceof TableReference){
+                } elseif ($dataType instanceof TableReference) {
                     $dataType->reference_table = $field["reference_table"];
-                }else if($dataType instanceof EnumaratedList){
+                } elseif ($dataType instanceof EnumaratedList) {
                     $dataType->values = explode(",", $field["list_values"]);
                 }
                 $this->table_definition->addField($dataType);
             }
-        }else{
+        } else {
             $this->table_definition = TableDefinition::getDefinition($table_name);
             $this->table_definition->setComment($table_comment);
         }
@@ -74,15 +74,15 @@ class TableStructForm extends Form
         if (@preg_match("/[^a-z1-9_]+/", $this->request["table_name"])) {
             $this->setError("table_name", Translation::getTranslation("table_name") . ": " . Translation::getTranslation("available_characters", ["a-z, _, 1-9"]));
         }
-        if (@preg_match("/[^\p{L}\p{N} ]+/u", $this->request["table_comment"])) {
+        if (@preg_match("/[^\p{L}\p{N}\. ]+/u", $this->request["table_comment"])) {
             $this->setError("table_comment", Translation::getTranslation("table_comment") . ": " . Translation::getTranslation("available_characters", ["A-z, a-z, _, 1-9"]));
         }
-        if(!isset($this->request["fields"]) || empty($this->request["fields"])){
-            $this->setError("fields",Translation::getTranslation("at_least_one_column"));
-        }else{
-            foreach($this->request["fields"] as $field){
-                if(!$field["field_name"]){
-                    $this->setError("fields",Translation::getTranslation("column_name_required"));
+        if (!isset($this->request["fields"]) || empty($this->request["fields"])) {
+            $this->setError("fields", Translation::getTranslation("at_least_one_column"));
+        } else {
+            foreach ($this->request["fields"] as $field) {
+                if (!$field["field_name"]) {
+                    $this->setError("fields", Translation::getTranslation("column_name_required"));
                     break;
                 }
             }
@@ -93,12 +93,12 @@ class TableStructForm extends Form
     public function submit()
     {
         if (isset($this->request["save"])) {
-            try{
+            try {
                 $success_message = $this->table_definition->table_exist ? "change_success" : "table_create_success";
                 $this->table_definition->saveDefinition();
                 CoreDB::messenger()->createMessage(Translation::getTranslation($success_message), Messenger::SUCCESS);
                 CoreDB::goTo(BASE_URL."/admin/table/struct/{$this->table_name}");
-            }catch(Exception $ex){
+            } catch (Exception $ex) {
                 $this->setError("table_name", $ex->getMessage());
             }
         }
@@ -115,7 +115,7 @@ class TableStructForm extends Form
                 ->addAttribute("required", "true")
                 ->setDescription(Translation::getTranslation("available_characters", ["a-z, _, 1-9"]))
         );
-        if($this->table_definition->table_name){
+        if ($this->table_definition->table_name) {
             $this->fields["table_name"]->addAttribute("readonly", "true");
         }
         $this->addField(
@@ -155,7 +155,7 @@ class TableStructForm extends Form
 
         foreach ($this->table_definition->fields as $column_name => $description) {
             $column_definition = new ColumnDefinition("fields[{$column_name}]", $description);
-            if(!in_array($column_name, ["ID", "created_at", "last_updated"])){
+            if (!in_array($column_name, ["ID", "created_at", "last_updated"])) {
                 $column_definition->setSortable(true);
             }
             $column_definition->setOpened(false);

@@ -4,7 +4,6 @@ namespace Views;
 
 namespace Src\Views;
 
-
 use Src\Theme\View;
 
 class Pagination extends View

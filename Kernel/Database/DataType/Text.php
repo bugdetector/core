@@ -8,25 +8,29 @@ use Src\Form\Widget\InputWidget;
 use Src\Form\Widget\TextareaWidget;
 
 class Text extends DataTypeAbstract
-{    
+{
+
     /**
      * @inheritdoc
      */
-    public static function getText(): string{
+    public static function getText(): string
+    {
         return Translation::getTranslation("text");
     }
 
     /**
      * @inheritdoc
      */
-    public function getWidget(): FormWidget{
+    public function getWidget(): FormWidget
+    {
         return TextareaWidget::create("");
     }
 
     /**
      * @inheritdoc
      */
-    public function getSearchWidget() : FormWidget{
+    public function getSearchWidget() : FormWidget
+    {
         return InputWidget::create("");
     }
 }

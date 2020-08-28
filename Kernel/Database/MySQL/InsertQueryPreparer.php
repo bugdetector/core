@@ -24,7 +24,7 @@ class InsertQueryPreparer extends InsertQueryPreparerAbstract
         $this->params = [];
         $index = 0;
         foreach ($this->fields as $key => $field) {
-            if($field === "NULL" || (!is_numeric($field) && !$field)){
+            if ($field === "NULL" || (!is_numeric($field) && !$field)) {
                 $field = null;
             } else {
                 $field = \CoreDB::cleanXSS($field);

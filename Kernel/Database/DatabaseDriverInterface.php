@@ -1,6 +1,6 @@
 <?php
 
-namespace CoreDB\Kernel;
+namespace CoreDB\Kernel\Database;
 
 use CoreDB\Kernel\Database\AlterQueryPreparerAbstract;
 use CoreDB\Kernel\Database\CreateQueryPreparerAbstract;
@@ -15,7 +15,8 @@ use CoreDB\Kernel\Database\TruncateQueryPreparerAbstract;
 use CoreDB\Kernel\Database\UpdateQueryPreparerAbstract;
 use PDOStatement;
 
-interface DatabaseDriverInterface{
+interface DatabaseDriverInterface
+{
 
     const INTEGER = "integer";
     const FLOAT = "float";
@@ -129,7 +130,7 @@ interface DatabaseDriverInterface{
      * @return AlterQueryPreparerAbstract
      *  Alter query preparer
      */
-    public function alter(TableDefinition $table) : AlterQueryPreparerAbstract;
+    public function alter(TableDefinition $table = null) : AlterQueryPreparerAbstract;
 
     /**
      * Begin transaction
@@ -229,7 +230,7 @@ interface DatabaseDriverInterface{
 
     /**
      * Returns all foreign key descriptions in database
-     * @return PDOStatement 
+     * @return PDOStatement
      * All defined references in database
      */
     public static function getAllTableReferences(): PDOStatement;
@@ -285,5 +286,4 @@ interface DatabaseDriverInterface{
      * Current Timestamp
      */
     public function currentTimestampOnUpdate(): string;
-
 }

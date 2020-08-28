@@ -2,14 +2,17 @@
 
 namespace CoreDB\Kernel;
 
-class Messenger implements MesengerInterface{
+class Messenger implements MesengerInterface
+{
     private static $instance;
 
-    private function __construct(){}
+    private function __construct()
+    {
+    }
 
     public static function getInstance()
     {
-        if(!self::$instance){
+        if (!self::$instance) {
             self::$instance = new Messenger();
         }
         return self::$instance;

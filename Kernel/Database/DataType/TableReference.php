@@ -8,19 +8,22 @@ use Src\Form\Widget\FormWidget;
 use Src\Form\Widget\SelectWidget;
 
 class TableReference extends DataTypeAbstract
-{   
-    public string $reference_table;
+{
+
+    public string $reference_table = "";
     /**
      * @inheritdoc
      */
-    public static function getText(): string{
+    public static function getText(): string
+    {
         return Translation::getTranslation("reference_table");
     }
 
     /**
      * @inheritdoc
      */
-    public function getWidget(): FormWidget{
+    public function getWidget(): FormWidget
+    {
         $entries = CoreDB::database()->select($this->reference_table)->orderBy("ID")->execute()->fetchAll(\PDO::FETCH_NUM);
         $options = [];
         foreach ($entries as $entry) {
@@ -37,7 +40,8 @@ class TableReference extends DataTypeAbstract
     /**
      * @inheritdoc
      */
-    public function getSearchWidget() : FormWidget{
+    public function getSearchWidget() : FormWidget
+    {
         return $this->getWidget();
     }
 
@@ -46,7 +50,7 @@ class TableReference extends DataTypeAbstract
      */
     public function equals(DataTypeAbstract $dataType): bool
     {
-        return parent::equals($dataType) && 
+        return parent::equals($dataType) &&
             (isset($dataType->reference_table) ? $dataType->reference_table == $this->reference_table : false);
     }
 }

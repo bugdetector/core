@@ -21,7 +21,8 @@ abstract class DataTypeAbstract
 
     public function getClassName()
     {
-        return (new \ReflectionClass($this))->getName();;
+        return (new \ReflectionClass($this))->getName();
+        ;
     }
 
     /**
@@ -48,13 +49,30 @@ abstract class DataTypeAbstract
      * @return bool
      *  Equals
      */
-    public function equals(DataTypeAbstract $dataType): bool {
-        return get_class($dataType) == get_class($this) &&
-            $this->column_name == $dataType->column_name &&
-            $this->primary_key == $dataType->primary_key &&
-            $this->autoIncrement == $dataType->primary_key &&
-            $this->isNull == $dataType->isNull &&
-            $this->isUnique == $dataType->isUnique &&
-            $this->comment == $dataType->comment;
+    public function equals(DataTypeAbstract $dataType): bool
+    {
+        $equals = get_class($dataType) == get_class($this);
+        if ($equals) {
+            foreach ($this as $field_name => $field) {
+                if ($field_name == "default") {
+                    continue;
+                }
+                if ($field != $dataType->{$field_name}) {
+                    $equals = false;
+                    break;
+                }
+            }
+        }
+        return $equals;
+    }
+
+    public function toArray() : array
+    {
+        $array = [];
+        $array["type"] = array_search(get_class($this), \CoreDB::database()->dataTypes());
+        foreach ($this as $field_name => $field) {
+            $array[$field_name] = $field;
+        }
+        return $array;
     }
 }

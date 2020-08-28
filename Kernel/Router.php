@@ -13,14 +13,14 @@ class Router
 
     /**
      * Argument supplied from route
-     * 
+     *
      * @var array $arguments
      * Arguments
      */
     private array $arguments;
     /**
      * Controller matched route
-     * 
+     *
      * @var ControllerInterface
      * Controller
      */

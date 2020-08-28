@@ -45,8 +45,8 @@ class ForgetPasswordForm extends Form
 
     public function validate() : bool
     {
-        if(isset($this->request["reset"])){
-            if(!User::get(["username" => $this->request["username"], "email" => $this->request["email"]])){
+        if (isset($this->request["reset"])) {
+            if (!User::get(["username" => $this->request["username"], "email" => $this->request["email"]])) {
                 $this->setError("username", Translation::getTranslation("wrong_username_or_email"));
             }
         }
@@ -58,7 +58,7 @@ class ForgetPasswordForm extends Form
         $user = User::get(["username" => $this->request["username"], "email" => $this->request["email"]]);
         $reset_password = new ResetPassword();
         $reset_password = ResetPassword::get(["user" => $user->ID]);
-        if( !$reset_password){
+        if (!$reset_password) {
             $reset_password = new ResetPassword();
             $reset_password->user = $user->ID;
             $reset_password->key = hash("SHA256", \CoreDB::get_current_date().json_encode($user->ID));
@@ -66,7 +66,7 @@ class ForgetPasswordForm extends Form
         }
         
         $reset_link = BASE_URL."/reset_password/?USER=".$user->ID."&KEY=".$reset_password->key;
-        $message = Translation::getEmailTranslation("password_reset" ,[$reset_link, $reset_link]);
+        $message = Translation::getEmailTranslation("password_reset", [$reset_link, $reset_link]);
         $username = $user->getFullName();
         
         \CoreDB::HTMLMail($user->email, Translation::getTranslation("reset_password"), $message, $username);
@@ -76,6 +76,5 @@ class ForgetPasswordForm extends Form
 
     protected function csrfTokenCheckFailed()
     {
-       
     }
 }

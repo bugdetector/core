@@ -25,7 +25,7 @@ use CoreDB\Kernel\Database\SelectQueryPreparerAbstract;
 use CoreDB\Kernel\Database\TableDefinition;
 use CoreDB\Kernel\Database\TruncateQueryPreparerAbstract;
 use CoreDB\Kernel\Database\UpdateQueryPreparerAbstract;
-use CoreDB\Kernel\DatabaseDriver;
+use CoreDB\Kernel\Database\DatabaseDriver;
 use \PDO;
 use \PDOException;
 use \PDOStatement;
@@ -82,7 +82,7 @@ class MySQLDriver extends DatabaseDriver
     /**
      * @inheritdoc
      */
-    public function query(string $query, array $params = NULL): PDOStatement
+    public function query(string $query, array $params = null): PDOStatement
     {
         try {
             return $this->connection->query($query);
@@ -146,14 +146,16 @@ class MySQLDriver extends DatabaseDriver
     /**
      * @inheritdoc
      */
-    public function create(TableDefinition $table) : CreateQueryPreparerAbstract{
-        return new CreateQueryPreparer($table);
+    public function create(TableDefinition $table, bool $excludeForeignKeys = false) : CreateQueryPreparerAbstract
+    {
+        return new CreateQueryPreparer($table, $excludeForeignKeys);
     }
 
     /**
      * @inheritdoc
      */
-    public function alter(TableDefinition $table) : AlterQueryPreparerAbstract{
+    public function alter(TableDefinition $table = null) : AlterQueryPreparerAbstract
+    {
         return new AlterQueryPreparer($table);
     }
 
@@ -381,42 +383,42 @@ class MySQLDriver extends DatabaseDriver
     {
         $type_description = "`$dataType->column_name` ";
         $class_name = get_class($dataType);
-        if($class_name == Integer::class){
+        if ($class_name == Integer::class) {
             $type_description .= "INT";
-        }else if($class_name == FloatNumber::class){
+        } elseif ($class_name == FloatNumber::class) {
             $type_description .= "DOUBLE";
-        }else if($class_name == ShortText::class){
+        } elseif ($class_name == ShortText::class) {
             /**
              * @var ShortText $dataType
              */
             $type_description .= "VARCHAR({$dataType->length})";
-        }else if($class_name == Text::class){
+        } elseif ($class_name == Text::class) {
             $type_description .= "TEXT";
-        }else if($class_name == LongText::class){
+        } elseif ($class_name == LongText::class) {
             $type_description .= "LONGTEXT";
-        }else if($class_name == Date::class){
+        } elseif ($class_name == Date::class) {
             $type_description .= "DATE";
-        }else if($class_name == DateTime::class){
+        } elseif ($class_name == DateTime::class) {
             $type_description .= "DATETIME";
-        }else if($class_name == Time::class){
+        } elseif ($class_name == Time::class) {
             $type_description .= "TIME";
-        }else if($class_name == File::class){
+        } elseif ($class_name == File::class) {
             $type_description .= "TINYTEXT";
-        }else if($class_name == TableReference::class){
+        } elseif ($class_name == TableReference::class) {
             $type_description .= "INT";
-        }else if($class_name == EnumaratedList::class){
+        } elseif ($class_name == EnumaratedList::class) {
             $type_description .= "ENUM('".implode("','", $dataType->values)."')";
         }
-        if(!$dataType->isNull){
+        if (!$dataType->isNull) {
             $type_description .= " NOT NULL";
         }
-        if($dataType->autoIncrement){
+        if ($dataType->autoIncrement) {
             $type_description .= " AUTO_INCREMENT";
         }
-        if($dataType->primary_key){
+        if ($dataType->primary_key) {
             $type_description .= " PRIMARY KEY";
         }
-        if($dataType->default){
+        if ($dataType->default) {
             $type_description .= " DEFAULT {$dataType->default}";
         }
         $type_description .= " COMMENT '{$dataType->comment}'";
@@ -426,7 +428,8 @@ class MySQLDriver extends DatabaseDriver
     /**
      * @inheritdoc
      */
-    public function currentTimestamp() : string{
+    public function currentTimestamp() : string
+    {
         return "CURRENT_TIMESTAMP";
     }
 

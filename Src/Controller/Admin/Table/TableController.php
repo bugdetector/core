@@ -24,7 +24,6 @@ class TableController extends AdminController
             $this->table_name = $this->arguments[0];
             $this->table_comment = \CoreDB::database()::getTableComment($this->table_name);
         }
-        
     }
 
     public function processPage()
@@ -42,7 +41,7 @@ class TableController extends AdminController
             /**
              * Creating table and table search form
              */
-            $this->setTitle(Translation::getTranslation("tables") . " | {$this->table_name}");            
+            $this->setTitle(Translation::getTranslation("tables") . " | {$this->table_name}");
             $this->table_search = TableSearchForm::createByTableName($this->table_name);
         }
     }
@@ -52,10 +51,16 @@ class TableController extends AdminController
         return "page-admin-table.twig";
     }
 
+    protected function addDefaultJsFiles()
+    {
+        parent::addDefaultJsFiles();
+        $this->addJsFiles("src/js/table.js");
+    }
+
     protected function addDefaultTranslations()
     {
         parent::addDefaultTranslations();
         $this->addFrontendTranslation("truncate_accept");
-        $this->addFrontendTranslation("drop_accept");   
+        $this->addFrontendTranslation("drop_accept");
     }
 }

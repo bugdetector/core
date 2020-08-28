@@ -5,7 +5,6 @@ namespace Src\Controller\Admin;
 use CoreDB;
 use CoreDB\Kernel\Messenger;
 use CoreDB\Kernel\ServiceController;
-
 use Exception;
 use Src\Entity\Cache;
 use Src\Entity\DBObject;
@@ -41,7 +40,7 @@ class AjaxController extends ServiceController
     /**
      * Returns foreign key entry
      */
-    private function get_fk_entry()
+    public function getForeignKeyEntry()
     {
         $description = \CoreDB::database()::getForeignKeyDescription($_POST["table"], $_POST["column"]);
         $object = DBObject::get(["ID" => intval($_POST["fk"])], $description[0]);
@@ -117,5 +116,17 @@ class AjaxController extends ServiceController
         } catch (Exception $ex) {
             $this->createMessage($ex->getMessage());
         }
+    }
+
+    public function tableConfigurationExport()
+    {
+        CoreDB::config()->exportTableConfiguration();
+        $this->createMessage(Translation::getTranslation("export_success"), Messenger::SUCCESS);
+    }
+
+    public function tableConfigurationImport()
+    {
+        CoreDB::config()->importTableConfiguration();
+        $this->createMessage(Translation::getTranslation("import_success"), Messenger::SUCCESS);
     }
 }

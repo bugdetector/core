@@ -17,7 +17,9 @@ class CoreRenderer
     private function __construct($template_directories)
     {
         $loader = new \Twig\Loader\FilesystemLoader($template_directories);
-        $this->twig = new \Twig\Environment($loader);
+        $this->twig = new \Twig\Environment($loader, [
+            'cache' => '../cache'
+        ]);
         $this->twig->addExtension(new CoreTwigExtension());
     }
 

@@ -4,9 +4,9 @@ namespace CoreDB\Kernel\Database\MySQL;
 
 use CoreDB\Kernel\Database\SelectQueryPreparerAbstract;
 
-
 class SelectQueryPreparer extends SelectQueryPreparerAbstract
-{    
+{
+
     public function getQuery() : string
     {
         return "SELECT ".$this->distinct.

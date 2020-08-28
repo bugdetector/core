@@ -82,7 +82,7 @@ abstract class BaseController implements ControllerInterface, BaseControllerInte
     public function preprocessPage()
     {
         try {
-            if($this->method){
+            if ($this->method) {
                 $this->{$this->method}();
             }
         } catch (Exception $ex) {

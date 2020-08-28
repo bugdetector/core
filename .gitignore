@@ -1,5 +1,6 @@
-/files/
-.config.php
+files/uploaded
+config/config.php
 .htaccess
 .composer.lock
 /vendor/
+cache/

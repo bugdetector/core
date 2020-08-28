@@ -19,14 +19,16 @@ class EnumaratedList extends DataTypeAbstract
     /**
      * @inheritdoc
      */
-    public static function getText(): string{
+    public static function getText(): string
+    {
         return Translation::getTranslation("list");
     }
 
     /**
      * @inheritdoc
      */
-    public function getWidget(): FormWidget{
+    public function getWidget(): FormWidget
+    {
         return SelectWidget::create("")
             ->setOptions($this->values);
     }
@@ -34,7 +36,8 @@ class EnumaratedList extends DataTypeAbstract
     /**
      * @inheritdoc
      */
-    public function getSearchWidget() : FormWidget{
+    public function getSearchWidget() : FormWidget
+    {
         return $this->getWidget();
     }
 
@@ -43,7 +46,7 @@ class EnumaratedList extends DataTypeAbstract
      */
     public function equals(DataTypeAbstract $dataType): bool
     {
-        return parent::equals($dataType) && 
+        return parent::equals($dataType) &&
             (isset($dataType->values) ? $dataType->values === $this->values : false);
     }
 }

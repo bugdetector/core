@@ -2,7 +2,6 @@
 
 namespace CoreDB\Kernel\Database;
 
-
 use PDOStatement;
 
 abstract class QueryPreparerAbstract

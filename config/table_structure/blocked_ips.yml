@@ -1,0 +1,13 @@
+table_name: blocked_ips
+table_comment: ''
+fields:
+  ip:
+    type: short_text
+    length: '16'
+    column_name: ip
+    primary_key: false
+    autoIncrement: false
+    isNull: false
+    isUnique: true
+    default: null
+    comment: ''

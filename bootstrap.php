@@ -2,7 +2,7 @@
 
 define("DIRECT_OBJECT_REF_SHIELD", TRUE);
 include __DIR__.'/vendor/autoload.php';
-include __DIR__.'/.config.php';
+include __DIR__.'/config/config.php';
 include __DIR__.'/Kernel/CoreDB.php';
 
 $host = \CoreDB::baseHost();

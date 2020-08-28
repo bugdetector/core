@@ -2,7 +2,6 @@
 
 namespace CoreDB\Kernel\Database;
 
-
 abstract class SelectQueryPreparerAbstract extends QueryPreparerAbstract
 {
     protected $tables;

@@ -65,7 +65,7 @@ class ColumnDefinition extends CollapsableCard
         $list_values_input = TextareaWidget::create("{$this->name}[list_values]")
         ->addClass("list_values")
         ->setLabel(Translation::getTranslation("list_values"))
-        ->addAttribute("placeholder", Translation::getTranslation("list_values") )
+        ->addAttribute("placeholder", Translation::getTranslation("list_values"))
         ->setDescription(Translation::getTranslation("list_values_description"));
 
         $field_length = InputWidget::create("{$this->name}[field_length]")
@@ -92,26 +92,25 @@ class ColumnDefinition extends CollapsableCard
         if ($this->dataType) {
             $this->title = $this->dataType->column_name;
             $field_name_input->setValue($this->dataType->column_name);
-            $data_type_select->setValue( array_search( get_class($this->dataType), $dataTypes));
+            $data_type_select->setValue(array_search(get_class($this->dataType), $dataTypes));
             $column_comment->setValue($this->dataType->comment);
             $remove_button->removeClass("removefield")
                 ->addClass("dropfield");
 
-            if($this->dataType->isUnique){
+            if ($this->dataType->isUnique) {
                 $is_unique_checkbox->addAttribute("checked", "true");
             }
-            if($this->dataType instanceof \CoreDB\Kernel\Database\DataType\TableReference){
+            if ($this->dataType instanceof \CoreDB\Kernel\Database\DataType\TableReference) {
                 $reference_table_select->setValue($this->dataType->reference_table);
             }
-            if( $this->dataType instanceof \CoreDB\Kernel\Database\DataType\ShortText ){
+            if ($this->dataType instanceof \CoreDB\Kernel\Database\DataType\ShortText) {
                 $field_length->setValue(strval($this->dataType->length));
             }
 
-            if( $this->dataType instanceof \CoreDB\Kernel\Database\DataType\EnumaratedList ){
-                $list_values_input->setValue( implode(",", array_keys($this->dataType->values) ) );
+            if ($this->dataType instanceof \CoreDB\Kernel\Database\DataType\EnumaratedList) {
+                $list_values_input->setValue(implode(",", array_keys($this->dataType->values)));
             }
-            
-        }else{
+        } else {
             $this->title = Translation::getTranslation("new_field");
         }
 

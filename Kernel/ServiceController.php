@@ -50,23 +50,23 @@ abstract class ServiceController implements ControllerInterface
         $response_data = ["data" => ""];
         try {
             $response = $this->{$this->method}();
-            if($response){
+            if ($response) {
                 $response_data["data"] = $response;
             }
         } catch (Exception $ex) {
             http_response_code(400);
             $this->createMessage($ex->getMessage());
         }
-        if($this->messages){
+        if ($this->messages) {
             $response_data["messages"] = $this->messages;
         }
-        switch($this->response_type){
+        switch ($this->response_type) {
             case self::RESPONSE_TYPE_JSON:
                 echo json_encode($response_data);
-            break;
+                break;
             case self::RESPONSE_TYPE_RAW:
                 echo $response_data["data"];
-            break;
-        }        
+                break;
+        }
     }
 }

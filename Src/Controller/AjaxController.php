@@ -3,7 +3,6 @@ namespace Src\Controller;
 
 use CoreDB\Kernel\ServiceController;
 
-
 class AjaxController extends ServiceController
 {
 
@@ -12,7 +11,8 @@ class AjaxController extends ServiceController
         $table = $_POST["table"];
 
         if (in_array($table, \CoreDB::database()::getTableList())) {
-            $column = preg_replace('/[^a-zA-Z1-9_]*/', '', $_POST["column"]);;
+            $column = preg_replace('/[^a-zA-Z1-9_]*/', '', $_POST["column"]);
+            ;
             $data = "%" . $_POST["data"] . "%";
             $query = db_select($table)
                 ->select($table, ["ID", $column])

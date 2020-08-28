@@ -6,7 +6,7 @@ use CoreDB\Kernel\Database\AlterQueryPreparerAbstract;
 use CoreDB\Kernel\Database\DataType\DataTypeAbstract;
 use CoreDB\Kernel\Database\DataType\TableReference;
 use CoreDB\Kernel\Database\TableDefinition;
-use CoreDB\Kernel\DatabaseDriverInterface;
+use CoreDB\Kernel\Database\DatabaseDriverInterface;
 use Exception;
 use PDOStatement;
 use Src\Entity\Cache;
@@ -14,22 +14,20 @@ use Src\Entity\Translation;
 
 class AlterQueryPreparer extends AlterQueryPreparerAbstract
 {
-    public DatabaseDriverInterface $db;
-    public array $queries = [];
-
-    public function __construct(TableDefinition $tableDefinition)
+    /**
+     * @inheritdoc
+     */
+    public function addTableDefinition(TableDefinition $tableDefinition)
     {
-        parent::__construct($tableDefinition);
-        $this->db = \CoreDB::database();
         $differences = [];
-        $original_description = $this->db->getTableDescription($this->table_definition->table_name);
+        $original_description = $this->db->getTableDescription($tableDefinition->table_name);
         /**
          * @var DataTypeAbstract $dataType
-         */        
+         */
         $old_order = array_keys($original_description);
-        $new_order = array_keys($this->table_definition->fields);
-        foreach ($this->table_definition->fields as $column_name => $dataType) {
-            if(in_array($column_name, ["ID", "created_at", "last_updated"])){
+        $new_order = array_keys($tableDefinition->fields);
+        foreach ($tableDefinition->fields as $column_name => $dataType) {
+            if (in_array($column_name, ["ID", "created_at", "last_updated"])) {
                 continue;
             }
             $old_index = array_search($column_name, $old_order);
@@ -52,7 +50,7 @@ class AlterQueryPreparer extends AlterQueryPreparerAbstract
                 ];
             }
         }
-        if(empty($differences) && $old_order == $new_order){
+        if (empty($differences) && $old_order == $new_order) {
             throw new Exception(Translation::getTranslation("no_change_on_table"));
         }
         foreach ($differences as $difference) {
@@ -66,33 +64,32 @@ class AlterQueryPreparer extends AlterQueryPreparerAbstract
             $new_column = $difference["new"];
             $after = $difference["after"];
 
-            if(!$old_column || get_class($old_column) != get_class($new_column)){
-                if($old_column){
-                    $this->queries[] = $this->db->drop($this->table_definition->table_name, $difference["old"]->column_name)->getQuery();
+            if (!$old_column || get_class($old_column) != get_class($new_column)) {
+                if ($old_column) {
+                    $this->queries[] = $this->db->drop($tableDefinition->table_name, $difference["old"]->column_name)->getQuery();
                 }
-                $this->queries[] = "ALTER TABLE `{$this->table_definition->table_name}` ADD " . $this->db->getColumnDefinition($new_column) . " AFTER `{$after}`;";
+                $this->queries[] = "ALTER TABLE `{$tableDefinition->table_name}` ADD " . $this->db->getColumnDefinition($new_column) . " AFTER `{$after}`;";
                 if ($new_column->isUnique) {
-                    $this->queries[] = "ALTER TABLE `{$this->table_definition->table_name}` ADD UNIQUE(`{$new_column->column_name}`);";
+                    $this->queries[] = "ALTER TABLE `{$tableDefinition->table_name}` ADD UNIQUE(`{$new_column->column_name}`);";
                 }
     
                 if ($new_column instanceof TableReference) {
-                    $this->queries[] = "ALTER TABLE `{$this->table_definition->table_name}` ADD FOREIGN KEY (`{$new_column->column_name}`) REFERENCES `{$new_column->reference_table}`(ID);";
+                    $this->foreignKeyQueries[] = "ALTER TABLE `{$tableDefinition->table_name}` ADD FOREIGN KEY (`{$new_column->column_name}`) REFERENCES `{$new_column->reference_table}`(ID);";
                 }
-            }else{
-                $this->queries[] = "ALTER TABLE `{$this->table_definition->table_name}` CHANGE `{$new_column->column_name}` ". $this->db->getColumnDefinition($new_column) . " AFTER `{$after}`;";
-                if(!$old_column->isUnique && $new_column->isUnique){
-                    $this->queries[] = "ALTER TABLE `{$this->table_definition->table_name}` ADD UNIQUE(`{$new_column->column_name}`);";
-                }
-                else if($old_column->isUnique && !$new_column->isUnique){
-                    $this->queries[] = "ALTER TABLE `{$this->table_definition->table_name}` DROP INDEX `{$new_column->column_name}`;";
+            } else {
+                $this->queries[] = "ALTER TABLE `{$tableDefinition->table_name}` CHANGE `{$new_column->column_name}` ". $this->db->getColumnDefinition($new_column) . " AFTER `{$after}`;";
+                if (!$old_column->isUnique && $new_column->isUnique) {
+                    $this->queries[] = "ALTER TABLE `{$tableDefinition->table_name}` ADD UNIQUE(`{$new_column->column_name}`);";
+                } elseif ($old_column->isUnique && !$new_column->isUnique) {
+                    $this->queries[] = "ALTER TABLE `{$tableDefinition->table_name}` DROP INDEX `{$new_column->column_name}`;";
                 }
             }
         }
-        $this->queries[] = $this->db->truncate(Cache::TABLE)->getQuery();
     }
+
     public function getQuery(): string
     {
-        return implode("\n", $this->queries);
+        return implode("\n", array_merge($this->queries, $this->foreignKeyQueries)).$this->db->truncate(Cache::TABLE)->getQuery();
     }
 
     public function execute(): PDOStatement

@@ -5,17 +5,15 @@ namespace Src\Entity;
 use CoreDB\Kernel\TableMapper;
 
 /**
- * Object relation with table emails
+ * Object relation with table blocked_ips
  * @author murat
  */
 
-class Email extends TableMapper
+class BlockedIp extends TableMapper
 {
-    const TABLE = "emails";
+    const TABLE = "blocked_ips";
     public $ID;
-    public $key;
-    public $en;
-    public $tr;
+    public $ip;
     public $created_at;
     public $last_updated;
 
@@ -27,7 +25,7 @@ class Email extends TableMapper
     /**
      * @Override
      */
-    public static function get(array $filter) : ?Email
+    public static function get(array $filter) : ?BlockedIp
     {
         return parent::find($filter, self::TABLE);
     }
@@ -40,7 +38,8 @@ class Email extends TableMapper
         return parent::findAll($filter, self::TABLE);
     }
 
-    public static function clear(){
+    public static function clear()
+    {
         parent::clearTable(self::TABLE);
     }
 }
