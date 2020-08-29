@@ -104,7 +104,8 @@ class ConfigurationManager
         }
     }
 
-    public function clearCache(){
+    public function clearCache()
+    {
         Cache::clear();
         \CoreDB::cleanDirectory("../cache", true);
     }

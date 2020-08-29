@@ -77,7 +77,9 @@ class CoreDB
 
     public static function cleanDirectory(string $path, bool $includeDirs = false)
     {
-        if(!is_dir($path)) return;
+        if (!is_dir($path)) {
+            return;
+        }
         foreach (new DirectoryIterator($path) as $fileInfo) {
             if (!$fileInfo->isDot()) {
                 if ($fileInfo->isDir()) {
@@ -87,7 +89,7 @@ class CoreDB
                 }
             }
         }
-        if($includeDirs){
+        if ($includeDirs) {
             rmdir($path);
         }
     }
@@ -158,7 +160,8 @@ class CoreDB
      * @global User $current_user
      * @return User
      */
-    public static function currentUser(){
+    public static function currentUser()
+    {
         global $current_user;
         if ($current_user) {
             return $current_user;
