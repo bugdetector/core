@@ -72,7 +72,7 @@ class CoreDB
 
     public static function requestUrl()
     {
-        return $_SERVER["REDIRECT_URL"];
+        return $_SERVER["REQUEST_URI"];
     }
 
     public static function cleanDirectory(string $path, bool $includeDirs = false)
