@@ -6,6 +6,7 @@ use CoreDB;
 use CoreDB\Kernel\TableMapper;
 use Exception;
 use PDO;
+use Src\Form\UserInsertForm;
 
 define("PASSWORD_FALSE_COUNT", "PASSWORD_FALSE_COUNT");
 define("LOGIN_UNTRUSTED_ACTIONS", "LOGIN_UNTRUSTED_ACTIONS");
@@ -55,6 +56,11 @@ class User extends TableMapper
     public static function clear()
     {
         parent::clearTable(self::TABLE);
+    }
+
+    public function getForm()
+    {
+        return new UserInsertForm($this);
     }
 
     public static function getUserByUsername(string $username)

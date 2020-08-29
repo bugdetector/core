@@ -1,0 +1,10 @@
+blocked_ips: Src\Entity\BlockedIp
+cache: Src\Entity\Cache
+emails: Src\Entity\Email
+logins: Src\Entity\Logins
+reset_password_queue: Src\Entity\ResetPassword
+roles: Src\Entity\Role
+translations: Src\Entity\Translation
+users: Src\Entity\User
+variables: Src\Entity\Variable
+watchdog: Src\Entity\Watchdog

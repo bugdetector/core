@@ -7,6 +7,7 @@ use CoreDB\Kernel\Database\DataType\DataTypeAbstract;
 use Exception;
 use PDO;
 use Src\Entity\Translation;
+use Src\Form\TableInsertForm;
 
 abstract class TableMapper
 {
@@ -145,19 +146,9 @@ abstract class TableMapper
         return BASE_URL."/files/uploaded/$this->table/$field_name/".$this->$field_name;
     }
 
-    protected function get_input_type(string $dataType, $key = "")
+    public function getForm()
     {
-        if (strpos($key, "MUL") !== false) {
-            return "MUL";
-        } elseif (strpos($dataType, "int") === 0) {
-            return "INT";
-        } elseif (strpos($dataType, "varchar") === 0) {
-            return "VARCHAR";
-        } elseif (strpos($dataType, "datetime")===0) {
-            return "DATETIME";
-        } else {
-            return strtoupper($dataType);
-        }
+        return new TableInsertForm($this);
     }
     
     public function getFormFields($name) : array

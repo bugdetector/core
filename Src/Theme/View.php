@@ -18,7 +18,7 @@ abstract class View
         CoreRenderer::getInstance(BaseTheme::getTemplateDirectories())->renderView($this);
     }
 
-    public function addClass(string $class_name)
+    public function addClass(string $class_name) : View
     {
         $this->classes = array_merge($this->classes, explode(" ", $class_name));
         return $this;

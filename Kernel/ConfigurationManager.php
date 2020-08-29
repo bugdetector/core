@@ -18,8 +18,13 @@ class ConfigurationManager
 
     private static ?ConfigurationManager $instance = null;
 
+    private array $tableMapping = [];
+
     private function __construct()
     {
+        if (empty($this->tableMapping)) {
+            $this->tableMapping = Yaml::parseFile("../config/table_mapping.yml");
+        }
     }
 
     public static function getInstance()
@@ -108,5 +113,14 @@ class ConfigurationManager
     {
         Cache::clear();
         \CoreDB::cleanDirectory("../cache", true);
+    }
+
+    public function getClassForTable(string $tableName)
+    {
+        if (isset($this->tableMapping[$tableName])) {
+            return $this->tableMapping[$tableName];
+        } else {
+            return \Src\Entity\DBObject::class;
+        }
     }
 }

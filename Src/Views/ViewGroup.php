@@ -8,6 +8,7 @@ class ViewGroup extends View
 {
     public $fields = [];
     public $tag_name;
+    private bool $addClassToChildren = false;
 
     public function __construct(string $tag_name, string $wrapper_class)
     {
@@ -23,6 +24,24 @@ class ViewGroup extends View
     public function getTemplateFile(): string
     {
         return "view_group.twig";
+    }
+
+    public function addClassToChildren(bool $addClassToChildren) : ViewGroup
+    {
+        $this->addClassToChildren = $addClassToChildren;
+        return $this;
+    }
+
+    public function addClass(string $class_name) : ViewGroup
+    {
+        if (!$this->addClassToChildren) {
+            parent::addClass($class_name);
+        } else {
+            foreach ($this->fields as &$field) {
+                $field->addClass($class_name);
+            }
+        }
+        return $this;
     }
 
     public function addField(View $field, $offset = 0)

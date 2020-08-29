@@ -29,8 +29,12 @@ class EnumaratedList extends DataTypeAbstract
      */
     public function getWidget(): FormWidget
     {
+        $options = [];
+        foreach ($this->values as $key => $value) {
+            $options[$key] = Translation::getTranslation($value);
+        }
         return SelectWidget::create("")
-            ->setOptions($this->values);
+            ->setOptions($options);
     }
 
     /**
