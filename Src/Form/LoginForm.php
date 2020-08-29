@@ -109,8 +109,8 @@ class LoginForm extends Form
             $payload = new stdClass();
             $payload->ID = $current_user->ID;
             $jwt->setPayload($payload);
-            setcookie("session-token", $jwt->createToken(), strtotime("+1 day"), SITE_ROOT, $_SERVER["HTTP_HOST"], false, true);
-            setcookie("remember-me", true, strtotime("+1 year"), SITE_ROOT, $_SERVER["HTTP_HOST"], false, true);
+            setcookie("session-token", $jwt->createToken(), strtotime("+1 day"), BASE_URL, $_SERVER["HTTP_HOST"], false, true);
+            setcookie("remember-me", true, strtotime("+1 year"), BASE_URL, $_SERVER["HTTP_HOST"], false, true);
         } else {
             setcookie("remember-me", false, null);
         }
@@ -125,11 +125,11 @@ class LoginForm extends Form
             ->condition("username = :username", [":username" => $this->user->username])
             ->execute();
         if (isset($_GET["destination"])) {
-            \CoreDB::goTo(SITE_ROOT . $_GET["destination"]);
-        } elseif (User::get_current_core_user()->isAdmin()) {
-            \CoreDB::goTo(SITE_ROOT . "/admin");
+            \CoreDB::goTo(BASE_URL . $_GET["destination"]);
+        } elseif (\CoreDB::currentUser()->isAdmin()) {
+            \CoreDB::goTo(BASE_URL . "/admin");
         } else {
-            \CoreDB::goTo(SITE_ROOT);
+            \CoreDB::goTo(BASE_URL);
         }
     }
 

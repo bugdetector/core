@@ -24,10 +24,15 @@ abstract class View
         return $this;
     }
 
+    public function hasClass(string $class_name) : bool
+    {
+        return in_array($class_name, $this->classes);
+    }
+
     public function removeClass(string $class_name)
     {
         $class_index = array_search($class_name, $this->classes);
-        if ($class_index) {
+        if ($class_index !== false) {
             unset($this->classes[$class_index]);
         }
         return $this;

@@ -6,6 +6,7 @@ use CoreDB;
 use Src\Theme\BaseTheme\BaseTheme;
 use Src\Entity\Translation;
 use Src\Entity\User;
+use Src\Entity\Variable;
 use Src\Views\BasicCard;
 
 class AdminController extends BaseTheme
@@ -16,7 +17,7 @@ class AdminController extends BaseTheme
     
     public function checkAccess() : bool
     {
-        return User::get_current_core_user()->isAdmin();
+        return \CoreDB::currentUser()->isAdmin();
     }
 
     public function getTemplateFile(): string
@@ -26,7 +27,7 @@ class AdminController extends BaseTheme
     
     public function preprocessPage()
     {
-        $this->setTitle(SITE_NAME." | ".Translation::getTranslation("dashboard"));
+        $this->setTitle(Variable::getByKey("site_name")->value." | ".Translation::getTranslation("dashboard"));
         $this->number_of_members = CoreDB::database()->select(User::TABLE)
         ->select_with_function(["COUNT(*) as count"])
         ->condition("USERNAME != :username", [":username" => "guest"])
@@ -43,7 +44,7 @@ class AdminController extends BaseTheme
         ->setBorderClass("border-left-info")
         ->setHref(BASE_URL . "/admin/manage/update")
         ->setTitle(Translation::getTranslation("system_version"))
-        ->setDescription(VERSION)
+        ->setDescription(Variable::getByKey("version")->value)
         ->setIconClass("fa-arrow-alt-circle-up");
         $this->cards[] = BasicCard::create()
         ->addClass("col-xl-3 col-md-6 mb-4")

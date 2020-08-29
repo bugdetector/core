@@ -23,7 +23,7 @@ class Role extends TableMapper
     }
 
     /**
-     * @Override
+     * @inheritdoc
      */
     public static function get(array $filter) : ?Role
     {
@@ -31,7 +31,7 @@ class Role extends TableMapper
     }
 
     /**
-     * @Override
+     * @inheritdoc
      */
     public static function getAll(array $filter) : array
     {

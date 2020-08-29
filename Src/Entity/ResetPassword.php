@@ -24,7 +24,7 @@ class ResetPassword extends TableMapper
     }
 
     /**
-     * @Override
+     * @inheritdoc
      */
     public static function get(array $filter) : ?ResetPassword
     {
@@ -32,7 +32,7 @@ class ResetPassword extends TableMapper
     }
 
     /**
-     * @Override
+     * @inheritdoc
      */
     public static function getAll(array $filter) : array
     {

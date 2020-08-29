@@ -25,7 +25,7 @@ class Cache extends TableMapper
     }
 
     /**
-     * @Override
+     * @inheritdoc
      */
     public static function get(array $filter) : ?Cache
     {
@@ -33,7 +33,7 @@ class Cache extends TableMapper
     }
 
     /**
-     * @Override
+     * @inheritdoc
      */
     public static function getAll(array $filter) : array
     {

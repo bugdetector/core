@@ -2,10 +2,9 @@
 namespace Src\Theme;
 
 use App\Twig\CoreTwigExtension;
-use CoreDB\Kernel\ControllerInterface;
+use CoreDB\Kernel\BaseControllerInterface;
 use Src\Theme\View;
 use Src\Entity\Translation;
-use Src\Entity\User;
 use Src\Form\Form;
 use Src\Form\Widget\FormWidget;
 
@@ -17,9 +16,11 @@ class CoreRenderer
     private function __construct($template_directories)
     {
         $loader = new \Twig\Loader\FilesystemLoader($template_directories);
-        $this->twig = new \Twig\Environment($loader, [
-            'cache' => '../cache'
-        ]);
+        $twig_options = [];
+        if (ENVIROMENT == "production") {
+            $twig_options["cache"] = "../cache";
+        }
+        $this->twig = new \Twig\Environment($loader, $twig_options);
         $this->twig->addExtension(new CoreTwigExtension());
     }
 
@@ -31,11 +32,11 @@ class CoreRenderer
         return self::$instance;
     }
 
-    public function renderController(ControllerInterface $controller)
+    public function renderController(BaseControllerInterface $controller)
     {
         echo $this->twig->render($controller->getTemplateFile(), [
             "controller" => $controller,
-            "user" => User::get_current_core_user(),
+            "user" => \CoreDB::currentUser(),
             "Translation" => new Translation()
         ]);
     }
@@ -44,7 +45,7 @@ class CoreRenderer
     {
         echo $this->twig->render("views/".$view->getTemplateFile(), [
             "view" => $view,
-            "user" => User::get_current_core_user(),
+            "user" => \CoreDB::currentUser(),
             "Translation" => new Translation()
         ]);
     }
@@ -53,7 +54,7 @@ class CoreRenderer
     {
         echo $this->twig->render("forms/".$form->getTemplateFile(), [
             "form" => $form,
-            "user" => User::get_current_core_user(),
+            "user" => \CoreDB::currentUser(),
             "Translation" => new Translation()
         ]);
     }
@@ -62,7 +63,7 @@ class CoreRenderer
     {
         echo $this->twig->render("widgets/".$widget->getTemplateFile(), [
             "widget" => $widget,
-            "user" => User::get_current_core_user(),
+            "user" => \CoreDB::currentUser(),
             "Translation" => new Translation()
         ]);
     }

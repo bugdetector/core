@@ -31,7 +31,7 @@ abstract class ServiceController implements ControllerInterface
      */
     public function checkAccess(): bool
     {
-        return User::get_current_core_user()->isLoggedIn() && boolval($this->method);
+        return \CoreDB::currentUser()->isLoggedIn() && boolval($this->method);
     }
 
     /**

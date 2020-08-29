@@ -61,15 +61,6 @@ fields:
     isUnique: false
     default: null
     comment: ''
-  last_access:
-    type: datetime
-    column_name: last_access
-    primary_key: false
-    autoIncrement: false
-    isNull: false
-    isUnique: false
-    default: null
-    comment: ''
   status:
     type: enumarated_list
     values:
@@ -77,6 +68,15 @@ fields:
       blocked: blocked
       pending: pending
     column_name: status
+    primary_key: false
+    autoIncrement: false
+    isNull: false
+    isUnique: false
+    default: null
+    comment: ''
+  last_access:
+    type: datetime
+    column_name: last_access
     primary_key: false
     autoIncrement: false
     isNull: false

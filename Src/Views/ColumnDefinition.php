@@ -2,11 +2,9 @@
 
 namespace Src\Views;
 
-use CoreDB;
 use CoreDB\Kernel\Database\DataType\DataTypeAbstract;
 use Src\Entity\Translation;
 use Src\Form\Widget\InputWidget;
-use Src\Form\Widget\OptionWidget;
 use Src\Form\Widget\SelectWidget;
 use Src\Form\Widget\TextareaWidget;
 
@@ -71,7 +69,9 @@ class ColumnDefinition extends CollapsableCard
         $field_length = InputWidget::create("{$this->name}[field_length]")
         ->addClass("field_length")
         ->setLabel(Translation::getTranslation("length_varchar"))
-        ->addAttribute("placeholder", Translation::getTranslation("length_varchar"));
+        ->addAttribute("placeholder", Translation::getTranslation("length_varchar"))
+        ->addAttribute("required", "true")
+        ->setValue("255");
         
         $is_unique_checkbox = InputWidget::create("{$this->name}[is_unique]")
         ->setType("checkbox")
@@ -125,7 +125,7 @@ class ColumnDefinition extends CollapsableCard
             ViewGroup::create("div", "col-sm-3 ".(!$reference_table_select->value ? "d-none" : ""))
                 ->addField($reference_table_select)
         )->addField(
-            ViewGroup::create("div", "col-sm-3 ".(!$field_length->value ? "d-none" : ""))
+            ViewGroup::create("div", "col-sm-3 ".(!($dataType instanceof \CoreDB\Kernel\Database\DataType\ShortText) ? "d-none" : ""))
                 ->addField($field_length)
         )->addField(
             ViewGroup::create("div", "col-sm-3")

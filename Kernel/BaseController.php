@@ -4,6 +4,7 @@ namespace CoreDB\Kernel;
 
 use Exception;
 use Src\Entity\Translation;
+use Src\Entity\Variable;
 use Src\Theme\CoreRenderer;
 use Src\Views\AlertMessage;
 use Src\Views\ViewGroup;
@@ -36,6 +37,7 @@ abstract class BaseController implements ControllerInterface, BaseControllerInte
     {
         $this->arguments = $arguments;
         $this->method = isset($this->arguments[0]) ? $this->arguments[0] : null;
+        $this->setTitle(Variable::getByKey("site_name")->value);
     }
 
     /**

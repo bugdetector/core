@@ -4,11 +4,16 @@ namespace Src\Theme\BaseTheme;
 
 use CoreDB\Kernel\BaseController;
 use Src\Entity\Translation;
+use Src\Views\NavItem;
+use Src\Views\Sidebar;
+use Src\Views\TextElement;
+use Src\Views\ViewGroup;
 
 abstract class BaseTheme extends BaseController
 {
 
-    public $title = SITE_NAME;
+    public Sidebar $sidebar;
+    public string $title = "";
     public $body_classes = [];
 
     public function checkAccess(): bool
@@ -33,11 +38,63 @@ abstract class BaseTheme extends BaseController
 
     public function processPage()
     {
+        $this->buildSidebar();
         $this->addDefaultJsFiles();
         $this->addDefaultCssFiles();
         $this->addDefaultTranslations();
         $this->preprocessPage();
         $this->render();
+    }
+
+    public function buildSidebar()
+    {
+        $this->sidebar = Sidebar::create("ul", "navbar-nav bg-gradient-primary sidebar sidebar-dark accordion toggled position-sticky");
+        if (\CoreDB::currentUser()->isAdmin()) {
+            $this->sidebar->addNavItem(
+                NavItem::create(
+                    "fa fa-tachometer-alt",
+                    Translation::getTranslation("dashboard"),
+                    BASE_URL. "/admin"
+                )
+            )->addNavItem(
+                NavItem::create(
+                    "fa fa-cog",
+                    Translation::getTranslation("management"),
+                    "#"
+                )
+                        ->addCollapsedItem(
+                            TextElement::create(Translation::getTranslation("management"))
+                            ->setTagName("h6"),
+                            true
+                        )->addCollapsedItem(
+                            TextElement::create(Translation::getTranslation("user_management"))
+                            ->setTagName("a")
+                            ->addAttribute("href", BASE_URL."/admin/manage/user")
+                        )
+                        ->addCollapsedItem(
+                            TextElement::create(Translation::getTranslation("role_management"))
+                            ->setTagName("a")
+                            ->addAttribute("href", BASE_URL."/admin/manage/role")
+                        )
+                        ->addCollapsedItem(
+                            TextElement::create(Translation::getTranslation("translations"))
+                            ->setTagName("a")
+                            ->addAttribute("href", BASE_URL."/admin/manage/translation")
+                        )
+            )->addNavItem(
+                NavItem::create(
+                    "fa fa-chart-area",
+                    Translation::getTranslation("tables"),
+                    BASE_URL."/admin/table"
+                )
+            )->addNavItem(
+                NavItem::create(
+                    "fa fa-broom",
+                    Translation::getTranslation("clear_cache"),
+                    "#"
+                )->addClass("clear-cache")
+            );
+        }
     }
 
     public function echoContent()

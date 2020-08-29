@@ -231,8 +231,8 @@
     },
     {
         "key": "length_varchar",
-        "en": "Length (max 255)",
-        "tr": "Uzunluk (en büyük 255)"
+        "en": "Length",
+        "tr": "Uzunluk"
     },
     {
         "key": "reference_table",
@@ -295,11 +295,6 @@
         "tr": "Tamam"
     },
     {
-        "key": "check_wrong_fields",
-        "en": "Please check wrong fields.",
-        "tr": "Lütfen hatalı alanları kontrol edin."
-    },
-    {
         "key": "record_remove_accept",
         "en": "Are you sure to remove that record?",
         "tr": "Bu kaydı silmek istediğinize emin misiniz?"
@@ -320,9 +315,9 @@
         "tr": "Dosya Seçin"
     },
     {
-        "key": "clean",
-        "en": "Clean",
-        "tr": "Temizle"
+        "key": "clear_cache",
+        "en": "Clear Cache",
+        "tr": "Önbelleği Temizle"
     },
     {
         "key": "update",
@@ -678,5 +673,65 @@
         "key": "list_values_description",
         "en": "Enter values seperated with comma.",
         "tr": "Virgülle ayrılmış değerler giriniz."
+    },
+    {
+        "key": "integer",
+        "en": "Integer",
+        "tr": "Tam sayı"
+    },
+    {
+        "key": "float",
+        "en": "Float number",
+        "tr": "Ondalıklı sayı"
+    },
+    {
+        "key": "short_text",
+        "en": "Short text",
+        "tr": "Kısa metin"
+    },
+    {
+        "key": "text",
+        "en": "Text",
+        "tr": "Metin"
+    },
+    {
+        "key": "long_text_or_html",
+        "en": "Long text or HTML",
+        "tr": "Uzun metin ya da HTML"
+    },
+    {
+        "key": "date",
+        "en": "Date",
+        "tr": "Tarih"
+    },
+    {
+        "key": "datetime",
+        "en": "Date-Time",
+        "tr": "Tarih-Zaman"
+    },
+    {
+        "key": "file",
+        "en": "File",
+        "tr": "Dosya"
+    },
+    {
+        "key": "list",
+        "en": "List",
+        "tr": "Liste"
+    },
+    {
+        "key": "no_change_on_table",
+        "en": "There is no change on table.",
+        "tr": "Tablo üzerinde değişiklik algılanmadı."
+    },
+    {
+        "key": "cache_cleared",
+        "en": "Cache cleared.",
+        "tr": "Tüm önbellekler temizlendi."
+    },
+    {
+        "key": "time",
+        "en": "Time",
+        "tr": "Zaman"
     }
 ]

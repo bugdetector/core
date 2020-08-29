@@ -46,7 +46,7 @@ class Translation extends TableMapper
     }
 
     /**
-     * @Override
+     * @inheritdoc
      */
     public static function get(array $filter) : ?Translation
     {
@@ -54,7 +54,7 @@ class Translation extends TableMapper
     }
 
     /**
-     * @Override
+     * @inheritdoc
      */
     public static function getAll(array $filter): array
     {

@@ -26,16 +26,12 @@
   ## Yapılandırma işlemleri
    1. "config_example.php" dosyasını kopyalayın üzerinden veritabanı bağlantısı için gerekli olan bilgiler girin.
 
-> VERSION parametresinin 0 olması gerekmektedir.
-
     
    2. .htaccess_example dosyasını da .htaccess olarak kopyalayın ve istediğiniz şekilde düzenleyin.
 
 > Sitenin HTTP ya da HTTPS kulandığı bildirin.
-> SITE_NAME kısmına sitenin adını yazın
 > E-posta ayarlarını bildirin.
 > EMAIL_USERNAME, sistem e-posta gönderdiği zaman görülecek olan kullanıcı adıdır.
->PAGE_SIZE_LIMIT, tablolar ekranında sayfalama yapılırken gösterilecek bir sayfa boyutunu gösterir.
 >TIMEZONE, varsayılan zaman dilimidir.
 > LANGUAGE, varsayılan sistem dilidir.
 

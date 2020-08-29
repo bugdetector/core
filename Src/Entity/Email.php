@@ -25,7 +25,7 @@ class Email extends TableMapper
     }
 
     /**
-     * @Override
+     * @inheritdoc
      */
     public static function get(array $filter) : ?Email
     {
@@ -33,7 +33,7 @@ class Email extends TableMapper
     }
 
     /**
-     * @Override
+     * @inheritdoc
      */
     public static function getAll(array $filter) : array
     {

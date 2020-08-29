@@ -137,7 +137,7 @@ class TableSearchForm extends Form
     public function processForm()
     {
         $this->submit();
-        $this->query->limit(PAGE_SIZE_LIMIT, ($this->pagination->page -1) * PAGE_SIZE_LIMIT);
+        $this->query->limit(100, ($this->pagination->page -1) * 100);
         $this->table_data = $this->query->execute()->fetchAll(PDO::FETCH_ASSOC);
         $this->pagination->total_count = $this->query->limit(0)->execute()->rowCount();
         $this->table = new Table($this->table_headers, $this->table_data);

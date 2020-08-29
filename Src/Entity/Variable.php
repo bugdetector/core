@@ -32,7 +32,7 @@ class Variable extends TableMapper
     }
 
     /**
-     * @Override
+     * @inheritdoc
      */
     public static function get(array $filter) : ?Variable
     {
@@ -40,7 +40,7 @@ class Variable extends TableMapper
     }
 
     /**
-     * @Override
+     * @inheritdoc
      */
     public static function getAll(array $filter) : array
     {

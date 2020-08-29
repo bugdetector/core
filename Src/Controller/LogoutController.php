@@ -11,7 +11,7 @@ class LogoutController extends BaseTheme
     
     public function checkAccess() : bool
     {
-        return User::get_current_core_user()->isLoggedIn();
+        return \CoreDB::currentUser()->isLoggedIn();
     }
 
     public function preprocessPage()

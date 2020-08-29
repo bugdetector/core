@@ -16,7 +16,7 @@ class AjaxController extends ServiceController
 {
     public function checkAccess(): bool
     {
-        return User::get_current_core_user()->isAdmin();
+        return \CoreDB::currentUser()->isAdmin();
     }
 
     /**
@@ -128,5 +128,11 @@ class AjaxController extends ServiceController
     {
         CoreDB::config()->importTableConfiguration();
         $this->createMessage(Translation::getTranslation("import_success"), Messenger::SUCCESS);
+    }
+
+    public function clearCache()
+    {
+        CoreDB::config()->clearCache();
+        $this->createMessage(Translation::getTranslation("cache_cleared"), Messenger::SUCCESS);
     }
 }

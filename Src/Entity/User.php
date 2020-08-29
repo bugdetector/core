@@ -5,7 +5,6 @@ namespace Src\Entity;
 use CoreDB;
 use CoreDB\Kernel\TableMapper;
 use Exception;
-use Src\JWT;
 use PDO;
 
 define("PASSWORD_FALSE_COUNT", "PASSWORD_FALSE_COUNT");
@@ -25,9 +24,10 @@ class User extends TableMapper
     public $email;
     public $phone;
     public $password;
-    public $created_at;
-    public $last_access;
     public $status;
+    public $last_access;
+    public $created_at;
+    public $last_updated;
 
     private $ROLES;
     private static $ALLROLES;
@@ -37,7 +37,7 @@ class User extends TableMapper
     }
 
     /**
-     * @Override
+     * @inheritdoc
      */
     public static function get(array $filter): ?User
     {
@@ -45,7 +45,7 @@ class User extends TableMapper
     }
 
     /**
-     * @Override
+     * @inheritdoc
      */
     public static function getAll(array $filter): array
     {
@@ -231,30 +231,6 @@ class User extends TableMapper
     public static function get_login_try_count_of_user(string $username)
     {
         return count(Logins::getAll(["username" => $username, "ip_address" => self::get_user_ip()]));
-    }
-
-    /**
-     *
-     * @global User $current_user
-     * @return User
-     */
-    public static function get_current_core_user()
-    {
-        global $current_user;
-        if ($current_user) {
-            return $current_user;
-        } else {
-            if (isset($_SESSION[BASE_URL . "-UID"])) {
-                $current_user = User::get(["ID" => $_SESSION[BASE_URL . "-UID"]]);
-            } elseif (isset($_COOKIE["session-token"])) {
-                $jwt = JWT::createFromString($_COOKIE["session-token"]);
-                $current_user = User::get(["ID" => ($jwt->getPayload())->ID]);
-                $_SESSION[BASE_URL . "-UID"] = $current_user->ID;
-            } else {
-                $current_user = User::getUserByUsername("guest");
-            }
-        }
-        return $current_user;
     }
 
     public function getFullName(): string

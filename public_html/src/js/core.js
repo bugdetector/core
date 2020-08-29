@@ -23,6 +23,11 @@ $(document).ready(function () {
         $(this).parents("form").find("input[type='checkbox']").prop("checked", false).change();
     });
 
+    $(document).on("click", ".clear-cache", function (e) {
+        e.preventDefault();
+        $.ajax(`${root}/admin/ajax/clearCache`);
+    });
+
     $(".summernote").summernote({
         lang: language
     });

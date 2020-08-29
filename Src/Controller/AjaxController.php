@@ -14,11 +14,11 @@ class AjaxController extends ServiceController
             $column = preg_replace('/[^a-zA-Z1-9_]*/', '', $_POST["column"]);
             ;
             $data = "%" . $_POST["data"] . "%";
-            $query = db_select($table)
+            $query = \CoreDB::database()->select($table)
                 ->select($table, ["ID", $column])
                 ->condition(" $column LIKE :data AND $column != '' AND $column IS NOT NULL", [
                     ":data" => $data
-                ])->limit(AUTOCOMPLETE_SELECT_BOX_LIMIT);
+                ])->limit(20);
             if (isset($_POST["filter-column"]) && isset($_POST["filter-value"])) {
                 $filter_column = preg_replace('/[^a-zA-Z1-9_]*/', '', $_POST["filter-column"]);
                 $query->condition(

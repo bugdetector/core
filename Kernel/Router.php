@@ -3,7 +3,6 @@
 namespace CoreDB\Kernel;
 
 use Src\Controller\AccessdeniedController;
-use Src\Entity\User;
 
 class Router
 {
@@ -78,7 +77,7 @@ class Router
         }
         $this->controller = new $controller_name($current_arguments);
         if (!$this->controller->checkAccess()) {
-            if (!User::get_current_core_user()->isLoggedIn()) {
+            if (!\CoreDB::currentUser()->isLoggedIn()) {
                 \CoreDB::goTo(BASE_URL."/login?destination=/". implode("/", $this->arguments));
             } else {
                 $this->controller = new AccessdeniedController($this->arguments);

@@ -6,6 +6,8 @@ use CoreDB\Kernel\Database\MySQL\MySQLDriver;
 use CoreDB\Kernel\Database\DatabaseDriver;
 use CoreDB\Kernel\Messenger;
 use CoreDB\Kernel\Router;
+use Src\Entity\User;
+use Src\JWT;
 
 class CoreDB
 {
@@ -75,17 +77,18 @@ class CoreDB
 
     public static function cleanDirectory(string $path, bool $includeDirs = false)
     {
+        if(!is_dir($path)) return;
         foreach (new DirectoryIterator($path) as $fileInfo) {
             if (!$fileInfo->isDot()) {
                 if ($fileInfo->isDir()) {
                     self::cleanDirectory($fileInfo->getPathname(), $includeDirs);
-                    if ($includeDirs) {
-                        rmdir($fileInfo->getPathname());
-                    }
                 } else {
                     unlink($fileInfo->getPathname());
                 }
             }
+        }
+        if($includeDirs){
+            rmdir($path);
         }
     }
     public static function storeUploadedFile($table, $field_name, $file)
@@ -150,6 +153,28 @@ class CoreDB
         }
     }
 
+    /**
+     *
+     * @global User $current_user
+     * @return User
+     */
+    public static function currentUser(){
+        global $current_user;
+        if ($current_user) {
+            return $current_user;
+        } else {
+            if (isset($_SESSION[BASE_URL . "-UID"])) {
+                $current_user = User::get(["ID" => $_SESSION[BASE_URL . "-UID"]]);
+            } elseif (isset($_COOKIE["session-token"])) {
+                $jwt = JWT::createFromString($_COOKIE["session-token"]);
+                $current_user = User::get(["ID" => ($jwt->getPayload())->ID]);
+                $_SESSION[BASE_URL . "-UID"] = $current_user->ID;
+            } else {
+                $current_user = User::getUserByUsername("guest");
+            }
+        }
+        return $current_user;
+    }
 
     public static function database() : DatabaseDriver
     {

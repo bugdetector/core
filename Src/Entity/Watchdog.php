@@ -20,7 +20,7 @@ class Watchdog extends TableMapper
     }
 
     /**
-     * @Override
+     * @inheritdoc
      */
     public static function get(array $filter) : ?Variable
     {
@@ -28,7 +28,7 @@ class Watchdog extends TableMapper
     }
 
     /**
-     * @Override
+     * @inheritdoc
      */
     public static function getAll(array $filter) : array
     {

@@ -10,6 +10,7 @@ use CoreDB\Kernel\Database\DataType\TableReference;
 use CoreDB\Kernel\Database\TableDefinition;
 use DirectoryIterator;
 use Exception;
+use Src\Entity\Cache;
 use Symfony\Component\Yaml\Yaml;
 
 class ConfigurationManager
@@ -96,10 +97,15 @@ class ConfigurationManager
 
     public function exportTableConfiguration()
     {
-        CoreDB::cleanDirectory("../config");
+        CoreDB::cleanDirectory("../config/table_structure");
         foreach (CoreDB::database()->getTableList() as $table_name) {
             $definition = TableDefinition::getDefinition($table_name);
             file_put_contents("../config/table_structure/{$table_name}.yml", Yaml::dump($definition->toArray(), 4, 2));
         }
+    }
+
+    public function clearCache(){
+        Cache::clear();
+        \CoreDB::cleanDirectory("../cache", true);
     }
 }

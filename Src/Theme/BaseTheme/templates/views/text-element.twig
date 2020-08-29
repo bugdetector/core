@@ -1,1 +1,1 @@
-<text class='{{ view.classes|join(" ") }}' {{ view.renderAttributes() }}>{{ view.text }}</text>
+<{{view.tagName}} class='{{ view.classes|join(" ") }}' {{ view.renderAttributes()|raw }}>{{ view.text }}</{{view.tagName}}>
