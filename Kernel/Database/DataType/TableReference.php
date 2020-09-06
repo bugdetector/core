@@ -31,8 +31,9 @@ class TableReference extends DataTypeAbstract
         }
 
         return SelectWidget::create("")
-            ->addClass("autocomplete")
             ->setOptions($options)
+            ->setDescription($this->comment)
+            ->addClass("autocomplete")
             ->addAttribute("data-reference-table", $this->reference_table)
             ->addAttribute("data-reference-column", $this->column_name);
     }

@@ -23,7 +23,7 @@ class Integer extends DataTypeAbstract
      */
     public function getWidget(): FormWidget
     {
-        return InputWidget::create("")->setType("number");
+        return InputWidget::create("")->setType("number")->setDescription($this->comment);
     }
 
     /**

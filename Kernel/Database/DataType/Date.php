@@ -23,6 +23,7 @@ class Date extends DataTypeAbstract
     {
         $rand_id = random_int(0, 100);
         return InputWidget::create("")
+        ->setDescription($this->comment)
         ->addClass("dateinput datetimepicker-input")
         ->addAttribute("id", $rand_id)
         ->addAttribute("data-target", "#" . $rand_id)

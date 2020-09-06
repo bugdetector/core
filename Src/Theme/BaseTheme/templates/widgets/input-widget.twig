@@ -5,7 +5,7 @@
 {% endif %}
 <input type='{{ widget.type }}' name='{{ widget.name }}' class='{{ widget.classes|join(" ") }}' {{ widget.renderAttributes()|raw }} value='{{ widget.value }}'/>
 {% if widget.description %}
-	<small for="{{ widget.attributes["id"] }}">
+	<small for="{{ widget.attributes["id"] }}" class="d-block">
 		{{ widget.description }}
 	</small>
 {% endif %}

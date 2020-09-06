@@ -26,22 +26,22 @@ class TableInsertForm extends Form
         }
         $this->addField(
             InputWidget::create("save")
-            ->addClass("btn btn-primary mt-2")
             ->setValue(Translation::getTranslation("save"))
             ->setType("submit")
+            ->addClass("btn btn-primary mt-2")
         );
         if ($this->object->ID) {
             $this->addField(
                 InputWidget::create("")
-                ->addClass("btn btn-danger mt-2")
                 ->setValue(Translation::getTranslation("delete"))
                 ->setType("button")
+                ->addClass("btn btn-danger mt-2")
                 ->addClass("remove_accept")
             );
             $this->addField(
                 InputWidget::create("delete")
-                ->addClass("btn btn-danger mt-2")
                 ->setType("submit")
+                ->addClass("btn btn-danger mt-2")
                 ->addAttribute("hidden", "true")
             );
         }

@@ -34,7 +34,8 @@ class EnumaratedList extends DataTypeAbstract
             $options[$key] = Translation::getTranslation($value);
         }
         return SelectWidget::create("")
-            ->setOptions($options);
+            ->setOptions($options)
+            ->setDescription($this->comment);
     }
 
     /**

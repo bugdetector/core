@@ -23,7 +23,7 @@ class LongText extends DataTypeAbstract
      */
     public function getWidget(): FormWidget
     {
-        return TextareaWidget::create("")->addClass("summernote");
+        return TextareaWidget::create("")->setDescription($this->comment)->addClass("summernote");
     }
 
     /**

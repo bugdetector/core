@@ -6,3 +6,8 @@
 		{{option}}
 	{% endfor %}
 </select>
+{% if widget.description %}
+	<small for="{{ widget.attributes["id"] }}" class="d-block">
+		{{ widget.description }}
+	</small>
+{% endif %}

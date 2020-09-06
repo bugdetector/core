@@ -125,7 +125,7 @@ class ColumnDefinition extends CollapsableCard
             ViewGroup::create("div", "col-sm-3 ".(!$reference_table_select->value ? "d-none" : ""))
                 ->addField($reference_table_select)
         )->addField(
-            ViewGroup::create("div", "col-sm-3 ".(!($dataType instanceof \CoreDB\Kernel\Database\DataType\ShortText) ? "d-none" : ""))
+            ViewGroup::create("div", "col-sm-3 ".(!($this->dataType instanceof \CoreDB\Kernel\Database\DataType\ShortText) ? "d-none" : ""))
                 ->addField($field_length)
         )->addField(
             ViewGroup::create("div", "col-sm-3")

@@ -12,10 +12,10 @@ class UserInsertForm extends TableInsertForm
     public function __construct(User $user)
     {
         parent::__construct($user);
-        $password_input = $this->fields["{$user->table}[password]"]->setValue("");
+        $password_input = $this->fields["{$user->table}[password]"]->setDescription("")->setValue("");
         $new_password_input = ViewGroup::create("div", "")
         ->addField($password_input)
-        ->addField((clone $password_input)->setName("password_again"))
+        ->addField((clone $password_input)->setLabel(Translation::getTranslation("password_again"))->setName("password_again"))
         ->addClassToChildren(true);
         $this->fields["{$user->table}[password]"] = $new_password_input;
         unset($this->fields["{$user->table}[created_at]"], $this->fields["{$user->table}[access]"]);
