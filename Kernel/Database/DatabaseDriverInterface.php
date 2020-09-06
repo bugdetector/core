@@ -20,6 +20,7 @@ interface DatabaseDriverInterface
 
     const INTEGER = "integer";
     const FLOAT = "float";
+    const CHECKBOX = "checkbox";
     const SHORT_TEXT = "short_text";
     const TEXT = "text";
     const LONG_TEXT = "long_text";

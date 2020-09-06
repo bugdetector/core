@@ -61,19 +61,15 @@ fields:
     isUnique: false
     default: null
     comment: 'Hashed user password'
-  status:
-    type: enumarated_list
-    values:
-      active: active
-      blocked: blocked
-      pending: pending
-    column_name: status
+  active:
+    type: checkbox
+    column_name: active
     primary_key: false
     autoIncrement: false
-    isNull: false
+    isNull: true
     isUnique: false
     default: null
-    comment: 'Is active'
+    comment: 'User is active or blocked.'
   last_access:
     type: datetime
     column_name: last_access

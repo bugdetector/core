@@ -56,7 +56,7 @@ class LoginForm extends Form
         }
 
         $this->user = User::getUserByUsername($this->request["username"]);
-        if ($this->user && $this->user->status == User::STATUS_BLOCKED) {
+        if ($this->user && !$this->user->active) {
             $this->setError("username", Translation::getTranslation("account_blocked"));
         }
 
@@ -67,7 +67,7 @@ class LoginForm extends Form
             }
             if (User::get_login_try_count_of_user($this->request["username"]) > 10) {
                 //blocking user
-                $this->user->status = User::STATUS_BLOCKED;
+                $this->user->active = 0;
                 $this->user->save();
             }
             $this->setError("username", Translation::getTranslation("ip_blocked"));

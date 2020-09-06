@@ -26,6 +26,7 @@ use CoreDB\Kernel\Database\TableDefinition;
 use CoreDB\Kernel\Database\TruncateQueryPreparerAbstract;
 use CoreDB\Kernel\Database\UpdateQueryPreparerAbstract;
 use CoreDB\Kernel\Database\DatabaseDriver;
+use CoreDB\Kernel\Database\DataType\Checkbox;
 use \PDO;
 use \PDOException;
 use \PDOStatement;
@@ -224,6 +225,9 @@ class MySQLDriver extends DatabaseDriver
                     case "double":
                         $field = new FloatNumber($description["Field"]);
                         break;
+                    case "tinyint":
+                        $field = new Checkbox($description["Field"]);
+                        break;
                     case "varchar":
                         $field = new ShortText($description["Field"]);
                         $field->length = filter_var($description["Type"], FILTER_SANITIZE_NUMBER_INT);
@@ -390,6 +394,8 @@ class MySQLDriver extends DatabaseDriver
             $type_description .= "INT";
         } elseif ($class_name == FloatNumber::class) {
             $type_description .= "DOUBLE";
+        } elseif ($class_name == Checkbox::class) {
+            $type_description .= "BOOLEAN";
         } elseif ($class_name == ShortText::class) {
             /**
              * @var ShortText $dataType

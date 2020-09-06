@@ -3,6 +3,7 @@
 namespace CoreDB\Kernel\Database;
 
 use CoreDB\Kernel\Database\DatabaseDriverInterface;
+use CoreDB\Kernel\Database\DataType\Checkbox;
 use CoreDB\Kernel\Database\DataType\Date;
 use CoreDB\Kernel\Database\DataType\DateTime;
 use CoreDB\Kernel\Database\DataType\TableReference;
@@ -23,6 +24,7 @@ abstract class DatabaseDriver implements DatabaseDriverInterface
         return [
             self::INTEGER => Integer::class,
             self::FLOAT => FloatNumber::class,
+            self::CHECKBOX => Checkbox::class,
             self::SHORT_TEXT => ShortText::class,
             self::TEXT => Text::class,
             self::LONG_TEXT => LongText::class,

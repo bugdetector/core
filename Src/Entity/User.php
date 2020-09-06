@@ -12,11 +12,6 @@ define("PASSWORD_FALSE_COUNT", "PASSWORD_FALSE_COUNT");
 define("LOGIN_UNTRUSTED_ACTIONS", "LOGIN_UNTRUSTED_ACTIONS");
 class User extends TableMapper
 {
-    const STATUS_ACTIVE = "active";
-    const STATUS_BLOCKED = "blocked";
-    const STATUS_PENDING = "pending";
-
-
     const TABLE = "users";
     public $ID;
     public $username;
@@ -25,7 +20,7 @@ class User extends TableMapper
     public $email;
     public $phone;
     public $password;
-    public $status;
+    public $active;
     public $last_access;
     public $created_at;
     public $last_updated;
@@ -81,7 +76,6 @@ class User extends TableMapper
             } elseif (!$this->checkEmailInsertAvailable()) {
                 throw new Exception(Translation::getTranslation("email_not_available"));
             }
-            $this->status = User::STATUS_ACTIVE;
         }
         return parent::insert();
     }
