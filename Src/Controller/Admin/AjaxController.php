@@ -9,7 +9,6 @@ use Exception;
 use Src\Entity\Cache;
 use Src\Entity\DBObject;
 use Src\Entity\Translation;
-use Src\Entity\User;
 use Src\Views\ColumnDefinition;
 
 class AjaxController extends ServiceController
@@ -56,7 +55,7 @@ class AjaxController extends ServiceController
      */
     public function getColumnDefinition()
     {
-        echo ColumnDefinition::create("fields[{$_POST["index"]}]");
+        echo ColumnDefinition::create("fields[{$_POST["index"]}]")->setSortable(true);
     }
 
     /**

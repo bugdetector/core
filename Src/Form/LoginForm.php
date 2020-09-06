@@ -110,9 +110,6 @@ class LoginForm extends Form
             $payload->ID = $current_user->ID;
             $jwt->setPayload($payload);
             setcookie("session-token", $jwt->createToken(), strtotime("+1 day"), BASE_URL, $_SERVER["HTTP_HOST"], false, true);
-            setcookie("remember-me", true, strtotime("+1 year"), BASE_URL, $_SERVER["HTTP_HOST"], false, true);
-        } else {
-            setcookie("remember-me", false, null);
         }
 
         Watchdog::log("login", $this->user->username);

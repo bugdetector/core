@@ -24,6 +24,7 @@ class TableDefinition
         $definition = new TableDefinition($table_name);
         if (in_array($table_name, CoreDB::database()->getTableList())) {
             $definition->fields = CoreDB::database()->getTableDescription($table_name);
+            $definition->table_comment = CoreDB::database()->getTableComment($table_name);
             $definition->table_exist = true;
         } else {
             $definition->table_exist = false;

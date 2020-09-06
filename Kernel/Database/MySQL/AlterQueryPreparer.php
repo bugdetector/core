@@ -6,7 +6,6 @@ use CoreDB\Kernel\Database\AlterQueryPreparerAbstract;
 use CoreDB\Kernel\Database\DataType\DataTypeAbstract;
 use CoreDB\Kernel\Database\DataType\TableReference;
 use CoreDB\Kernel\Database\TableDefinition;
-use CoreDB\Kernel\Database\DatabaseDriverInterface;
 use Exception;
 use PDOStatement;
 use Src\Entity\Cache;
@@ -20,11 +19,11 @@ class AlterQueryPreparer extends AlterQueryPreparerAbstract
     public function addTableDefinition(TableDefinition $tableDefinition)
     {
         $differences = [];
-        $original_description = $this->db->getTableDescription($tableDefinition->table_name);
+        $original_description = TableDefinition::getDefinition($tableDefinition->table_name);
         /**
          * @var DataTypeAbstract $dataType
          */
-        $old_order = array_keys($original_description);
+        $old_order = array_keys($original_description->fields);
         $new_order = array_keys($tableDefinition->fields);
         foreach ($tableDefinition->fields as $column_name => $dataType) {
             if (in_array($column_name, ["ID", "created_at", "last_updated"])) {
@@ -34,10 +33,10 @@ class AlterQueryPreparer extends AlterQueryPreparerAbstract
             $old_after = $old_index ? $old_order[$old_index-1] : null;
             $new_after = $new_order[array_search($column_name, $new_order) - 1];
             $order_changed = $old_after != $new_after;
-            if (isset($original_description[$column_name])) {
-                if (!$dataType->equals($original_description[$column_name]) || $order_changed) {
+            if (isset($original_description->fields[$column_name])) {
+                if (!$dataType->equals($original_description->fields[$column_name]) || $order_changed) {
                     $differences[] = [
-                        "old" => $original_description[$column_name],
+                        "old" => $original_description->fields[$column_name],
                         "new" => $dataType,
                         "after" => $new_after
                     ];
@@ -50,8 +49,11 @@ class AlterQueryPreparer extends AlterQueryPreparerAbstract
                 ];
             }
         }
-        if (empty($differences) && $old_order == $new_order) {
+        if (empty($differences) && $old_order == $new_order && $original_description->table_comment == $tableDefinition->table_comment) {
             throw new Exception(Translation::getTranslation("no_change_on_table"));
+        }
+        if($original_description->table_comment != $tableDefinition->table_comment){
+            $this->queries[] = "ALTER TABLE `{$tableDefinition->table_name}` COMMENT = '{$tableDefinition->table_comment}' ;";
         }
         foreach ($differences as $difference) {
             /**

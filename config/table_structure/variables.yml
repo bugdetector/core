@@ -1,5 +1,5 @@
 table_name: variables
-table_comment: ''
+table_comment: 'Contains less secure site Variables. For more security use .config.php. Connected vie Variable class.'
 fields:
   key:
     type: short_text

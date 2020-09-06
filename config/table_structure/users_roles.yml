@@ -1,5 +1,5 @@
 table_name: users_roles
-table_comment: ''
+table_comment: 'Constains User''s roles. Look at User::add_role, User::delete_role, User::updateRoles'
 fields:
   user_id:
     type: table_reference

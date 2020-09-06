@@ -1,5 +1,5 @@
 table_name: emails
-table_comment: ''
+table_comment: 'Contains e-mail template in many languages. You can add new one.'
 fields:
   key:
     type: short_text

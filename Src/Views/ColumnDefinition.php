@@ -30,13 +30,13 @@ class ColumnDefinition extends CollapsableCard
 
     public function render()
     {
-        $field_name_input = InputWidget::create("{$this->name}[field_name]")
+        $field_name_input = InputWidget::create("{$this->name}[field_name]");
+        $field_name_input->setLabel(Translation::getTranslation("column_name"))
+            ->setDescription(Translation::getTranslation("available_characters", ["a-z, _, 1-9"]))
             ->addClass("lowercase_filter column_name")
             ->addAttribute("placeholder", Translation::getTranslation("column_name"))
             ->addAttribute("autocomplete", "off")
-            ->addAttribute("required", "true")
-            ->setLabel(Translation::getTranslation("column_name"))
-            ->setDescription(Translation::getTranslation("available_characters", ["a-z, _, 1-9"]));
+            ->addAttribute("required", "true");
 
         $data_type_options = [];
         $dataTypes = \CoreDB::database()::dataTypes();
@@ -50,36 +50,36 @@ class ColumnDefinition extends CollapsableCard
         $data_type_select = new SelectWidget("{$this->name}[field_type]");
         $data_type_select->setLabel(Translation::getTranslation("data_type"))
             ->setNullElement(null)
+            ->setOptions($data_type_options)
             ->addAttribute("required", "true")
-            ->addClass("type-control")
-            ->setOptions($data_type_options);
+            ->addClass("type-control");
 
-        $reference_table_select = SelectWidget::create("{$this->name}[reference_table]")
-        ->addClass("reference_table")
-        ->setLabel(Translation::getTranslation("reference_table"))
+        $reference_table_select = SelectWidget::create("{$this->name}[reference_table]");
+        $reference_table_select->setLabel(Translation::getTranslation("reference_table"))
         ->setNullElement(Translation::getTranslation("reference_table"))
-        ->setOptions(\CoreDB::database()::getTableList());
+        ->setOptions(\CoreDB::database()::getTableList())
+        ->addClass("reference_table");
 
-        $list_values_input = TextareaWidget::create("{$this->name}[list_values]")
+        $list_values_input = TextareaWidget::create("{$this->name}[list_values]");
+        $list_values_input->setLabel(Translation::getTranslation("list_values"))
+        ->setDescription(Translation::getTranslation("list_values_description"))
         ->addClass("list_values")
-        ->setLabel(Translation::getTranslation("list_values"))
-        ->addAttribute("placeholder", Translation::getTranslation("list_values"))
-        ->setDescription(Translation::getTranslation("list_values_description"));
+        ->addAttribute("placeholder", Translation::getTranslation("list_values"));
 
-        $field_length = InputWidget::create("{$this->name}[field_length]")
+        $field_length = InputWidget::create("{$this->name}[field_length]");
+        $field_length->setLabel(Translation::getTranslation("length_varchar"))
+        ->setValue("255")
         ->addClass("field_length")
-        ->setLabel(Translation::getTranslation("length_varchar"))
         ->addAttribute("placeholder", Translation::getTranslation("length_varchar"))
-        ->addAttribute("required", "true")
-        ->setValue("255");
+        ->addAttribute("required", "true");
         
         $is_unique_checkbox = InputWidget::create("{$this->name}[is_unique]")
         ->setType("checkbox")
         ->setLabel(Translation::getTranslation("unique"))
         ->removeClass("form-control");
 
-        $column_comment = TextareaWidget::create("{$this->name}[comment]")
-        ->addAttribute("placeholder", Translation::getTranslation("column_comment"))
+        $column_comment = TextareaWidget::create("{$this->name}[comment]");
+        $column_comment->addAttribute("placeholder", Translation::getTranslation("column_comment"))
         ->addClass("my-2");
 
         $remove_button = ViewGroup::create("a", "btn btn-danger removefield")

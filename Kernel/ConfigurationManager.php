@@ -4,6 +4,7 @@ namespace CoreDB\Kernel;
 
 use CoreDB;
 use CoreDB\Kernel\Database\DataType\DataTypeAbstract;
+use CoreDB\Kernel\Database\DataType\DateTime;
 use CoreDB\Kernel\Database\DataType\EnumaratedList;
 use CoreDB\Kernel\Database\DataType\ShortText;
 use CoreDB\Kernel\Database\DataType\TableReference;
@@ -82,6 +83,13 @@ class ConfigurationManager
         }
         $db_query .= implode("\n", $alterQueryPreparer->queries);
         foreach ($createdTables as $create_table) {
+            unset($tables[$create_table]->fields["created_at"], $tables[$create_table]->fields["last_updated"]);
+            $created_at = new DateTime("created_at");
+            $created_at->default = CoreDB::database()->currentTimestamp();
+            $tables[$create_table]->fields["created_at"] = $created_at;
+            $last_updated = new DateTime("last_updated");
+            $last_updated->default = CoreDB::database()->currentTimestampOnUpdate();
+            $tables[$create_table]->fields["last_updated"] = $last_updated;
             $db_query .= "\n" . CoreDB::database()->create($tables[$create_table], true)->getQuery();
         }
         foreach ($droppedTables as $drop_table) {

@@ -1,5 +1,5 @@
 table_name: blocked_ips
-table_comment: ''
+table_comment: 'Contains blocked IP adresses. These IP adresses can''t login to site.'
 fields:
   ip:
     type: short_text

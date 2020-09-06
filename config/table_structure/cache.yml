@@ -1,5 +1,5 @@
 table_name: cache
-table_comment: ''
+table_comment: 'Contains cached data. You can use this table via Cache class.'
 fields:
   bundle:
     type: short_text

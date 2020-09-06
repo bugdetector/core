@@ -1,5 +1,5 @@
 table_name: watchdog
-table_comment: ''
+table_comment: 'Importtant log of actions.'
 fields:
   event:
     type: short_text

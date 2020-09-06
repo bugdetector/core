@@ -54,6 +54,8 @@ class TableStructForm extends Form
                 $this->table_definition->addField($dataType);
             }
         } else {
+            $this->table_name = $table_name;
+            $this->table_comment = $table_comment;
             $this->table_definition = TableDefinition::getDefinition($table_name);
             $this->table_definition->setComment($table_comment);
         }
@@ -129,28 +131,22 @@ class TableStructForm extends Form
 
         $this->addField(
             InputWidget::create("new_field")
-                ->addClass("btn btn-info mt-2 newfield")
                 ->setValue(Translation::getTranslation("new_field"))
                 ->setType("button")
+                ->addClass("btn btn-info mt-2 newfield")
         );
         $this->addField(
             InputWidget::create("save")
-                ->addClass("btn btn-primary mt-2")
                 ->setValue(Translation::getTranslation("save"))
                 ->setType("submit")
-        );
-        $this->addField(
-            InputWidget::create("drop_accept")
-                ->addClass("btn btn-danger mt-2")
-                ->setValue(Translation::getTranslation("drop_table"))
-                ->setType("button")
-                ->addClass("remove_accept")
+                ->addClass("btn btn-primary mt-2")
         );
         $this->addField(
             InputWidget::create("drop")
-                ->addClass("btn btn-danger mt-2")
+                ->setValue(Translation::getTranslation("drop_table"))
                 ->setType("submit")
-                ->addAttribute("hidden", "true")
+                ->addClass("btn btn-danger mt-2 tabledrop")
+                ->addAttribute("data-table-name", $this->table_name)
         );
 
         foreach ($this->table_definition->fields as $column_name => $description) {

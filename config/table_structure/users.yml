@@ -1,5 +1,5 @@
 table_name: users
-table_comment: ''
+table_comment: 'Contains site Users fundemantal data. Connected with User class.'
 fields:
   username:
     type: short_text
