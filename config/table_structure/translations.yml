@@ -3,31 +3,31 @@ table_comment: 'Contains site translations. You can add new one.'
 fields:
   key:
     type: short_text
-    length: '10000'
+    length: '255'
     column_name: key
+    primary_key: false
+    autoIncrement: false
+    isNull: false
+    isUnique: true
+    default: null
+    comment: 'Translation Key.'
+  en:
+    type: short_text
+    length: '10000'
+    column_name: en
     primary_key: false
     autoIncrement: false
     isNull: false
     isUnique: false
     default: null
-    comment: 'Translation Key.'
-  en:
-    type: short_text
-    length: '255'
-    column_name: en
-    primary_key: false
-    autoIncrement: false
-    isNull: false
-    isUnique: true
-    default: null
     comment: 'English translation.'
   tr:
     type: short_text
-    length: '255'
+    length: '10000'
     column_name: tr
     primary_key: false
     autoIncrement: false
     isNull: false
-    isUnique: true
+    isUnique: false
     default: null
     comment: 'Turkish translation.'
