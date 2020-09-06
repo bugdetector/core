@@ -57,7 +57,7 @@ fields:
     column_name: password
     primary_key: false
     autoIncrement: false
-    isNull: false
+    isNull: true
     isUnique: false
     default: null
     comment: 'Hashed user password'
