@@ -9,7 +9,7 @@ interface ControllerInterface
      * Check is page accessible. If returns false not found page will shown
      *
      * @return bool
-     *  is_accessible
+     *  Is accessible
      */
     public function checkAccess(): bool;
 

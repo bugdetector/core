@@ -97,7 +97,7 @@ class TableStructForm extends Form
                 $success_message = $this->table_definition->table_exist ? "change_success" : "table_create_success";
                 $this->table_definition->saveDefinition();
                 CoreDB::messenger()->createMessage(Translation::getTranslation($success_message), Messenger::SUCCESS);
-                CoreDB::goTo(BASE_URL."/admin/table/struct/{$this->table_name}");
+                CoreDB::goTo(\CoreDB::controller()->getUrl()."{$this->table_name}");
             } catch (Exception $ex) {
                 $this->setError("table_name", $ex->getMessage());
             }

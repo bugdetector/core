@@ -64,15 +64,19 @@ class CoreDB
         return $normalized_files;
     }
 
-    public static function goTo(string $uri)
+    public static function goTo(string $uri, $params = [])
     {
+        if(!empty($params)){
+            $uri .= "?".http_build_query($params);
+        }
         header("Location: $uri");
         die();
     }
 
     public static function requestUrl()
     {
-        return $_SERVER["REQUEST_URI"];
+        $count = 1;
+        return str_replace(SITE_ROOT, "", $_SERVER["REQUEST_URI"], $count);
     }
 
     public static function cleanDirectory(string $path, bool $includeDirs = false)
@@ -173,7 +177,8 @@ class CoreDB
                 $current_user = User::get(["ID" => ($jwt->getPayload())->ID]);
                 $_SESSION[BASE_URL . "-UID"] = $current_user->ID;
             } else {
-                $current_user = User::getUserByUsername("guest");
+                $current_user = new User();
+                $current_user->username = "guest";
             }
         }
         return $current_user;

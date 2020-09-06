@@ -3,6 +3,9 @@
 namespace Src\Form;
 
 use CoreDB;
+use CoreDB\Kernel\Router;
+use Src\Controller\AdminController;
+use Src\Controller\MainpageController;
 use Src\Entity\Logins;
 use Src\Entity\Translation;
 use Src\Entity\User;
@@ -124,9 +127,9 @@ class LoginForm extends Form
         if (isset($_GET["destination"])) {
             \CoreDB::goTo(BASE_URL . $_GET["destination"]);
         } elseif (\CoreDB::currentUser()->isAdmin()) {
-            \CoreDB::goTo(BASE_URL . "/admin");
+            \CoreDB::goTo(AdminController::getUrl());
         } else {
-            \CoreDB::goTo(BASE_URL);
+            \CoreDB::goTo(MainpageController::getUrl());
         }
     }
 

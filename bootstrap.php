@@ -4,14 +4,9 @@ include __DIR__.'/config/config.php';
 include __DIR__.'/Kernel/CoreDB.php';
 
 $host = \CoreDB::baseHost();
-define("BASE_URL", HTTP."://".$host.SITE_ROOT);
+define("BASE_URL", $_SERVER["REQUEST_SCHEME"]."://".\CoreDB::baseHost().SITE_ROOT);
 session_start();
 
-CoreDB::currentUser();
 date_default_timezone_set(TIMEZONE);
 
-$uri = trim(str_replace(BASE_URL, "", HTTP."://".$host.$_SERVER["REQUEST_URI"]),"/");
-$uri = explode("/", preg_replace("/\?.*/", "", $uri));
-
-$router = new CoreDB\Kernel\Router($uri);
-$router->route();
+CoreDB\Kernel\Router::getInstance()->route();

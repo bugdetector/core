@@ -3,7 +3,6 @@ define("DB_SERVER", "localhost");
 define("DB_USER", "core_multisite_user");
 define("DB_PASSWORD", "core_multisite1234");
 define("DB_NAME", "core_multisite");
-define("HTTP", "http");
 
 define("EMAIL", "farmakonerciyes@gmail.com");
 define("EMAIL_PASSWORD", "spbepjrlwrsnwjnf");

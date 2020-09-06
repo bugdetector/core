@@ -3,20 +3,16 @@
 namespace CoreDB\Kernel;
 
 use Src\Controller\AccessdeniedController;
+use Src\Controller\LoginController;
+use Src\Controller\MainpageController;
+use Src\Controller\NotFoundController;
 
 class Router
 {
-    const MAINPAGE = "mainpage";
-    const NOT_FOUND = "NotFoundController";
-    const ACCESS_DENIED = "AccessdeniedController";
+    const MAINPAGE = MainpageController::class;
+    const NOT_FOUND = NotFoundController::class;
+    const ACCESS_DENIED = AccessdeniedController::class;
 
-    /**
-     * Argument supplied from route
-     *
-     * @var array $arguments
-     * Arguments
-     */
-    private array $arguments;
     /**
      * Controller matched route
      *
@@ -28,35 +24,46 @@ class Router
     private static $instance = null;
 
 
-    public function __construct(array $uri)
+    public function __construct()
     {
         self::$instance = $this;
-        $this->arguments = $uri;
     }
 
     /**
      *
      * @return Router
      */
-    public static function getInstance()
+    public static function getInstance() : Router
     {
         if (!self::$instance) {
-            die("Invalid access");
+            self::$instance = new Router();
         }
         return self::$instance;
     }
     
     public function route($route = null)
     {
-        if ($route) {
-            $current_arguments = explode("/", $route);
-        } else {
-            if (!$this->arguments[0]) {
-                $this->arguments[0] = self::MAINPAGE;
-            }
-            $current_arguments = $this->arguments;
+        if (!$route) {
+            $route = trim(str_replace(BASE_URL, "", $_SERVER["REQUEST_SCHEME"]."://".\CoreDB::baseHost().$_SERVER["REQUEST_URI"]),"/");
         }
-        
+        $this->controller = $this->getControllerFromUrl($route);
+        if (!$this->controller->checkAccess()) {
+            if (!\CoreDB::currentUser()->isLoggedIn()) {
+                \CoreDB::goTo(LoginController::getUrl(), ["destination" => \CoreDB::requestUrl()]);
+            } else {
+                $this->controller = new AccessdeniedController([]);
+            }
+        }
+        $this->controller->processPage();
+        die();
+    }
+
+    public function getControllerFromUrl($url){
+        $current_arguments = explode("/", preg_replace("/\?.*/", "", $url));
+        if (!$current_arguments[0]) {
+            $mainpageClass = self::MAINPAGE;
+            return new $mainpageClass($current_arguments);
+        }
         $namespace = "Src\\Controller\\";
         $controller_name = null;
         foreach ($current_arguments as $page) {
@@ -71,25 +78,24 @@ class Router
                 break;
             }
         }
-        
-        if (!$controller_name) {
-            $controller_name = $namespace.self::NOT_FOUND;
+        if(!$controller_name){
+            $controller_name = self::NOT_FOUND;
         }
-        $this->controller = new $controller_name($current_arguments);
-        if (!$this->controller->checkAccess()) {
-            if (!\CoreDB::currentUser()->isLoggedIn()) {
-                \CoreDB::goTo(BASE_URL."/login?destination=/". implode("/", $this->arguments));
-            } else {
-                $this->controller = new AccessdeniedController($this->arguments);
-            }
-        }
-        $this->controller->processPage();
-        die();
+        return new $controller_name($current_arguments);
     }
-    
-    public function get_arguments()
-    {
-        return $this->arguments;
+
+    /**
+     * Return URL.
+     * @return string
+     *  URL
+     */
+    public function getUrl(string $controller) : string{
+        $mainPath = explode("\\", str_replace("Src\\Controller\\", "", $controller));
+        $route = "/";
+        foreach($mainPath as $path){
+            $route .= str_replace("controller", "", mb_strtolower($path))."/";
+        }
+        return BASE_URL.$route;
     }
 
     public static function getController() : ControllerInterface

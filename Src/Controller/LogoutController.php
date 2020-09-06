@@ -18,7 +18,7 @@ class LogoutController extends BaseTheme
     {
         session_destroy();
         setcookie("session-token", "");
-        \CoreDB::goTo(BASE_URL);
+        \CoreDB::goTo(MainpageController::getUrl());
     }
 
 

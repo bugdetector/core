@@ -105,7 +105,7 @@ class TableSearchForm extends Form
 
     public function submit()
     {
-        $params = array_filter($this->request);
+        $params = $this->request;
         $this->pagination->page = isset($params["page"]) ? $params["page"] : 1;
         $orderBy = isset($params["orderBy"]) && in_array($params["orderBy"], array_keys($this->table_headers)) ? $params["orderBy"] : null;
         $orderDirection = isset($params["orderDirection"]) && $params["orderDirection"] == "DESC" ? "DESC" : "ASC";
@@ -118,7 +118,7 @@ class TableSearchForm extends Form
          */
         foreach (\CoreDB::database()::getTableDescription($this->table_name) as $dataType) {
             $column_name = $dataType->column_name;
-            if (isset($params[$column_name]) && $params[$column_name]) {
+            if (isset($params[$column_name]) && $params[$column_name] !== "") {
                 if (in_array(get_class($dataType), [DateTime::class, Date::class, Time::class])) {
                     $dates = explode("&", $params[$column_name]);
                     $this->query->condition(

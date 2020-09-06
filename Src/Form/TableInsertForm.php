@@ -2,8 +2,10 @@
 
 namespace Src\Form;
 
+use CoreDB;
 use CoreDB\Kernel\TableMapper;
 use Exception;
+use Src\Controller\Admin\TableController;
 use Src\Entity\Translation;
 use Src\Form\Widget\FormWidget;
 use Src\Form\Widget\InputWidget;
@@ -81,7 +83,7 @@ class TableInsertForm extends Form
                 }
                 $this->setMessage(Translation::getTranslation($success_message));
                 if ($this->redirect) {
-                    \CoreDB::goTo($this->getSaveRedirectUrl());
+                    \CoreDB::goTo(CoreDB::controller()->getUrl()."{$this->object->table}/{$this->object->ID}");
                 }
             } elseif (isset($this->request["delete"])) {
                 $this->object->delete();
@@ -95,13 +97,8 @@ class TableInsertForm extends Form
         }
     }
 
-    protected function getSaveRedirectUrl() :string
-    {
-        return BASE_URL."/admin/table/insert/{$this->object->table}/{$this->object->ID}";
-    }
-
     protected function getDeleteRedirectUrl() :string
     {
-        return BASE_URL."/admin/table/{$this->object->table}";
+        return TableController::getUrl()."{$this->object->table}";
     }
 }

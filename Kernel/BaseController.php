@@ -73,6 +73,10 @@ abstract class BaseController implements ControllerInterface, BaseControllerInte
         return $message_group;
     }
 
+    public static function getUrl() : string{
+        return Router::getInstance()->getUrl(static::class);
+    }
+
     /**
      * @inheritdoc
      */
