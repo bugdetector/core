@@ -10,7 +10,7 @@ fields:
     isNull: false
     isUnique: true
     default: null
-    comment: ''
+    comment: Username
   name:
     type: short_text
     length: '50'
@@ -20,17 +20,17 @@ fields:
     isNull: false
     isUnique: false
     default: null
-    comment: ''
+    comment: Name
   surname:
     type: short_text
     length: '50'
     column_name: surname
     primary_key: false
     autoIncrement: false
-    isNull: false
+    isNull: true
     isUnique: false
     default: null
-    comment: ''
+    comment: Surname
   email:
     type: short_text
     length: '50'
@@ -40,14 +40,14 @@ fields:
     isNull: false
     isUnique: true
     default: null
-    comment: ''
+    comment: Email
   phone:
     type: short_text
     length: '20'
     column_name: phone
     primary_key: false
     autoIncrement: false
-    isNull: false
+    isNull: true
     isUnique: false
     default: null
     comment: ''
@@ -60,7 +60,7 @@ fields:
     isNull: false
     isUnique: false
     default: null
-    comment: ''
+    comment: 'Hashed user password'
   status:
     type: enumarated_list
     values:
@@ -73,13 +73,13 @@ fields:
     isNull: false
     isUnique: false
     default: null
-    comment: ''
+    comment: 'Is active'
   last_access:
     type: datetime
     column_name: last_access
     primary_key: false
     autoIncrement: false
-    isNull: false
+    isNull: true
     isUnique: false
     default: null
     comment: ''

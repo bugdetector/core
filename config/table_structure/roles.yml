@@ -10,4 +10,4 @@ fields:
     isNull: false
     isUnique: true
     default: null
-    comment: ''
+    comment: 'Role name.'

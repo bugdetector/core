@@ -9,7 +9,7 @@ abstract class DataTypeAbstract
     public string $column_name;
     public bool $primary_key = false;
     public bool $autoIncrement = false;
-    public bool $isNull = false;
+    public bool $isNull = true;
     public bool $isUnique = false;
     public $default;
     public string $comment = "";
@@ -22,7 +22,6 @@ abstract class DataTypeAbstract
     public function getClassName()
     {
         return (new \ReflectionClass($this))->getName();
-        ;
     }
 
     /**

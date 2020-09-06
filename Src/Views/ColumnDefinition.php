@@ -55,7 +55,7 @@ class ColumnDefinition extends CollapsableCard
             ->addClass("type-control");
 
         $reference_table_select = SelectWidget::create("{$this->name}[reference_table]");
-        $reference_table_select->setLabel(Translation::getTranslation("reference_table"))
+        $reference_table_select->setLabel(Translation::getTranslation("reference"))
         ->setNullElement(Translation::getTranslation("reference_table"))
         ->setOptions(\CoreDB::database()::getTableList())
         ->addClass("reference_table");
@@ -76,6 +76,11 @@ class ColumnDefinition extends CollapsableCard
         $is_unique_checkbox = InputWidget::create("{$this->name}[is_unique]")
         ->setType("checkbox")
         ->setLabel(Translation::getTranslation("unique"))
+        ->removeClass("form-control");
+
+        $not_empty_checkbox = InputWidget::create("{$this->name}[not_empty]")
+        ->setType("checkbox")
+        ->setLabel(Translation::getTranslation("not_empty"))
         ->removeClass("form-control");
 
         $column_comment = TextareaWidget::create("{$this->name}[comment]");
@@ -100,6 +105,9 @@ class ColumnDefinition extends CollapsableCard
             if ($this->dataType->isUnique) {
                 $is_unique_checkbox->addAttribute("checked", "true");
             }
+            if (!$this->dataType->isNull) {
+                $not_empty_checkbox->addAttribute("checked", "true");
+            }
             if ($this->dataType instanceof \CoreDB\Kernel\Database\DataType\TableReference) {
                 $reference_table_select->setValue($this->dataType->reference_table);
             }
@@ -122,14 +130,17 @@ class ColumnDefinition extends CollapsableCard
             ViewGroup::create("div", "col-sm-3")
                 ->addField($data_type_select)
         )->addField(
-            ViewGroup::create("div", "col-sm-3 ".(!$reference_table_select->value ? "d-none" : ""))
+            ViewGroup::create("div", "col-sm-2 ".(!$reference_table_select->value ? "d-none" : ""))
                 ->addField($reference_table_select)
         )->addField(
-            ViewGroup::create("div", "col-sm-3 ".(!($this->dataType instanceof \CoreDB\Kernel\Database\DataType\ShortText) ? "d-none" : ""))
+            ViewGroup::create("div", "col-sm-2 ".(!($this->dataType instanceof \CoreDB\Kernel\Database\DataType\ShortText) ? "d-none" : ""))
                 ->addField($field_length)
         )->addField(
-            ViewGroup::create("div", "col-sm-3")
+            ViewGroup::create("div", "col-sm-2")
                 ->addField($is_unique_checkbox)
+        )->addField(
+            ViewGroup::create("div", "col-sm-2")
+                ->addField($not_empty_checkbox)
         )->addField(
             ViewGroup::create("div", "col-sm-12 ".(!$list_values_input->value ? "d-none" : ""))
                 ->addField($list_values_input)

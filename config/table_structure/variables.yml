@@ -1,5 +1,5 @@
 table_name: variables
-table_comment: 'Contains less secure site Variables. For more security use .config.php. Connected vie Variable class.'
+table_comment: 'Contains less secure site Variables. For more security use .config.php. Connected via Variable class.'
 fields:
   key:
     type: short_text
@@ -10,13 +10,13 @@ fields:
     isNull: false
     isUnique: true
     default: null
-    comment: ''
+    comment: 'Variable key.'
   value:
     type: text
     column_name: value
     primary_key: false
     autoIncrement: false
-    isNull: false
+    isNull: true
     isUnique: false
     default: null
-    comment: ''
+    comment: Value.

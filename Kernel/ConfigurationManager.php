@@ -56,6 +56,7 @@ class ConfigurationManager
                 $dataType = new $dataTypes[$field["type"]]($field["column_name"]);
                 $dataType->comment = $field["comment"];
                 $dataType->isUnique = $field["isUnique"];
+                $dataType->isNull = $field["isNull"];
                 if ($dataType instanceof ShortText) {
                     $dataType->length = $field["length"];
                 } elseif ($dataType instanceof TableReference) {

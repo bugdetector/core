@@ -22,7 +22,7 @@ class File extends DataTypeAbstract
      */
     public function getWidget(): FormWidget
     {
-        return InputWidget::create("")->setType("file")->setDescription($this->comment);
+        return InputWidget::create("")->setType("file")->setDescription(Translation::getTranslation($this->comment));
     }
 
     /**

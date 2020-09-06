@@ -22,7 +22,7 @@ class ShortText extends DataTypeAbstract
      */
     public function getWidget(): FormWidget
     {
-        return InputWidget::create("")->setDescription($this->comment);
+        return InputWidget::create("")->setDescription(Translation::getTranslation($this->comment));
     }
 
     /**

@@ -385,7 +385,7 @@
         "tr": "Hesabınız kilitlenmiştir. Lütfen şifrenizi sıfırlayarak sisteme yeniden giriş yapın."
     },
     {
-        "key": null,
+        "key": "file_upload_error",
         "en": "File cannot uploaded.",
         "tr": "Dosya yüklenemedi."
     },
@@ -585,7 +585,7 @@
         "tr": "Kullanıcıların rollerini barındırır. Bkz: User::add_role, User::delete_role, User::updateRoles"
     },
     {
-        "key": "Contains less secure site Variables. For more security use .config.php. Connected vie Variable class.",
+        "key": "Contains less secure site Variables. For more security use .config.php. Connected via Variable class.",
         "en": "Contains less secure site Variables. For more security use .config.php. Connected via Variable class.",
         "tr": ".config.php üzerindekine göre daha az güvenli site değişkenlerini barındırır. Variable sınıfı ile bağlıdır."
     },
@@ -733,5 +733,15 @@
         "key": "time",
         "en": "Time",
         "tr": "Zaman"
+    },
+    {
+        "key": "not_empty",
+        "en": "Not Empty",
+        "tr": "Boş Değil"
+    },
+    {
+        "key": "reference",
+        "en": "Reference",
+        "tr": "Referans"
     }
 ]

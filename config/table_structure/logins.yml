@@ -10,7 +10,7 @@ fields:
     isNull: false
     isUnique: false
     default: null
-    comment: ''
+    comment: 'Ip address.'
   username:
     type: short_text
     length: '255'
@@ -20,4 +20,4 @@ fields:
     isNull: false
     isUnique: false
     default: null
-    comment: ''
+    comment: 'Username or email filled in login screen.'

@@ -23,7 +23,7 @@ class Text extends DataTypeAbstract
      */
     public function getWidget(): FormWidget
     {
-        return TextareaWidget::create("")->setDescription($this->comment);
+        return TextareaWidget::create("")->setDescription(Translation::getTranslation($this->comment));
     }
 
     /**

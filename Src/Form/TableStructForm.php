@@ -44,6 +44,7 @@ class TableStructForm extends Form
                 $dataType = new $dataTypes[$field["field_type"]]($field["field_name"]);
                 $dataType->comment = $field["comment"];
                 $dataType->isUnique = boolval($field["is_unique"]);
+                $dataType->isNull = !boolval($field["not_empty"]);
                 if ($dataType instanceof ShortText) {
                     $dataType->length = $field["field_length"];
                 } elseif ($dataType instanceof TableReference) {
@@ -75,9 +76,6 @@ class TableStructForm extends Form
     {
         if (@preg_match("/[^a-z1-9_]+/", $this->request["table_name"])) {
             $this->setError("table_name", Translation::getTranslation("table_name") . ": " . Translation::getTranslation("available_characters", ["a-z, _, 1-9"]));
-        }
-        if (@preg_match("/[^\p{L}\p{N}\. ]+/u", $this->request["table_comment"])) {
-            $this->setError("table_comment", Translation::getTranslation("table_comment") . ": " . Translation::getTranslation("available_characters", ["A-z, a-z, _, 1-9"]));
         }
         if (!isset($this->request["fields"]) || empty($this->request["fields"])) {
             $this->setError("fields", Translation::getTranslation("at_least_one_column"));

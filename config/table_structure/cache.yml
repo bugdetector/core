@@ -10,7 +10,7 @@ fields:
     isNull: false
     isUnique: false
     default: null
-    comment: ''
+    comment: 'Cache bundle.'
   key:
     type: short_text
     length: '255'
@@ -20,7 +20,7 @@ fields:
     isNull: false
     isUnique: false
     default: null
-    comment: ''
+    comment: 'Cache key.'
   value:
     type: long_text
     column_name: value
@@ -29,4 +29,4 @@ fields:
     isNull: false
     isUnique: false
     default: null
-    comment: ''
+    comment: 'Cache value.'

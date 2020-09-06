@@ -22,7 +22,7 @@ class FloatNumber extends DataTypeAbstract
      */
     public function getWidget(): FormWidget
     {
-        return InputWidget::create("")->setType("number")->setDescription($this->comment)->addAttribute("step", "0.01");
+        return InputWidget::create("")->setType("number")->setDescription(Translation::getTranslation($this->comment))->addAttribute("step", "0.01");
     }
 
     /**

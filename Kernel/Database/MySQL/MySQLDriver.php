@@ -264,6 +264,9 @@ class MySQLDriver extends DatabaseDriver
                 if ($description["Key"] == "UNI") {
                     $field->isUnique = true;
                 }
+                if ($description["Null"] == "NO") {
+                    $field->isNull = false;
+                }
                 $field->comment = CoreDB::database()->getColumnComment($table, $description["Field"]);
                 $fields[$field->column_name] = $field;
             }

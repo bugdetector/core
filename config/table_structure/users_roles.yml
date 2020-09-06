@@ -7,17 +7,17 @@ fields:
     column_name: user_id
     primary_key: false
     autoIncrement: false
-    isNull: false
+    isNull: true
     isUnique: false
     default: null
-    comment: ''
+    comment: 'User Id.'
   role_id:
     type: table_reference
     reference_table: roles
     column_name: role_id
     primary_key: false
     autoIncrement: false
-    isNull: false
+    isNull: true
     isUnique: false
     default: null
-    comment: ''
+    comment: 'Role Id.'
