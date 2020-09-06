@@ -2,8 +2,7 @@
 
 namespace Src\Form;
 
-use CoreDB\Kernel\Messenger;
-
+use Src\Entity\Logins;
 use Src\Entity\ResetPassword;
 use Src\Entity\Translation;
 use Src\Entity\User;
@@ -62,11 +61,22 @@ class ResetPasswordForm extends Form
 
     public function submit()
     {
-        $this->user->password = password_hash($this->request["password"], PASSWORD_BCRYPT);
+        $this->user->map([
+            "password" => $this->request["password"],
+            "active" => 1
+        ]);
         $this->user->save();
 
         $reset_password_queue = ResetPassword::get(["user" => $this->user->ID, "key" => $_GET["KEY"]]);
         $reset_password_queue->delete();
+
+        \CoreDB::database()->delete(Logins::TABLE)
+        ->condition("username = :username OR ip_address = :ip_address", 
+            [
+                ":username" => $this->user->username,
+                ":ip_address" => $this->user->get_user_ip()
+            ]
+        )->execute();
 
         $message = Translation::getTranslation("password_reset_success");
         $username = $this->user->getFullName();

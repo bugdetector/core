@@ -30,11 +30,11 @@ class LoginForm extends Form
         );
         $this->addField(
             InputWidget::create("password")
+            ->setType("password")
             ->addClass("form-control-user")
             ->addAttribute("placeholder", Translation::getTranslation("password"))
             ->addAttribute("required", "true")
             ->addAttribute("autofocus", "true")
-            ->setType("password")
         );
     }
 
@@ -72,7 +72,7 @@ class LoginForm extends Form
             }
             $this->setError("username", Translation::getTranslation("ip_blocked"));
         }
-        if (!$this->user || !password_verify($this->request["password"], $this->user->password)) {
+        if (empty($this->errors) && (!$this->user || !password_verify($this->request["password"], $this->user->password))) {
             if (isset($_SESSION[LOGIN_UNTRUSTED_ACTIONS])) {
                 $_SESSION[LOGIN_UNTRUSTED_ACTIONS]++;
                 if ($_SESSION[LOGIN_UNTRUSTED_ACTIONS] > 3) {

@@ -24,18 +24,7 @@
 			<tr>
 				{% for key, data in row %}
 					<td>
-						{% if key == "edit_actions" %}
-							<div class="d-flex  ">
-								<a href="#" class="mr-2 rowdelete" data-table="{{ view.table_name }}" data-id="{{data}}">
-									<i class="fa fa-times text-danger core-control"></i>
-								</a>
-								<a href="{{ constant("BASE_URL") ~ "/admin/table/insert/" ~ view.table_name ~ "/" ~ data }}" class="ml-2">
-									<i class="fa fa-edit text-primary core-control row"></i>
-								</a>
-							</div>
-						{% else %}
-							{{ data }}
-						{% endif %}
+						{{ data }}
 					</td>
 				{% endfor %}
 			</tr>

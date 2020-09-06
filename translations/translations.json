@@ -650,16 +650,6 @@
         "tr": "Etkin"
     },
     {
-        "key": "blocked",
-        "en": "Blocked",
-        "tr": "Engellenmiş"
-    },
-    {
-        "key": "pending",
-        "en": "Pending",
-        "tr": "Onay Bekliyor"
-    },
-    {
         "key": "column_comment",
         "en": "Column Comment",
         "tr": "Kolon Yorumu"
@@ -743,5 +733,10 @@
         "key": "reference",
         "en": "Reference",
         "tr": "Referans"
+    },
+    {
+        "key": "checkbox",
+        "en": "Checkbox",
+        "tr": "Onay Kutusu"
     }
 ]

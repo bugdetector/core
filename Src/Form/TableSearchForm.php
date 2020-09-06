@@ -8,6 +8,7 @@ use CoreDB\Kernel\Database\DataType\Date;
 use CoreDB\Kernel\Database\DataType\DateTime;
 use CoreDB\Kernel\Database\DataType\Time;
 use CoreDB\Kernel\Database\SelectQueryPreparerAbstract;
+use CoreDB\Kernel\TableMapper;
 use PDO;
 use Src\Entity\Translation;
 use Src\Form\Widget\InputWidget;
@@ -104,7 +105,7 @@ class TableSearchForm extends Form
 
     public function submit()
     {
-        $params = array_filter($_GET);
+        $params = array_filter($this->request);
         $this->pagination->page = isset($params["page"]) ? $params["page"] : 1;
         $orderBy = isset($params["orderBy"]) && in_array($params["orderBy"], array_keys($this->table_headers)) ? $params["orderBy"] : null;
         $orderDirection = isset($params["orderDirection"]) && $params["orderDirection"] == "DESC" ? "DESC" : "ASC";
@@ -139,6 +140,24 @@ class TableSearchForm extends Form
         $this->submit();
         $this->query->limit(100, ($this->pagination->page -1) * 100);
         $this->table_data = $this->query->execute()->fetchAll(PDO::FETCH_ASSOC);
+        foreach($this->table_data as &$row){
+            $row["edit_actions"] = ViewGroup::create("div", "d-flex")
+            ->addField(
+                ViewGroup::create("a", "mr-2 rowdelete")
+                ->addField(
+                    ViewGroup::create("i", "fa fa-times text-danger core-control")
+                )
+                ->addAttribute("data-table", $this->table_name)
+                ->addAttribute("data-id", $row["ID"])
+                ->addAttribute("href", "#")
+            )->addField(
+                ViewGroup::create("a", "ml-2")
+                ->addField(
+                    ViewGroup::create("i", "fa fa-edit text-primary core-control")
+                )
+                ->addAttribute("href", TableMapper::editUrl($this->table_name, $row["ID"]))
+                );
+        }
         $this->pagination->total_count = $this->query->limit(0)->execute()->rowCount();
         $this->table = new Table($this->table_headers, $this->table_data);
         $this->table->table_name = $this->table_name;

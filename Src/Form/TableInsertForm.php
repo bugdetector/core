@@ -3,7 +3,9 @@
 namespace Src\Form;
 
 use CoreDB\Kernel\TableMapper;
+use Exception;
 use Src\Entity\Translation;
+use Src\Form\Widget\FormWidget;
 use Src\Form\Widget\InputWidget;
 
 class TableInsertForm extends Form
@@ -52,6 +54,14 @@ class TableInsertForm extends Form
         return "table_insert_form";
     }
 
+    protected function restoreValues(){
+        foreach ($this->object->toArray() as $field_name => $field) {
+            if($this->fields["{$this->object->table}[{$field_name}]"] instanceof FormWidget){
+                $this->fields["{$this->object->table}[{$field_name}]"]->setValue(strval($field)); 
+            }
+        }
+    }
+
     public function validate() : bool
     {
         return true;
@@ -59,25 +69,29 @@ class TableInsertForm extends Form
 
     public function submit()
     {
-        if (isset($this->request["save"])) {
-            $success_message = $this->object->ID ? "update_success" : "insert_success";
-            if (isset($this->request[$this->object->table])) {
-                $this->object->map($this->request[$this->object->table]);
+        try{
+            if (isset($this->request["save"])) {
+                $success_message = $this->object->ID ? "update_success" : "insert_success";
+                if (isset($this->request[$this->object->table])) {
+                    $this->object->map($this->request[$this->object->table]);
+                }
+                $this->object->save();
+                if (isset($_FILES[$this->object->table])) {
+                    $this->object->include_files($_FILES[$this->object->table]);
+                }
+                $this->setMessage(Translation::getTranslation($success_message));
+                if ($this->redirect) {
+                    \CoreDB::goTo($this->getSaveRedirectUrl());
+                }
+            } elseif (isset($this->request["delete"])) {
+                $this->object->delete();
+                $this->setMessage(Translation::getTranslation("record_removed"));
+                if ($this->redirect) {
+                    \CoreDB::goTo($this->getDeleteRedirectUrl());
+                }
             }
-            $this->object->save();
-            if (isset($_FILES[$this->object->table])) {
-                $this->object->include_files($_FILES[$this->object->table]);
-            }
-            $this->setMessage(Translation::getTranslation($success_message));
-            if ($this->redirect) {
-                \CoreDB::goTo($this->getSaveRedirectUrl());
-            }
-        } elseif (isset($this->request["delete"])) {
-            $this->object->delete();
-            $this->setMessage(Translation::getTranslation("record_removed"));
-            if ($this->redirect) {
-                \CoreDB::goTo($this->getDeleteRedirectUrl());
-            }
+        }catch(Exception $ex){
+            $this->setError("", $ex->getMessage());
         }
     }
 

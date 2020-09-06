@@ -19,7 +19,7 @@ class User extends TableMapper
     public $surname;
     public $email;
     public $phone;
-    public $password;
+    protected $password;
     public $active;
     public $last_access;
     public $created_at;
@@ -30,6 +30,22 @@ class User extends TableMapper
     public function __construct()
     {
         $this->table = self::TABLE;
+    }
+
+    public function toArray(): array
+    {
+        $array = parent::toArray();
+        unset($array["ROLES"], $array["ALLROLES"]);
+        return $array;
+    }
+
+    public function map(array $array)
+    {
+        if(!$array["password"]){
+            unset($array["password"]);
+        }
+        unset($array["last_access"]);
+        parent::map($array);
     }
 
     /**
@@ -70,12 +86,10 @@ class User extends TableMapper
 
     protected function insert()
     {
-        if (get_called_class() === User::class) {
-            if (!$this->checkUsernameInsertAvailable()) {
-                throw new Exception(Translation::getTranslation("username_exist"));
-            } elseif (!$this->checkEmailInsertAvailable()) {
-                throw new Exception(Translation::getTranslation("email_not_available"));
-            }
+        if (!$this->checkUsernameInsertAvailable()) {
+            throw new Exception(Translation::getTranslation("username_exist"));
+        } elseif (!$this->checkEmailInsertAvailable()) {
+            throw new Exception(Translation::getTranslation("email_not_available"));
         }
         return parent::insert();
     }
@@ -88,6 +102,14 @@ class User extends TableMapper
             }
         }
         return parent::update();
+    }
+
+    public function save()
+    {
+        if(isset($this->changed_fields["password"]) && $this->changed_fields["password"]["new_value"]){
+            $this->password = password_hash($this->password, PASSWORD_BCRYPT);
+        }
+        return parent::save();
     }
 
     public function delete(): bool
@@ -238,12 +260,7 @@ class User extends TableMapper
         return "{$this->name} {$this->surname}";
     }
 
-    public static function getStatuses(): array
-    {
-        return [
-            self::STATUS_ACTIVE => Translation::getTranslation(self::STATUS_ACTIVE),
-            self::STATUS_BLOCKED => Translation::getTranslation(self::STATUS_BLOCKED),
-            self::STATUS_PENDING => Translation::getTranslation(self::STATUS_PENDING)
-        ];
+    public static function editUrl(string $table_name, $data){
+        return BASE_URL."/admin/user/".User::get(["ID" => $data])->username;
     }
 }

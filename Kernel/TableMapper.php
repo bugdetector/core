@@ -6,6 +6,7 @@ use CoreDB;
 use CoreDB\Kernel\Database\DataType\DataTypeAbstract;
 use Exception;
 use PDO;
+use ReflectionObject;
 use Src\Entity\Translation;
 use Src\Form\TableInsertForm;
 
@@ -22,6 +23,10 @@ abstract class TableMapper
     public function __construct(string $table)
     {
         $this->table = $table;
+    }
+    public function __get($name)
+    {
+        return $this->{$name};
     }
     
     abstract public static function get(array $filter);
@@ -84,7 +89,14 @@ abstract class TableMapper
      */
     public function toArray() : array
     {
-        $object_as_array = get_object_vars($this);
+        $reflector = new ReflectionObject($this);
+        $nodes = $reflector->getProperties();
+        $object_as_array = [];
+        foreach ($nodes as $node) {
+            $nod = $reflector->getProperty($node->getName());
+            $nod->setAccessible(true);
+            $object_as_array[$node->getName()] = $nod->getValue($this);
+        }
         unset($object_as_array["ID"]);
         unset($object_as_array["table"]);
         unset($object_as_array["created_at"]);
@@ -172,6 +184,10 @@ abstract class TableMapper
             $fields[$description->column_name] = $field;
         }
         return $fields;
+    }
+
+    public static function editUrl(string $table_name, $data){
+        return BASE_URL."/admin/table/insert/{$table_name}/{$data}";
     }
 
     function include_files($from = null)
