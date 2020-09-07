@@ -663,5 +663,10 @@
         "key": "checkbox",
         "en": "Checkbox",
         "tr": "Onay Kutusu"
+    },
+    {
+        "key": "current_pass_wrong",
+        "en": "Entered current password wrong.",
+        "tr": "Geçerli şifrenizi yanlış girdiniz."
     }
 ]

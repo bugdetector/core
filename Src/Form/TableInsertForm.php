@@ -14,8 +14,6 @@ class TableInsertForm extends Form
 {
     public string $method = "POST";
 
-    public bool $redirect = true;
-
     protected TableMapper $object;
 
     public function __construct(TableMapper $object)
@@ -84,23 +82,23 @@ class TableInsertForm extends Form
                     $this->object->include_files($_FILES[$this->object->table]);
                 }
                 $this->setMessage(Translation::getTranslation($success_message));
-                if ($this->redirect) {
-                    \CoreDB::goTo(CoreDB::controller()->getUrl()."{$this->object->table}/{$this->object->ID}");
-                }
+                $this->submitSuccess();
             } elseif (isset($this->request["delete"])) {
                 $this->object->delete();
                 $this->setMessage(Translation::getTranslation("record_removed"));
-                if ($this->redirect) {
-                    \CoreDB::goTo($this->getDeleteRedirectUrl());
-                }
+                $this->deleteSuccess();
             }
         }catch(Exception $ex){
             $this->setError("", $ex->getMessage());
         }
     }
 
-    protected function getDeleteRedirectUrl() :string
+    protected function submitSuccess(){
+        \CoreDB::goTo(CoreDB::controller()->getUrl()."{$this->object->table}/{$this->object->ID}");
+    }
+
+    protected function deleteSuccess() :string
     {
-        return TableController::getUrl()."{$this->object->table}";
+        \CoreDB::goTo(TableController::getUrl()."{$this->object->table}");
     }
 }

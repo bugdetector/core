@@ -11,6 +11,7 @@ use Src\Form\Widget\InputWidget;
 use Src\Theme\CoreRenderer;
 use Src\Theme\View;
 use Src\Views\AlertMessage;
+use Src\Views\ViewGroup;
 
 abstract class Form extends View
 {
@@ -99,7 +100,12 @@ abstract class Form extends View
 
     public function setError(string $field_name, string $message)
     {
-        $this->errors[$field_name] = AlertMessage::create($message);
+        if(!isset($this->errors[$field_name])){
+            $this->errors[$field_name] = ViewGroup::create("div","");
+        }
+        $this->errors[$field_name]->addField(
+            AlertMessage::create($message)
+        );
     }
 
     public function setMessage(string $message, int $type = Messenger::SUCCESS)

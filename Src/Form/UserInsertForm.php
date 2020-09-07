@@ -2,6 +2,8 @@
 
 namespace Src\Form;
 
+use Src\Controller\Admin\Manage\UserController;
+use Src\Controller\Admin\UserController as AdminUserController;
 use Src\Entity\Translation;
 use Src\Entity\User;
 use Src\Views\ViewGroup;
@@ -13,11 +15,18 @@ class UserInsertForm extends TableInsertForm
     {
         parent::__construct($user);
         $password_input = $this->fields["{$user->table}[password]"]
+        ->setType("password")
         ->setDescription("")
         ->setValue("")
         ->addAttribute("autocomplete", "new-password");
-        $new_password_input = ViewGroup::create("div", "")
-        ->addField($password_input)
+        $new_password_input = ViewGroup::create("div", "");
+        $current_user = \CoreDB::currentUser();
+        if(!$current_user->isAdmin() || $current_user->ID == $user->ID){
+            $new_password_input->addField((clone $password_input)
+            ->setLabel(Translation::getTranslation("current_pass"))
+            ->setName("current_pass"));
+        }
+        $new_password_input->addField($password_input)
         ->addField((clone $password_input)->setLabel(Translation::getTranslation("password_again"))->setName("password_again"))
         ->addClassToChildren(true);
         $this->fields["{$user->table}[password]"] = $new_password_input;
@@ -29,6 +38,12 @@ class UserInsertForm extends TableInsertForm
     {
         $parent_check = parent::validate();
         if ($this->request[$this->object->table]["password"]) {
+            $current_user = \CoreDB::currentUser();
+            if(!$current_user->isAdmin() || $current_user->ID == $this->object->ID){
+                if(!password_verify($this->request["current_pass"], $this->object->password)){
+                    $this->setError("{$this->object->table}[password]", Translation::getTranslation("current_pass_wrong"));
+                }
+            }
             if ($this->request[$this->object->table]["password"] != $this->request["password_again"]) {
                 $this->setError("{$this->object->table}[password]", Translation::getTranslation("password_match_error"));
             }
@@ -40,13 +55,13 @@ class UserInsertForm extends TableInsertForm
     }
 
 
-    protected function getSaveRedirectUrl() :string
+    protected function submitSuccess()
     {
-        return BASE_URL."/admin/user/{$this->object->username}";
+        \CoreDB::goTo(AdminUserController::getUrl().$this->object->username);
     }
 
     protected function getDeleteRedirectUrl() :string
     {
-        return BASE_URL."/admin/manage/user";
+        \CoreDB::goTo(UserController::getUrl());
     }
 }
