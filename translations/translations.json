@@ -30,11 +30,6 @@
         "tr": "Rol Yönetimi"
     },
     {
-        "key": "updates",
-        "en": "Updates",
-        "tr": "Güncellemeler"
-    },
-    {
         "key": "add_user",
         "en": "Add User",
         "tr": "Kullanıcı Ekle"
@@ -135,11 +130,6 @@
         "tr": "Kaydet"
     },
     {
-        "key": "update_password",
-        "en": "Update Password",
-        "tr": "Şifre Güncelle"
-    },
-    {
         "key": "current_pass",
         "en": "Current Password",
         "tr": "Geçerli Şifre"
@@ -153,11 +143,6 @@
         "key": "username_exist",
         "en": "An user with same username exist.",
         "tr": "Bu kullanıcı adıyla bir kullanıcı bulunuyor."
-    },
-    {
-        "key": "password_be_sure_correct",
-        "en": "Please be sure that you written password correct. ",
-        "tr": "Şifreyi doğru yazdığınızdan emin olun."
     },
     {
         "key": "password_validation_error",
@@ -230,7 +215,7 @@
         "tr": "Yeni Alan"
     },
     {
-        "key": "length_varchar",
+        "key": "length",
         "en": "Length",
         "tr": "Uzunluk"
     },
@@ -243,11 +228,6 @@
         "key": "record_removed",
         "en": "Record removed.",
         "tr": "Kayıt silindi."
-    },
-    {
-        "key": "table_exits",
-        "en": "A table with same name already created.",
-        "tr": "Bu isimde bir tablo zaten tanımlı."
     },
     {
         "key": "invalid_operation",
@@ -263,11 +243,6 @@
         "key": "table_deleted",
         "en": "%s table deleted.",
         "tr": "%s tablosu silindi."
-    },
-    {
-        "key": "deleted",
-        "en": "%s deleted.",
-        "tr": "%s silindi."
     },
     {
         "key": "forgot_password_question",
@@ -305,24 +280,9 @@
         "tr": "Sil"
     },
     {
-        "key": "browse",
-        "en": "Browse",
-        "tr": "Gözat"
-    },
-    {
-        "key": "choose_file",
-        "en": "Choose File",
-        "tr": "Dosya Seçin"
-    },
-    {
         "key": "clear_cache",
         "en": "Clear Cache",
         "tr": "Önbelleği Temizle"
-    },
-    {
-        "key": "update",
-        "en": "Update",
-        "tr": "Güncelle"
     },
     {
         "key": "password_reset_success",
@@ -383,11 +343,6 @@
         "key": "account_blocked",
         "en": "Your user account has been blocked. Please login after reset password.",
         "tr": "Hesabınız kilitlenmiştir. Lütfen şifrenizi sıfırlayarak sisteme yeniden giriş yapın."
-    },
-    {
-        "key": "file_upload_error",
-        "en": "File cannot uploaded.",
-        "tr": "Dosya yüklenemedi."
     },
     {
         "key": "translations",
@@ -480,26 +435,6 @@
         "tr": "Çeviri yapılmış metin sayısı"
     },
     {
-        "key": "no_update",
-        "en": "There is no update",
-        "tr": "Güncelleme mevcut değil"
-    },
-    {
-        "key": "available_version",
-        "en": "Available version",
-        "tr": "Erişilebilir versiyon"
-    },
-    {
-        "key": "user_definition",
-        "en": "%s user definition",
-        "tr": "%s kullanıcı tanımı"
-    },
-    {
-        "key": "update_available",
-        "en": "Update available",
-        "tr": "Güncelleme mevcut"
-    },
-    {
         "key": "login_welcome",
         "en": "Welcome",
         "tr": "Hoşgeldiniz"
@@ -523,11 +458,6 @@
         "key": "edit_table",
         "en": "Edit Table",
         "tr": "Tablo Düzenle"
-    },
-    {
-        "key": "back_table",
-        "en": "Back To Table",
-        "tr": "Tabloya Dön"
     },
     {
         "key": "back_to_mainpage",
@@ -638,11 +568,6 @@
         "key": "password_match_error",
         "en": "Passwords not match.",
         "tr": "Şifreler uyuşmuyor."
-    },
-    {
-        "key": "status",
-        "en": "Status",
-        "tr": "Durum"
     },
     {
         "key": "active",

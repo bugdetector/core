@@ -34,7 +34,7 @@ class StructController extends TableController
     protected function addDefaultTranslations()
     {
         parent::addDefaultTranslations();
-        $this->addFrontendTranslation("length_varchar");
+        $this->addFrontendTranslation("length");
         $this->addFrontendTranslation("reference_table");
         $this->addFrontendTranslation("field_drop_accept");
         $this->addFrontendTranslation("check_wrong_fields");

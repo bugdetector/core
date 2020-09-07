@@ -66,6 +66,13 @@ class Translation extends TableMapper
         parent::clearTable(self::TABLE);
     }
 
+    public function toArray(): array
+    {
+        $array = parent::toArray();
+        unset($array["language"], $array["cache"], $array["available_languages"]);
+        return $array;
+    }
+
     public function map(array $array)
     {
         parent::map($array);
@@ -119,14 +126,14 @@ class Translation extends TableMapper
     public static function importTranslations()
     {
         $translations = json_decode(file_get_contents(Translation::BACKUP_PATH), true);
-        \CoreDB::database()::getInstance()->beginTransaction();
-        db_truncate(self::TABLE);
+        \CoreDB::database()->beginTransaction();
+        self::clear();
         foreach ($translations as $translation) {
             $translate = new Translation();
             $translate->map($translation);
             $translate->insert();
         }
-        \CoreDB::database()::getInstance()->commit();
+        \CoreDB::database()->commit();
     }
 
     public static function exportTranslations()
