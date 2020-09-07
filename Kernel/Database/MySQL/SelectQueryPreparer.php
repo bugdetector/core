@@ -89,12 +89,18 @@ class SelectQueryPreparer extends SelectQueryPreparerAbstract
         return $this->having ? "HAVING $this->having" : "";
     }
     
-    public function condition(string $condition, array $params = null, $connect = "AND")
+    /**
+     * @inheritdoc
+     */
+    public function condition(string $column, $value, string $operator = "=", string $connect = "AND") : SelectQueryPreparerAbstract
     {
-        $this->condition = $this->condition ? "$this->condition $connect $condition" : $condition;
-        if ($params) {
-            $this->params = empty($this->params) ? $params : array_merge($this->params, $params);
+        $placeholder = $column;
+        $index = 0;
+        while(isset($this->params[":$placeholder"])){
+            $placeholder = "{$column}_{$index}";
         }
+        $this->condition .= ($this->condition ? $connect : "")." `$column` $operator :$placeholder ";
+        $this->params[":$placeholder"] = $value;
         return $this;
     }
     

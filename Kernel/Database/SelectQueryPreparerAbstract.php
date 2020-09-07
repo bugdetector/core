@@ -173,16 +173,18 @@ abstract class SelectQueryPreparerAbstract extends QueryPreparerAbstract
 
     /**
      * Add condition to query
-     * @param string $condition
-     *  Condition sentence
-     * @param array $params
-     *  Condition params
+     * @param string $column
+     *  Column name.
+     * @param mixed $value
+     *  Matching value.
+     * @param string $operator
+     *  Matching operator.
      * @param string $connect
      *  AND - OR vs. Default: AND
-     * @return $this
-     *  Chaining
+     * @return SelectQueryPreparerAbstract
+     *  Self
      */
-    abstract public function condition(string $condition, array $params = null, $connect = "AND");
+    abstract public function condition(string $column, $value, string $operator = "=", string $connect = "AND") : SelectQueryPreparerAbstract;
     
     /**
      * Range results

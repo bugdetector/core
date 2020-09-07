@@ -71,12 +71,9 @@ class ResetPasswordForm extends Form
         $reset_password_queue->delete();
 
         \CoreDB::database()->delete(Logins::TABLE)
-        ->condition("username = :username OR ip_address = :ip_address", 
-            [
-                ":username" => $this->user->username,
-                ":ip_address" => $this->user->get_user_ip()
-            ]
-        )->execute();
+        ->condition("username", $this->user->username)
+        ->condition("ip_address", $this->user->get_user_ip(), "OR")
+        ->execute();
 
         $message = Translation::getTranslation("password_reset_success");
         $username = $this->user->getFullName();

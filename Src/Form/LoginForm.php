@@ -122,7 +122,7 @@ class LoginForm extends Form
 
         //Clearing failed login actions
         CoreDB::database()->delete(Logins::TABLE)
-            ->condition("username = :username", [":username" => $this->user->username])
+            ->condition("username", $this->user->username)
             ->execute();
         if (isset($_GET["destination"])) {
             \CoreDB::goTo(BASE_URL . $_GET["destination"]);

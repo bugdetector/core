@@ -288,8 +288,9 @@ class MySQLDriver extends DatabaseDriver
     {
         return CoreDB::database()->select("INFORMATION_SCHEMA.KEY_COLUMN_USAGE", "", false)
             ->select("", ["TABLE_NAME", "COLUMN_NAME"])
-            ->condition("REFERENCED_TABLE_SCHEMA = :scheme AND REFERENCED_TABLE_NAME = :table")
-            ->params(["scheme" => DB_NAME, "table" => $table])->execute()->fetchAll(PDO::FETCH_NUM);
+            ->condition("REFERENCED_TABLE_SCHEMA", DB_NAME)
+            ->condition("REFERENCED_TABLE_NAME", $table)
+            ->execute()->fetchAll(PDO::FETCH_NUM);
     }
 
     /**
@@ -299,8 +300,8 @@ class MySQLDriver extends DatabaseDriver
     {
         return CoreDB::database()->select("INFORMATION_SCHEMA.KEY_COLUMN_USAGE", "", false)
             ->select("", ["REFERENCED_TABLE_NAME", "REFERENCED_COLUMN_NAME"])
-            ->condition("REFERENCED_TABLE_SCHEMA = :scheme AND TABLE_NAME = :table")
-            ->params(["scheme" => DB_NAME, "table" => $table])->execute();
+            ->condition("REFERENCED_TABLE_SCHEMA", DB_NAME)
+            ->condition("TABLE_NAME", $table)->execute();
     }
 
     /**
@@ -311,7 +312,7 @@ class MySQLDriver extends DatabaseDriver
     {
         return CoreDB::database()->select("INFORMATION_SCHEMA.KEY_COLUMN_USAGE", "", false)
             ->select("", ["TABLE_NAME", "COLUMN_NAME", "REFERENCED_TABLE_NAME", "REFERENCED_COLUMN_NAME"])
-            ->condition("REFERENCED_TABLE_SCHEMA = :scheme")
+            ->condition("REFERENCED_TABLE_SCHEMA", DB_NAME)
             ->params(["scheme" => DB_NAME])->execute();
     }
 
@@ -334,8 +335,10 @@ class MySQLDriver extends DatabaseDriver
         } else {
             $result = CoreDB::database()->select("INFORMATION_SCHEMA.KEY_COLUMN_USAGE", "", false)
                 ->select("", ["REFERENCED_TABLE_NAME", "REFERENCED_COLUMN_NAME"])
-                ->condition("REFERENCED_TABLE_SCHEMA = :scheme AND TABLE_NAME = :table AND COLUMN_NAME = :column")
-                ->params(["scheme" => DB_NAME, "table" => $table, ":column" => $foreignKey])->execute()->fetch(PDO::FETCH_BOTH);
+                ->condition("REFERENCED_TABLE_SCHEMA", DB_NAME)
+                ->condition("TABLE_NAME", $table)
+                ->condition("COLUMN_NAME", $foreignKey)
+                ->execute()->fetch(PDO::FETCH_BOTH);
             if ($result) {
                 Cache::set("foreign_key_description", $table . $foreignKey, json_encode($result));
             }
@@ -363,7 +366,8 @@ class MySQLDriver extends DatabaseDriver
     public static function getTableComment(string $table_name): string
     {
         return CoreDB::database()->select("INFORMATION_SCHEMA.TABLES", "", false)
-            ->condition("table_schema = :schema AND table_name = :table_name", [":schema" => DB_NAME, ":table_name" => $table_name])
+            ->condition("table_schema", DB_NAME)
+            ->condition("table_name", $table_name)
             ->select("", ["table_comment AS comment"])
             ->execute()->fetchObject()->comment;
     }
@@ -375,9 +379,9 @@ class MySQLDriver extends DatabaseDriver
     public static function getColumnComment(string $table_name, string $column_name): string
     {
         $comment_result = CoreDB::database()->select("INFORMATION_SCHEMA.COLUMNS", "", false)
-            ->condition("TABLE_SCHEMA = :table_schema", [":table_schema" => DB_NAME])
-            ->condition("TABLE_NAME = :table_name", [":table_name" => $table_name])
-            ->condition("COLUMN_NAME = :column_name", [":column_name" => $column_name])
+            ->condition("TABLE_SCHEMA", DB_NAME)
+            ->condition("TABLE_NAME", $table_name)
+            ->condition("COLUMN_NAME", $column_name)
             ->select("", ["COLUMN_COMMENT"])
             ->execute()->fetchObject();
         if ($comment_result) {

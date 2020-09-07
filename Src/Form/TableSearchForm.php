@@ -122,15 +122,10 @@ class TableSearchForm extends Form
             if (isset($params[$column_name]) && $params[$column_name] !== "") {
                 if (in_array(get_class($dataType), [DateTime::class, Date::class, Time::class])) {
                     $dates = explode("&", $params[$column_name]);
-                    $this->query->condition(
-                        "`{$column_name}` >= :{$column_name}_start AND `{$column_name}` <= :{$column_name}_end",
-                        [
-                            ":{$column_name}_start" => $dates[0] . " 00:00:00",
-                            ":{$column_name}_end" => $dates[1] . " 23:59:59"
-                        ]
-                    );
+                    $this->query->condition($column_name, $dates[0] . " 00:00:00", ">=")
+                    ->condition($column_name, $dates[0] . " 23:59:59", "<=");
                 } else {
-                    $this->query->condition("`{$column_name}` LIKE :{$column_name}", [":{$column_name}" => "%{$params[$column_name]}%"]);
+                    $this->query->condition($column_name, "%{$params[$column_name]}%", "LIKE");
                 }
             }
         }

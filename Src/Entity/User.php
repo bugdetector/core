@@ -114,9 +114,9 @@ class User extends TableMapper
 
     public function delete(): bool
     {
-        return CoreDB::database()->delete("users_roles")->condition("user_id = :user_id", ["user_id" => $this->ID])->execute() &&
-            CoreDB::database()->delete(Logins::TABLE)->condition("username = :username", ["username" => $this->username])->execute() &&
-            CoreDB::database()->delete(ResetPassword::TABLE)->condition("USER = :user_id", ["user_id" => $this->ID])->execute()
+        return CoreDB::database()->delete("users_roles")->condition("user_id", $this->ID)->execute() &&
+            CoreDB::database()->delete(Logins::TABLE)->condition("username", $this->username)->execute() &&
+            CoreDB::database()->delete(ResetPassword::TABLE)->condition("user", $this->ID)->execute()
             && parent::delete();
     }
 
@@ -167,9 +167,9 @@ class User extends TableMapper
     {
         if (!$this->ROLES || $force) {
             $query = CoreDB::database()->select("users_roles", "", true)
-                ->join("roles")
+                ->join("roles", "", "role_id = roles.ID")
                 ->select("roles", ["ROLE"])
-                ->condition("user_id = :user_id AND role_id = roles.ID", [":user_id" => $this->ID])
+                ->condition("user_id", $this->ID)
                 ->execute();
             $this->ROLES = array_map(function ($el) {
                 return $el->ROLE;

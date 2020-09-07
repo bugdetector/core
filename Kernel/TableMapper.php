@@ -36,13 +36,10 @@ abstract class TableMapper
     public static function find(array $filter, string $table) : ?TableMapper
     {
         $query = CoreDB::database()->select($table);
-        $params = [];
         foreach ($filter as $key => $value) {
-            $query->condition("`$key` = :$key");
-            $params[":$key"] = $value;
+            $query->condition($key, $value);
         }
-        return $query->params($params)
-        ->orderBy("ID")
+        return $query->orderBy("ID")
         ->execute()
         ->fetchObject(get_called_class(), [$table]) ? : null;
     }
@@ -50,13 +47,10 @@ abstract class TableMapper
     public static function findAll(array $filter, string $table) : array
     {
         $query = CoreDB::database()->select($table);
-        $params = [];
         foreach ($filter as $key => $value) {
-            $query->condition("`$key` = :$key");
-            $params[":$key"] = $value;
+            $query->condition($key, $value);
         }
-        return $query->params($params)
-        ->orderBy("ID")
+        return $query->orderBy("ID")
         ->execute()
         ->fetchAll(PDO::FETCH_CLASS, get_called_class(), [$table]) ? : [];
     }
@@ -116,7 +110,10 @@ abstract class TableMapper
 
     protected function update()
     {
-        return CoreDB::database()->update($this->table, $this->toArray())->condition("ID = :id", ["id" => $this->ID])->execute();
+        return CoreDB::database()
+        ->update($this->table, $this->toArray())
+        ->condition("ID", $this->ID)
+        ->execute();
     }
 
     public function save()
@@ -143,7 +140,7 @@ abstract class TableMapper
             }
         }
         return boolval(
-            CoreDB::database()->delete($this->table)->condition(" ID = :id ", ["id" => $this->ID])->execute()
+            CoreDB::database()->delete($this->table)->condition("ID", $this->ID)->execute()
         );
     }
 

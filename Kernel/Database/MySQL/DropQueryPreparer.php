@@ -30,8 +30,9 @@ class DropQueryPreparer extends DropQueryPreparerAbstract
     {
         $select_contsraints = MySQLDriver::getInstance()->select("information_schema.KEY_COLUMN_USAGE", "kcu", false)
         ->select("kcu", ["CONSTRAINT_NAME"])
-        ->condition("REFERENCED_TABLE_SCHEMA = :schema AND TABLE_NAME = :table", [":schema" => DB_NAME, ":table" => $this->table])
-        ->condition("COLUMN_NAME = :column", [":column" => $this->column]);
+        ->condition("REFERENCED_TABLE_SCHEMA", DB_NAME)
+        ->condition("TABLE_NAME", $this->table)
+        ->condition("COLUMN_NAME", $this->column);
         foreach ($select_contsraints->execute()->fetchAll(PDO::FETCH_COLUMN) as $constraint) {
             $this->query .= "ALTER TABLE `{$this->table}` DROP FOREIGN KEY `{$constraint}`;";
         }

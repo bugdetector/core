@@ -9,12 +9,20 @@ abstract class DeleteQueryPreparerAbstract extends QueryPreparerAbstract
         $this->table = $table;
     }
     
-    public function condition(string $condition, array $params = [])
-    {
-        $this->condition = $condition;
-        $this->params = $params;
-        return $this;
-    }
+     /**
+     * Add condition to query
+     * @param string $column
+     *  Column name.
+     * @param mixed $value
+     *  Matching value.
+     * @param string $operator
+     *  Matching operator.
+     * @param string $connect
+     *  AND - OR vs. Default: AND
+     * @return DeleteQueryPreparerAbstract
+     *  Self
+     */
+    abstract public function condition(string $column, $value, string $operator = "=", string $connect = "AND") : DeleteQueryPreparerAbstract;
     
     /**
      * Return condition string
