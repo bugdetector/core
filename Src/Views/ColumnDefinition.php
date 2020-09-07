@@ -67,10 +67,10 @@ class ColumnDefinition extends CollapsableCard
         ->addAttribute("placeholder", Translation::getTranslation("list_values"));
 
         $field_length = InputWidget::create("{$this->name}[field_length]");
-        $field_length->setLabel(Translation::getTranslation("length_varchar"))
+        $field_length->setLabel(Translation::getTranslation("length"))
         ->setValue("255")
         ->addClass("field_length")
-        ->addAttribute("placeholder", Translation::getTranslation("length_varchar"))
+        ->addAttribute("placeholder", Translation::getTranslation("length"))
         ->addAttribute("required", "true");
         
         $is_unique_checkbox = InputWidget::create("{$this->name}[is_unique]")
