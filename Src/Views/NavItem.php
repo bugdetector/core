@@ -12,9 +12,13 @@ class NavItem extends ViewGroup
     public function __construct(
         string $icon_class,
         string $label,
-        string $href = '#'
+        string $href = '#',
+        bool $is_active = false
     ) {
         parent::__construct("li", "nav-item");
+        if($is_active){
+            $this->addClass("active");
+        }
         $this->addField(
             ViewGroup::create("a", "nav-link")
             ->addAttribute("href", $href)
@@ -36,7 +40,7 @@ class NavItem extends ViewGroup
         return new NavItem($icon_class, $label, $href, $is_active);
     }
 
-    public function addCollapsedItem(View $item, bool $collase_header = false) : NavItem
+    public function addCollapsedItem(View $item, bool $is_active = false, bool $collase_header = false) : NavItem
     {
         if (!$this->hasClass("collapsed")) {
             $this->fields[0]->addClass("collapsed")
@@ -58,6 +62,9 @@ class NavItem extends ViewGroup
             $item->addClass("collapse-header");
         } else {
             $item->addClass("collapse-item");
+            if($is_active){
+                $item->addClass("active");
+            }
         }
         $this->fields[1]->fields[0]->addField($item);
         return $this;

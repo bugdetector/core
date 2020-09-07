@@ -3,11 +3,16 @@
 namespace Src\Theme\BaseTheme;
 
 use CoreDB\Kernel\BaseController;
+use Src\Controller\Admin\Manage\RoleController;
+use Src\Controller\Admin\Manage\TranslationController;
+use Src\Controller\Admin\Manage\UserController;
+use Src\Controller\Admin\ManageController;
+use Src\Controller\Admin\TableController;
+use Src\Controller\AdminController;
 use Src\Entity\Translation;
 use Src\Views\NavItem;
 use Src\Views\Sidebar;
 use Src\Views\TextElement;
-use Src\Views\ViewGroup;
 
 abstract class BaseTheme extends BaseController
 {
@@ -54,38 +59,45 @@ abstract class BaseTheme extends BaseController
                 NavItem::create(
                     "fa fa-tachometer-alt",
                     Translation::getTranslation("dashboard"),
-                    BASE_URL. "/admin"
+                    BASE_URL. "/admin",
+                    static::class == AdminController::class
                 )
             )->addNavItem(
                 NavItem::create(
                     "fa fa-cog",
                     Translation::getTranslation("management"),
-                    "#"
+                    "#",
+                    $this instanceof ManageController
                 )
                         ->addCollapsedItem(
                             TextElement::create(Translation::getTranslation("management"))
                             ->setTagName("h6"),
+                            false,
                             true
                         )->addCollapsedItem(
                             TextElement::create(Translation::getTranslation("user_management"))
                             ->setTagName("a")
-                            ->addAttribute("href", BASE_URL."/admin/manage/user")
+                            ->addAttribute("href", UserController::getUrl()),
+                            $this instanceof UserController
                         )
                         ->addCollapsedItem(
                             TextElement::create(Translation::getTranslation("role_management"))
                             ->setTagName("a")
-                            ->addAttribute("href", BASE_URL."/admin/manage/role")
+                            ->addAttribute("href", RoleController::getUrl()),
+                            $this instanceof RoleController
                         )
                         ->addCollapsedItem(
                             TextElement::create(Translation::getTranslation("translations"))
                             ->setTagName("a")
-                            ->addAttribute("href", BASE_URL."/admin/manage/translation")
+                            ->addAttribute("href", TranslationController::getUrl()),
+                            $this instanceof TranslationController
                         )
             )->addNavItem(
                 NavItem::create(
                     "fa fa-chart-area",
                     Translation::getTranslation("tables"),
-                    BASE_URL."/admin/table"
+                    BASE_URL."/admin/table",
+                    $this instanceof TableController
                 )
             )->addNavItem(
                 NavItem::create(
