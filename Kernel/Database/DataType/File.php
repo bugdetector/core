@@ -6,9 +6,14 @@ use Src\Entity\Translation;
 use Src\Form\Widget\FormWidget;
 use Src\Form\Widget\InputWidget;
 
-class File extends DataTypeAbstract
+class File extends TableReference
 {
 
+    public function __construct(string $column_name)
+    {
+        parent::__construct($column_name);
+        $this->reference_table = "files";
+    }
     /**
      * @inheritdoc
      */
@@ -22,7 +27,10 @@ class File extends DataTypeAbstract
      */
     public function getWidget(): FormWidget
     {
-        return InputWidget::create("")->setType("file")->setDescription(Translation::getTranslation($this->comment));
+        return InputWidget::create("")
+        ->setType("file")
+        ->setDescription(Translation::getTranslation($this->comment))
+        ->removeClass("form-control");
     }
 
     /**

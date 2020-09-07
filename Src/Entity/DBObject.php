@@ -16,7 +16,7 @@ class DBObject extends TableMapper
      *  Table name
      * @return DBObject
      */
-    public static function get(array $filter, string $table = null) : DBObject
+    public static function get(array $filter, string $table = null) : ?DBObject
     {
         return parent::find($filter, $table);
     }

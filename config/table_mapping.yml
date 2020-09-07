@@ -1,6 +1,7 @@
 blocked_ips: Src\Entity\BlockedIp
 cache: Src\Entity\Cache
 emails: Src\Entity\Email
+files: Src\Entity\File
 logins: Src\Entity\Logins
 reset_password_queue: Src\Entity\ResetPassword
 roles: Src\Entity\Role

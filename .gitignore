@@ -1,4 +1,4 @@
-files/uploaded
+public_html/files/uploaded
 config/config.php
 .htaccess
 .composer.lock

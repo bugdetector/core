@@ -3,6 +3,15 @@
 		{{ widget.label }}
 	</label>
 {% endif %}
+{% if widget.file %}
+	<div>
+		<a class="mr-2 rowdelete" data-table="files" data-id="{{ widget.file.ID }}" href="#">
+    		<i class="fa fa-times text-danger core-control"></i>
+		</a>
+		<a href="{{ widget.file.getUrl() }}">{{ widget.file.file_name }}</a>
+	</div>
+{% endif %}
+
 <input type='{{ widget.type }}' name='{{ widget.name }}' class='{{ widget.classes|join(" ") }}' {{ widget.renderAttributes()|raw }} value='{{ widget.value }}'/>
 {% if widget.description %}
 	<small for="{{ widget.attributes["id"] }}" class="d-block">

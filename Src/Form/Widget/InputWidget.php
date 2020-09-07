@@ -2,9 +2,13 @@
 
 namespace Src\Form\Widget;
 
+use Src\Entity\File;
+
 class InputWidget extends FormWidget
 {
     public $type = "text";
+
+    public ?File $file;
 
     public static function create(string $name): InputWidget
     {
@@ -25,10 +29,14 @@ class InputWidget extends FormWidget
     public function setValue(string $value)
     {
         $this->value = $value;
-        if($this->type == "checkbox" && $this->value){
-            $this->addAttribute("checked", "true");
-        }else{
-            $this->removeAttribute("checked");
+        if($this->type == "checkbox"){
+            if($this->value){
+                $this->addAttribute("checked", "true");
+            }else{
+                $this->removeAttribute("checked");
+            }
+        }else if($this->type == "file"){
+            $this->file = File::get(["ID" => $value]);
         }
         return $this;
     }

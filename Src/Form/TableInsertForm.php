@@ -49,6 +49,8 @@ class TableInsertForm extends Form
                 ->addAttribute("hidden", "true")
             );
         }
+
+        \CoreDB::controller()->addJsFiles("src/js/table_search_form.js");
     }
 
     public function getFormId(): string

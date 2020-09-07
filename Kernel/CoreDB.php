@@ -97,24 +97,6 @@ class CoreDB
             rmdir($path);
         }
     }
-    public static function storeUploadedFile($table, $field_name, $file)
-    {
-        if ($file["error"]) {
-            return false;
-        }
-        $file_url = getcwd()."/files/uploaded/$table/$field_name/";
-        is_dir($file_url) ?: mkdir($file_url, 0777, true);
-        $file_url .= $file["name"];
-        return move_uploaded_file($file["tmp_name"], $file_url);
-    }
-
-    public static function removeUploadedFile($table, $field_name, $file)
-    {
-        $file_url = getcwd()."/files/uploaded/$table/$field_name/$file";
-        if (is_file($file_url)) {
-            unlink($file_url);
-        }
-    }
 
     public static function cleanXSS($data)
     {

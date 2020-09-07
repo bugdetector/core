@@ -7,6 +7,7 @@ use CoreDB\Kernel\Database\DataType\DataTypeAbstract;
 use Exception;
 use PDO;
 use ReflectionObject;
+use Src\Entity\File;
 use Src\Entity\Translation;
 use Src\Form\TableInsertForm;
 
@@ -26,7 +27,7 @@ abstract class TableMapper
     }
     public function __get($name)
     {
-        return $this->{$name};
+        return isset($this->{$name}) ? $this->{$name} : null;
     }
     
     abstract public static function get(array $filter);
@@ -149,7 +150,7 @@ abstract class TableMapper
     abstract public static function clear();
     protected static function clearTable($table)
     {
-        CoreDB::database()->truncate($table)->execute();
+        return CoreDB::database()->truncate($table)->execute();
     }
 
 
@@ -192,17 +193,22 @@ abstract class TableMapper
 
     function include_files($from = null)
     {
-        foreach (\CoreDB::normalizeFiles($from) as $file_key => $file) {
-            if ($file["size"] != 0) {
-                $file["name"] = $this->ID."_".filter_var($file["name"], FILTER_SANITIZE_SPECIAL_CHARS, FILTER_NULL_ON_FAILURE);
-                \CoreDB::removeUploadedFile($this->table, $file_key, $this->$file_key);
-                $this->$file_key = $file["name"];
-                if (!\CoreDB::storeUploadedFile($this->table, $file_key, $file)) {
+        foreach (\CoreDB::normalizeFiles($from) as $file_key => $fileInfo) {
+            if ($fileInfo["size"] != 0) {
+                if($this->$file_key){
+                    $file = File::get(["ID" => $this->$file_key]);
+                    $file->unlinkFile();
+                }else{
+                    $file = new File();
+                }
+                if ($file->storeUploadedFile($this->table, $file_key, $fileInfo)) {
+                    $this->{$file_key} = $file->ID;
+                    $this->save();
+                }else{
                     \CoreDB::database()->rollback();
                     throw new Exception(Translation::getTranslation(99));
                 }
             }
         }
-        $this->update();
     }
 }

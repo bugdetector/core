@@ -232,9 +232,6 @@ class MySQLDriver extends DatabaseDriver
                         $field = new ShortText($description["Field"]);
                         $field->length = filter_var($description["Type"], FILTER_SANITIZE_NUMBER_INT);
                         break;
-                    case "tinytext":
-                        $field = new File($description["Field"]);
-                        break;
                     case "text":
                         $field = new Text($description["Field"]);
                         break;
@@ -251,9 +248,14 @@ class MySQLDriver extends DatabaseDriver
                         $field = new Time($description["Field"]);
                         break;
                     case "table_reference":
-                        $field = new TableReference($description["Field"]);
                         $fk_description = self::getForeignKeyDescription($table, $description["Field"]);
-                        $field->reference_table = !empty($fk_description) ? $fk_description["REFERENCED_TABLE_NAME"] : "";
+                        $reference_table = !empty($fk_description) ? $fk_description["REFERENCED_TABLE_NAME"] : "";
+                        if($reference_table == "files"){
+                            $field = new File($description["Field"]);
+                        }else{
+                            $field = new TableReference($description["Field"]);
+                            $field->reference_table = $reference_table;
+                        }
                         break;
                     case "enum":
                         $field = new EnumaratedList($description["Field"]);
@@ -412,7 +414,7 @@ class MySQLDriver extends DatabaseDriver
         } elseif ($class_name == Time::class) {
             $type_description .= "TIME";
         } elseif ($class_name == File::class) {
-            $type_description .= "TINYTEXT";
+            $type_description .= "INT";
         } elseif ($class_name == TableReference::class) {
             $type_description .= "INT";
         } elseif ($class_name == EnumaratedList::class) {

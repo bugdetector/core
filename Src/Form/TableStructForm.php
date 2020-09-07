@@ -5,6 +5,7 @@ namespace Src\Form;
 use CoreDB;
 use CoreDB\Kernel\Database\DataType\DataTypeAbstract;
 use CoreDB\Kernel\Database\DataType\EnumaratedList;
+use CoreDB\Kernel\Database\DataType\File;
 use CoreDB\Kernel\Database\DataType\ShortText;
 use CoreDB\Kernel\Database\DataType\TableReference;
 use CoreDB\Kernel\Database\TableDefinition;
@@ -47,7 +48,7 @@ class TableStructForm extends Form
                 $dataType->isNull = !boolval($field["not_empty"]);
                 if ($dataType instanceof ShortText) {
                     $dataType->length = $field["field_length"];
-                } elseif ($dataType instanceof TableReference) {
+                } elseif ($dataType instanceof TableReference && !($dataType instanceof File)) {
                     $dataType->reference_table = $field["reference_table"];
                 } elseif ($dataType instanceof EnumaratedList) {
                     $dataType->values = explode(",", $field["list_values"]);
