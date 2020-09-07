@@ -25,6 +25,7 @@ class TableSearchForm extends Form
     public Table $table;
     public CollapsableCard $search_input_group;
     public Pagination $pagination;
+    public string $summary_text;
     private SelectQueryPreparerAbstract $query;
     public function __construct()
     {
@@ -159,6 +160,11 @@ class TableSearchForm extends Form
                 );
         }
         $this->pagination->total_count = $this->query->limit(0)->execute()->rowCount();
+        $this->summary_text = Translation::getTranslation("table_summary", [
+            $this->pagination->total_count,
+            ($this->pagination->page -1) * 100 + 1,
+            ($this->pagination->page) * 100 > $this->pagination->total_count ? $this->pagination->total_count : ($this->pagination->page) * 100
+        ]);
         $this->table = new Table($this->table_headers, $this->table_data);
         $this->table->table_name = $this->table_name;
         $this->table->setOrderable(true);

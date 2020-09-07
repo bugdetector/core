@@ -26,9 +26,6 @@ class NavItem extends ViewGroup
             ->addField(TextElement::create($label)->setTagName("span"))
         );
         $this->collapse_id = str_replace(" ", "_", mb_strtolower($label));
-        if ($href == $_SERVER["REQUEST_SCHEME"]."://".\CoreDB::baseHost().\CoreDB::requestUrl()) {
-            $this->addClass("active");
-        }
     }
 
     public static function create(

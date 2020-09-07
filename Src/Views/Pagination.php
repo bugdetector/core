@@ -17,7 +17,7 @@ class Pagination extends View
         $this->page = $page;
         $params = $_GET;
         unset($params["page"]);
-        $this->query_link = \CoreDB::requestUrl() . "?" . http_build_query(array_filter($params));
+        $this->query_link = BASE_URL.\CoreDB::requestUrl() . "?" . http_build_query(array_filter($params));
     }
 
     public function getTemplateFile(): string

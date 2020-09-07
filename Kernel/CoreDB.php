@@ -76,7 +76,7 @@ class CoreDB
     public static function requestUrl()
     {
         $count = 1;
-        return str_replace(SITE_ROOT, "", $_SERVER["REQUEST_URI"], $count);
+        return str_replace(SITE_ROOT, "", parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH), $count);
     }
 
     public static function cleanDirectory(string $path, bool $includeDirs = false)
