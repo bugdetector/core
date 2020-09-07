@@ -2,6 +2,7 @@
 namespace Src\Controller\Admin;
 
 use CoreDB\Kernel\Database\CoreDB;
+use CoreDB\Kernel\Database\TableDefinition;
 use CoreDB\Kernel\Messenger;
 
 use Src\Controller\AdminController;
@@ -21,8 +22,9 @@ class TableController extends AdminController
     {
         parent::__construct($arguments);
         if (isset($this->arguments[0]) && $this->arguments[0] && in_array($this->arguments[0], \CoreDB::database()::getTableList())) {
+            $table_definition = TableDefinition::getDefinition($this->arguments[0]);
             $this->table_name = $this->arguments[0];
-            $this->table_comment = \CoreDB::database()::getTableComment($this->table_name);
+            $this->table_comment = $table_definition->table_comment;
         }
     }
 

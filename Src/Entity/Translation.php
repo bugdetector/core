@@ -3,6 +3,8 @@
 namespace Src\Entity;
 
 use CoreDB\Kernel\Database\DataType\DataTypeAbstract;
+use CoreDB\Kernel\Database\DataType\ShortText;
+use CoreDB\Kernel\Database\TableDefinition;
 use CoreDB\Kernel\TableMapper;
 use Exception;
 
@@ -11,16 +13,14 @@ class Translation extends TableMapper
     private static $language;
     private static $cache;
     private static $available_languages;
+    private static $instance;
 
     const BACKUP_PATH = __DIR__ . "/../../translations/translations.json";
 
     const TABLE = "translations";
-    public $ID;
-    public $key;
-    public $en;
-    public $tr;
-    public $created_at;
-    public $last_updated;
+    public ShortText $key;
+    public ShortText $en;
+    public ShortText $tr;
 
 
     public static function getLanguage()
@@ -43,6 +43,13 @@ class Translation extends TableMapper
     public function __construct()
     {
         parent::__construct(self::TABLE);
+    }
+
+    public static function getInstance() : Translation{
+        if(!self::$instance){
+            self::$instance = new Translation();
+        }
+        return self::$instance;
     }
 
     /**
@@ -73,19 +80,11 @@ class Translation extends TableMapper
         return $array;
     }
 
-    public function map(array $array)
-    {
-        parent::map($array);
-        foreach (array_keys($array) as $field_name) {
-            $this->{$field_name} = htmlspecialchars_decode($this->{$field_name});
-        }
-    }
-
     public static function getTranslation($key, array $arguments = null)
     {
         if (!isset(self::$cache[$key])) {
             $translation = Translation::get(["key" => $key]);
-            self::$cache[$key] = $translation ? $translation->{Translation::getLanguage()} : $key;
+            self::$cache[$key] = $translation ? $translation->{Translation::getLanguage()}->getValue() : $key;
         }
         return !$arguments ? self::$cache[$key] : vsprintf(self::$cache[$key], $arguments);
     }
@@ -105,16 +104,15 @@ class Translation extends TableMapper
     {
         if (true || !isset(self::$available_languages)) {
             try {
-                $table_description = \CoreDB::database()::getTableDescription(Translation::TABLE);
                 self::$available_languages = [];
                 /**
                  * @var DataTypeAbstract $column_description
                  */
-                foreach ($table_description as $column_description) {
-                    if (in_array($column_description->column_name, ["ID", "key", "created_at", "last_updated"])) {
+                foreach (TableDefinition::getDefinition(self::TABLE)->fields as $field_name => $field) {
+                    if (in_array($field_name, ["ID", "key", "created_at", "last_updated"])) {
                         continue;
                     }
-                    self::$available_languages[] = $column_description->column_name;
+                    self::$available_languages[] = $field_name;
                 }
             } catch (Exception $ex) {
                 self::$available_languages[] = "en";

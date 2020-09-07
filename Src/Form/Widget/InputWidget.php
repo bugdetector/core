@@ -26,7 +26,7 @@ class InputWidget extends FormWidget
         return "input-widget.twig";
     }
 
-    public function setValue(string $value)
+    public function setValue($value)
     {
         $this->value = $value;
         if($this->type == "checkbox"){

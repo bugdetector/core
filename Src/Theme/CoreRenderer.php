@@ -37,7 +37,7 @@ class CoreRenderer
         echo $this->twig->render($controller->getTemplateFile(), [
             "controller" => $controller,
             "user" => \CoreDB::currentUser(),
-            "Translation" => new Translation()
+            "Translation" => Translation::getInstance()
         ]);
     }
 
@@ -46,7 +46,7 @@ class CoreRenderer
         echo $this->twig->render("views/".$view->getTemplateFile(), [
             "view" => $view,
             "user" => \CoreDB::currentUser(),
-            "Translation" => new Translation()
+            "Translation" => Translation::getInstance()
         ]);
     }
 
@@ -55,7 +55,7 @@ class CoreRenderer
         echo $this->twig->render("forms/".$form->getTemplateFile(), [
             "form" => $form,
             "user" => \CoreDB::currentUser(),
-            "Translation" => new Translation()
+            "Translation" => Translation::getInstance()
         ]);
     }
 
@@ -64,7 +64,7 @@ class CoreRenderer
         echo $this->twig->render("widgets/".$widget->getTemplateFile(), [
             "widget" => $widget,
             "user" => \CoreDB::currentUser(),
-            "Translation" => new Translation()
+            "Translation" => Translation::getInstance()
         ]);
     }
 }

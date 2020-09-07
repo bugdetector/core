@@ -104,13 +104,13 @@ class LoginForm extends Form
         //login successful
         global $current_user;
         $current_user = $this->user;
-        $current_user->last_access = \CoreDB::get_current_date();
+        $current_user->last_access->setValue(\CoreDB::get_current_date());
         $current_user->save();
         $_SESSION[BASE_URL . "-UID"] = $this->user->ID;
         if (isset($_POST["remember-me"]) && $_POST["remember-me"]) {
             $jwt = new JWT();
             $payload = new stdClass();
-            $payload->ID = $current_user->ID;
+            $payload->ID = $current_user->ID->getValue();
             $jwt->setPayload($payload);
             setcookie("session-token", $jwt->createToken(), strtotime("+1 day"), BASE_URL, $_SERVER["HTTP_HOST"], false, true);
         }

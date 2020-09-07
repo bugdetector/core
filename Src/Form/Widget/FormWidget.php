@@ -24,7 +24,7 @@ abstract class FormWidget extends View
         return $this;
     }
 
-    public function setValue(string $value)
+    public function setValue($value)
     {
         $this->value = $value;
         return $this;

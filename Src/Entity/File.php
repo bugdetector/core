@@ -3,6 +3,7 @@
 namespace Src\Entity;
 
 use CoreDB;
+use CoreDB\Kernel\Database\DataType\ShortText;
 use CoreDB\Kernel\TableMapper;
 
 /**
@@ -13,14 +14,11 @@ use CoreDB\Kernel\TableMapper;
 class File extends TableMapper
 {
     const TABLE = "files";
-    public $ID;
-    public $file_name;
-    public $file_path;
-    public $file_size;
-    public $mime_type;
-    public $extension;
-    public $created_at;
-    public $last_updated;
+    public ShortText $file_name;
+    public ShortText $file_path;
+    public ShortText $file_size;
+    public ShortText $mime_type;
+    public ShortText $extension;
 
     public function __construct()
     {
@@ -62,14 +60,15 @@ class File extends TableMapper
 
     public function storeUploadedFile($table, $field_name, $fileInfo) : bool
     {
-        $this->file_name = $fileInfo["name"];
-        $this->mime_type = $fileInfo["type"];
-        $this->file_size = $fileInfo["size"];
-        $this->extension = pathinfo($fileInfo["name"], PATHINFO_EXTENSION);
+        $this->file_name->setValue($fileInfo["name"]);
+        $this->mime_type->setValue($fileInfo["type"]);
+        $this->file_size->setValue($fileInfo["size"]);
+        $this->extension->setValue(pathinfo($fileInfo["name"], PATHINFO_EXTENSION));
         
         $file_url = getcwd()."/files/uploaded/$table/$field_name/";
         is_dir($file_url) ?: mkdir($file_url, 0777, true);
-        $this->file_path = "$table/$field_name/".md5($fileInfo["tmp_name"].\CoreDB::get_current_date());
+        $file_path = "$table/$field_name/".md5($fileInfo["tmp_name"].\CoreDB::get_current_date());
+        $this->file_path->setValue($file_path);
         if(move_uploaded_file($fileInfo["tmp_name"], getcwd()."/files/uploaded/{$this->file_path}")){
             $this->save();
             return true;

@@ -30,7 +30,8 @@ class File extends TableReference
         return InputWidget::create("")
         ->setType("file")
         ->setDescription(Translation::getTranslation($this->comment))
-        ->removeClass("form-control");
+        ->removeClass("form-control")
+        ->setValue($this->value);
     }
 
     /**

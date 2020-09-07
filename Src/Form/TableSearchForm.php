@@ -8,6 +8,7 @@ use CoreDB\Kernel\Database\DataType\Date;
 use CoreDB\Kernel\Database\DataType\DateTime;
 use CoreDB\Kernel\Database\DataType\Time;
 use CoreDB\Kernel\Database\SelectQueryPreparerAbstract;
+use CoreDB\Kernel\Database\TableDefinition;
 use CoreDB\Kernel\TableMapper;
 use PDO;
 use Src\Entity\Translation;
@@ -51,7 +52,7 @@ class TableSearchForm extends Form
         /**
          * @var DataTypeAbstract $dataType
          */
-        foreach (\CoreDB::database()::getTableDescription($table_name) as $dataType) {
+        foreach (TableDefinition::getDefinition($table_name)->fields as $field_name => $dataType) {
             $search_form->table_headers[$dataType->column_name] = Translation::getTranslation($dataType->column_name);
 
             $params = array_filter($_GET);
@@ -117,7 +118,7 @@ class TableSearchForm extends Form
         /**
          * @var DataTypeAbstract $dataType
          */
-        foreach (\CoreDB::database()::getTableDescription($this->table_name) as $dataType) {
+        foreach (TableDefinition::getDefinition($this->table_name)->fields as $dataType) {
             $column_name = $dataType->column_name;
             if (isset($params[$column_name]) && $params[$column_name] !== "") {
                 if (in_array(get_class($dataType), [DateTime::class, Date::class, Time::class])) {

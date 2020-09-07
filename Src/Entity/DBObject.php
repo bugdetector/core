@@ -7,8 +7,6 @@ class DBObject extends TableMapper
 {
     public $table;
 
-    public $ID;
-
     /**
      * @param array $filter
      *  Filter on key value pairs
@@ -42,11 +40,11 @@ class DBObject extends TableMapper
         foreach ($array as $key => $value) {
             if (isset($this->{$key}) && $this->{$key} != $value) {
                 $this->changed_fields[$key] = [
-                    "old_value" => $this->{$key},
+                    "old_value" => $this->{$key}->getValue(),
                     "new_value" => $value
                 ];
             }
-            $this->$key = $value;
+            $this->$key->setValue($value);
         }
     }
 }

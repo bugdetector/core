@@ -2,6 +2,7 @@
 
 namespace Src\Entity;
 
+use CoreDB\Kernel\Database\DataType\ShortText;
 use CoreDB\Kernel\TableMapper;
 
 /**
@@ -12,10 +13,7 @@ use CoreDB\Kernel\TableMapper;
 class Role extends TableMapper
 {
     const TABLE = "roles";
-    public $ID;
-    public $role;
-    public $created_at;
-    public $last_updated;
+    public ShortText $role;
 
     public function __construct()
     {

@@ -2,6 +2,7 @@
 
 namespace Src\Entity;
 
+use CoreDB\Kernel\Database\DataType\ShortText;
 use CoreDB\Kernel\TableMapper;
 
 /**
@@ -12,10 +13,7 @@ use CoreDB\Kernel\TableMapper;
 class BlockedIp extends TableMapper
 {
     const TABLE = "blocked_ips";
-    public $ID;
-    public $ip;
-    public $created_at;
-    public $last_updated;
+    public ShortText $ip;
 
     public function __construct()
     {

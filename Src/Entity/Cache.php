@@ -2,6 +2,10 @@
 
 namespace Src\Entity;
 
+use CoreDB\Kernel\Database\DataType\DateTime;
+use CoreDB\Kernel\Database\DataType\Integer;
+use CoreDB\Kernel\Database\DataType\LongText;
+use CoreDB\Kernel\Database\DataType\ShortText;
 use CoreDB\Kernel\TableMapper;
 
 /**
@@ -12,22 +16,26 @@ use CoreDB\Kernel\TableMapper;
 class Cache extends TableMapper
 {
     const TABLE = "cache";
-    public $ID;
-    public $bundle;
-    public $key;
-    public $value;
-    public $created_at;
-    public $last_updated;
+    public ShortText $bundle;
+    public ShortText $key;
+    public LongText $value;
 
+    private static array $staticCache = [];
     public function __construct()
     {
-        parent::__construct(self::TABLE);
+        $this->table = self::TABLE;
+        $this->ID = new Integer("");
+        $this->bundle = new ShortText("");
+        $this->key = new ShortText("");
+        $this->value = new LongText("");
+        $this->created_at = new DateTime("");
+        $this->last_updated = new DateTime("");
     }
 
     /**
      * @inheritdoc
      */
-    public static function get(array $filter) : ?Cache
+    public static function get(array $filter): ?Cache
     {
         return parent::find($filter, self::TABLE);
     }
@@ -35,7 +43,7 @@ class Cache extends TableMapper
     /**
      * @inheritdoc
      */
-    public static function getAll(array $filter) : array
+    public static function getAll(array $filter): array
     {
         return parent::findAll($filter, self::TABLE);
     }
@@ -47,15 +55,21 @@ class Cache extends TableMapper
 
     public static function set(string $bundle, string $key, string $value)
     {
-        $cache = Cache::get(["bundle" => $bundle, "key" => $key]) ? : new Cache();
-        $cache->bundle = $bundle;
-        $cache->key = $key;
-        $cache->value = $value;
-        $cache->save();
+        if ($bundle && $key && $value) {
+            $cache = Cache::get(["bundle" => $bundle, "key" => $key]) ?: new Cache();
+            $cache->bundle->setValue($bundle);
+            $cache->key->setValue($key);
+            $cache->value->setValue($value);
+            $cache->save();
+            self::$staticCache[$bundle][$key] = $cache;
+        }
     }
 
-    public static function getByBundleAndKey(string $bundle, string $key) : ?Cache
+    public static function getByBundleAndKey(string $bundle, string $key): ?Cache
     {
-        return Cache::get(["bundle" => $bundle, "key" => $key]);
+        if (!isset(self::$staticCache[$bundle][$key])) {
+            self::$staticCache[$bundle][$key] = Cache::get(["bundle" => $bundle, "key" => $key]);
+        }
+        return self::$staticCache[$bundle][$key];
     }
 }

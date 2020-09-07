@@ -6,6 +6,7 @@ use Src\Form\Widget\FormWidget;
 
 abstract class DataTypeAbstract
 {
+    protected $value = "";
     public string $column_name;
     public bool $primary_key = false;
     public bool $autoIncrement = false;
@@ -73,5 +74,27 @@ abstract class DataTypeAbstract
             $array[$field_name] = $field;
         }
         return $array;
+    }
+
+    /**
+     * Return value.
+     */
+    //abstract public function setValue($value);
+    /**
+     * Return value.
+     */
+    //abstract public function getValue();
+
+    public function setValue($value){
+        $this->value = $value;
+    }
+
+    public function getValue(){
+        return $this->value;
+    }
+
+    public function __toString()
+    {
+        return strval($this->getValue());
     }
 }

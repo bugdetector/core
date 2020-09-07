@@ -160,7 +160,7 @@ class CoreDB
                 $_SESSION[BASE_URL . "-UID"] = $current_user->ID;
             } else {
                 $current_user = new User();
-                $current_user->username = "guest";
+                $current_user->username->setValue("guest");
             }
         }
         return $current_user;

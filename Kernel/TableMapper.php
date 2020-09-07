@@ -4,6 +4,9 @@ namespace CoreDB\Kernel;
 
 use CoreDB;
 use CoreDB\Kernel\Database\DataType\DataTypeAbstract;
+use CoreDB\Kernel\Database\DataType\DateTime;
+use CoreDB\Kernel\Database\DataType\Integer;
+use CoreDB\Kernel\Database\TableDefinition;
 use Exception;
 use PDO;
 use ReflectionObject;
@@ -15,15 +18,22 @@ abstract class TableMapper
 {
     public $table;
     
-    public $ID;
-    public $created_at;
-    public $last_updated;
+    public Integer $ID;
+    public DateTime $created_at;
+    public DateTime $last_updated;
     
     protected $changed_fields;
 
     public function __construct(string $table)
     {
         $this->table = $table;
+        $table_definition = TableDefinition::getDefinition($this->table);
+        /**
+         * @var DataTypeAbstract $field
+         */
+        foreach($table_definition->fields as $field_name => $field){
+            $this->{$field_name} = $field;
+        }
     }
     public function __get($name)
     {
@@ -35,13 +45,24 @@ abstract class TableMapper
 
     public static function find(array $filter, string $table) : ?TableMapper
     {
-        $query = CoreDB::database()->select($table);
+        $query = \CoreDB::database()->select($table);
         foreach ($filter as $key => $value) {
             $query->condition($key, $value);
         }
-        return $query->orderBy("ID")
+        $result = $query->orderBy("ID")
         ->execute()
-        ->fetchObject(get_called_class(), [$table]) ? : null;
+        ->fetch(\PDO::FETCH_ASSOC) ? : null;
+        if($result){
+            $className = get_called_class();
+            /**
+             * @var TableMapper
+             */
+            $object = new $className($table);
+            $object->map($result);
+        }else{
+            $object = null;
+        }
+        return $object;
     }
 
     public static function findAll(array $filter, string $table) : array
@@ -50,9 +71,22 @@ abstract class TableMapper
         foreach ($filter as $key => $value) {
             $query->condition($key, $value);
         }
-        return $query->orderBy("ID")
+        $results = $query->orderBy("ID")
         ->execute()
-        ->fetchAll(PDO::FETCH_CLASS, get_called_class(), [$table]) ? : [];
+        ->fetchAll(PDO::FETCH_ASSOC);
+        $objects = [];
+        if($results){
+            $className = get_called_class();
+            foreach($results as $result){
+                /**
+                 * @var TableMapper
+                 */
+                $object = new $className($table);
+                $object->map($result);
+                $objects[] = $object;
+            }
+        }
+        return $objects;
     }
 
     /**
@@ -73,7 +107,7 @@ abstract class TableMapper
                     "new_value" => $value
                 ];
             }
-            $this->$key = $value;
+            $this->$key->setValue($value);
         }
     }
 
@@ -90,13 +124,12 @@ abstract class TableMapper
         foreach ($nodes as $node) {
             $nod = $reflector->getProperty($node->getName());
             $nod->setAccessible(true);
-            $object_as_array[$node->getName()] = $nod->getValue($this);
+            $field = $nod->getValue($this);
+            if( !($field instanceof DataTypeAbstract) || in_array($node->getName(), ["ID", "table", "created_at", "last_updated", "changed_fields"]) ){
+                continue;
+            }
+            $object_as_array[$node->getName()] = $field->getValue();
         }
-        unset($object_as_array["ID"]);
-        unset($object_as_array["table"]);
-        unset($object_as_array["created_at"]);
-        unset($object_as_array["last_updated"]);
-        unset($object_as_array["changed_fields"]);
         return $object_as_array;
     }
 
@@ -104,7 +137,7 @@ abstract class TableMapper
     protected function insert()
     {
         $statement = CoreDB::database()->insert($this->table, $this->toArray())->execute();
-        $this->ID = \CoreDB::database()->lastInsertId();
+        $this->ID->setValue(\CoreDB::database()->lastInsertId());
         return $statement;
     }
 
@@ -112,13 +145,13 @@ abstract class TableMapper
     {
         return CoreDB::database()
         ->update($this->table, $this->toArray())
-        ->condition("ID", $this->ID)
+        ->condition("ID", $this->ID->getValue())
         ->execute();
     }
 
     public function save()
     {
-        if ($this->ID) {
+        if ($this->ID->getValue()) {
             return $this->update();
         } else {
             return $this->insert();
@@ -127,16 +160,17 @@ abstract class TableMapper
 
     public function delete() : bool
     {
-        if (!$this->ID) {
+        if (!$this->ID->getValue()) {
             return false;
         }
-        $table_description = \CoreDB::database()::getTableDescription($this->table);
         /**
          * @var DataTypeAbstract $field
          */
-        foreach ($table_description as $field) {
+        foreach($this->toArray() as $field_name => $field){
             if ($field instanceof \CoreDB\Kernel\Database\DataType\File) {
-                \CoreDB::removeUploadedFile($this->table, $field->column_name, $this->{$field->column_name});
+                if($file = File::get(["ID" => $field->getValue()])){
+                    $file->unlinkFile();
+                }
             }
         }
         return boolval(
@@ -164,22 +198,18 @@ abstract class TableMapper
     public function getFormFields($name) : array
     {
         $fields = [];
-        $descriptions = \CoreDB::database()::getTableDescription($this->table);
-        /**
-         * @var DataTypeAbstract $description
-         */
-        foreach ($descriptions as $column_name => $description) {
-            if (in_array($column_name, ["ID", "created_at", "last_updated"])) {
+        $reflector = new ReflectionObject($this);
+        $nodes = $reflector->getProperties();
+        foreach ($nodes as $node) {
+            $nod = $reflector->getProperty($node->getName());
+            $nod->setAccessible(true);
+            $field = $nod->getValue($this);
+            if( !($field instanceof DataTypeAbstract) || in_array($node->getName(), ["ID", "table", "created_at", "last_updated", "changed_fields"]) ){
                 continue;
             }
-            /**
-             * @var FormWidget $field
-             */
-            $field = $description->getWidget();
-            $field->setName($name."[{$description->column_name}]")
-            ->setLabel(Translation::getTranslation($description->column_name))
-            ->setValue(isset($this->{$description->column_name}) ? strval($this->{$description->column_name}) : "");
-            $fields[$description->column_name] = $field;
+            $column_name = $node->getName();
+            $fields[$column_name] = $field->getWidget()->setName($name."[{$column_name}]")
+            ->setLabel(Translation::getTranslation($column_name));
         }
         return $fields;
     }
@@ -192,14 +222,14 @@ abstract class TableMapper
     {
         foreach (\CoreDB::normalizeFiles($from) as $file_key => $fileInfo) {
             if ($fileInfo["size"] != 0) {
-                if($this->$file_key){
+                if($this->$file_key->getValue()){
                     $file = File::get(["ID" => $this->$file_key]);
                     $file->unlinkFile();
                 }else{
                     $file = new File();
                 }
                 if ($file->storeUploadedFile($this->table, $file_key, $fileInfo)) {
-                    $this->{$file_key} = $file->ID;
+                    $this->{$file_key}->setValue($file->ID);
                     $this->save();
                 }else{
                     \CoreDB::database()->rollback();

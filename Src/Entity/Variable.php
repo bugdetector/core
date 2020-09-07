@@ -2,6 +2,8 @@
 
 namespace Src\Entity;
 
+use CoreDB\Kernel\Database\DataType\Text;
+use CoreDB\Kernel\Database\DataType\ShortText;
 use CoreDB\Kernel\TableMapper;
 use Exception;
 
@@ -13,11 +15,8 @@ use Exception;
 class Variable extends TableMapper
 {
     const TABLE = "variables";
-    public $ID;
-    public $key;
-    public $value;
-    public $created_at;
-    public $last_updated;
+    public ShortText $key;
+    public Text $value;
     
     public function __construct()
     {

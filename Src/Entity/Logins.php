@@ -2,6 +2,7 @@
 
 namespace Src\Entity;
 
+use CoreDB\Kernel\Database\DataType\ShortText;
 use CoreDB\Kernel\TableMapper;
 
 /**
@@ -12,11 +13,8 @@ use CoreDB\Kernel\TableMapper;
 class Logins extends TableMapper
 {
     const TABLE = "logins";
-    public $ID;
-    public $ip_address;
-    public $username;
-    public $created_at;
-    public $last_updated;
+    public ShortText $ip_address;
+    public ShortText $username;
 
     public function __construct()
     {

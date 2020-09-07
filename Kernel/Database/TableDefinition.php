@@ -6,6 +6,7 @@ use CoreDB;
 use CoreDB\Kernel\Database\DataType\DataTypeAbstract;
 use CoreDB\Kernel\Database\DataType\DateTime;
 use CoreDB\Kernel\Database\DataType\Integer;
+use Src\Entity\Cache;
 
 class TableDefinition
 {
@@ -19,17 +20,23 @@ class TableDefinition
         $this->table_name = $table_name;
     }
 
-    public static function getDefinition(string $table_name)
+    public static function getDefinition(string $table_name) : ?TableDefinition
     {
-        $definition = new TableDefinition($table_name);
-        if (in_array($table_name, CoreDB::database()->getTableList())) {
-            $definition->fields = CoreDB::database()->getTableDescription($table_name);
-            $definition->table_comment = CoreDB::database()->getTableComment($table_name);
-            $definition->table_exist = true;
+        $cache = Cache::getByBundleAndKey("table_definition", $table_name);
+        if($cache){
+            return unserialize(base64_decode($cache->value->getValue()));
         } else {
-            $definition->table_exist = false;
+            $definition = new TableDefinition($table_name);
+            if (in_array($table_name, CoreDB::database()->getTableList())) {
+                $definition->fields = CoreDB::database()->getTableDescription($table_name);
+                $definition->table_comment = CoreDB::database()->getTableComment($table_name);
+                $definition->table_exist = true;
+            } else {
+                $definition->table_exist = false;
+            }
+            $cache = Cache::set("table_definition", $table_name, base64_encode(serialize($definition)));
+            return $definition;
         }
-        return $definition;
     }
 
     public function setComment(string $table_comment)

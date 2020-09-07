@@ -30,7 +30,6 @@ use CoreDB\Kernel\Database\DataType\Checkbox;
 use \PDO;
 use \PDOException;
 use \PDOStatement;
-use Src\Entity\Cache;
 
 class MySQLDriver extends DatabaseDriver
 {
@@ -205,80 +204,74 @@ class MySQLDriver extends DatabaseDriver
      */
     public static function getTableDescription(string $table): array
     {
-        $cache = Cache::getByBundleAndKey("table_description", $table);
-        if ($cache) {
-            return unserialize(base64_decode($cache->value));
-        } else {
-            $descriptions = self::getInstance()->query("DESCRIBE `$table`")->fetchAll(PDO::FETCH_ASSOC);
-            $fields = [];
-            foreach ($descriptions as $index => $description) {
-                $field = null;
-                $type = substr($description["Type"], 0, strpos($description["Type"], "(") ?: strlen($description["Type"]));
-                if ($type == "int" && ($description["Key"] == "MUL" ||
-                    ($description["Key"] == "UNI" && self::isUniqueForeignKey($table, $description["Field"])))) {
-                    $type = "table_reference";
-                }
-                switch ($type) {
-                    case "int":
-                        $field = new Integer($description["Field"]);
-                        break;
-                    case "double":
-                        $field = new FloatNumber($description["Field"]);
-                        break;
-                    case "tinyint":
-                        $field = new Checkbox($description["Field"]);
-                        break;
-                    case "varchar":
-                        $field = new ShortText($description["Field"]);
-                        $field->length = filter_var($description["Type"], FILTER_SANITIZE_NUMBER_INT);
-                        break;
-                    case "text":
-                        $field = new Text($description["Field"]);
-                        break;
-                    case "longtext":
-                        $field = new LongText($description["Field"]);
-                        break;
-                    case "date":
-                        $field = new Date($description["Field"]);
-                        break;
-                    case "datetime":
-                        $field = new DateTime($description["Field"]);
-                        break;
-                    case "time":
-                        $field = new Time($description["Field"]);
-                        break;
-                    case "table_reference":
-                        $fk_description = self::getForeignKeyDescription($table, $description["Field"]);
-                        $reference_table = !empty($fk_description) ? $fk_description["REFERENCED_TABLE_NAME"] : "";
-                        if($reference_table == "files"){
-                            $field = new File($description["Field"]);
-                        }else{
-                            $field = new TableReference($description["Field"]);
-                            $field->reference_table = $reference_table;
-                        }
-                        break;
-                    case "enum":
-                        $field = new EnumaratedList($description["Field"]);
-                        preg_match("/^enum\(\'(.*)\'\)$/", $description["Type"], $matches);
-                        $options = [];
-                        foreach (explode("','", $matches[1]) as $option) {
-                            $options[$option] = $option;
-                        }
-                        $field->values = $options;
-                        break;
-                }
-                if ($description["Key"] == "UNI") {
-                    $field->isUnique = true;
-                }
-                if ($description["Null"] == "NO") {
-                    $field->isNull = false;
-                }
-                $field->comment = CoreDB::database()->getColumnComment($table, $description["Field"]);
-                $fields[$field->column_name] = $field;
+        $descriptions = self::getInstance()->query("DESCRIBE `$table`")->fetchAll(PDO::FETCH_ASSOC);
+        $fields = [];
+        foreach ($descriptions as $index => $description) {
+            $field = null;
+            $type = substr($description["Type"], 0, strpos($description["Type"], "(") ?: strlen($description["Type"]));
+            if ($type == "int" && ($description["Key"] == "MUL" ||
+                ($description["Key"] == "UNI" && self::isUniqueForeignKey($table, $description["Field"])))) {
+                $type = "table_reference";
             }
-            Cache::set("table_description", $table, base64_encode(serialize($fields)));
-            return $fields;
+            switch ($type) {
+                case "int":
+                    $field = new Integer($description["Field"]);
+                    break;
+                case "double":
+                    $field = new FloatNumber($description["Field"]);
+                    break;
+                case "tinyint":
+                    $field = new Checkbox($description["Field"]);
+                    break;
+                case "varchar":
+                    $field = new ShortText($description["Field"]);
+                    $field->length = filter_var($description["Type"], FILTER_SANITIZE_NUMBER_INT);
+                    break;
+                case "text":
+                    $field = new Text($description["Field"]);
+                    break;
+                case "longtext":
+                    $field = new LongText($description["Field"]);
+                    break;
+                case "date":
+                    $field = new Date($description["Field"]);
+                    break;
+                case "datetime":
+                    $field = new DateTime($description["Field"]);
+                    break;
+                case "time":
+                    $field = new Time($description["Field"]);
+                    break;
+                case "table_reference":
+                    $fk_description = self::getForeignKeyDescription($table, $description["Field"]);
+                    $reference_table = !empty($fk_description) ? $fk_description["REFERENCED_TABLE_NAME"] : "";
+                    if($reference_table == "files"){
+                        $field = new File($description["Field"]);
+                    }else{
+                        $field = new TableReference($description["Field"]);
+                        $field->reference_table = $reference_table;
+                    }
+                    break;
+                case "enum":
+                    $field = new EnumaratedList($description["Field"]);
+                    preg_match("/^enum\(\'(.*)\'\)$/", $description["Type"], $matches);
+                    $options = [];
+                    foreach (explode("','", $matches[1]) as $option) {
+                        $options[$option] = $option;
+                    }
+                    $field->values = $options;
+                    break;
+            }
+            if ($description["Key"] == "UNI") {
+                $field->isUnique = true;
+            }
+            if ($description["Null"] == "NO") {
+                $field->isNull = false;
+            }
+            $field->comment = CoreDB::database()->getColumnComment($table, $description["Field"]);
+            $fields[$field->column_name] = $field;
         }
+        return $fields;
     }
 
     /**
@@ -329,21 +322,13 @@ class MySQLDriver extends DatabaseDriver
      */
     public static function getForeignKeyDescription(string $table, string $foreignKey): array
     {
-        $cache = Cache::getByBundleAndKey("foreign_key_description", $table . $foreignKey);
-        if ($cache) {
-            return json_decode($cache->value, true) ?: [];
-        } else {
-            $result = CoreDB::database()->select("INFORMATION_SCHEMA.KEY_COLUMN_USAGE", "", false)
-                ->select("", ["REFERENCED_TABLE_NAME", "REFERENCED_COLUMN_NAME"])
-                ->condition("REFERENCED_TABLE_SCHEMA", DB_NAME)
-                ->condition("TABLE_NAME", $table)
-                ->condition("COLUMN_NAME", $foreignKey)
-                ->execute()->fetch(PDO::FETCH_BOTH);
-            if ($result) {
-                Cache::set("foreign_key_description", $table . $foreignKey, json_encode($result));
-            }
-            return $result ?: [];
-        }
+        $result = CoreDB::database()->select("INFORMATION_SCHEMA.KEY_COLUMN_USAGE", "", false)
+            ->select("", ["REFERENCED_TABLE_NAME", "REFERENCED_COLUMN_NAME"])
+            ->condition("REFERENCED_TABLE_SCHEMA", DB_NAME)
+            ->condition("TABLE_NAME", $table)
+            ->condition("COLUMN_NAME", $foreignKey)
+            ->execute()->fetch(PDO::FETCH_BOTH);
+        return $result ?: [];
     }
 
     /**

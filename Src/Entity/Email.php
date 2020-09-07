@@ -2,6 +2,8 @@
 
 namespace Src\Entity;
 
+use CoreDB\Kernel\Database\DataType\LongText;
+use CoreDB\Kernel\Database\DataType\ShortText;
 use CoreDB\Kernel\TableMapper;
 
 /**
@@ -12,12 +14,9 @@ use CoreDB\Kernel\TableMapper;
 class Email extends TableMapper
 {
     const TABLE = "emails";
-    public $ID;
-    public $key;
-    public $en;
-    public $tr;
-    public $created_at;
-    public $last_updated;
+    public ShortText $key;
+    public LongText $en;
+    public LongText $tr;
 
     public function __construct()
     {

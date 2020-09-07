@@ -2,6 +2,8 @@
 
 namespace Src\Entity;
 
+use CoreDB\Kernel\Database\DataType\ShortText;
+use CoreDB\Kernel\Database\DataType\TableReference;
 use CoreDB\Kernel\TableMapper;
 
 /**
@@ -12,11 +14,8 @@ use CoreDB\Kernel\TableMapper;
 class ResetPassword extends TableMapper
 {
     const TABLE = "reset_password_queue";
-    public $ID;
-    public $user;
-    public $key;
-    public $created_at;
-    public $last_updated;
+    public TableReference $user;
+    public ShortText $key;
 
     public function __construct()
     {

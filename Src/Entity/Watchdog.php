@@ -1,17 +1,16 @@
 <?php
 namespace Src\Entity;
 
+use CoreDB\Kernel\Database\DataType\ShortText;
+use CoreDB\Kernel\Database\DataType\Text;
 use CoreDB\Kernel\TableMapper;
 
 class Watchdog extends TableMapper
 {
     const TABLE = "watchdog";
-    public $ID;
-    public $event;
-    public $value;
-    public $ip;
-    public $created_at;
-    public $last_updated;
+    public ShortText $event;
+    public ShortText $value;
+    public ShortText $ip;
     
 
     public function __construct()
@@ -43,9 +42,9 @@ class Watchdog extends TableMapper
     public static function log(string $event, string $value)
     {
         $watchdog = new Watchdog(self::TABLE);
-        $watchdog->event = $event;
-        $watchdog->value = $value;
-        $watchdog->ip = User::get_user_ip();
+        $watchdog->event->setValue($event);
+        $watchdog->value->setValue($value);
+        $watchdog->ip->setValue(User::get_user_ip());
         $watchdog->save();
     }
 }

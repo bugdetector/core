@@ -3,6 +3,9 @@
 namespace Src\Entity;
 
 use CoreDB;
+use CoreDB\Kernel\Database\DataType\Checkbox;
+use CoreDB\Kernel\Database\DataType\DateTime;
+use CoreDB\Kernel\Database\DataType\ShortText;
 use CoreDB\Kernel\TableMapper;
 use Exception;
 use PDO;
@@ -13,23 +16,20 @@ define("LOGIN_UNTRUSTED_ACTIONS", "LOGIN_UNTRUSTED_ACTIONS");
 class User extends TableMapper
 {
     const TABLE = "users";
-    public $ID;
-    public $username;
-    public $name;
-    public $surname;
-    public $email;
-    public $phone;
-    protected $password;
-    public $active;
-    public $last_access;
-    public $created_at;
-    public $last_updated;
+    public ShortText $username;
+    public ShortText $name;
+    public ShortText $surname;
+    public ShortText $email;
+    public ShortText $phone;
+    protected ShortText $password;
+    public Checkbox $active;
+    public DateTime $last_access;
 
     private $ROLES;
     private static $ALLROLES;
     public function __construct()
     {
-        $this->table = self::TABLE;
+        parent::__construct(self::TABLE);
     }
 
     public function toArray(): array
@@ -107,7 +107,7 @@ class User extends TableMapper
     public function save()
     {
         if(isset($this->changed_fields["password"]) && $this->changed_fields["password"]["new_value"]){
-            $this->password = password_hash($this->password, PASSWORD_BCRYPT);
+            //$this->password = password_hash($this->password, PASSWORD_BCRYPT);
         }
         return parent::save();
     }
@@ -132,8 +132,8 @@ class User extends TableMapper
 
     public function checkEmailUpdateAvailable(): bool
     {
-        $user = self::getUserByEmail($this->email);
-        return !$user ? true : self::getUserByEmail($this->email)->ID === $this->ID;
+        $user = self::getUserByEmail($this->email->getValue());
+        return !$user ? true : self::getUserByEmail($this->email->getValue())->ID->getValue() === $this->ID->getValue();
     }
 
     public static function validatePassword(string $password)

@@ -24,7 +24,8 @@ class Checkbox extends DataTypeAbstract
         return InputWidget::create("")
         ->setType("checkbox")
         ->setDescription(Translation::getTranslation($this->comment))
-        ->removeClass("form-control");
+        ->removeClass("form-control")
+        ->setValue($this->value);
     }
 
     /**
