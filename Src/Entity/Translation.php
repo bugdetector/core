@@ -55,13 +55,6 @@ class Translation extends TableMapper
         return self::$instance;
     }
 
-    public function toArray(): array
-    {
-        $array = parent::toArray();
-        unset($array["language"], $array["cache"], $array["available_languages"]);
-        return $array;
-    }
-
     public static function getTranslation($key, array $arguments = null)
     {
         if (!isset(self::$cache[$key])) {
@@ -126,7 +119,7 @@ class Translation extends TableMapper
             unlink(Translation::BACKUP_PATH);
         }
         foreach ($translations as $translation) {
-            unset($translation->ID, $translation->created_at, $translation->last_updated, $translation->table);
+            unset($translation->ID, $translation->created_at, $translation->last_updated);
         }
         file_put_contents(Translation::BACKUP_PATH, json_encode($translations, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
     }

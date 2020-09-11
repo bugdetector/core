@@ -198,6 +198,7 @@ abstract class TableMapper
          */
         foreach($this->toArray() as $field_name => $field){
             if ($field instanceof \CoreDB\Kernel\Database\DataType\File) {
+                /** @var File $file */
                 if($file = File::get(["ID" => $field->getValue()])){
                     $file->unlinkFile();
                 }
@@ -213,7 +214,7 @@ abstract class TableMapper
      * @throws PDOException
      */
     public static function clear(){
-        return static::clear(static::getTableName());
+        return static::clearTable(static::getTableName());
     }
     protected static function clearTable($table)
     {

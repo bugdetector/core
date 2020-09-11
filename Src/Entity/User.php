@@ -35,13 +35,6 @@ class User extends TableMapper
         return "users";
     }
 
-    public function toArray(): array
-    {
-        $array = parent::toArray();
-        unset($array["ROLES"], $array["ALLROLES"]);
-        return $array;
-    }
-
     public function map(array $array)
     {
         if(!$array["password"]){

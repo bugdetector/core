@@ -22,7 +22,6 @@ class Cache extends TableMapper
     private static array $staticCache = [];
     public function __construct()
     {
-        $this->table = self::getTableName();
         $this->ID = new Integer("");
         $this->bundle = new ShortText("");
         $this->key = new ShortText("");

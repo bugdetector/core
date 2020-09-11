@@ -23,7 +23,7 @@ class TableInsertForm extends Form
         $this->setEnctype("multipart/form-data");
         \CoreDB::controller()->addJsFiles("src/js/insert.js");
 
-        foreach ($this->object->getFormFields($this->object->table) as $column_name => $field) {
+        foreach ($this->object->getFormFields($this->object->getTableName()) as $column_name => $field) {
             $this->addField($field);
         }
         $this->addField(
@@ -58,8 +58,8 @@ class TableInsertForm extends Form
 
     protected function restoreValues(){
         foreach ($this->object->toArray() as $field_name => $field) {
-            if($this->fields["{$this->object->table}[{$field_name}]"] instanceof FormWidget){
-                $this->fields["{$this->object->table}[{$field_name}]"]->setValue(strval($field)); 
+            if($this->fields[$this->object->getTableName()."[{$field_name}]"] instanceof FormWidget){
+                $this->fields[$this->object->getTableName()."[{$field_name}]"]->setValue(strval($field)); 
             }
         }
     }
@@ -74,12 +74,12 @@ class TableInsertForm extends Form
         try{
             if (isset($this->request["save"])) {
                 $success_message = $this->object->ID ? "update_success" : "insert_success";
-                if (isset($this->request[$this->object->table])) {
-                    $this->object->map($this->request[$this->object->table]);
+                if (isset($this->request[$this->object->getTableName()])) {
+                    $this->object->map($this->request[$this->object->getTableName()]);
                 }
                 $this->object->save();
-                if (isset($_FILES[$this->object->table])) {
-                    $this->object->includeFiles($_FILES[$this->object->table]);
+                if (isset($_FILES[$this->object->getTableName()])) {
+                    $this->object->includeFiles($_FILES[$this->object->getTableName()]);
                 }
                 $this->setMessage(Translation::getTranslation($success_message));
                 $this->submitSuccess();
@@ -94,11 +94,11 @@ class TableInsertForm extends Form
     }
 
     protected function submitSuccess(){
-        \CoreDB::goTo(CoreDB::controller()->getUrl()."{$this->object->table}/{$this->object->ID}");
+        \CoreDB::goTo(CoreDB::controller()->getUrl().$this->object->getTableName()."/{$this->object->ID}");
     }
 
     protected function deleteSuccess() :string
     {
-        \CoreDB::goTo(TableController::getUrl()."{$this->object->table}");
+        \CoreDB::goTo(TableController::getUrl().$this->object->getTableName());
     }
 }
