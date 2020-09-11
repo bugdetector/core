@@ -37,20 +37,6 @@ class AjaxController extends ServiceController
     }
 
     /**
-     * Returns foreign key entry
-     */
-    public function getForeignKeyEntry()
-    {
-        $description = \CoreDB::database()::getForeignKeyDescription($_POST["table"], $_POST["column"]);
-        $object = DBObject::get(["ID" => intval($_POST["fk"])], $description[0]);
-        $return_string = "";
-        foreach ($object->toArray() as $key => $field) {
-            $return_string .= "$key = $field ";
-        }
-        echo $return_string;
-    }
-
-    /**
      * Returns column definition for table definition
      */
     public function getColumnDefinition()

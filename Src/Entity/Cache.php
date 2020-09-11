@@ -15,7 +15,6 @@ use CoreDB\Kernel\TableMapper;
 
 class Cache extends TableMapper
 {
-    const TABLE = "cache";
     public ShortText $bundle;
     public ShortText $key;
     public LongText $value;
@@ -23,7 +22,7 @@ class Cache extends TableMapper
     private static array $staticCache = [];
     public function __construct()
     {
-        $this->table = self::TABLE;
+        $this->table = self::getTableName();
         $this->ID = new Integer("");
         $this->bundle = new ShortText("");
         $this->key = new ShortText("");
@@ -35,22 +34,9 @@ class Cache extends TableMapper
     /**
      * @inheritdoc
      */
-    public static function get(array $filter): ?Cache
+    public static function getTableName(): string
     {
-        return parent::find($filter, self::TABLE);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function getAll(array $filter): array
-    {
-        return parent::findAll($filter, self::TABLE);
-    }
-
-    public static function clear()
-    {
-        parent::clearTable(self::TABLE);
+        return "cache";
     }
 
     public static function set(string $bundle, string $key, string $value)

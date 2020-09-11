@@ -16,9 +16,9 @@ class UserController extends ManageController
     {
         parent::preprocessPage();
         $this->setTitle(Translation::getTranslation("user_management"));
-        $this->table_search_form = TableSearchForm::createByTableName(User::TABLE);
+        $this->table_search_form = TableSearchForm::createByTableName(User::getTableName());
         $this->action_section = ViewGroup::create("a", "d-sm-inline-block btn btn-sm btn-primary shadow-sm add-role")
-        ->addAttribute("href", BASE_URL."/admin/table/insert/".User::TABLE)
+        ->addAttribute("href", BASE_URL."/admin/table/insert/".User::getTableName())
         ->addField(
             ViewGroup::create("i", "fa fa-plus text-white-50")
         )

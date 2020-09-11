@@ -28,7 +28,7 @@ class AdminController extends BaseTheme
     public function preprocessPage()
     {
         $this->setTitle(Variable::getByKey("site_name")->value." | ".Translation::getTranslation("dashboard"));
-        $this->number_of_members = CoreDB::database()->select(User::TABLE)
+        $this->number_of_members = CoreDB::database()->select(User::getTableName())
         ->select_with_function(["COUNT(*) as count"])
         ->execute()->fetchObject()->count;
         $this->cards[] = BasicCard::create()
@@ -37,13 +37,6 @@ class AdminController extends BaseTheme
         ->setTitle(Translation::getTranslation("number_of_members"))
         ->setDescription($this->number_of_members)
         ->setIconClass("fa-user")
-        ->addClass("col-xl-3 col-md-6 mb-4");
-        $this->cards[] = BasicCard::create()
-        ->setBorderClass("border-left-info")
-        ->setHref(BASE_URL . "/admin/manage/update")
-        ->setTitle(Translation::getTranslation("system_version"))
-        ->setDescription(Variable::getByKey("version")->value)
-        ->setIconClass("fa-arrow-alt-circle-up")
         ->addClass("col-xl-3 col-md-6 mb-4");
         $this->cards[] = BasicCard::create()
         ->setBorderClass("border-left-info")

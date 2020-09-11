@@ -70,7 +70,7 @@ class ResetPasswordForm extends Form
         $reset_password_queue = ResetPassword::get(["user" => $this->user->ID, "key" => $_GET["KEY"]]);
         $reset_password_queue->delete();
 
-        \CoreDB::database()->delete(Logins::TABLE)
+        \CoreDB::database()->delete(Logins::getTableName())
         ->condition("username", $this->user->username)
         ->condition("ip_address", $this->user->get_user_ip(), "OR")
         ->execute();

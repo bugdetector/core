@@ -121,7 +121,7 @@ class LoginForm extends Form
         unset($_SESSION[LOGIN_UNTRUSTED_ACTIONS]);
 
         //Clearing failed login actions
-        CoreDB::database()->delete(Logins::TABLE)
+        CoreDB::database()->delete(Logins::getTableName())
             ->condition("username", $this->user->username)
             ->execute();
         if (isset($_GET["destination"])) {

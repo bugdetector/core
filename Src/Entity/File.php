@@ -20,37 +20,19 @@ class File extends TableMapper
     public ShortText $mime_type;
     public ShortText $extension;
 
-    public function __construct()
-    {
-        parent::__construct(self::TABLE);
-    }
-
     /**
      * @inheritdoc
      */
-    public static function get(array $filter) : ?File
+    public static function getTableName(): string
     {
-        return parent::find($filter, self::TABLE);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function getAll(array $filter) : array
-    {
-        return parent::findAll($filter, self::TABLE);
+        return "files";
     }
 
     public static function clear()
     {
-        return parent::clearTable(self::TABLE) && CoreDB::cleanDirectory(getcwd()."/files/uploaded");
+        return parent::clearTable(self::getTableName()) && CoreDB::cleanDirectory(getcwd()."/files/uploaded");
     }
-
-    public function delete(): bool
-    {
-        return parent::delete();
-    }
-
+    
     public function unlinkFile(){
         $file_url = getcwd()."/files/uploaded/{$this->file_path}";
         if (is_file($file_url)) {

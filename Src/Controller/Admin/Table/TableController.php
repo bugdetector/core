@@ -1,7 +1,6 @@
 <?php
 namespace Src\Controller\Admin;
 
-use CoreDB\Kernel\Database\CoreDB;
 use CoreDB\Kernel\Database\TableDefinition;
 use CoreDB\Kernel\Messenger;
 

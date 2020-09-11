@@ -15,7 +15,6 @@ define("PASSWORD_FALSE_COUNT", "PASSWORD_FALSE_COUNT");
 define("LOGIN_UNTRUSTED_ACTIONS", "LOGIN_UNTRUSTED_ACTIONS");
 class User extends TableMapper
 {
-    const TABLE = "users";
     public ShortText $username;
     public ShortText $name;
     public ShortText $surname;
@@ -27,9 +26,13 @@ class User extends TableMapper
 
     private $ROLES;
     private static $ALLROLES;
-    public function __construct()
+    
+    /**
+     * @inheritdoc
+     */
+    public static function getTableName(): string
     {
-        parent::__construct(self::TABLE);
+        return "users";
     }
 
     public function toArray(): array
@@ -46,27 +49,6 @@ class User extends TableMapper
         }
         unset($array["last_access"]);
         parent::map($array);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function get(array $filter): ?User
-    {
-        return parent::find($filter, self::TABLE);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function getAll(array $filter): array
-    {
-        return parent::findAll($filter, self::TABLE);
-    }
-
-    public static function clear()
-    {
-        parent::clearTable(self::TABLE);
     }
 
     public function getForm()
@@ -115,8 +97,8 @@ class User extends TableMapper
     public function delete(): bool
     {
         return CoreDB::database()->delete("users_roles")->condition("user_id", $this->ID)->execute() &&
-            CoreDB::database()->delete(Logins::TABLE)->condition("username", $this->username)->execute() &&
-            CoreDB::database()->delete(ResetPassword::TABLE)->condition("user", $this->ID)->execute()
+            CoreDB::database()->delete(Logins::getTableName())->condition("username", $this->username)->execute() &&
+            CoreDB::database()->delete(ResetPassword::getTableName())->condition("user", $this->ID)->execute()
             && parent::delete();
     }
 

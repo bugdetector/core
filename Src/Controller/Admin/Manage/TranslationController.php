@@ -15,7 +15,7 @@ class TranslationController extends ManageController
     {
         parent::preprocessPage();
         $this->setTitle(Translation::getTranslation("translations"));
-        $this->table_search_form = TableSearchForm::createByTableName(Translation::TABLE);
+        $this->table_search_form = TableSearchForm::createByTableName(Translation::getTableName());
         $this->action_section = ViewGroup::create("div", "")->addField(
             ViewGroup::create("a", "d-sm-inline-block btn btn-sm btn-primary shadow-sm lang-imp")
                 ->addAttribute("href", "#")

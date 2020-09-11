@@ -15,9 +15,9 @@ class RoleController extends ManageController
     {
         parent::preprocessPage();
         $this->setTitle(Translation::getTranslation("role_management"));
-        $this->table_search_form = TableSearchForm::createByTableName(Role::TABLE);
+        $this->table_search_form = TableSearchForm::createByTableName(Role::getTableName());
         $this->action_section = ViewGroup::create("a", "d-sm-inline-block btn btn-sm btn-primary shadow-sm add-role")
-        ->addAttribute("href", BASE_URL."/admin/table/insert/".Role::TABLE)
+        ->addAttribute("href", BASE_URL."/admin/table/insert/".Role::getTableName())
         ->addField(
             ViewGroup::create("i", "fa fa-plus text-white-50")
         )

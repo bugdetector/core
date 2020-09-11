@@ -7,6 +7,7 @@ use CoreDB\Kernel\Database\DataType\ShortText;
 use CoreDB\Kernel\Database\TableDefinition;
 use CoreDB\Kernel\TableMapper;
 use Exception;
+use PDO;
 
 class Translation extends TableMapper
 {
@@ -17,7 +18,6 @@ class Translation extends TableMapper
 
     const BACKUP_PATH = __DIR__ . "/../../translations/translations.json";
 
-    const TABLE = "translations";
     public ShortText $key;
     public ShortText $en;
     public ShortText $tr;
@@ -40,9 +40,12 @@ class Translation extends TableMapper
         return self::$language;
     }
 
-    public function __construct()
+   /**
+     * @inheritdoc
+     */
+    public static function getTableName(): string
     {
-        parent::__construct(self::TABLE);
+        return "translations";
     }
 
     public static function getInstance() : Translation{
@@ -50,27 +53,6 @@ class Translation extends TableMapper
             self::$instance = new Translation();
         }
         return self::$instance;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function get(array $filter) : ?Translation
-    {
-        return parent::find($filter, self::TABLE);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function getAll(array $filter): array
-    {
-        return parent::findAll($filter, self::TABLE);
-    }
-
-    public static function clear()
-    {
-        parent::clearTable(self::TABLE);
     }
 
     public function toArray(): array
@@ -108,7 +90,7 @@ class Translation extends TableMapper
                 /**
                  * @var DataTypeAbstract $column_description
                  */
-                foreach (TableDefinition::getDefinition(self::TABLE)->fields as $field_name => $field) {
+                foreach (TableDefinition::getDefinition(self::getTableName())->fields as $field_name => $field) {
                     if (in_array($field_name, ["ID", "key", "created_at", "last_updated"])) {
                         continue;
                     }
@@ -136,7 +118,10 @@ class Translation extends TableMapper
 
     public static function exportTranslations()
     {
-        $translations = Translation::getAll([]);
+        $translations = \CoreDB::database()
+        ->select(self::getTableName())
+        ->execute()
+        ->fetchAll(PDO::FETCH_OBJ);
         if (file_exists(Translation::BACKUP_PATH)) {
             unlink(Translation::BACKUP_PATH);
         }

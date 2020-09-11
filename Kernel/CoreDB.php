@@ -146,7 +146,7 @@ class CoreDB
      * @global User $current_user
      * @return User
      */
-    public static function currentUser()
+    public static function currentUser() : User
     {
         global $current_user;
         if ($current_user) {

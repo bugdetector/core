@@ -12,32 +12,13 @@ use CoreDB\Kernel\TableMapper;
 
 class BlockedIp extends TableMapper
 {
-    const TABLE = "blocked_ips";
     public ShortText $ip;
 
-    public function __construct()
-    {
-        parent::__construct(self::TABLE);
-    }
-
     /**
      * @inheritdoc
      */
-    public static function get(array $filter) : ?BlockedIp
+    public static function getTableName(): string
     {
-        return parent::find($filter, self::TABLE);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function getAll(array $filter) : array
-    {
-        return parent::findAll($filter, self::TABLE);
-    }
-
-    public static function clear()
-    {
-        parent::clearTable(self::TABLE);
+        return "blocked_ips";
     }
 }

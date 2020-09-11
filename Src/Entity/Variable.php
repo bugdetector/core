@@ -14,13 +14,15 @@ use Exception;
 
 class Variable extends TableMapper
 {
-    const TABLE = "variables";
     public ShortText $key;
     public Text $value;
     
-    public function __construct()
+    /**
+     * @inheritdoc
+     */
+    public static function getTableName(): string
     {
-        parent::__construct(self::TABLE);
+        return "variables";
     }
 
     public static function create($key) : Variable
@@ -28,27 +30,6 @@ class Variable extends TableMapper
         $variable = new Variable();
         $variable->key = $key;
         return $variable;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function get(array $filter) : ?Variable
-    {
-        return parent::find($filter, self::TABLE);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function getAll(array $filter) : array
-    {
-        return parent::findAll($filter, self::TABLE);
-    }
-
-    public static function clear()
-    {
-        parent::clearTable(self::TABLE);
     }
 
     public static function getByKey(string $key)

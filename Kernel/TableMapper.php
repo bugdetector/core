@@ -9,25 +9,23 @@ use CoreDB\Kernel\Database\DataType\Integer;
 use CoreDB\Kernel\Database\TableDefinition;
 use Exception;
 use PDO;
+use PDOException;
 use ReflectionObject;
 use Src\Entity\File;
 use Src\Entity\Translation;
 use Src\Form\TableInsertForm;
 
 abstract class TableMapper
-{
-    public $table;
-    
+{    
     public Integer $ID;
     public DateTime $created_at;
     public DateTime $last_updated;
     
     protected $changed_fields;
 
-    public function __construct(string $table)
+    public function __construct()
     {
-        $this->table = $table;
-        $table_definition = TableDefinition::getDefinition($this->table);
+        $table_definition = TableDefinition::getDefinition($this->getTableName());
         /**
          * @var DataTypeAbstract $field
          */
@@ -39,10 +37,38 @@ abstract class TableMapper
     {
         return isset($this->{$name}) ? $this->{$name} : null;
     }
-    
-    abstract public static function get(array $filter);
-    abstract public static function getAll(array $filter) : array;
 
+    /**
+     * Return associated table name.
+     * @return string
+     *  Table name.
+     */
+    abstract public static function getTableName() : string;
+    
+    /**
+     * Get an instance of object with given filter
+     * @return TableMapper
+     *  Object.
+     */
+    public static function get(array $filter){
+        return static::find($filter, static::getTableName());
+    }
+
+    /**
+     * Get all objects matches given filter.
+     * @return array
+     *  TableMapper objects.
+     */
+    public static function getAll(array $filter) : array{
+        return static::findAll($filter, static::getTableName());
+    }
+
+
+    /**
+     * Copy of ::get. Needs table name.
+     * @return TableMapper
+     *  Object.
+     */
     public static function find(array $filter, string $table) : ?TableMapper
     {
         $query = \CoreDB::database()->select($table);
@@ -65,6 +91,11 @@ abstract class TableMapper
         return $object;
     }
 
+    /**
+     * Copy of ::getAll. Need table name.
+     * @return array
+     *  TableMapper objects.
+     */
     public static function findAll(array $filter, string $table) : array
     {
         $query = CoreDB::database()->select($table);
@@ -113,7 +144,6 @@ abstract class TableMapper
 
     /**
      * Converts an object to array including private fields
-     * @param DBObject $object
      * @return \array
      */
     public function toArray() : array
@@ -136,7 +166,7 @@ abstract class TableMapper
 
     protected function insert()
     {
-        $statement = CoreDB::database()->insert($this->table, $this->toArray())->execute();
+        $statement = CoreDB::database()->insert($this->getTableName(), $this->toArray())->execute();
         $this->ID->setValue(\CoreDB::database()->lastInsertId());
         return $statement;
     }
@@ -144,7 +174,7 @@ abstract class TableMapper
     protected function update()
     {
         return CoreDB::database()
-        ->update($this->table, $this->toArray())
+        ->update($this->getTableName(), $this->toArray())
         ->condition("ID", $this->ID->getValue())
         ->execute();
     }
@@ -174,11 +204,17 @@ abstract class TableMapper
             }
         }
         return boolval(
-            CoreDB::database()->delete($this->table)->condition("ID", $this->ID)->execute()
+            CoreDB::database()->delete($this->getTableName())->condition("ID", $this->ID)->execute()
         );
     }
 
-    abstract public static function clear();
+    /**
+     * Truncate associated table.
+     * @throws PDOException
+     */
+    public static function clear(){
+        return static::clear(static::getTableName());
+    }
     protected static function clearTable($table)
     {
         return CoreDB::database()->truncate($table)->execute();
@@ -187,7 +223,7 @@ abstract class TableMapper
 
     public function getFileUrlForField($field_name)
     {
-        return BASE_URL."/files/uploaded/$this->table/$field_name/".$this->$field_name;
+        return BASE_URL."/files/uploaded/".$this->getTableName()."/$field_name/".$this->$field_name;
     }
 
     public function getForm()
@@ -218,7 +254,7 @@ abstract class TableMapper
         return BASE_URL."/admin/table/insert/{$table_name}/{$data}";
     }
 
-    function include_files($from = null)
+    function includeFiles($from = null)
     {
         foreach (\CoreDB::normalizeFiles($from) as $file_key => $fileInfo) {
             if ($fileInfo["size"] != 0) {
@@ -228,7 +264,7 @@ abstract class TableMapper
                 }else{
                     $file = new File();
                 }
-                if ($file->storeUploadedFile($this->table, $file_key, $fileInfo)) {
+                if ($file->storeUploadedFile($this->getTableName(), $file_key, $fileInfo)) {
                     $this->{$file_key}->setValue($file->ID);
                     $this->save();
                 }else{

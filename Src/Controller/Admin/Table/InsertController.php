@@ -2,11 +2,9 @@
 
 namespace Src\Controller\Admin\Table;
 
-use Src\Entity\DBObject;
 use CoreDB\Kernel\Router;
 use Src\Controller\Admin\TableController;
 use Src\Entity\Translation;
-use Src\Form\TableInsertForm;
 
 class InsertController extends TableController
 {

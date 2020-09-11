@@ -5,28 +5,20 @@ use CoreDB\Kernel\TableMapper;
 
 class DBObject extends TableMapper
 {
-    public $table;
+    public static $table;
+    
+    public function __construct(string $table)
+    {
+        self::$table = $table;
+        parent::__construct();
+    }
 
     /**
-     * @param array $filter
-     *  Filter on key value pairs
-     * @param string $table
-     *  Table name
-     * @return DBObject
+     * @inheritdoc
      */
-    public static function get(array $filter, string $table = null) : ?DBObject
+    public static function getTableName(): string
     {
-        return parent::find($filter, $table);
-    }
-
-    public static function getAll(array $filter, string $table = null) : array
-    {
-        return parent::findAll($filter, $table);
-    }
-
-    public static function clear($table = null)
-    {
-        parent::clearTable($table);
+        return self::$table;
     }
 
     /**

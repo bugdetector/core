@@ -420,11 +420,6 @@
         "tr": "Üye Sayısı"
     },
     {
-        "key": "system_version",
-        "en": "System Version",
-        "tr": "Sistem Versiyonu"
-    },
-    {
         "key": "table_count",
         "en": "Table Count",
         "tr": "Tablo Sayısı"

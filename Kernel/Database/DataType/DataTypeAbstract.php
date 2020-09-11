@@ -71,6 +71,9 @@ abstract class DataTypeAbstract
         $array = [];
         $array["type"] = array_search(get_class($this), \CoreDB::database()->dataTypes());
         foreach ($this as $field_name => $field) {
+            if($field_name == "value"){
+                continue;
+            }
             $array[$field_name] = $field;
         }
         return $array;

@@ -91,7 +91,7 @@ class AlterQueryPreparer extends AlterQueryPreparerAbstract
 
     public function getQuery(): string
     {
-        return implode("\n", array_merge($this->queries, $this->foreignKeyQueries)).$this->db->truncate(Cache::TABLE)->getQuery();
+        return implode("\n", array_merge($this->queries, $this->foreignKeyQueries)).$this->db->truncate(Cache::getTableName())->getQuery();
     }
 
     public function execute(): PDOStatement

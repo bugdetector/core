@@ -79,7 +79,7 @@ class TableInsertForm extends Form
                 }
                 $this->object->save();
                 if (isset($_FILES[$this->object->table])) {
-                    $this->object->include_files($_FILES[$this->object->table]);
+                    $this->object->includeFiles($_FILES[$this->object->table]);
                 }
                 $this->setMessage(Translation::getTranslation($success_message));
                 $this->submitSuccess();
