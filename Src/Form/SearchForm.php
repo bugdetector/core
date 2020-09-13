@@ -43,7 +43,7 @@ class SearchForm extends Form
 
     public static function createByObject(SearchableInterface $object, $translateLabels = true){
         $search_form = new SearchForm();
-        $search_form->table_headers = $object->getTableHeaders();
+        $search_form->table_headers = $object->getTableHeaders($translateLabels);
         $search_form->query = $object->getTableQuery();
         $search_form->object = $object;
         $search_form->translateLabels = $translateLabels;
