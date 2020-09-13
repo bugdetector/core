@@ -1,36 +1,38 @@
 <?php
 
-namespace Src\Controller\Admin\Table;
+namespace Src\Controller\Admin\Entity;
 
 use CoreDB\Kernel\Router;
-use Src\Controller\Admin\TableController;
-use Src\Entity\DBObject;
+use CoreDB\Kernel\TableMapper;
+use Src\Controller\Admin\EntityController;
 use Src\Entity\Translation;
 
-class InsertController extends TableController
+class InsertController extends EntityController
 {
-    public $object = null;
+
+    public ?TableMapper $object = null;
     public $insert_form;
 
     public function __construct(array $arguments)
     {
         parent::__construct($arguments);
-        if (!$this->table_name) {
+        if (!$this->entityName) {
             Router::getInstance()->route(Router::NOT_FOUND);
         }
     }
 
     public function preprocessPage()
     {
+        $className = \CoreDB::config()->getEntityInfo($this->entityName)["class"];
         if (isset($this->arguments[1]) && !isset($_POST["insert?"])) {
-            $this->object = DBObject::get(["ID" => $this->arguments[1]], $this->table_name);
+            $this->object = $className::get(["ID" => $this->arguments[1]]);
             if (!$this->object) {
                 Router::getInstance()->route(Router::NOT_FOUND);
             }
-            $this->setTitle(Translation::getTranslation("edit") . " | " . $this->table_name . " ID: {$this->object->ID}");
+            $this->setTitle(Translation::getTranslation("edit") . " | " . Translation::getTranslation($this->entityName) . " ID: {$this->object->ID}");
         } elseif (!isset($_POST["delete?"])) {
-            $this->object = new DBObject($this->table_name);
-            $this->setTitle(Translation::getTranslation("add") . " | " . $this->table_name);
+            $this->object = new $className();
+            $this->setTitle(Translation::getTranslation("add") . " | " . Translation::getTranslation($this->entityName));
         } else {
             Router::getInstance()->route(Router::ACCESS_DENIED);
         }

@@ -1,0 +1,41 @@
+<div
+	class="card shadow mb-4">
+	<!-- Card Header - Accordion -->
+	<a href="#table_list" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true">
+		<h6 class="m-0 font-weight-bold text-primary">{{ Translation.getTranslation("entities") }}</h6>
+	</a>
+	<!-- Card Content - Collapse -->
+	<div class="collapse show" id="table_list">
+		<div class="card-body">
+			<div class="input-group mb-3">
+				<div class="input-group-prepend">
+					<span class="input-group-text">
+						<i class="fa fa-search"></i>
+					</span>
+				</div>
+				<input type="text" class="form-control lowercase_filter" placeholder="{{ Translation.getTranslation("search") }}" id="table_search_field">
+			</div>
+			<div class="list-group">
+				{% for entity_name in view.entityList %}
+					<div class="btn-group mb-1 table_info">
+						<a href="{{ constant("BASE_URL") ~ "/admin/entity/" ~ entity_name }}" class="btn btn-outline-dark text-left {{ view.activeEntity == entity_name ? " active" : " " }}">
+							<span class="fa fa-cube"></span>
+							{{ Translation.getTranslation(entity_name) }}
+						</a>
+						<button type="button" class="btn btn-info dropdown-toggle dropdown-toggle-split" style="max-width: min-content;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+						<div class="dropdown-menu bg-gradient-info">
+							<a class="dropdown-item" href="{{ constant("BASE_URL") ~ "/admin/entity/insert/" ~ entity_name }}">
+								<i class="fa fa-save"></i>
+								{{ Translation.getTranslation("add") }}
+							</a>
+							<a class="dropdown-item" href="{{ constant("BASE_URL") ~ "/admin/entity/struct/" ~ entity_name }}">
+								<i class="fa fa-edit"></i>
+								{{ Translation.getTranslation("edit") }}
+							</a>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+</div>

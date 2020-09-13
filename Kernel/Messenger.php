@@ -2,7 +2,7 @@
 
 namespace CoreDB\Kernel;
 
-class Messenger implements MesengerInterface
+class Messenger implements MessengerInterface
 {
     private static $instance;
 

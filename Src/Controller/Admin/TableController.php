@@ -6,7 +6,7 @@ use CoreDB\Kernel\Messenger;
 
 use Src\Controller\AdminController;
 use Src\Entity\Translation;
-use Src\Form\TableSearchForm;
+use Src\Form\SearchForm;
 use Src\Views\SideTableList;
 
 class TableController extends AdminController
@@ -14,7 +14,7 @@ class TableController extends AdminController
     public $table_name;
     public $table_comment;
     
-    public TableSearchForm $table_search;
+    public SearchForm $table_search;
     public SideTableList $side_table_list;
 
     public function __construct(array $arguments)
@@ -43,7 +43,7 @@ class TableController extends AdminController
              * Creating table and table search form
              */
             $this->setTitle(Translation::getTranslation("tables") . " | {$this->table_name}");
-            $this->table_search = TableSearchForm::createByTableName($this->table_name);
+            $this->table_search = SearchForm::createByTableName($this->table_name);
         }
     }
 

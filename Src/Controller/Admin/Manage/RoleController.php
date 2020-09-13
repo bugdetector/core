@@ -4,7 +4,7 @@ namespace Src\Controller\Admin\Manage;
 use Src\Controller\Admin\ManageController;
 use Src\Entity\Role;
 use Src\Entity\Translation;
-use Src\Form\TableSearchForm;
+use Src\Form\SearchForm;
 use Src\Views\TextElement;
 use Src\Views\ViewGroup;
 
@@ -15,7 +15,7 @@ class RoleController extends ManageController
     {
         parent::preprocessPage();
         $this->setTitle(Translation::getTranslation("role_management"));
-        $this->table_search_form = TableSearchForm::createByTableName(Role::getTableName());
+        $this->table_search_form = SearchForm::createByObject(new Role());
         $this->action_section = ViewGroup::create("a", "d-sm-inline-block btn btn-sm btn-primary shadow-sm add-role")
         ->addAttribute("href", BASE_URL."/admin/table/insert/".Role::getTableName())
         ->addField(

@@ -6,7 +6,6 @@ use Src\Theme\View;
 
 class Table extends View
 {
-    public $table_name;
     public $table_data;
     public $table_headers;
     public $orderable = false;

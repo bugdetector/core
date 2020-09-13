@@ -6,15 +6,19 @@
 		<div class="text-gray-600 ml-3 mr-auto">
 			{{ controller.table_comment }}
 		</div>
-        {% if controller.table_name %}
-            <a class="d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-1" href="{{ constant("BASE_URL") ~ "/admin/table/insert/" ~ controller.table_name }}">
+        {% if controller.entityName %}
+            <a class="d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-1" href="{{ constant("BASE_URL") ~ "/admin/entity/insert/" ~ controller.entityName }}">
                 <i class="fas fa-plus text-white-50"></i>
                 {{ Translation.getTranslation("add") }}
             </a>
         {% endif %}
-		<a class="d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-1" href="{{ constant("BASE_URL") ~ "/admin/table/struct" }}">
-			<i class="fas fa-plus text-white-50"></i>
-			{{ Translation.getTranslation("new_table") }}
+        <a class="d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-1 table_config_import" href="#">
+			<i class="fas fa-file-import text-white-50"></i>
+			{{ Translation.getTranslation("config_import") }}
+		</a>
+        <a class="d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-1 table_config_export" href="#">
+			<i class="fas fa-file-export text-white-50"></i>
+			{{ Translation.getTranslation("config_export") }}
 		</a>
 	</div>
 {% endblock %}
@@ -24,12 +28,12 @@
         <div class="col-md-8 order-md-first order-last">
             <div class="card p-2">
                 {{ controller.printMessages() }}
-                {{ controller.table_search }}
+                {{ controller.search_form }}
                 {{ controller.echoContent() }}
             </div>
         </div>
         <div class="col-md-4">
-            {{ controller.side_table_list }}
+            {{ controller.side_entity_list }}
         </div>
 	</div>
 {% endblock %}

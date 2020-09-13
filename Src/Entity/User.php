@@ -6,6 +6,8 @@ use CoreDB;
 use CoreDB\Kernel\Database\DataType\Checkbox;
 use CoreDB\Kernel\Database\DataType\DateTime;
 use CoreDB\Kernel\Database\DataType\ShortText;
+use CoreDB\Kernel\Database\SelectQueryPreparerAbstract;
+use CoreDB\Kernel\EntityReference;
 use CoreDB\Kernel\TableMapper;
 use Exception;
 use PDO;
@@ -24,9 +26,10 @@ class User extends TableMapper
     public Checkbox $active;
     public DateTime $last_access;
 
+    public EntityReference $roles;
     private $ROLES;
     private static $ALLROLES;
-    
+
     /**
      * @inheritdoc
      */
@@ -37,7 +40,7 @@ class User extends TableMapper
 
     public function map(array $array)
     {
-        if(!$array["password"]){
+        if (!$array["password"]) {
             unset($array["password"]);
         }
         unset($array["last_access"]);
@@ -47,6 +50,50 @@ class User extends TableMapper
     public function getForm()
     {
         return new UserInsertForm($this);
+    }
+
+    public function getTableHeaders(bool $translateLabel = true) : array
+    {
+        $headers = [""];
+        $fields = [
+            "ID",
+            "username",
+            "name",
+            "surname",
+            "email",
+            "phone",
+            "roles",
+            "last_access",
+            "created_at"
+        ];
+        foreach ($fields as $header) {
+            $headers[$header] = $translateLabel ? Translation::getTranslation($header) : $header;
+        }
+        return $headers;
+    }
+
+    public function getTableQuery(): SelectQueryPreparerAbstract
+    {
+        return \CoreDB::database()->select($this->getTableName(), "u")
+            ->select("u", [
+                "ID AS edit_actions",
+                "ID",
+                "username",
+                "name",
+                "surname",
+                "email",
+                "phone"
+            ])
+            ->select_with_function(["GROUP_CONCAT(r.role SEPARATOR '\n') AS roles"])
+            ->select(
+                "u",
+                [
+                    "last_access",
+                    "created_at"
+                ]
+            )->leftjoin("users_roles", "ur", "ur.user_id = u.ID")
+            ->leftjoin(Role::getTableName(), "r", "ur.role_id = r.ID")
+            ->groupBy("u.ID");
     }
 
     public static function getUserByUsername(string $username)
@@ -81,7 +128,7 @@ class User extends TableMapper
 
     public function save()
     {
-        if(isset($this->changed_fields["password"]) && $this->changed_fields["password"]["new_value"]){
+        if (isset($this->changed_fields["password"]) && $this->changed_fields["password"]["new_value"]) {
             //$this->password = password_hash($this->password, PASSWORD_BCRYPT);
         }
         return parent::save();
@@ -233,9 +280,5 @@ class User extends TableMapper
     public function getFullName(): string
     {
         return "{$this->name} {$this->surname}";
-    }
-
-    public static function editUrl(string $table_name, $data){
-        return BASE_URL."/admin/user/".User::get(["ID" => $data])->username;
     }
 }

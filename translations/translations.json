@@ -663,5 +663,45 @@
         "key": "current_pass_wrong",
         "en": "Entered current password wrong.",
         "tr": "Geçerli şifrenizi yanlış girdiniz."
+    },
+    {
+        "key": "entities",
+        "en": "Entities",
+        "tr": "Varlıklar"
+    },
+    {
+        "key": "config_import",
+        "en": "Import configuration",
+        "tr": "Yapılandırmayı içe aktar"
+    },
+    {
+        "key": "config_export",
+        "en": "Export configuration",
+        "tr": "Yapılandırmayı dışa aktar"
+    },
+    {
+        "key": "users",
+        "en": "Users",
+        "tr": "Kullanıcılar"
+    },
+    {
+        "key": "roles",
+        "en": "Roles",
+        "tr": "Roller"
+    },
+    {
+        "key": "key",
+        "en": "Key",
+        "tr": "Anahtar"
+    },
+    {
+        "key": "en",
+        "en": "English",
+        "tr": "İnglizce"
+    },
+    {
+        "key": "tr",
+        "en": "Turkish",
+        "tr": "Türkçe"
     }
 ]

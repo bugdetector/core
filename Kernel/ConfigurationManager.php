@@ -20,11 +20,15 @@ class ConfigurationManager
     private static ?ConfigurationManager $instance = null;
 
     private array $tableMapping = [];
+    private array $entityConfig = [];
 
     private function __construct()
     {
         if (empty($this->tableMapping)) {
             $this->tableMapping = Yaml::parseFile("../config/table_mapping.yml");
+        }
+        if (empty($this->entityConfig)) {
+            $this->entityConfig = Yaml::parseFile("../config/entity_config.yml");
         }
     }
 
@@ -122,6 +126,20 @@ class ConfigurationManager
     {
         Cache::clear();
         \CoreDB::cleanDirectory("../cache", true);
+    }
+
+    public function getEntityList(){
+        return array_keys($this->entityConfig);
+    }
+
+    public function getEntityInfo(string $entityName){
+        return $this->entityConfig[$entityName];
+    }
+
+    public function getEntityInfoByClass(string $className){
+        return array_filter($this->entityConfig, function($el) use ($className){
+            return $el["class"] == $className;
+        });
     }
 
     public function getClassForTable(string $tableName)

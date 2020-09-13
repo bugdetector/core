@@ -4,6 +4,7 @@ namespace Src\Entity;
 
 use CoreDB\Kernel\Database\DataType\DataTypeAbstract;
 use CoreDB\Kernel\Database\DataType\ShortText;
+use CoreDB\Kernel\Database\SelectQueryPreparerAbstract;
 use CoreDB\Kernel\Database\TableDefinition;
 use CoreDB\Kernel\TableMapper;
 use Exception;
@@ -122,5 +123,30 @@ class Translation extends TableMapper
             unset($translation->ID, $translation->created_at, $translation->last_updated);
         }
         file_put_contents(Translation::BACKUP_PATH, json_encode($translations, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getTableHeaders(bool $translateLabel = true) : array{
+        $headers = parent::getTableHeaders($translateLabel);
+        unset($headers["ID"], $headers["created_at"], $headers["last_updated"]);
+        return $headers;
+    }
+    /**
+     * @inheritdoc
+     */
+    public function getSearchFormFields(bool $translateLabel = true) : array{
+        $fields = parent::getSearchFormFields($translateLabel);
+        unset($fields["ID"], $fields["created_at"], $fields["last_updated"]);
+        return $fields;
+    }
+    /**
+     * @inheritdoc
+     */
+    public function getTableQuery() : SelectQueryPreparerAbstract{
+        $fields = array_merge(["ID AS edit_actions", "key"], $this->getAvailableLanguageList());
+        return \CoreDB::database()->select($this->getTableName(), "t")
+        ->select("t", $fields);
     }
 }

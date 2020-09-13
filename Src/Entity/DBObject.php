@@ -22,6 +22,22 @@ class DBObject extends TableMapper
     }
 
     /**
+     * @inheritdoc
+     */
+    public static function get(array $filter, string $table_name = null){
+        self::$table = $table_name;
+        return static::find($filter, static::getTableName());
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function getAll(array $filter, string $table_name = null) : array{
+        self::$table = $table_name;
+        return static::findAll($filter, static::getTableName());
+    }
+
+    /**
     * Set fields of object using an array with same keys
     * @param array $array
     *  Containing field values to set

@@ -4,8 +4,8 @@ namespace CoreDB\Kernel\Database;
 
 abstract class SelectQueryPreparerAbstract extends QueryPreparerAbstract
 {
-    protected $tables;
-    protected $fields;
+    public $tables;
+    public $fields;
     protected $condition;
     protected $orderBy;
     protected $groupBy;
@@ -109,7 +109,7 @@ abstract class SelectQueryPreparerAbstract extends QueryPreparerAbstract
      * @return $this
      *  Chaining
      */
-    public function select_with_function(array $functions)
+    public function select_with_function(array $functions) : SelectQueryPreparerAbstract
     {
         if (!$this->fields) {
             $this->fields = array();

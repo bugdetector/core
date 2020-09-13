@@ -8,7 +8,7 @@ use Src\Entity\Translation;
 use Src\Entity\User;
 use Src\Views\ViewGroup;
 
-class UserInsertForm extends TableInsertForm
+class UserInsertForm extends InsertForm
 {
 
     public function __construct(User $user)

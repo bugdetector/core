@@ -6,20 +6,24 @@ use CoreDB;
 use CoreDB\Kernel\Database\DataType\DataTypeAbstract;
 use CoreDB\Kernel\Database\DataType\DateTime;
 use CoreDB\Kernel\Database\DataType\Integer;
+use CoreDB\Kernel\Database\SelectQueryPreparerAbstract;
 use CoreDB\Kernel\Database\TableDefinition;
 use Exception;
 use PDO;
 use PDOException;
 use ReflectionObject;
+use Src\Entity\DBObject;
 use Src\Entity\File;
 use Src\Entity\Translation;
-use Src\Form\TableInsertForm;
+use Src\Form\InsertForm;
+use Src\Views\ViewGroup;
 
-abstract class TableMapper
+abstract class TableMapper implements SearchableInterface
 {    
     public Integer $ID;
     public DateTime $created_at;
     public DateTime $last_updated;
+    public ?array $entityConfig = [];
     
     protected $changed_fields;
 
@@ -31,6 +35,16 @@ abstract class TableMapper
          */
         foreach($table_definition->fields as $field_name => $field){
             $this->{$field_name} = $field;
+        }
+        $entityConfig = CoreDB::config()->getEntityInfoByClass(static::class);
+        if($entityConfig){
+            $entityName = array_key_first($entityConfig);
+            $this->entityConfig =  $entityConfig[$entityName];
+            if(isset($this->entityConfig[EntityReference::CONNECTION_MANY_TO_MANY])){
+                foreach($this->entityConfig[EntityReference::CONNECTION_MANY_TO_MANY] as $fieldEntityName => $config){
+                    $this->{$fieldEntityName} = new EntityReference($fieldEntityName ,$this, $config, EntityReference::CONNECTION_MANY_TO_MANY);
+                }
+            }
         }
     }
     public function __get($name)
@@ -155,7 +169,7 @@ abstract class TableMapper
             $nod = $reflector->getProperty($node->getName());
             $nod->setAccessible(true);
             $field = $nod->getValue($this);
-            if( !($field instanceof DataTypeAbstract) || in_array($node->getName(), ["ID", "table", "created_at", "last_updated", "changed_fields"]) ){
+            if( !($field instanceof DataTypeAbstract) || ($field instanceof EntityReference) || in_array($node->getName(), ["ID", "table", "created_at", "last_updated", "changed_fields"]) ){
                 continue;
             }
             $object_as_array[$node->getName()] = $field->getValue();
@@ -181,10 +195,13 @@ abstract class TableMapper
 
     public function save()
     {
-        if ($this->ID->getValue()) {
-            return $this->update();
-        } else {
-            return $this->insert();
+        $this_save = $this->ID->getValue() ? $this->update() : $this->insert();
+        foreach($this as $field_name => $field){
+            if($field instanceof EntityReference){
+                /** @var EntityReference */
+                $field->object = &$this;
+                $field->save();
+            }
         }
     }
 
@@ -196,7 +213,7 @@ abstract class TableMapper
         /**
          * @var DataTypeAbstract $field
          */
-        foreach($this->toArray() as $field_name => $field){
+        foreach($this as $field_name => $field){
             if ($field instanceof \CoreDB\Kernel\Database\DataType\File) {
                 /** @var File $file */
                 if($file = File::get(["ID" => $field->getValue()])){
@@ -229,30 +246,86 @@ abstract class TableMapper
 
     public function getForm()
     {
-        return new TableInsertForm($this);
+        return new InsertForm($this);
     }
     
-    public function getFormFields($name) : array
+    public function getFormFields($name, bool $translateLabel = true) : array
     {
         $fields = [];
-        $reflector = new ReflectionObject($this);
-        $nodes = $reflector->getProperties();
-        foreach ($nodes as $node) {
-            $nod = $reflector->getProperty($node->getName());
-            $nod->setAccessible(true);
-            $field = $nod->getValue($this);
-            if( !($field instanceof DataTypeAbstract) || in_array($node->getName(), ["ID", "table", "created_at", "last_updated", "changed_fields"]) ){
+        foreach ($this as $field_name => $field) {
+            if( (!($field instanceof DataTypeAbstract)) || in_array($field_name, ["ID", "table", "created_at", "last_updated"]) ){
                 continue;
             }
-            $column_name = $node->getName();
-            $fields[$column_name] = $field->getWidget()->setName($name."[{$column_name}]")
-            ->setLabel(Translation::getTranslation($column_name));
+            $inputName = $name."[{$field_name}]";
+            if($field instanceof EntityReference){
+                $inputName .= "[]";
+            }
+            $fields[$field_name] = $field->getWidget()->setName($inputName)
+            ->setLabel($translateLabel ? Translation::getTranslation($field_name) : $field_name);
         }
         return $fields;
     }
 
-    public static function editUrl(string $table_name, $data){
-        return BASE_URL."/admin/table/insert/{$table_name}/{$data}";
+    /**
+     * @inheritdoc
+     */
+    public function getSearchFormFields(bool $translateLabel = true) : array{
+        $fields = [];
+        foreach (TableDefinition::getDefinition(static::getTableName())->fields as $field) {
+            $column_name = $field->column_name;
+            $fields[$column_name] = $field->getSearchWidget()->setName($column_name)
+            ->setLabel($translateLabel ? Translation::getTranslation($column_name) : $column_name);
+        }
+        return $fields;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getTableHeaders(bool $translateLabel = true) : array{
+        $headers = [""];
+        /**
+         * @var DataTypeAbstract $field
+         */
+        foreach (TableDefinition::getDefinition(static::getTableName())->fields as $field) {
+            $headers[$field->column_name] = $translateLabel ? Translation::getTranslation($field->column_name) : $field->column_name;
+        }
+        return $headers;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getTableQuery() : SelectQueryPreparerAbstract{
+        return \CoreDB::database()->select(static::getTableName())
+        ->select(static::getTableName(), ["ID AS edit_actions", "*"]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function postProcessRow(&$row) : void{
+        $row["edit_actions"] = ViewGroup::create("div", "d-flex")
+            ->addField(
+                ViewGroup::create("a", "mr-2 rowdelete")
+                ->addField(
+                    ViewGroup::create("i", "fa fa-times text-danger core-control")
+                )
+                ->addAttribute("data-table", $this->getTableName())
+                ->addAttribute("data-id", $row["edit_actions"])
+                ->addAttribute("href", "#")
+            )->addField(
+                ViewGroup::create("a", "ml-2")
+                ->addField(
+                    ViewGroup::create("i", "fa fa-edit text-primary core-control")
+                )
+                ->addAttribute("href", $this->editUrl($row))
+                );
+    }
+
+    public static function editUrl($row){
+        $tableOrEntity = static::class == DBObject::class ? "table" : "entity";
+        return BASE_URL."/admin/{$tableOrEntity}/insert/".static::getTableName()."/{$row["edit_actions"]}";
     }
 
     function includeFiles($from = null)
@@ -260,6 +333,7 @@ abstract class TableMapper
         foreach (\CoreDB::normalizeFiles($from) as $file_key => $fileInfo) {
             if ($fileInfo["size"] != 0) {
                 if($this->$file_key->getValue()){
+                    /** @var File  */
                     $file = File::get(["ID" => $this->$file_key]);
                     $file->unlinkFile();
                 }else{

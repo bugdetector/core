@@ -6,11 +6,12 @@ use CoreDB;
 use CoreDB\Kernel\TableMapper;
 use Exception;
 use Src\Controller\Admin\TableController;
+use Src\Entity\DBObject;
 use Src\Entity\Translation;
 use Src\Form\Widget\FormWidget;
 use Src\Form\Widget\InputWidget;
 
-class TableInsertForm extends Form
+class InsertForm extends Form
 {
     public string $method = "POST";
 
@@ -22,8 +23,8 @@ class TableInsertForm extends Form
         $this->object = $object;
         $this->setEnctype("multipart/form-data");
         \CoreDB::controller()->addJsFiles("src/js/insert.js");
-
-        foreach ($this->object->getFormFields($this->object->getTableName()) as $column_name => $field) {
+        
+        foreach ($this->object->getFormFields($this->object->getTableName(), !($object instanceof DBObject) ) as $column_name => $field) {
             $this->addField($field);
         }
         $this->addField(

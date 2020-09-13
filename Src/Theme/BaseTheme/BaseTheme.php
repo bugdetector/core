@@ -3,6 +3,7 @@
 namespace Src\Theme\BaseTheme;
 
 use CoreDB\Kernel\BaseController;
+use Src\Controller\Admin\EntityController;
 use Src\Controller\Admin\Manage\RoleController;
 use Src\Controller\Admin\Manage\TranslationController;
 use Src\Controller\Admin\Manage\UserController;
@@ -92,6 +93,13 @@ abstract class BaseTheme extends BaseController
                             ->addAttribute("href", TranslationController::getUrl()),
                             $this instanceof TranslationController
                         )
+            )->addNavItem(
+                NavItem::create(
+                    "fa fa-cube",
+                    Translation::getTranslation("entities"),
+                    BASE_URL."/admin/entity",
+                    $this instanceof EntityController
+                )
             )->addNavItem(
                 NavItem::create(
                     "fa fa-chart-area",
