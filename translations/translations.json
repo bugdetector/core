@@ -20,16 +20,6 @@
         "tr": "Oturumu Kapat"
     },
     {
-        "key": "add_user",
-        "en": "Add User",
-        "tr": "Kullanıcı Ekle"
-    },
-    {
-        "key": "edit_user",
-        "en": "Edit User",
-        "tr": "Kullanıcıyı düzenle"
-    },
-    {
         "key": "new_table",
         "en": "New Table",
         "tr": "Yeni Tablo"
@@ -495,14 +485,14 @@
         "tr": "Site kullanıcılarının temel verilerini barındırır. User sınıfı ile bağlıdır."
     },
     {
-        "key": "Constains User's roles. Look at User::add_role, User::delete_role, User::updateRoles",
-        "en": "Constains User's roles. Look at User::add_role, User::delete_role, User::updateRoles",
-        "tr": "Kullanıcıların rollerini barındırır. Bkz: User::add_role, User::delete_role, User::updateRoles"
+        "key": "Constains User's roles. Look at User::roles",
+        "en": "Constains User's roles. Look at User::roles",
+        "tr": "Kullanıcıların rollerini barındırır. Bkz: User::roles"
     },
     {
-        "key": "Contains less secure site Variables. For more security use .config.php. Connected via Variable class.",
-        "en": "Contains less secure site Variables. For more security use .config.php. Connected via Variable class.",
-        "tr": ".config.php üzerindekine göre daha az güvenli site değişkenlerini barındırır. Variable sınıfı ile bağlıdır."
+        "key": "Contains less secure site Variables. For more security use config.php. Connected via Variable class.",
+        "en": "Contains less secure site Variables. For more security use config.php. Connected via Variable class.",
+        "tr": "config.php üzerindekine göre daha az güvenli site değişkenlerini barındırır. Variable sınıfı ile bağlıdır."
     },
     {
         "key": "Importtant log of actions.",
@@ -543,11 +533,6 @@
         "key": "column_name_required",
         "en": "Column name required.",
         "tr": "Kolon ismi gereklidir."
-    },
-    {
-        "key": "add_role",
-        "en": "Add Role",
-        "tr": "Rol Ekle"
     },
     {
         "key": "password_match_error",
@@ -698,5 +683,25 @@
         "key": "entity_select_info",
         "en": " Select an entity to make a transaction.",
         "tr": "İşlem yapmak için bir varlık seçin."
+    },
+    {
+        "key": "file_name",
+        "en": "File name",
+        "tr": "Dosya ismi"
+    },
+    {
+        "key": "file_size",
+        "en": "File size",
+        "tr": "Dosya boyutu"
+    },
+    {
+        "key": "mime_type",
+        "en": "Mime type",
+        "tr": "Mime tipi"
+    },
+    {
+        "key": "an_error_occured",
+        "en": "An unknown error occured.",
+        "tr": "Bilinmeyen bir hata oluştu."
     }
 ]
