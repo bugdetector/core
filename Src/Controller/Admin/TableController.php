@@ -14,37 +14,30 @@ class TableController extends AdminController
     public $table_name;
     public $table_comment;
     
-    public SearchForm $table_search;
+    public ?SearchForm $table_search = null;
     public SideTableList $side_table_list;
 
-    public function __construct(array $arguments)
+    public function preprocessPage()
     {
-        parent::__construct($arguments);
         if (isset($this->arguments[0]) && $this->arguments[0] && in_array($this->arguments[0], \CoreDB::database()::getTableList())) {
             $table_definition = TableDefinition::getDefinition($this->arguments[0]);
             $this->table_name = $this->arguments[0];
             $this->table_comment = $table_definition->table_comment;
-        }
-    }
-
-    public function processPage()
-    {
-        $this->side_table_list = new SideTableList($this->table_name);
-        parent::processPage();
-    }
-
-    public function preprocessPage()
-    {
-        if (!$this->table_name) {
-            $this->createMessage(Translation::getTranslation("table_select_info"), Messenger::INFO);
-            $this->setTitle(Translation::getTranslation("tables"));
-        } else {
+            $this->table_search = SearchForm::createByTableName($this->table_name);
             /**
              * Creating table and table search form
              */
             $this->setTitle(Translation::getTranslation("tables") . " | {$this->table_name}");
-            $this->table_search = SearchForm::createByTableName($this->table_name);
+        }else{
+            $this->createMessage(Translation::getTranslation("table_select_info"), Messenger::INFO);
+            $this->setTitle(Translation::getTranslation("tables"));
         }
+        $this->side_table_list = new SideTableList($this->table_name);
+    }
+
+    public function echoContent()
+    {
+        return $this->table_search;
     }
 
     public function getTemplateFile(): string

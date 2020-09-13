@@ -56,4 +56,18 @@ class SelectWidget extends FormWidget
         }
         parent::render();
     }
+
+    public function setValue($value)
+    {
+        if(is_array($value)){
+            foreach($value as $key){
+                if(isset($this->options[$key])){
+                    $this->options[$key]->setSelected(true);
+                }
+            }
+        }else{
+            $this->value = $value;
+        }
+        return $this;
+    }
 }

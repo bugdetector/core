@@ -16,6 +16,7 @@ use Src\Entity\DBObject;
 use Src\Entity\File;
 use Src\Entity\Translation;
 use Src\Form\InsertForm;
+use Src\Views\TextElement;
 use Src\Views\ViewGroup;
 
 abstract class TableMapper implements SearchableInterface
@@ -23,6 +24,7 @@ abstract class TableMapper implements SearchableInterface
     public Integer $ID;
     public DateTime $created_at;
     public DateTime $last_updated;
+    public string $entityName = "";
     public ?array $entityConfig = [];
     
     protected $changed_fields;
@@ -38,8 +40,8 @@ abstract class TableMapper implements SearchableInterface
         }
         $entityConfig = CoreDB::config()->getEntityInfoByClass(static::class);
         if($entityConfig){
-            $entityName = array_key_first($entityConfig);
-            $this->entityConfig =  $entityConfig[$entityName];
+            $this->entityName = array_key_first($entityConfig);
+            $this->entityConfig =  $entityConfig[$this->entityName];
             if(isset($this->entityConfig[EntityReference::CONNECTION_MANY_TO_MANY])){
                 foreach($this->entityConfig[EntityReference::CONNECTION_MANY_TO_MANY] as $fieldEntityName => $config){
                     $this->{$fieldEntityName} = new EntityReference($fieldEntityName ,$this, $config, EntityReference::CONNECTION_MANY_TO_MANY);
@@ -253,7 +255,7 @@ abstract class TableMapper implements SearchableInterface
     {
         $fields = [];
         foreach ($this as $field_name => $field) {
-            if( (!($field instanceof DataTypeAbstract)) || in_array($field_name, ["ID", "table", "created_at", "last_updated"]) ){
+            if( !($field instanceof DataTypeAbstract) || in_array($field_name, ["ID", "table", "created_at", "last_updated"]) ){
                 continue;
             }
             $inputName = $name."[{$field_name}]";
@@ -271,10 +273,16 @@ abstract class TableMapper implements SearchableInterface
      */
     public function getSearchFormFields(bool $translateLabel = true) : array{
         $fields = [];
-        foreach (TableDefinition::getDefinition(static::getTableName())->fields as $field) {
-            $column_name = $field->column_name;
-            $fields[$column_name] = $field->getSearchWidget()->setName($column_name)
-            ->setLabel($translateLabel ? Translation::getTranslation($column_name) : $column_name);
+        foreach ($this as $field_name => $field) {
+            if( !($field instanceof DataTypeAbstract) ){
+                continue;
+            }
+            $inputName = $field_name;
+            if($field instanceof EntityReference){
+                $inputName .= "[]";
+            }
+            $fields[$field_name] = $field->getSearchWidget()->setName($inputName)
+            ->setLabel($translateLabel ? Translation::getTranslation($field_name) : $field_name);
         }
         return $fields;
     }
@@ -319,13 +327,30 @@ abstract class TableMapper implements SearchableInterface
                 ->addField(
                     ViewGroup::create("i", "fa fa-edit text-primary core-control")
                 )
-                ->addAttribute("href", $this->editUrl($row))
+                ->addAttribute("href", $this->editUrl($row["edit_actions"]))
                 );
     }
 
-    public static function editUrl($row){
-        $tableOrEntity = static::class == DBObject::class ? "table" : "entity";
-        return BASE_URL."/admin/{$tableOrEntity}/insert/".static::getTableName()."/{$row["edit_actions"]}";
+    /**
+     * Return entity action buttons.
+     * @return array
+     *  String convertibable objects.
+     */
+    public function actions() : array{
+        return [
+            ViewGroup::create("a", "d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-1")
+            ->addField(
+                ViewGroup::create("i", "fa fa-plus text-white-50")
+            )->addAttribute("href", BASE_URL."/admin/entity/insert/{$this->entityName}")
+            ->addField(TextElement::create(Translation::getTranslation("add")))
+        ];
+    }
+    public function editUrl($value = NULL){
+        if(!$value){
+            $value = $this->ID->getValue();
+        }
+        $isEntity = static::class != DBObject::class;
+        return BASE_URL."/admin/".($isEntity ? "entity" : "table")."/insert/".($isEntity ? $this->entityName : $this->getTableName())."/{$value}";
     }
 
     function includeFiles($from = null)
@@ -344,7 +369,7 @@ abstract class TableMapper implements SearchableInterface
                     $this->save();
                 }else{
                     \CoreDB::database()->rollback();
-                    throw new Exception(Translation::getTranslation(99));
+                    throw new Exception(Translation::getTranslation("an_error_occured"));
                 }
             }
         }

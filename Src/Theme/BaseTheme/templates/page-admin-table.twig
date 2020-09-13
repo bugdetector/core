@@ -12,6 +12,14 @@
                 {{ Translation.getTranslation("add") }}
             </a>
         {% endif %}
+        <a class="d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-1 table_config_import" href="#">
+			<i class="fas fa-file-import text-white-50"></i>
+			{{ Translation.getTranslation("config_import") }}
+		</a>
+        <a class="d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-1 table_config_export" href="#">
+			<i class="fas fa-file-export text-white-50"></i>
+			{{ Translation.getTranslation("config_export") }}
+		</a>
 		<a class="d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-1" href="{{ constant("BASE_URL") ~ "/admin/table/struct" }}">
 			<i class="fas fa-plus text-white-50"></i>
 			{{ Translation.getTranslation("new_table") }}
@@ -24,7 +32,6 @@
         <div class="col-md-8 order-md-first order-last">
             <div class="card p-2">
                 {{ controller.printMessages() }}
-                {{ controller.table_search }}
                 {{ controller.echoContent() }}
             </div>
         </div>

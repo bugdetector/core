@@ -2,8 +2,6 @@
 
 namespace Src\Form;
 
-use Src\Controller\Admin\Manage\UserController;
-use Src\Controller\Admin\UserController as AdminUserController;
 use Src\Entity\Translation;
 use Src\Entity\User;
 use Src\Views\ViewGroup;
@@ -52,16 +50,5 @@ class UserInsertForm extends InsertForm
             }
         }
         return $parent_check && empty($this->errors);
-    }
-
-
-    protected function submitSuccess()
-    {
-        \CoreDB::goTo(AdminUserController::getUrl().$this->object->username);
-    }
-
-    protected function getDeleteRedirectUrl() :string
-    {
-        \CoreDB::goTo(UserController::getUrl());
     }
 }

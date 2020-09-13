@@ -20,16 +20,6 @@
         "tr": "Oturumu Kapat"
     },
     {
-        "key": "user_management",
-        "en": "User Management",
-        "tr": "Kullanıcı Yönetimi"
-    },
-    {
-        "key": "role_management",
-        "en": "Role Management",
-        "tr": "Rol Yönetimi"
-    },
-    {
         "key": "add_user",
         "en": "Add User",
         "tr": "Kullanıcı Ekle"
@@ -162,7 +152,7 @@
     {
         "key": "table_select_info",
         "en": "Select a table to make a transaction.",
-        "tr": "işlem yapmak için bir tablo seçin."
+        "tr": "İşlem yapmak için bir tablo seçin."
     },
     {
         "key": "info",
@@ -703,5 +693,10 @@
         "key": "tr",
         "en": "Turkish",
         "tr": "Türkçe"
+    },
+    {
+        "key": "entity_select_info",
+        "en": " Select an entity to make a transaction.",
+        "tr": "İşlem yapmak için bir varlık seçin."
     }
 ]

@@ -53,7 +53,7 @@ class AlterQueryPreparer extends AlterQueryPreparerAbstract
             throw new Exception(Translation::getTranslation("no_change_on_table"));
         }
         if($original_description->table_comment != $tableDefinition->table_comment){
-            $this->queries[] = "ALTER TABLE `{$tableDefinition->table_name}` COMMENT = '{$tableDefinition->table_comment}' ;";
+            $this->queries[] = "ALTER TABLE `{$tableDefinition->table_name}` COMMENT = ".\CoreDB::database()->quote($tableDefinition->table_comment)." ;";
         }
         foreach ($differences as $difference) {
             /**

@@ -15,6 +15,7 @@ class StructController extends TableController
 
     public function preprocessPage()
     {
+        parent::preprocessPage();
         $this->form = new TableStructForm(strval($this->table_name), strval($this->table_comment));
         $this->form->processForm();
         if ($this->table_name) {

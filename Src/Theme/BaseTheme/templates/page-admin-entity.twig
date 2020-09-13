@@ -6,12 +6,9 @@
 		<div class="text-gray-600 ml-3 mr-auto">
 			{{ controller.table_comment }}
 		</div>
-        {% if controller.entityName %}
-            <a class="d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-1" href="{{ constant("BASE_URL") ~ "/admin/entity/insert/" ~ controller.entityName }}">
-                <i class="fas fa-plus text-white-50"></i>
-                {{ Translation.getTranslation("add") }}
-            </a>
-        {% endif %}
+        {% for action in controller.actions %}
+            {{ action }}
+        {% endfor %}
         <a class="d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-1 table_config_import" href="#">
 			<i class="fas fa-file-import text-white-50"></i>
 			{{ Translation.getTranslation("config_import") }}
@@ -28,7 +25,6 @@
         <div class="col-md-8 order-md-first order-last">
             <div class="card p-2">
                 {{ controller.printMessages() }}
-                {{ controller.search_form }}
                 {{ controller.echoContent() }}
             </div>
         </div>

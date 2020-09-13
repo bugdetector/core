@@ -12,16 +12,12 @@ class InsertController extends TableController
     public $object = null;
     public $insert_form;
 
-    public function __construct(array $arguments)
+    public function preprocessPage()
     {
-        parent::__construct($arguments);
+        parent::preprocessPage();
         if (!$this->table_name) {
             Router::getInstance()->route(Router::NOT_FOUND);
         }
-    }
-
-    public function preprocessPage()
-    {
         if (isset($this->arguments[1]) && !isset($_POST["insert?"])) {
             $this->object = DBObject::get(["ID" => $this->arguments[1]], $this->table_name);
             if (!$this->object) {

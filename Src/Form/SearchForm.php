@@ -8,6 +8,7 @@ use CoreDB\Kernel\Database\DataType\DateTime;
 use CoreDB\Kernel\Database\DataType\Time;
 use CoreDB\Kernel\Database\SelectQueryPreparerAbstract;
 use CoreDB\Kernel\Database\TableDefinition;
+use CoreDB\Kernel\EntityReference;
 use CoreDB\Kernel\SearchableInterface;
 use CoreDB\Kernel\TableMapper;
 use PDO;
@@ -87,6 +88,8 @@ class SearchForm extends Form
                     $dates = explode("&", $params[$column_name]);
                     $this->query->condition($column_name, $dates[0] . " 00:00:00", ">=")
                     ->condition($column_name, $dates[1] . " 23:59:59", "<=");
+                } else if($this->object->$column_name instanceof EntityReference){
+                    $this->query->condition("{$column_name}.ID",  $params[$column_name], "IN");
                 } else {
                     $this->query->condition($column_name, "%{$params[$column_name]}%", "LIKE");
                 }
@@ -107,13 +110,10 @@ class SearchForm extends Form
          * @var DataTypeAbstract $dataType
          */
         foreach ($this->object->getSearchFormFields($this->translateLabels) as $field_name => $searchWidget) {
-            $label = $this->translateLabels ? Translation::getTranslation($field_name) : $field_name;
             $search_input_group->addField(
                 ViewGroup::create("div", "col-sm-3")->addField(
                     $searchWidget
-                    ->setLabel($label)
-                    ->setValue(isset($this->request[$field_name]) ? strval($this->request[$field_name]) : "")
-                    ->setName($field_name)
+                    ->setValue(isset($this->request[$field_name]) ? $this->request[$field_name] : "")
                     ->addAttribute("autocomplete", "off")
                 )
             );

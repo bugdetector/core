@@ -9,6 +9,8 @@ use CoreDB\Kernel\Database\TableDefinition;
 use CoreDB\Kernel\TableMapper;
 use Exception;
 use PDO;
+use Src\Views\TextElement;
+use Src\Views\ViewGroup;
 
 class Translation extends TableMapper
 {
@@ -148,5 +150,26 @@ class Translation extends TableMapper
         $fields = array_merge(["ID AS edit_actions", "key"], $this->getAvailableLanguageList());
         return \CoreDB::database()->select($this->getTableName(), "t")
         ->select("t", $fields);
+    }
+
+    public function actions(): array
+    {
+        $actions = parent::actions();
+        $actions[] = ViewGroup::create("a", "d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-1 lang-imp")
+        ->addField(
+            ViewGroup::create("i", "fa fa-file-import text-white-50")
+        )->addAttribute("href", "#")
+        ->addField(TextElement::create(Translation::getTranslation("import")));
+        $actions[] = ViewGroup::create("a", "d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-1 lang-exp")
+        ->addField(
+            ViewGroup::create("i", "fa fa-file-export text-white-50")
+        )->addAttribute("href", "#")
+        ->addField(TextElement::create(Translation::getTranslation("export")));
+
+        \CoreDB::controller()->addJsFiles("src/js/translation.js");
+        \CoreDB::controller()->addFrontendTranslation("lang_import_info");
+        \CoreDB::controller()->addFrontendTranslation("lang_export_info");
+
+        return $actions;
     }
 }

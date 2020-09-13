@@ -421,7 +421,7 @@ class MySQLDriver extends DatabaseDriver
         if ($dataType->default) {
             $type_description .= " DEFAULT {$dataType->default}";
         }
-        $type_description .= " COMMENT '{$dataType->comment}'";
+        $type_description .= " COMMENT ".\CoreDB::database()->quote($dataType->comment);
         return $type_description;
     }
 

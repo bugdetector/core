@@ -84,7 +84,7 @@ class User extends TableMapper
                 "email",
                 "phone"
             ])
-            ->select_with_function(["GROUP_CONCAT(r.role SEPARATOR '\n') AS roles"])
+            ->select_with_function(["GROUP_CONCAT(roles.role SEPARATOR '\n') AS roles"])
             ->select(
                 "u",
                 [
@@ -92,7 +92,7 @@ class User extends TableMapper
                     "created_at"
                 ]
             )->leftjoin("users_roles", "ur", "ur.user_id = u.ID")
-            ->leftjoin(Role::getTableName(), "r", "ur.role_id = r.ID")
+            ->leftjoin(Role::getTableName(), "roles", "ur.role_id = roles.ID")
             ->groupBy("u.ID");
     }
 

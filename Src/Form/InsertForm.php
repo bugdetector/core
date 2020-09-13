@@ -95,7 +95,7 @@ class InsertForm extends Form
     }
 
     protected function submitSuccess(){
-        \CoreDB::goTo(CoreDB::controller()->getUrl().$this->object->getTableName()."/{$this->object->ID}");
+        \CoreDB::goTo($this->object->editUrl());
     }
 
     protected function deleteSuccess() :string

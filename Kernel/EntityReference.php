@@ -57,15 +57,19 @@ class EntityReference extends DataTypeAbstract
 
             $options = [];
             foreach ($allOptions as $anOption) {
-                $objectArray = $referenceClass::get(["ID" => $anOption])->toArray();
-                $text = current($objectArray);
-                $option = new OptionWidget($anOption, $text);
-                if (in_array($anOption, $checkeds)) {
-                    $option->setSelected(true);
+                $object = $referenceClass::get(["ID" => $anOption]);
+                if($object){
+                    $objectArray = $object->toArray();
+                    $text = current($objectArray);
+                    $option = new OptionWidget($anOption, $text);
+                    if (in_array($anOption, $checkeds)) {
+                        $option->setSelected(true);
+                    }
+                    $options[] = $option;
                 }
-                $options[] = $option;
             }
             $widget = SelectWidget::create("")
+            ->setNullElement(null)
             ->addAttribute("multiple", "true")
             ->setOptions($options);
         }

@@ -4,16 +4,11 @@ namespace Src\Theme\BaseTheme;
 
 use CoreDB\Kernel\BaseController;
 use Src\Controller\Admin\EntityController;
-use Src\Controller\Admin\Manage\RoleController;
-use Src\Controller\Admin\Manage\TranslationController;
-use Src\Controller\Admin\Manage\UserController;
-use Src\Controller\Admin\ManageController;
 use Src\Controller\Admin\TableController;
 use Src\Controller\AdminController;
 use Src\Entity\Translation;
 use Src\Views\NavItem;
 use Src\Views\Sidebar;
-use Src\Views\TextElement;
 
 abstract class BaseTheme extends BaseController
 {
@@ -63,36 +58,6 @@ abstract class BaseTheme extends BaseController
                     BASE_URL. "/admin",
                     static::class == AdminController::class
                 )
-            )->addNavItem(
-                NavItem::create(
-                    "fa fa-cog",
-                    Translation::getTranslation("management"),
-                    "#",
-                    $this instanceof ManageController
-                )
-                        ->addCollapsedItem(
-                            TextElement::create(Translation::getTranslation("management"))
-                            ->setTagName("h6"),
-                            false,
-                            true
-                        )->addCollapsedItem(
-                            TextElement::create(Translation::getTranslation("user_management"))
-                            ->setTagName("a")
-                            ->addAttribute("href", UserController::getUrl()),
-                            $this instanceof UserController
-                        )
-                        ->addCollapsedItem(
-                            TextElement::create(Translation::getTranslation("role_management"))
-                            ->setTagName("a")
-                            ->addAttribute("href", RoleController::getUrl()),
-                            $this instanceof RoleController
-                        )
-                        ->addCollapsedItem(
-                            TextElement::create(Translation::getTranslation("translations"))
-                            ->setTagName("a")
-                            ->addAttribute("href", TranslationController::getUrl()),
-                            $this instanceof TranslationController
-                        )
             )->addNavItem(
                 NavItem::create(
                     "fa fa-cube",

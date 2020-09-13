@@ -94,13 +94,26 @@ class SelectQueryPreparer extends SelectQueryPreparerAbstract
      */
     public function condition(string $column, $value, string $operator = "=", string $connect = "AND") : SelectQueryPreparerAbstract
     {
-        $placeholder = $column;
+        $placeholder = str_replace(".", "_", $column);
+        $columnInfo = explode(".", $column);
+        $column = $columnInfo[0];
+        $fieldName = isset($columnInfo[1]) ? ".{$columnInfo[1]}" : "";
         $index = 0;
         while(isset($this->params[":$placeholder"])){
             $placeholder = "{$column}_{$index}";
         }
-        $this->condition .= ($this->condition ? $connect : "")." `$column` $operator :$placeholder ";
-        $this->params[":$placeholder"] = $value;
+        if($operator == "IN"){
+            $condition = "(";
+            foreach($value as $index => $val){
+                $condition .= ($condition != "(" ? "," : "").":{$placeholder}_{$index}";
+                $this->params[":{$placeholder}_{$index}"] = $val;
+            }
+            $condition .= ")";
+        }else{
+            $condition = ":$placeholder";
+            $this->params[":$placeholder"] = $value;
+        }
+        $this->condition .= ($this->condition ? $connect : "")." `$column`$fieldName $operator $condition ";
         return $this;
     }
     
