@@ -7,10 +7,8 @@ use CoreDB\Kernel\Database\DataType\Date;
 use CoreDB\Kernel\Database\DataType\DateTime;
 use CoreDB\Kernel\Database\DataType\Time;
 use CoreDB\Kernel\Database\SelectQueryPreparerAbstract;
-use CoreDB\Kernel\Database\TableDefinition;
 use CoreDB\Kernel\EntityReference;
 use CoreDB\Kernel\SearchableInterface;
-use CoreDB\Kernel\TableMapper;
 use PDO;
 use Src\Entity\DBObject;
 use Src\Entity\Translation;
@@ -37,7 +35,7 @@ class SearchForm extends Form
         $this->search_input_group = new CollapsableCard(Translation::getTranslation("search"));
         $this->search_input_group->setId("search_input_group");
         $this->pagination = new Pagination(isset($_GET["page"]) ? $_GET["page"] : 1);
-        \CoreDB::controller()->addJsFiles("src/js/table_search_form.js");
+        \CoreDB::controller()->addJsFiles("src/js/search_form.js");
         \CoreDB::controller()->addFrontendTranslation("record_remove_accept");
     }
 
@@ -60,11 +58,11 @@ class SearchForm extends Form
 
     public function getFormId(): string
     {
-        return "table_search_form";
+        return "search_form";
     }
     public function getTemplateFile(): string
     {
-        return "table_search_form.twig";
+        return "search_form.twig";
     }
 
     public function validate(): bool

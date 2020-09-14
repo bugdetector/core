@@ -49,7 +49,7 @@ class InsertForm extends Form
             );
         }
 
-        \CoreDB::controller()->addJsFiles("src/js/table_search_form.js");
+        \CoreDB::controller()->addJsFiles("src/js/search_form.js");
     }
 
     public function getFormId(): string

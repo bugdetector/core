@@ -2,7 +2,7 @@
 
 namespace Src\Entity;
 
-use CoreDB\Kernel\Database\DataType\Text;
+use CoreDB\Kernel\Database\DataType\LongText;
 use CoreDB\Kernel\Database\DataType\ShortText;
 use CoreDB\Kernel\TableMapper;
 use Exception;
@@ -15,7 +15,7 @@ use Exception;
 class Variable extends TableMapper
 {
     public ShortText $key;
-    public Text $value;
+    public LongText $value;
     
     /**
      * @inheritdoc
