@@ -4,7 +4,6 @@ namespace Src\Entity;
 
 use CoreDB;
 use CoreDB\Kernel\Database\DataType\ShortText;
-use CoreDB\Kernel\Database\SelectQueryPreparerAbstract;
 use CoreDB\Kernel\TableMapper;
 use Exception;
 use Src\Form\Widget\InputWidget;
@@ -18,19 +17,27 @@ use Src\Views\ViewGroup;
 
 class File extends TableMapper
 {
-    const TABLE = "files";
     public ShortText $file_name;
     public ShortText $file_path;
     public ShortText $file_size;
     public ShortText $mime_type;
     public ShortText $extension;
 
+    public bool $isImage;
     /**
      * @inheritdoc
      */
     public static function getTableName(): string
     {
         return "files";
+    }
+
+    public function map(array $array)
+    {
+        parent::map($array);
+        if(strpos($this->mime_type, "image/") !== false){
+            $this->isImage = true;
+        }
     }
 
     public static function clear()
@@ -52,6 +59,9 @@ class File extends TableMapper
         $this->mime_type->setValue($fileInfo["type"]);
         $this->file_size->setValue($fileInfo["size"]);
         $this->extension->setValue(pathinfo($fileInfo["name"], PATHINFO_EXTENSION));
+        if(strpos($this->mime_type, "image/")){
+            $this->isImage = true;
+        }
 
         $file_url = getcwd() . "/files/uploaded/$table/$field_name/";
         is_dir($file_url) ?: mkdir($file_url, 0777, true);

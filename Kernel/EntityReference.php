@@ -33,6 +33,7 @@ class EntityReference extends DataTypeAbstract
             $this->mergeTable = $config["mergeTable"];
             $this->selfKey = $config["selfKey"];
             $this->foreignKey = $config["foreignKey"];
+            $this->value = $this->getCheckeds();
         }
     }
 

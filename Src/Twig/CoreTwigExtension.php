@@ -1,6 +1,7 @@
 <?php
 namespace App\Twig;
 
+use Src\Entity\Translation;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -10,6 +11,7 @@ class CoreTwigExtension extends AbstractExtension
     {
         return [
             new TwigFunction('getHashedFilemTime', [$this, 'getHashedFilemTime']),
+            new TwigFunction('t', [Translation::class, 'getTranslation']),
         ];
     }
 

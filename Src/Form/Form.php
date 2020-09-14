@@ -117,7 +117,7 @@ abstract class Form extends View
     {
         $encryption_key = bin2hex(random_bytes(10));
         $this->form_build_id = @openssl_encrypt($this->getFormId(), self::ENCRYPTION_METHOD, $encryption_key);
-        $this->form_token = hash("SHA256", $this->form_build_id . User::get_user_ip());
+        $this->form_token = hash("SHA256", $this->form_build_id . User::getUserIp());
         $_SESSION[$this->form_build_id] = [
             "encryption_key" => $encryption_key,
             "value" => $this->form_token

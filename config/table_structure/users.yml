@@ -31,6 +31,16 @@ fields:
     isUnique: false
     default: null
     comment: Surname
+  profile_photo:
+    type: file
+    reference_table: files
+    column_name: profile_photo
+    primary_key: false
+    autoIncrement: false
+    isNull: true
+    isUnique: false
+    default: null
+    comment: 'User profile photo.'
   email:
     type: short_text
     length: '50'

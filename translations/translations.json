@@ -703,5 +703,10 @@
         "key": "an_error_occured",
         "en": "An unknown error occured.",
         "tr": "Bilinmeyen bir hata oluştu."
+    },
+    {
+        "key": "profile_photo",
+        "en": "Profile photo",
+        "tr": "Profil resmi"
     }
 ]

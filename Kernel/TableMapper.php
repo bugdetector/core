@@ -16,6 +16,7 @@ use Src\Entity\DBObject;
 use Src\Entity\File;
 use Src\Entity\Translation;
 use Src\Form\InsertForm;
+use Src\Form\Widget\FormWidget;
 use Src\Views\TextElement;
 use Src\Views\ViewGroup;
 
@@ -29,7 +30,7 @@ abstract class TableMapper implements SearchableInterface
     
     protected $changed_fields;
 
-    public function __construct()
+    public function __construct(string $tableName = null, array $mapData = [])
     {
         $table_definition = TableDefinition::getDefinition($this->getTableName());
         /**
@@ -38,6 +39,9 @@ abstract class TableMapper implements SearchableInterface
         foreach($table_definition->fields as $field_name => $field){
             $this->{$field_name} = $field;
         }
+        $this->map($mapData);
+        $this->changed_fields = [];
+        
         $entityConfig = CoreDB::config()->getEntityInfoByClass(static::class);
         if($entityConfig){
             $this->entityName = array_key_first($entityConfig);
@@ -99,8 +103,7 @@ abstract class TableMapper implements SearchableInterface
             /**
              * @var TableMapper
              */
-            $object = new $className($table);
-            $object->map($result);
+            $object = new $className($table, $result);
         }else{
             $object = null;
         }
@@ -128,8 +131,7 @@ abstract class TableMapper implements SearchableInterface
                 /**
                  * @var TableMapper
                  */
-                $object = new $className($table);
-                $object->map($result);
+                $object = new $className($table, $result);
                 $objects[] = $object;
             }
         }
@@ -164,17 +166,11 @@ abstract class TableMapper implements SearchableInterface
      */
     public function toArray() : array
     {
-        $reflector = new ReflectionObject($this);
-        $nodes = $reflector->getProperties();
-        $object_as_array = [];
-        foreach ($nodes as $node) {
-            $nod = $reflector->getProperty($node->getName());
-            $nod->setAccessible(true);
-            $field = $nod->getValue($this);
-            if( !($field instanceof DataTypeAbstract) || ($field instanceof EntityReference) || in_array($node->getName(), ["ID", "table", "created_at", "last_updated", "changed_fields"]) ){
+        foreach ($this as $field_name => $field) {
+            if( !($field instanceof DataTypeAbstract) || ($field instanceof EntityReference) || in_array($field_name, ["ID", "created_at", "last_updated", "changed_fields"]) ){
                 continue;
             }
-            $object_as_array[$node->getName()] = $field->getValue();
+            $object_as_array[$field_name] = $field->getValue();
         }
         return $object_as_array;
     }
@@ -258,14 +254,22 @@ abstract class TableMapper implements SearchableInterface
             if( !($field instanceof DataTypeAbstract) || in_array($field_name, ["ID", "table", "created_at", "last_updated"]) ){
                 continue;
             }
+            $widget = $this->getFieldWidget($field_name, $translateLabel);
+            if(!$widget){
+                continue;
+            }
             $inputName = $name."[{$field_name}]";
             if($field instanceof EntityReference){
                 $inputName .= "[]";
             }
-            $fields[$field_name] = $field->getWidget()->setName($inputName)
-            ->setLabel($translateLabel ? Translation::getTranslation($field_name) : $field_name);
+            $fields[$field_name] = $widget->setName($inputName);
         }
         return $fields;
+    }
+
+    protected function getFieldWidget(string $field_name, bool $translateLabel) : ?FormWidget{
+        return $this->$field_name->getWidget()
+        ->setLabel($translateLabel ? Translation::getTranslation($field_name) : $field_name);
     }
 
     /**

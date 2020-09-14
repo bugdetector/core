@@ -72,7 +72,7 @@ class ResetPasswordForm extends Form
 
         \CoreDB::database()->delete(Logins::getTableName())
         ->condition("username", $this->user->username)
-        ->condition("ip_address", $this->user->get_user_ip(), "OR")
+        ->condition("ip_address", $this->user->getUserIp(), "OR")
         ->execute();
 
         $message = Translation::getTranslation("password_reset_success");

@@ -13,12 +13,12 @@
 	<div class="form-group">
 		<div class="d-flex ml-1">
 			<input type="checkbox" class="" id="remember-me" value="remember-me" name="remember-me"/>
-			<label class="ml-1" for="remember-me">{{ Translation.getTranslation("remember_me") }}</label>
+			<label class="ml-1" for="remember-me">{{ t("remember_me") }}</label>
 		</div>
-		<input type="submit" class="btn btn-primary btn-user btn-block" value="{{ Translation.getTranslation("login") }}" name="login">
+		<input type="submit" class="btn btn-primary btn-user btn-block" value="{{ t("login") }}" name="login">
 	</div>
 	<div class="text-center">
 		<a class="small" href="{{ constant("BASE_URL") ~ "/forgetpassword" }}">
-			{{ Translation.getTranslation("forgot_password") }}</a>
+			{{ t("forgot_password") }}</a>
 	</div>
 {% endblock %}

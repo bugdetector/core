@@ -2,7 +2,7 @@
 	class="card shadow mb-4">
 	<!-- Card Header - Accordion -->
 	<a href="#table_list" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true">
-		<h6 class="m-0 font-weight-bold text-primary">{{ Translation.getTranslation("tables") }}</h6>
+		<h6 class="m-0 font-weight-bold text-primary">{{ t("tables") }}</h6>
 	</a>
 	<!-- Card Content - Collapse -->
 	<div class="collapse show" id="table_list">
@@ -13,7 +13,7 @@
 						<i class="fa fa-search"></i>
 					</span>
 				</div>
-				<input type="text" class="form-control lowercase_filter" placeholder="{{ Translation.getTranslation("search") }}" id="table_search_field">
+				<input type="text" class="form-control lowercase_filter" placeholder="{{ t("search") }}" id="table_search_field">
 			</div>
 			<div class="list-group">
 				{% for table_name in view.information_scheme %}
@@ -26,19 +26,19 @@
 						<div class="dropdown-menu bg-gradient-info">
 							<a class="dropdown-item" href="{{ constant("BASE_URL") ~ "/admin/table/insert/" ~ table_name }}">
 								<i class="fa fa-save"></i>
-								{{ Translation.getTranslation("add") }}
+								{{ t("add") }}
 							</a>
 							<a class="dropdown-item" href="{{ constant("BASE_URL") ~ "/admin/table/struct/" ~ table_name }}">
 								<i class="fa fa-edit"></i>
-								{{ Translation.getTranslation("edit") }}
+								{{ t("edit") }}
 							</a>
 							<a class="dropdown-item tabletruncate" data-table-name="{{ table_name }}" href="#">
 								<i class="fa fa-trash"></i>
-								{{ Translation.getTranslation("truncate") }}
+								{{ t("truncate") }}
 							</a>
 							<a class="dropdown-item tabledrop" href="#" data-table-name="{{ table_name }}">
 								<i class="fa fa-times-circle"></i>
-								{{ Translation.getTranslation("drop_table") }}
+								{{ t("drop_table") }}
 							</a>
 						</div>
 					</div>

@@ -20,7 +20,7 @@ class Cache extends TableMapper
     public LongText $value;
 
     private static array $staticCache = [];
-    public function __construct()
+    public function __construct(string $tableName = null, array $mapData = [])
     {
         $this->ID = new Integer("");
         $this->bundle = new ShortText("");
@@ -28,6 +28,7 @@ class Cache extends TableMapper
         $this->value = new LongText("");
         $this->created_at = new DateTime("");
         $this->last_updated = new DateTime("");
+        $this->map($mapData);
     }
 
     /**

@@ -54,7 +54,7 @@ class LoginForm extends Form
     public function validate() : bool
     {
         //if ip address is blocked not let to login
-        if (User::is_ip_address_blocked()) {
+        if (User::isIpAddressBlocked()) {
             $this->setError("username", Translation::getTranslation("ip_blocked"));
         }
 
@@ -65,10 +65,10 @@ class LoginForm extends Form
 
         //if login fails for more than 10 times block this ip
         if (isset($_SESSION[LOGIN_UNTRUSTED_ACTIONS]) && $_SESSION[LOGIN_UNTRUSTED_ACTIONS] > 10) {
-            if (User::get_login_try_count_of_ip() > 10) {
-                User::block_ip_address();
+            if (User::getLoginTryCountOfIp() > 10) {
+                User::blockIpAddress();
             }
-            if (User::get_login_try_count_of_user($this->request["username"]) > 10) {
+            if (User::getLoginTryCountOfUser($this->request["username"]) > 10) {
                 //blocking user
                 $this->user->active = 0;
                 $this->user->save();
@@ -90,7 +90,7 @@ class LoginForm extends Form
         if (!empty($this->errors)) {
             //Logging failed login actions
             $login_log = new Logins();
-            $login_log->ip_address = User::get_user_ip();
+            $login_log->ip_address = User::getUserIp();
             $login_log->username = $_POST["username"];
             $login_log->save();
             return false;

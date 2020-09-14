@@ -29,7 +29,7 @@ class EntityController extends AdminController
             $this->setTitle(Translation::getTranslation("entities") . " | ".Translation::getTranslation($this->entityName));
             $this->search_form = SearchForm::createByObject($this->object);
         }else{
-            $this->createMessage(Translation::getTranslation("table_select_info"), Messenger::INFO);
+            $this->createMessage(Translation::getTranslation("entity_select_info"), Messenger::INFO);
             $this->setTitle(Translation::getTranslation("entities"));
         }
         $this->side_entity_list = new SideEntityList($this->entityName);

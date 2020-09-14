@@ -7,10 +7,10 @@ class DBObject extends TableMapper
 {
     public static $table;
     
-    public function __construct(string $table)
+    public function __construct(string $tableName = null, array $mapData = [])
     {
-        self::$table = $table;
-        parent::__construct();
+        self::$table = $tableName;
+        parent::__construct($tableName, $mapData);
     }
 
     /**

@@ -24,7 +24,7 @@ class Watchdog extends TableMapper
         $watchdog = new Watchdog(self::getTableName());
         $watchdog->event->setValue($event);
         $watchdog->value->setValue($value);
-        $watchdog->ip->setValue(User::get_user_ip());
+        $watchdog->ip->setValue(User::getUserIp());
         $watchdog->save();
     }
 }
