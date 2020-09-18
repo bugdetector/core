@@ -2,7 +2,7 @@
 
  1. Tablo oluşturmak için aşağıdaki komutu kullanabilirsiniz.
 
-> CREATE DATABASE core_multisite CHARACTER SET utf8 COLLATE utf8_general_ci;
+> CREATE DATABASE core CHARACTER SET utf8 COLLATE utf8_general_ci;
 
   2. Veri tabanını kullanmak için sadece localhost üzerinden bağlanabilen özel bir mysql kullanıcısı oluşturun.
     
@@ -19,7 +19,7 @@
     
 
 > MYSQL 5.0: GRANT ALL PRIVILEGES ON core_multisite.* To 'core_multisite_user'@'localhost' IDENTIFIED BY  'core_multisite1234';
-> MYSQL 8.0: GRANT ALL PRIVILEGES ON core_multisite.* To 'core_multisite_user'@'localhost' WITH GRANT OPTION
+> MYSQL 8.0: GRANT ALL PRIVILEGES ON core.* To 'core_multisite_user'@'localhost' WITH GRANT OPTION
 
     
       
