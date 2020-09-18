@@ -22,7 +22,6 @@ class InsertForm extends Form
         parent::__construct();
         $this->object = $object;
         $this->setEnctype("multipart/form-data");
-        \CoreDB::controller()->addJsFiles("src/js/insert.js");
         
         foreach ($this->object->getFormFields($this->object->getTableName(), !($object instanceof DBObject) ) as $column_name => $field) {
             $this->addField($field);
@@ -48,8 +47,7 @@ class InsertForm extends Form
                 ->addAttribute("hidden", "true")
             );
         }
-
-        \CoreDB::controller()->addJsFiles("src/js/search_form.js");
+        \CoreDB::controller()->addJsFiles("dist/insert_form/insert_form.js");
     }
 
     public function getFormId(): string

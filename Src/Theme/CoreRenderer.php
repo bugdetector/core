@@ -2,9 +2,8 @@
 namespace Src\Theme;
 
 use App\Twig\CoreTwigExtension;
-use CoreDB\Kernel\BaseControllerInterface;
+use CoreDB\Kernel\BaseController;
 use Src\Theme\View;
-use Src\Entity\Translation;
 use Src\Form\Form;
 use Src\Form\Widget\FormWidget;
 
@@ -32,7 +31,7 @@ class CoreRenderer
         return self::$instance;
     }
 
-    public function renderController(BaseControllerInterface $controller)
+    public function renderController(BaseController $controller)
     {
         echo $this->twig->render($controller->getTemplateFile(), [
             "controller" => $controller,

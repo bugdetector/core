@@ -28,7 +28,7 @@ class TableController extends AdminController
              * Creating table and table search form
              */
             $this->setTitle(Translation::getTranslation("tables") . " | {$this->table_name}");
-        }else{
+        }else if( get_class($this) == TableController::class ){
             $this->createMessage(Translation::getTranslation("table_select_info"), Messenger::INFO);
             $this->setTitle(Translation::getTranslation("tables"));
         }
@@ -48,7 +48,7 @@ class TableController extends AdminController
     protected function addDefaultJsFiles()
     {
         parent::addDefaultJsFiles();
-        $this->addJsFiles("src/js/table.js");
+        $this->addJsFiles("dist/table_screen/table_screen.js");
     }
 
     protected function addDefaultTranslations()

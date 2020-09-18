@@ -9,12 +9,13 @@ use Src\Theme\CoreRenderer;
 use Src\Views\AlertMessage;
 use Src\Views\ViewGroup;
 
-abstract class BaseController implements ControllerInterface, BaseControllerInterface
+abstract class BaseController implements ControllerInterface
 {
 
     public $arguments = [];
     public $method;
-
+    
+    public string $title = "";
     public $js_files = [];
     public $js_codes = [];
     public $css_files = [];
@@ -26,6 +27,16 @@ abstract class BaseController implements ControllerInterface, BaseControllerInte
     public function render()
     {
         CoreRenderer::getInstance($this::getTemplateDirectories())->renderController($this);
+    }
+
+    public function setTitle(string $title) : void
+    {
+        $this->title = $title;
+    }
+
+    public function getTemplateFile() : string
+    {
+        return "page.twig";
     }
 
     /**
@@ -99,8 +110,8 @@ abstract class BaseController implements ControllerInterface, BaseControllerInte
     public function addJsFiles($js_file_path)
     {
         if (is_array($js_file_path)) {
-            $this->js_files = array_merge($this->js_files, $js_file_path);
-        } else {
+            $this->js_files = array_unique(array_merge($this->js_files, $js_file_path));
+        } else if(!in_array($js_file_path, $this->js_files)){
             $this->js_files[] = $js_file_path;
         }
     }
@@ -116,8 +127,8 @@ abstract class BaseController implements ControllerInterface, BaseControllerInte
     public function addCssFiles($css_file_path)
     {
         if (is_array($css_file_path)) {
-            $this->css_files = array_merge($this->css_files, $css_file_path);
-        } else {
+            $this->css_files = array_unique(array_merge($this->css_files, $css_file_path));
+        } else if(!in_array($css_file_path, $this->css_files)){
             $this->css_files[] = $css_file_path;
         }
     }

@@ -5,7 +5,7 @@ namespace CoreDB\Kernel;
 use Exception;
 use Src\Entity\User;
 
-abstract class ServiceController implements ControllerInterface
+abstract class ServiceController  extends BaseController
 {
 
     const RESPONSE_TYPE_JSON = 0;
@@ -68,5 +68,19 @@ abstract class ServiceController implements ControllerInterface
                 echo $response_data["data"];
                 break;
         }
+    }
+
+    /**
+     * Set page title
+     * @param string $title
+     *  Page Title
+     */
+    public function setTitle(string $title) : void{}
+
+    /**
+     * No theme.
+     */
+    public static function getTemplateDirectories() : array{
+        return [];
     }
 }

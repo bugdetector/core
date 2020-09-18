@@ -166,7 +166,7 @@ class Translation extends TableMapper
         )->addAttribute("href", "#")
         ->addField(TextElement::create(Translation::getTranslation("export")));
 
-        \CoreDB::controller()->addJsFiles("src/js/translation.js");
+        \CoreDB::controller()->addJsFiles("dist/translation_screen/translation_screen.js");
         \CoreDB::controller()->addFrontendTranslation("lang_import_info");
         \CoreDB::controller()->addFrontendTranslation("lang_export_info");
 

@@ -21,15 +21,7 @@ class ColumnDefinition extends CollapsableCard
         $this->setId($this->name);
         $this->addClass("column_definition");
         $this->opened = true;
-    }
-
-    public static function create($name, $dataType = null): ColumnDefinition
-    {
-        return new ColumnDefinition($name, $dataType);
-    }
-
-    public function render()
-    {
+        
         $field_name_input = InputWidget::create("{$this->name}[field_name]");
         $field_name_input->setLabel(Translation::getTranslation("column_name"))
             ->setDescription(Translation::getTranslation("available_characters", ["a-z, _, 1-9"]))
@@ -151,6 +143,11 @@ class ColumnDefinition extends CollapsableCard
             ViewGroup::create("div", "col-sm-3")
                 ->addField($remove_button)
         );
-        parent::render();
+        
+    }
+
+    public static function create($name, $dataType = null): ColumnDefinition
+    {
+        return new ColumnDefinition($name, $dataType);
     }
 }

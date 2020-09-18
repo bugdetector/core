@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(document).on("ready",function () {
     $(document).on("keyup", ".uppercase_filter", function () {
         $(this).val($(this).val().toUpperCase());
         if (!($(this).val().match(/^[A-Z1-9_\s]+$/))) {
@@ -20,17 +20,12 @@ $(document).ready(function () {
         e.preventDefault();
         $(this).parents("form").find("input:not([type='submit']):not([type='reset']),textarea").val("");
         $(this).parents("form").find("select").val("NULL").selectpicker("refresh");
-        $(this).parents("form").find("input[type='checkbox']").prop("checked", false).change();
+        $(this).parents("form").find("input[type='checkbox']").prop("checked", false).trigger("change");
     });
 
-    $(document).on("click", ".clear-cache", function (e) {
-        e.preventDefault();
-        $.ajax(`${root}/admin/ajax/clearCache`);
-    });
-
-    $(".summernote").summernote({
+    /*$(".summernote").summernote({
         lang: language
-    });
+    });*/
 
     $("input[type='checkbox']").each(function (i, element) {
         loadCheckbox(element);
@@ -144,7 +139,7 @@ $(document).ready(function () {
      * Ajax loader functions
      */
 
-    $(document).submit(function () {
+    $(document).on("submit", function () {
         $("body").append("<div class='loader'></div>");
     });
     $(document).ajaxSend(function () {
@@ -194,22 +189,6 @@ $(document).ready(function () {
     });
 })
 
-
-function _t(key, arguments) {
-    if (arguments) {
-        return translations[key].format(arguments);
-    }
-    return translations[key];
-}
-
-String.prototype.format = function () {
-    var a = this, b;
-    for (b in arguments) {
-        a = a.replace(/%[a-z]/, arguments[b]);
-    }
-    return a; // Make chainable
-};
-
 function alert_message(options) {
     let message = options.message;
     let title = options.title ? options.title : _t("warning");
@@ -240,27 +219,4 @@ function alert_message(options) {
             }
         ]
     });
-}
-
-function loadCheckbox(element) {
-    if($(element).attr("disabled")){
-        return;
-    }
-    let replace = $("<div class='checkbox_div'>" + element.outerHTML + "</div>");
-    let replace_input = replace.find("input");
-    $(replace_input).val(1);
-    if (replace_input[0].checked) {
-        $(replace_input).after("<input type='hidden' value='0' name='" + $(replace_input).attr("name") + "' disabled='disabled'>");
-    } else {
-        $(replace_input).after("<input type='hidden' value='0' name='" + $(replace_input).attr("name") + "'>");
-    }
-    $(replace_input).change(function () {
-        if ($(this).is(':checked')) {
-            $(this).next().attr("disabled", "disabled");
-        } else {
-            $(this).next().removeAttr("disabled");
-        }
-    });
-
-    $(element).replaceWith(replace);
 }

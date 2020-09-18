@@ -2,5 +2,7 @@ public_html/files/uploaded
 config/config.php
 .htaccess
 .composer.lock
-/vendor/
+vendor/
+public_html/node_modules/
+public_html/dist
 cache/

@@ -26,6 +26,7 @@ class LoginController extends BaseTheme
     {
         return true;
     }
+
     public function preprocessPage()
     {
 
@@ -33,6 +34,7 @@ class LoginController extends BaseTheme
         $this->form->processForm();
     }
 
+    protected function addDefaultJsFiles(){}
 
     public function echoContent()
     {

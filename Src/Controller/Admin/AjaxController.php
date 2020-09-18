@@ -78,7 +78,8 @@ class AjaxController extends ServiceController
     {
         $tablename = $_POST["tablename"];
         if (in_array($tablename, \CoreDB::database()::getTableList())) {
-            DBObject::clear($tablename);
+            $object = new DBObject($tablename);
+            $object->clear($tablename);
             $this->createMessage(Translation::getTranslation("table_truncated", [$tablename]), Messenger::SUCCESS);
         }
     }

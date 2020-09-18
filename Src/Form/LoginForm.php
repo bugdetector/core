@@ -90,8 +90,8 @@ class LoginForm extends Form
         if (!empty($this->errors)) {
             //Logging failed login actions
             $login_log = new Logins();
-            $login_log->ip_address = User::getUserIp();
-            $login_log->username = $_POST["username"];
+            $login_log->ip_address->setValue(User::getUserIp());
+            $login_log->username->setValue($_POST["username"]);
             $login_log->save();
             return false;
         }
