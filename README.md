@@ -57,3 +57,7 @@
   php-intl
   php-mbstring
   php-mysql
+
+   5. Kod standardı kontrolü
+  phpcs --standard=PSR12 <file>
+  phpcbf --standard=PSR12 <file>

@@ -18,15 +18,11 @@ class ConfigurationManager
 {
 
     private static ?ConfigurationManager $instance = null;
-
-    private array $tableMapping = [];
+    
     private array $entityConfig = [];
 
     private function __construct()
     {
-        if (empty($this->tableMapping)) {
-            $this->tableMapping = Yaml::parseFile("../config/table_mapping.yml");
-        }
         if (empty($this->entityConfig)) {
             $this->entityConfig = Yaml::parseFile("../config/entity_config.yml");
         }
@@ -140,14 +136,5 @@ class ConfigurationManager
         return array_filter($this->entityConfig, function($el) use ($className){
             return $el["class"] == $className;
         });
-    }
-
-    public function getClassForTable(string $tableName)
-    {
-        if (isset($this->tableMapping[$tableName])) {
-            return $this->tableMapping[$tableName];
-        } else {
-            return \Src\Entity\DBObject::class;
-        }
     }
 }
