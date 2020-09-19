@@ -40,7 +40,7 @@ class InputWidget extends FormWidget
                 $this->removeAttribute("checked");
             }
         }else if($this->type == "file"){
-            $this->file = File::get(["ID" => $value]);
+            $this->file = File::get($value);
         }
         return $this;
     }

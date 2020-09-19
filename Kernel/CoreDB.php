@@ -153,12 +153,13 @@ class CoreDB
             return $current_user;
         } else {
             if (isset($_SESSION[BASE_URL . "-UID"])) {
-                $current_user = User::get(["ID" => $_SESSION[BASE_URL . "-UID"]]);
+                $current_user = User::get($_SESSION[BASE_URL . "-UID"]);
             } elseif (isset($_COOKIE["session-token"])) {
                 $jwt = JWT::createFromString($_COOKIE["session-token"]);
-                $current_user = User::get(["ID" => ($jwt->getPayload())->ID]);
+                $current_user = User::get($jwt->getPayload()->ID);
                 $_SESSION[BASE_URL . "-UID"] = $current_user->ID;
-            } else {
+            } 
+            if(!$current_user) {
                 $current_user = new User();
                 $current_user->username->setValue("guest");
             }

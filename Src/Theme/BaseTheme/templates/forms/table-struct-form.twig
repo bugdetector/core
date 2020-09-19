@@ -5,6 +5,16 @@
     {{ form.fields["form_build_id"] }}
     {{ form.fields["form_token"] }}
 	<div class="row ml-1">
+		{% if form.exportEntityButtonShow %}
+			<div class="col-sm-12">
+				<a href="{{ constant("BASE_URL") }}/admin/table/ExportMapper/{{ form.table_name }}" class="btn btn-success btn-icon-split">
+					<span class="text">{{ t("export_as_class") }}</span>
+					<span class="icon text-white-100">
+						<i class="fa fa-file-export"></i>
+					</span>
+				</a>
+			</div>
+		{% endif %}
 		<div class="col-md-3 col-sm-6 col-xs-12 form-group text-left font-weight-bold">
 			{{ form.fields["table_name"] }}
 		</div>

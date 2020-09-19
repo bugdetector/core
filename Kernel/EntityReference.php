@@ -58,7 +58,7 @@ class EntityReference extends DataTypeAbstract
 
             $options = [];
             foreach ($allOptions as $anOption) {
-                $object = $referenceClass::get(["ID" => $anOption]);
+                $object = $referenceClass::get($anOption);
                 if($object){
                     $objectArray = $object->toArray();
                     $text = current($objectArray);

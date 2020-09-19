@@ -708,5 +708,10 @@
         "key": "profile_photo",
         "en": "Profile photo",
         "tr": "Profil resmi"
+    },
+    {
+        "key": "export_as_class",
+        "en": "Export table as class",
+        "tr": "Tabloyu sınıf olarak dışa aktar"
     }
 ]

@@ -39,7 +39,7 @@ class Reset_PasswordController extends BaseTheme
             if (!$reset_password_queue) {
                 $this->createMessage(Translation::getTranslation("link_used"), Messenger::ERROR);
             } else {
-                $user = User::get(["ID" => $_GET["USER"]]);
+                $user = User::get($_GET["USER"]);
                 $this->form = new ResetPasswordForm($user);
                 $this->form->processForm();
             }

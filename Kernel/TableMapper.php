@@ -70,7 +70,12 @@ abstract class TableMapper implements SearchableInterface
      * @return TableMapper
      *  Object.
      */
-    public static function get(array $filter){
+    public static function get($filter){
+        if(!is_array($filter)){
+            $filter = [
+                "ID" => $filter
+            ];
+        }
         return static::find($filter, static::getTableName());
     }
 
@@ -214,7 +219,7 @@ abstract class TableMapper implements SearchableInterface
         foreach($this as $field_name => $field){
             if ($field instanceof \CoreDB\Kernel\Database\DataType\File) {
                 /** @var File $file */
-                if($file = File::get(["ID" => $field->getValue()])){
+                if($file = File::get($field->getValue())){
                     $file->unlinkFile();
                 }
             }
@@ -363,7 +368,7 @@ abstract class TableMapper implements SearchableInterface
             if ($fileInfo["size"] != 0) {
                 if($this->$file_key->getValue()){
                     /** @var File  */
-                    $file = File::get(["ID" => $this->$file_key]);
+                    $file = File::get($this->$file_key);
                     $file->unlinkFile();
                 }else{
                     $file = new File();

@@ -24,9 +24,9 @@ class DBObject extends TableMapper
     /**
      * @inheritdoc
      */
-    public static function get(array $filter, string $table_name = null){
+    public static function get($filter, string $table_name = null){
         self::$table = $table_name;
-        return static::find($filter, static::getTableName());
+        return parent::get($filter);
     }
 
     /**

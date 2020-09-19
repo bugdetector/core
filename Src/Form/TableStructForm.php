@@ -23,6 +23,7 @@ class TableStructForm extends Form
     public string $table_name;
     public string $table_comment;
     public array $columns = [];
+    public bool $exportEntityButtonShow = false;
 
     public function __construct(string $table_name, string $table_comment)
     {
@@ -115,9 +116,6 @@ class TableStructForm extends Form
                 ->addAttribute("required", "true")
                 ->setDescription(Translation::getTranslation("available_characters", ["a-z, _, 1-9"]))
         );
-        if ($this->table_definition->table_exist) {
-            $this->fields["table_name"]->addAttribute("readonly", "true");
-        }
         $this->addField(
             InputWidget::create("table_comment")
                 ->setValue($this->table_definition->table_comment)
@@ -157,6 +155,11 @@ class TableStructForm extends Form
         }
         if(empty($this->columns)){
             $this->columns[] = ColumnDefinition::create("fields[0]")->setSortable(true);
+        }
+
+        if ($this->table_definition->table_exist) {
+            $this->fields["table_name"]->addAttribute("readonly", "true");
+            $this->exportEntityButtonShow = true;
         }
     }
 }

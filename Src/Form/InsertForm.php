@@ -2,7 +2,6 @@
 
 namespace Src\Form;
 
-use CoreDB;
 use CoreDB\Kernel\TableMapper;
 use Exception;
 use Src\Controller\Admin\TableController;
@@ -32,7 +31,7 @@ class InsertForm extends Form
             ->setType("submit")
             ->addClass("btn btn-primary mt-2")
         );
-        if ($this->object->ID) {
+        if ($this->object->ID->getValue()) {
             $this->addField(
                 InputWidget::create("")
                 ->setValue(Translation::getTranslation("delete"))
@@ -72,7 +71,7 @@ class InsertForm extends Form
     {
         try{
             if (isset($this->request["save"])) {
-                $success_message = $this->object->ID ? "update_success" : "insert_success";
+                $success_message = $this->object->ID->getValue() ? "update_success" : "insert_success";
                 if (isset($this->request[$this->object->getTableName()])) {
                     $this->object->map($this->request[$this->object->getTableName()]);
                 }
