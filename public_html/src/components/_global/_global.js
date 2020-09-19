@@ -1,5 +1,6 @@
 import {$} from "../jquery/jquery";
 import "popper.js";
+import "bootstrap/js/src/collapse";
 import "bootstrap/js/src/dropdown";
 import "./_global.scss";
 

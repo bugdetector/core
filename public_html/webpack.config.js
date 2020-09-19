@@ -1,7 +1,6 @@
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const path = require("path");
-const webpack = require("webpack");
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const autoprefixer = require("autoprefixer");
 const globImporter = require('node-sass-glob-importer');
 
 const dirNode = 'node_modules';
@@ -22,7 +21,6 @@ module.exports = (env, argv) => {
       summernote: ["./src/components/summernote/summernote.js"],
       datetimepicker : ["./src/components/datetimepicker/datetimepicker.js"],
       daterangepicker : ["./src/components/daterangepicker/daterangepicker.js"],
-      side_table_list : ["./src/components/side_table_list/side_table_list.js"],
       collapsable_card : ["./src/components/collapsable_card/collapsable_card.js"],
       /**
        * Forms
@@ -35,6 +33,11 @@ module.exports = (env, argv) => {
        */
       table_screen : ["./src/screens/table_screen.js"],
       translation_screen : ["./src/screens/translation_screen.js"],
+      /**
+       * Views
+       */
+      side_table_list : ["./src/views/side_table_list.js"],
+      side_entity_list : ["./src/views/side_entity_list.js"],
     },
     resolve: {
       modules: [
@@ -59,7 +62,12 @@ module.exports = (env, argv) => {
                 sourceMap: isDevMode,
               }
             },
-            { loader: 'postcss-loader', options: { sourceMap: isDevMode } },
+            { loader: 'postcss-loader', options: { 
+              sourceMap: isDevMode,
+              plugins:()=>[
+                autoprefixer()
+              ]
+             } },
             {
               loader: 'sass-loader',
               options: {
@@ -111,7 +119,6 @@ module.exports = (env, argv) => {
      
     },
     plugins: [
-      new CleanWebpackPlugin(),
       new MiniCssExtractPlugin({
         filename: '[name]/[name].css'
       })
