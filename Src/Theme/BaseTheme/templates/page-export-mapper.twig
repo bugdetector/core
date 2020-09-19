@@ -26,9 +26,22 @@ use {{ used }};
 
 class {{ controller.table_name|title| replace( {"_" : ""} ) }} extends TableMapper
 {
-    {% for fieldName, fieldClass in controller.fields %}
+{% for constName, const in controller.consts %}
+    /**
+    * {{ constName }} description.
+    */
+    public const {{ constName }} = "{{ const }}";
+{% endfor %}
+{% if controller.consts|length > 0 %}
+
+{% endif %}
+{% for fieldName, fieldClass in controller.fields %}
+    /**
+    * @var {{ fieldClass }} ${{ fieldName }}
+    * {{ controller.fieldComments[fieldName]  }}
+    */
     public {{ fieldClass }} ${{ fieldName }};
-    {% endfor %}
+{% endfor %}
 
     /**
      * @inheritdoc
@@ -38,8 +51,7 @@ class {{ controller.table_name|title| replace( {"_" : ""} ) }} extends TableMapp
         return "{{ controller.table_name }}";
     }
 }
-
-                </textarea>
+</textarea>
             </div>
         </div>
 	</div>
