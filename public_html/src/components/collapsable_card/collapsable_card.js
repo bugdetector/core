@@ -1,4 +1,3 @@
-import "bootstrap/js/src/collapse";
 import Sortable from "sortablejs";
 $(function($){
     var form = $("form");

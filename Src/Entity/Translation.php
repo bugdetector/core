@@ -155,12 +155,12 @@ class Translation extends TableMapper
     public function actions(): array
     {
         $actions = parent::actions();
-        $actions[] = ViewGroup::create("a", "d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-1 lang-imp")
+        $actions[] = ViewGroup::create("a", "d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-1 mb-1 lang-imp")
         ->addField(
             ViewGroup::create("i", "fa fa-file-import text-white-50")
         )->addAttribute("href", "#")
         ->addField(TextElement::create(Translation::getTranslation("import")));
-        $actions[] = ViewGroup::create("a", "d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-1 lang-exp")
+        $actions[] = ViewGroup::create("a", "d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-1 mb-1 lang-exp")
         ->addField(
             ViewGroup::create("i", "fa fa-file-export text-white-50")
         )->addAttribute("href", "#")

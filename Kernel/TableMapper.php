@@ -342,7 +342,7 @@ abstract class TableMapper implements SearchableInterface
      */
     public function actions() : array{
         return [
-            ViewGroup::create("a", "d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-1")
+            ViewGroup::create("a", "d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-1 mb-1")
             ->addField(
                 ViewGroup::create("i", "fa fa-plus text-white-50")
             )->addAttribute("href", BASE_URL."/admin/entity/insert/{$this->entityName}")

@@ -35,6 +35,8 @@ class ForgetpasswordController extends BaseTheme
         $this->form->processForm();
     }
 
+    protected function addDefaultJsFiles(){}
+
 
     public function echoContent()
     {

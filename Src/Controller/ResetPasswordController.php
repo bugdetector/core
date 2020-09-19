@@ -49,6 +49,7 @@ class Reset_PasswordController extends BaseTheme
         }
     }
 
+    protected function addDefaultJsFiles(){}
 
     public function echoContent()
     {

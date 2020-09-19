@@ -7,20 +7,20 @@
 			{{ controller.table_comment }}
 		</div>
         {% if controller.table_name %}
-            <a class="d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-1" href="{{ constant("BASE_URL") ~ "/admin/table/insert/" ~ controller.table_name }}">
+            <a class="d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-1 mb-1" href="{{ constant("BASE_URL") ~ "/admin/table/insert/" ~ controller.table_name }}">
                 <i class="fas fa-plus text-white-50"></i>
                 {{ t("add") }}
             </a>
         {% endif %}
-        <a class="d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-1 table_config_import" href="#">
+        <a class="d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-1 mb-1 table_config_import" href="#">
 			<i class="fas fa-file-import text-white-50"></i>
 			{{ t("config_import") }}
 		</a>
-        <a class="d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-1 table_config_export" href="#">
+        <a class="d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-1 mb-1 table_config_export" href="#">
 			<i class="fas fa-file-export text-white-50"></i>
 			{{ t("config_export") }}
 		</a>
-		<a class="d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-1" href="{{ constant("BASE_URL") ~ "/admin/table/struct" }}">
+		<a class="d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-1 mb-1" href="{{ constant("BASE_URL") ~ "/admin/table/struct" }}">
 			<i class="fas fa-plus text-white-50"></i>
 			{{ t("new_table") }}
 		</a>

@@ -1,7 +1,7 @@
 import {$} from "../jquery/jquery";
 import "popper.js";
-import "bootstrap/js/src/collapse";
-import "bootstrap/js/src/dropdown";
+import "bootstrap/js/dist/collapse";
+import "bootstrap/js/dist/dropdown";
 import "./_global.scss";
 
 $(function ($) {

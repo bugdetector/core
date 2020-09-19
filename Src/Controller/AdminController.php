@@ -33,7 +33,7 @@ class AdminController extends BaseTheme
         ->execute()->fetchObject()->count;
         $this->cards[] = BasicCard::create()
         ->setBorderClass("border-left-primary")
-        ->setHref(BASE_URL . "/admin/manage/user")
+        ->setHref(BASE_URL . "/admin/entity/users")
         ->setTitle(Translation::getTranslation("number_of_members"))
         ->setDescription($this->number_of_members)
         ->setIconClass("fa-user")
@@ -47,7 +47,7 @@ class AdminController extends BaseTheme
         ->addClass("col-xl-3 col-md-6 mb-4");
         $this->cards[] = BasicCard::create()
         ->setBorderClass("border-left-info")
-        ->setHref(BASE_URL . "/admin/manage/translation")
+        ->setHref(BASE_URL . "/admin/entity/translations")
         ->setTitle(Translation::getTranslation("translation_count"))
         ->setDescription(count(Translation::getAll([])))
         ->setIconClass("fa-language")

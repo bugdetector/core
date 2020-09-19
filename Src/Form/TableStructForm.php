@@ -115,7 +115,7 @@ class TableStructForm extends Form
                 ->addAttribute("required", "true")
                 ->setDescription(Translation::getTranslation("available_characters", ["a-z, _, 1-9"]))
         );
-        if ($this->table_definition->table_name) {
+        if ($this->table_definition->table_exist) {
             $this->fields["table_name"]->addAttribute("readonly", "true");
         }
         $this->addField(
