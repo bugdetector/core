@@ -32,7 +32,7 @@ class File extends TableMapper
         return "files";
     }
 
-    public function map(array $array)
+    public function map(array $array, bool $isConstructor = false)
     {
         parent::map($array);
         if(strpos($this->mime_type, "image/") !== false){
@@ -83,9 +83,9 @@ class File extends TableMapper
     /**
      * @inheritdoc
      */
-    public function getTableHeaders(bool $translateLabel = true): array
+    public function getResultHeaders(bool $translateLabel = true): array
     {
-        $headers = parent::getTableHeaders($translateLabel);
+        $headers = parent::getResultHeaders($translateLabel);
         unset($headers["ID"], $headers["last_updated"]);
         unset($headers["file_path"], $headers["extension"]);
         return $headers;

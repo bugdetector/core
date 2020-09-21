@@ -23,10 +23,19 @@ class Integer extends DataTypeAbstract
      */
     public function getWidget(): FormWidget
     {
-        return InputWidget::create("")
+        $widget = InputWidget::create("")
         ->setType("number")
         ->setDescription(Translation::getTranslation($this->comment))
-        ->setValue($this->value);
+        ->setValue(strval($this->value));
+        if(!$this->isNull){
+            $widget->addAttribute("required", "true");
+        }
+        return $widget;
+    }
+
+    public function setValue($value)
+    {
+        $this->value = intval($value);
     }
 
     /**

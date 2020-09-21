@@ -92,9 +92,13 @@ abstract class Form extends View
         return $this;
     }
 
-    public function addField(FormWidget $field)
+    public function addField(View $field)
     {
-        $this->fields[$field->name] = $field;
+        if($field instanceof FormWidget){
+            $this->fields[$field->name] = $field;
+        }else{
+            $this->fields[] = $field;
+        }
         return $this;
     }
 

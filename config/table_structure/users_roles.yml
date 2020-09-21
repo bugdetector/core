@@ -7,7 +7,7 @@ fields:
     column_name: user_id
     primary_key: false
     autoIncrement: false
-    isNull: true
+    isNull: false
     isUnique: false
     default: null
     comment: 'User Id.'
@@ -17,7 +17,7 @@ fields:
     column_name: role_id
     primary_key: false
     autoIncrement: false
-    isNull: true
+    isNull: false
     isUnique: false
     default: null
     comment: 'Role Id.'

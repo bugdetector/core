@@ -37,7 +37,10 @@ class User extends TableMapper
         return "users";
     }
 
-    public function map(array $array)
+    /**
+     * @inheritdoc
+     */
+    public function map(array $array, bool $isConstructor = false)
     {
         if (isset($array["password"]) && !$array["password"]) {
             unset($array["password"]);
@@ -51,7 +54,7 @@ class User extends TableMapper
         return new UserInsertForm($this);
     }
 
-    public function getTableHeaders(bool $translateLabel = true) : array
+    public function getResultHeaders(bool $translateLabel = true) : array
     {
         $headers = [""];
         $fields = [
@@ -71,7 +74,7 @@ class User extends TableMapper
         return $headers;
     }
 
-    public function getTableQuery(): SelectQueryPreparerAbstract
+    public function getResultQuery(): SelectQueryPreparerAbstract
     {
         return \CoreDB::database()->select($this->getTableName(), "u")
             ->select("u", [

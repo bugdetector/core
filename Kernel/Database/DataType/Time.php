@@ -23,13 +23,18 @@ class Time extends DataTypeAbstract
     public function getWidget(): FormWidget
     {
         $rand_id = random_int(0, 100);
-        return InputWidget::create("")
+        $widget = InputWidget::create("")
+        ->setValue($this->value)
         ->setDescription(Translation::getTranslation($this->comment))
         ->addClass("datetimeinput datetimepicker-input")
         ->addAttribute("id", $rand_id)
         ->addAttribute("data-target", "#" . $rand_id)
         ->addAttribute("data-toggle", "datetimepicker")
         ->addAttribute("autocomplete", "off");
+        if(!$this->isNull){
+            $widget->addAttribute("required", "true");
+        }
+        return $widget;
     }
 
     /**

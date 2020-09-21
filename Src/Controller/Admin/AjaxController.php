@@ -10,6 +10,7 @@ use Src\Entity\Cache;
 use Src\Entity\DBObject;
 use Src\Entity\Translation;
 use Src\Views\ColumnDefinition;
+use Src\Views\TableAndColumnSelector;
 
 class AjaxController extends ServiceController
 {
@@ -41,7 +42,36 @@ class AjaxController extends ServiceController
      */
     public function getColumnDefinition()
     {
+        $this->response_type = self::RESPONSE_TYPE_RAW;
         echo ColumnDefinition::create("fields[{$_POST["index"]}]")->setSortable(true);
+    }
+
+
+    public function getTableColumns(){
+        $column_options = [];
+        if($_POST["type"] == TableAndColumnSelector::TYPE_FIELD){
+            $column_options["*"] = Translation::getTranslation("all");
+        }
+        $table = isset($_POST["table"]) ? $_POST["table"] : null;
+        if($table){
+            foreach(\CoreDB::database()->getTableDescription($table) as $fieldName => $field){
+                $column_options[$fieldName] = $fieldName;
+            }
+        }
+        return $column_options;
+    }
+
+    public function getTableAndColumnSelector(){
+        $this->response_type = self::RESPONSE_TYPE_RAW;
+        $index = $_POST["index"];
+        $type = $_POST["type"];
+        $name = $_POST["name"];
+        $title = $type == TableAndColumnSelector::TYPE_COMPARISON ? Translation::getTranslation("filters") : Translation::getTranslation("result_fields");
+        $widget = new TableAndColumnSelector($title, $name, $type);
+        $widget->setValue(json_encode([
+            $index => []
+        ]));
+        echo $widget->content->fields[0];
     }
 
     /**
@@ -84,6 +114,9 @@ class AjaxController extends ServiceController
         }
     }
 
+    /**
+     * Imports translations
+     */
     public function langimp()
     {
         try {
@@ -94,6 +127,9 @@ class AjaxController extends ServiceController
         }
     }
 
+    /**
+     * Exports translations
+     */
     public function langexp()
     {
         try {
@@ -104,18 +140,27 @@ class AjaxController extends ServiceController
         }
     }
 
+    /**
+     * Exports table configuration
+     */
     public function tableConfigurationExport()
     {
         CoreDB::config()->exportTableConfiguration();
         $this->createMessage(Translation::getTranslation("export_success"), Messenger::SUCCESS);
     }
 
+    /**
+     * Imports table configuration
+     */
     public function tableConfigurationImport()
     {
         CoreDB::config()->importTableConfiguration();
         $this->createMessage(Translation::getTranslation("import_success"), Messenger::SUCCESS);
     }
 
+    /**
+     * Clears cache table and twig cache
+     */
     public function clearCache()
     {
         CoreDB::config()->clearCache();

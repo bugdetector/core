@@ -22,7 +22,21 @@ class FloatNumber extends DataTypeAbstract
      */
     public function getWidget(): FormWidget
     {
-        return InputWidget::create("")->setType("number")->setDescription(Translation::getTranslation($this->comment))->addAttribute("step", "0.01");
+        $widget = InputWidget::create("")
+        ->setValue(strval($this->value))
+        ->setType("number")
+        ->setDescription(Translation::getTranslation($this->comment))
+        ->addAttribute("step", "0.01");
+        if(!$this->isNull){
+            $widget->addAttribute("required", "true");
+        }
+        return $widget;
+    }
+
+
+    public function setValue($value)
+    {
+        $this->value = floatval($value);
     }
 
     /**
@@ -30,6 +44,6 @@ class FloatNumber extends DataTypeAbstract
      */
     public function getSearchWidget() : FormWidget
     {
-        return $this->getWidget();
+        return $this->getWidget()->removeAttribute("required");
     }
 }

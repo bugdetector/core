@@ -56,8 +56,9 @@ class InsertForm extends Form
 
     protected function restoreValues(){
         foreach ($this->object->toArray() as $field_name => $field) {
-            if($this->fields[$this->object->getTableName()."[{$field_name}]"] instanceof FormWidget){
-                $this->fields[$this->object->getTableName()."[{$field_name}]"]->setValue(strval($field)); 
+            $key = $this->object->getTableName()."[{$field_name}]";
+            if(isset($this->fields[$key]) && $this->fields[$key] instanceof FormWidget){
+                $this->fields[$key]->setValue(strval($field)); 
             }
         }
     }

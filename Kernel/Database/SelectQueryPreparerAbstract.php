@@ -4,7 +4,7 @@ namespace CoreDB\Kernel\Database;
 
 abstract class SelectQueryPreparerAbstract extends QueryPreparerAbstract
 {
-    public $tables;
+    public array $tables = [];
     public $fields;
     protected $condition;
     protected $orderBy;
@@ -16,12 +16,11 @@ abstract class SelectQueryPreparerAbstract extends QueryPreparerAbstract
     
     public function __construct(string $table_name, string $alias = "", bool $quote = true)
     {
-        $this->tables = array();
         $this->quote = $quote;
-        array_push($this->tables, array(
+        $this->tables[] = [
             "tableName" => $table_name,
             "alias" => $alias
-        ));
+        ];
     }
 
     /**

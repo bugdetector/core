@@ -18,9 +18,14 @@ class CoreRenderer
         $twig_options = [];
         if (ENVIROMENT == "production") {
             $twig_options["cache"] = "../cache";
+        }else{
+            $twig_options["debug"] = true;
         }
         $this->twig = new \Twig\Environment($loader, $twig_options);
         $this->twig->addExtension(new CoreTwigExtension());
+        if(ENVIROMENT == "development"){
+            $this->twig->addExtension(new \Twig\Extension\DebugExtension());
+        }
     }
 
     public static function getInstance(array $template_directories) : CoreRenderer

@@ -305,7 +305,7 @@
         "tr": "%s tablosunu kaldırmak istediğinize emin misiniz?"
     },
     {
-        "key": "table_summary",
+        "key": "result_summary",
         "en": "Out of %d records %d-%d is monitoring.",
         "tr": "Toplam %d kayıttan %d-%d arası görüntüleniyor."
     },
@@ -713,5 +713,115 @@
         "key": "export_as_class",
         "en": "Export table as class",
         "tr": "Tabloyu sınıf olarak dışa aktar"
+    },
+    {
+        "key": "title",
+        "en": "Title",
+        "tr": "Başlık"
+    },
+    {
+        "key": "description",
+        "en": "Description",
+        "tr": "Açıklama"
+    },
+    {
+        "key": "viewable_queries",
+        "en": "Viewable Queries",
+        "tr": "Görüntülenebilir Sorgular"
+    },
+    {
+        "key": "filters",
+        "en": "Filters",
+        "tr": "Filtreler"
+    },
+    {
+        "key": "result_fields",
+        "en": "Result fields",
+        "tr": "Sonuç alanları"
+    },
+    {
+        "key": "paging_limit",
+        "en": "Paging limit",
+        "tr": "Sayfalama limiti"
+    },
+    {
+        "key": "order_by",
+        "en": "Order by",
+        "tr": "Sıralama şekli"
+    },
+    {
+        "key": "result_view_template",
+        "en": "Result view template",
+        "tr": "Sonuç görüntüleme şablonu"
+    },
+    {
+        "key": "card_template_class",
+        "en": "Card view template class",
+        "tr": "Kart görünümü şablon sınıfı"
+    },
+    {
+        "key": "Administration title.",
+        "en": "Administration title.",
+        "tr": "Yönetimsel başlık."
+    },
+    {
+        "key": "Administration description.",
+        "en": "Administration description.",
+        "tr": "Yönetimsel açıklama."
+    },
+    {
+        "key": "Paginate results with limit. Default: 100.",
+        "en": "Paginate results with limit. Default: 100.",
+        "tr": "Sonuçları verilen sınıra göre sayfalar. Varsayılan: 100."
+    },
+    {
+        "key": "Order by and order direction.",
+        "en": "Order by and order direction.",
+        "tr": "Neye göre sıralanacağı ve sırala şekli."
+    },
+    {
+        "key": "Use a template to show results.",
+        "en": "Use a template to show results.",
+        "tr": "Sonuç görüntülemek için bir şablon kullanın."
+    },
+    {
+        "key": "table",
+        "en": "Table",
+        "tr": "Tablo"
+    },
+    {
+        "key": "custom_card",
+        "en": "Custom card",
+        "tr": "Özel kart"
+    },
+    {
+        "key": "Enter a view name if you selected result view template as card.",
+        "en": "Enter a view name if you selected result view template as card.",
+        "tr": "Eğer sonuç görüntüleme şablonunu özel kart seçtiyseniz bir view sınıf ismi girin."
+    },
+    {
+        "key": "Programming key.",
+        "en": "Programming key.",
+        "tr": "Programlama anahtarı."
+    },
+    {
+        "key": "cannot_empty",
+        "en": "%s cannot be empty.",
+        "tr": "%s boş bırakılamaz."
+    },
+    {
+        "key": "class_not_found",
+        "en": "Defined class not found.",
+        "tr": "Belirtilen sınıf bulunamadı."
+    },
+    {
+        "key": "new_filter",
+        "en": "New Filter",
+        "tr": "Yeni Filtre"
+    },
+    {
+        "key": "all",
+        "en": "All",
+        "tr": "Tümü"
     }
 ]

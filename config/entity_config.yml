@@ -11,3 +11,5 @@ translations:
   class: Src\Entity\Translation
 file:
   class: Src\Entity\File
+viewable_queries: 
+  class: Src\Entity\ViewableQueries

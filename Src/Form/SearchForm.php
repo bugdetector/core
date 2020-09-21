@@ -22,30 +22,31 @@ class SearchForm extends Form
 {
     public SearchableInterface $object;
     public bool $translateLabels;
-    public array $table_headers = [];
-    public array $table_data = [];
+    public array $headers = [];
+    public array $data = [];
     public Table $table;
     public CollapsableCard $search_input_group;
     public Pagination $pagination;
     public string $summary_text;
     private SelectQueryPreparerAbstract $query;
-    public function __construct()
+    
+    private function __construct(SearchableInterface $object, $translateLabels = true)
     {
         parent::__construct();
+        $this->object = $object;
+        $this->headers = $object->getResultHeaders($translateLabels);
+        $this->query = $object->getResultQuery();
+        $this->translateLabels = $translateLabels;        
         $this->search_input_group = new CollapsableCard(Translation::getTranslation("search"));
         $this->search_input_group->setId("search_input_group");
-        $this->pagination = new Pagination(isset($_GET["page"]) ? $_GET["page"] : 1);
+        $this->pagination = new Pagination(isset($_GET["page"]) ? $_GET["page"] : 1, $this->object->getPaginationLimit());
         \CoreDB::controller()->addJsFiles("dist/search_form/search_form.js");
         \CoreDB::controller()->addFrontendTranslation("record_remove_accept");
     }
 
 
     public static function createByObject(SearchableInterface $object, $translateLabels = true){
-        $search_form = new SearchForm();
-        $search_form->table_headers = $object->getTableHeaders($translateLabels);
-        $search_form->query = $object->getTableQuery();
-        $search_form->object = $object;
-        $search_form->translateLabels = $translateLabels;
+        $search_form = new SearchForm($object, $translateLabels);
         $search_form->processForm();
         return $search_form;
     }
@@ -74,15 +75,15 @@ class SearchForm extends Form
     {
         $params = $this->request;
         $this->pagination->page = isset($params["page"]) ? $params["page"] : 1;
-        $orderBy = isset($params["orderBy"]) && in_array($params["orderBy"], array_keys($this->table_headers)) ? $params["orderBy"] : null;
+        $orderBy = isset($params["orderBy"]) && in_array($params["orderBy"], array_keys($this->headers)) ? $params["orderBy"] : null;
         $orderDirection = isset($params["orderDirection"]) && $params["orderDirection"] == "DESC" ? "DESC" : "ASC";
         if ($orderBy) {
             $this->query->orderBy("`$orderBy` $orderDirection");
         }
 
-        foreach ($this->table_headers as $column_name => $value) {
+        foreach ($this->headers as $column_name => $value) {
             if (isset($params[$column_name]) && $params[$column_name] !== "") {
-                if (in_array(get_class($this->object->$column_name), [DateTime::class, Date::class, Time::class])) {
+                if (isset($this->object->$column_name) && in_array(get_class($this->object->$column_name), [DateTime::class, Date::class, Time::class])) {
                     $dates = explode("&", $params[$column_name]);
                     $this->query->condition($column_name, $dates[0] . " 00:00:00", ">=")
                     ->condition($column_name, $dates[1] . " 23:59:59", "<=");
@@ -98,9 +99,9 @@ class SearchForm extends Form
     public function processForm()
     {
         $this->submit();
-        $this->query->limit(100, ($this->pagination->page -1) * 100);
+        $this->query->limit($this->pagination->limit, ($this->pagination->page -1) * $this->pagination->limit);
         $queryResult = $this->query->execute();
-        $this->table_data = $queryResult->fetchAll(PDO::FETCH_ASSOC);
+        $this->data = $queryResult->fetchAll(PDO::FETCH_ASSOC);
 
         $search_input_group = new ViewGroup("div", "row");
         
@@ -137,16 +138,18 @@ class SearchForm extends Form
 
         $this->search_input_group->setContent($search_input_group);
         
-        foreach($this->table_data as &$row){
+        foreach($this->data as &$row){
             $this->object->postProcessRow($row);
         }
         $this->pagination->total_count = $this->query->limit(0)->execute()->rowCount();
-        $this->summary_text = Translation::getTranslation("table_summary", [
+        $this->summary_text = Translation::getTranslation("result_summary", [
             $this->pagination->total_count,
-            ($this->pagination->page -1) * 100 + 1,
-            ($this->pagination->page) * 100 > $this->pagination->total_count ? $this->pagination->total_count : ($this->pagination->page) * 100
+            ($this->pagination->page -1) * $this->pagination->limit + 1,
+            ($this->pagination->page) * $this->pagination->limit > $this->pagination->total_count ? $this->pagination->total_count : ($this->pagination->page) * $this->pagination->limit
         ]);
-        $this->table = new Table($this->table_headers, $this->table_data);
-        $this->table->setOrderable(true);
+        $this->viewer = $this->object->getResultsViewer()
+        ->setHeaders($this->headers)
+        ->setData($this->data)
+        ->setOrderable(true);
     }
 }

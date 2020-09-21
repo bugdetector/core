@@ -2,26 +2,21 @@
 
 namespace Src\Views;
 
-use Src\Theme\View;
+use Src\Theme\ResultsViewer;
 
-class Table extends View
+class Table extends ResultsViewer
 {
-    public $table_data;
-    public $table_headers;
-    public $orderable = false;
     public ?string $orderBy;
     public ?string $orderDirection;
     public array $filter_params;
-    public function __construct(array $table_headers, array $table_data)
+    public function __construct()
     {
-        $this->table_data = $table_data;
-        $this->table_headers = $table_headers;
         $this->classes = ["table", "table-bordered", "text-gray-900"];
     }
 
     public function setOrderable(bool $orderable)
     {
-        $this->orderable = $orderable;
+        parent::setOrderable($orderable);
         if ($this->orderable) {
             $this->filter_params = array_filter($_GET);
             $this->orderBy = isset($this->filter_params["orderBy"]) ? $this->filter_params["orderBy"] : null;

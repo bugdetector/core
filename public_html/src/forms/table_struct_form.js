@@ -26,15 +26,15 @@ $(function($){
             $(this).parents(".column_definition").find(".field_length").parent().parent().addClass("d-none");
         }
         if (value === "table_reference") {
-            $(this).parents(".column_definition").find(".reference_table").parent().removeClass("d-none");
+            $(this).parents(".column_definition").find(".reference_table").parent().parent().removeClass("d-none");
         } else {
-            $(this).parents(".column_definition").find(".reference_table").parent().addClass("d-none");
+            $(this).parents(".column_definition").find(".reference_table").parent().parent().addClass("d-none");
         }
     
         if (value === "enumarated_list") {
-            $(this).parents(".column_definition").find(".list_values").parent().removeClass("d-none");
+            $(this).parents(".column_definition").find(".list_values").parent().parent().removeClass("d-none");
         } else {
-            $(this).parents(".column_definition").find(".list_values").parent().addClass("d-none");
+            $(this).parents(".column_definition").find(".list_values").parent().parent().addClass("d-none");
         }
     });
     $(document).on("click", ".removefield", function (e) {

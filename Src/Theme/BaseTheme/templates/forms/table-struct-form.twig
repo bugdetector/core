@@ -22,9 +22,11 @@
 			{{ form.fields["table_comment"] }}
 		</div>
 	</div>
+	<div class="sortable_list">
     {% for column in form.columns %}
         {{ column }}
     {% endfor %}
+	</div>
 	<div class="row mt-4 mb-5">
 		<div class="col-sm-3">
 			{{ form.fields["new_field"] }}

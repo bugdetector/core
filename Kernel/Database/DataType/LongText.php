@@ -23,10 +23,14 @@ class LongText extends DataTypeAbstract
      */
     public function getWidget(): FormWidget
     {
-        return TextareaWidget::create("")
+        $widget = TextareaWidget::create("")
         ->setValue($this->value)
         ->setDescription(Translation::getTranslation($this->comment))
         ->addClass("summernote");
+        if(!$this->isNull){
+            $widget->addAttribute("required", "true");
+        }
+        return $widget;
     }
 
     /**
@@ -35,5 +39,16 @@ class LongText extends DataTypeAbstract
     public function getSearchWidget() : FormWidget
     {
         return InputWidget::create("");
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setValue($value){
+        if(is_array($value)){
+            $this->value = json_encode($value);
+        }else{
+            $this->value = $value;
+        }
     }
 }

@@ -33,17 +33,22 @@ class EnumaratedList extends DataTypeAbstract
         foreach ($this->values as $key => $value) {
             $options[$key] = Translation::getTranslation($value);
         }
-        return SelectWidget::create("")
+        $widget = SelectWidget::create("")
+            ->setValue($this->value)
             ->setOptions($options)
             ->setDescription(Translation::getTranslation($this->comment));
+        if (!$this->isNull) {
+            $widget->addAttribute("required", "true");
+        }
+        return $widget;
     }
 
     /**
      * @inheritdoc
      */
-    public function getSearchWidget() : FormWidget
+    public function getSearchWidget(): FormWidget
     {
-        return $this->getWidget();
+        return $this->getWidget()->removeAttribute("required");
     }
 
     /**

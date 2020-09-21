@@ -42,11 +42,11 @@ class DBObject extends TableMapper
     * @param array $array
     *  Containing field values to set
     */
-    public function map(array $array)
+    public function map(array $array, bool $isConstructor = false)
     {
         $this->changed_fields = [];
         foreach ($array as $key => $value) {
-            if (isset($this->{$key}) && $this->{$key} != $value) {
+            if (!$isConstructor && isset($this->{$key}) && $this->{$key}->getValue() != $value) {
                 $this->changed_fields[$key] = [
                     "old_value" => $this->{$key}->getValue(),
                     "new_value" => $value

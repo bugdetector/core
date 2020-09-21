@@ -30,12 +30,21 @@ class TableReference extends DataTypeAbstract
             $options[$entry[0]] = $entry[1];
         }
 
-        return SelectWidget::create("")
+        $widget = SelectWidget::create("")
+            ->setValue($this->value)
             ->setOptions($options)
             ->setDescription(Translation::getTranslation($this->comment))
             ->addClass("autocomplete")
             ->addAttribute("data-reference-table", $this->reference_table)
             ->addAttribute("data-reference-column", $this->column_name);
+        if(!$this->isNull){
+            /**
+             * @var SelectWidget $widget
+             */
+            $widget->setNullElement("")
+            ->addAttribute("required", "true");
+        }
+        return $widget;
     }
 
     /**
@@ -43,7 +52,13 @@ class TableReference extends DataTypeAbstract
      */
     public function getSearchWidget() : FormWidget
     {
-        return $this->getWidget();
+        /**
+         * @var SelectWidget
+         */
+        $widget = $this->getWidget();
+        $widget->setNullElement(Translation::getTranslation("all"))
+        ->removeAttribute("required");
+        return $widget;
     }
 
     /**

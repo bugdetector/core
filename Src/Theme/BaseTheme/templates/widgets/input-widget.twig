@@ -1,5 +1,6 @@
+<div>
 {% if widget.label %}
-	<label for="{{ widget.attributes["id"] }}">
+	<label for="{{ widget.attributes["id"] }}" class="font-weight-bold text-primary">
 		{{ widget.label }}
 	</label>
 {% endif %}
@@ -17,11 +18,10 @@
 		</a>
 	</div>
 {% endif %}
-<div>
 	<input type='{{ widget.type }}' name='{{ widget.name }}' class='{{ widget.classes|join(" ") }}' {{ widget.renderAttributes()|raw }} value='{{ widget.value }}'/>
-</div>
 {% if widget.description %}
 	<small for="{{ widget.attributes["id"] }}" class="d-block">
 		{{ widget.description }}
 	</small>
 {% endif %}
+</div>

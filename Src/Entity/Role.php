@@ -26,8 +26,8 @@ class Role extends TableMapper
     /**
      * @inheritdoc
      */
-    public function getTableHeaders(bool $translateLabel = true) : array{
-        $headers = parent::getTableHeaders($translateLabel);
+    public function getResultHeaders(bool $translateLabel = true) : array{
+        $headers = parent::getResultHeaders($translateLabel);
         unset($headers["ID"], $headers["created_at"], $headers["last_updated"]);
         return $headers;
     }
@@ -42,7 +42,7 @@ class Role extends TableMapper
     /**
      * @inheritdoc
      */
-    public function getTableQuery() : SelectQueryPreparerAbstract{
+    public function getResultQuery() : SelectQueryPreparerAbstract{
         return \CoreDB::database()->select($this->getTableName(), "r")
         ->select("r", [
             "ID AS edit_actions",

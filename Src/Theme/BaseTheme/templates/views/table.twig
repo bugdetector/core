@@ -1,7 +1,7 @@
 <div class="table_wrapper">
 	<table class="{{ view.classes|join(" ") }}" {{ view.renderAttributes() }}>
 		<thead>
-			{% for key, header in view.table_headers %}
+			{% for key, header in view.headers %}
 				<th>
 					{% if view.orderable and not( key matches '/^\\d+$/') %}
 						<a href="?{{ view.filter_params|url_encode }}&orderBy={{key}}&orderDirection={{ view.orderBy == key and view.orderDirection == "DESC" ? "ASC" : "DESC" }}">
@@ -20,7 +20,7 @@
 		</thead>
 	</thead>
 	<tbody>
-		{% for row in view.table_data %}
+		{% for row in view.data %}
 			<tr>
 				{% for key, data in row %}
 					<td>

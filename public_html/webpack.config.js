@@ -38,6 +38,7 @@ module.exports = (env, argv) => {
        */
       side_table_list : ["./src/views/side_table_list.js"],
       side_entity_list : ["./src/views/side_entity_list.js"],
+      table_and_column_selector : ["./src/views/table_and_column_selector.js"],
     },
     resolve: {
       modules: [

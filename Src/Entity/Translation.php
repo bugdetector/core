@@ -130,8 +130,8 @@ class Translation extends TableMapper
     /**
      * @inheritdoc
      */
-    public function getTableHeaders(bool $translateLabel = true) : array{
-        $headers = parent::getTableHeaders($translateLabel);
+    public function getResultHeaders(bool $translateLabel = true) : array{
+        $headers = parent::getResultHeaders($translateLabel);
         unset($headers["ID"], $headers["created_at"], $headers["last_updated"]);
         return $headers;
     }
@@ -146,7 +146,7 @@ class Translation extends TableMapper
     /**
      * @inheritdoc
      */
-    public function getTableQuery() : SelectQueryPreparerAbstract{
+    public function getResultQuery() : SelectQueryPreparerAbstract{
         $fields = array_merge(["ID AS edit_actions", "key"], $this->getAvailableLanguageList());
         return \CoreDB::database()->select($this->getTableName(), "t")
         ->select("t", $fields);

@@ -22,9 +22,13 @@ class ShortText extends DataTypeAbstract
      */
     public function getWidget(): FormWidget
     {
-        return InputWidget::create("")
+        $widget = InputWidget::create("")
         ->setDescription(Translation::getTranslation($this->comment))
         ->setValue($this->value);
+        if(!$this->isNull){
+            $widget->addAttribute("required", "true");
+        }
+        return $widget;
     }
 
     /**
@@ -32,7 +36,7 @@ class ShortText extends DataTypeAbstract
      */
     public function getSearchWidget() : FormWidget
     {
-        return $this->getWidget();
+        return $this->getWidget()->removeAttribute("required");
     }
 
     /**

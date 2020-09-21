@@ -1,4 +1,5 @@
-<label>{{ widget.label }}</label>
+<div>
+<label for="{{ widget.attributes["id"] }}" class="font-weight-bold text-primary">{{ widget.label }}</label>
 <select name='{{ widget.name }}' class='{{ widget.classes|join(" ") }}' {{ widget.renderAttributes()|raw }}>
 
 	{{ widget.null_element }}
@@ -11,3 +12,4 @@
 		{{ widget.description }}
 	</small>
 {% endif %}
+</div>

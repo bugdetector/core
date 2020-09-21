@@ -1,0 +1,91 @@
+table_name: viewable_queries
+table_comment: 'Contains viewable queries configuration.'
+fields:
+  title:
+    type: short_text
+    length: '255'
+    column_name: title
+    primary_key: false
+    autoIncrement: false
+    isNull: true
+    isUnique: true
+    default: null
+    comment: 'Administration title.'
+  description:
+    type: text
+    column_name: description
+    primary_key: false
+    autoIncrement: false
+    isNull: true
+    isUnique: false
+    default: null
+    comment: 'Administration description.'
+  key:
+    type: short_text
+    length: '255'
+    column_name: key
+    primary_key: false
+    autoIncrement: false
+    isNull: false
+    isUnique: true
+    default: null
+    comment: 'Programming key.'
+  filters:
+    type: text
+    column_name: filters
+    primary_key: false
+    autoIncrement: false
+    isNull: true
+    isUnique: false
+    default: null
+    comment: 'Provided conditions data.'
+  result_fields:
+    type: text
+    column_name: result_fields
+    primary_key: false
+    autoIncrement: false
+    isNull: false
+    isUnique: false
+    default: null
+    comment: 'Required fields data.'
+  paging_limit:
+    type: integer
+    length: null
+    column_name: paging_limit
+    primary_key: false
+    autoIncrement: false
+    isNull: true
+    isUnique: false
+    default: null
+    comment: 'Paginate results with limit. Default: 100.'
+  order_by:
+    type: text
+    column_name: order_by
+    primary_key: false
+    autoIncrement: false
+    isNull: true
+    isUnique: false
+    default: null
+    comment: 'Order by and order direction.'
+  result_view_template:
+    type: enumarated_list
+    values:
+      table: table
+      custom_card: custom_card
+    column_name: result_view_template
+    primary_key: false
+    autoIncrement: false
+    isNull: false
+    isUnique: false
+    default: null
+    comment: 'Use a template to show results.'
+  card_template_class:
+    type: short_text
+    length: '500'
+    column_name: card_template_class
+    primary_key: false
+    autoIncrement: false
+    isNull: true
+    isUnique: false
+    default: null
+    comment: 'Enter a view name if you selected result view template as card.'

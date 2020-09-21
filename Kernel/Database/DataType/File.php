@@ -27,11 +27,15 @@ class File extends TableReference
      */
     public function getWidget(): FormWidget
     {
-        return InputWidget::create("")
+        $widget = InputWidget::create("")
         ->setType("file")
         ->setDescription(Translation::getTranslation($this->comment))
         ->removeClass("form-control")
         ->setValue($this->value);
+        if(!$this->isNull){
+            $widget->addAttribute("required", "true");
+        }
+        return $widget;
     }
 
     /**
@@ -39,6 +43,6 @@ class File extends TableReference
      */
     public function getSearchWidget() : FormWidget
     {
-        return $this->getWidget();
+        return $this->getWidget()->removeAttribute("required");
     }
 }

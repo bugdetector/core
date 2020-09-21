@@ -11,12 +11,14 @@ use CoreDB\Kernel\Database\TableDefinition;
 use Exception;
 use PDO;
 use PDOException;
-use ReflectionObject;
 use Src\Entity\DBObject;
 use Src\Entity\File;
 use Src\Entity\Translation;
 use Src\Form\InsertForm;
 use Src\Form\Widget\FormWidget;
+use Src\Theme\ResultsViewer;
+use Src\Theme\View;
+use Src\Views\Table;
 use Src\Views\TextElement;
 use Src\Views\ViewGroup;
 
@@ -39,7 +41,7 @@ abstract class TableMapper implements SearchableInterface
         foreach($table_definition->fields as $field_name => $field){
             $this->{$field_name} = $field;
         }
-        $this->map($mapData);
+        $this->map($mapData, true);
         $this->changed_fields = [];
         
         $entityConfig = CoreDB::config()->getEntityInfoByClass(static::class);
@@ -148,16 +150,16 @@ abstract class TableMapper implements SearchableInterface
     * @param array $array
     *  Containing field values to set
     */
-    public function map(array $array)
+    public function map(array $array, bool $isConstructor = false)
     {
         $this->changed_fields = [];
         foreach ($array as $key => $value) {
             if (!property_exists($this, $key)) {
                 continue;
             }
-            if ($this->{$key} != $value) {
+            if (!$isConstructor && $this->{$key}->getValue() != $value) {
                 $this->changed_fields[$key] = [
-                    "old_value" => $this->{$key},
+                    "old_value" => $this->{$key}->getValue(),
                     "new_value" => $value
                 ];
             }
@@ -267,12 +269,18 @@ abstract class TableMapper implements SearchableInterface
             if($field instanceof EntityReference){
                 $inputName .= "[]";
             }
-            $fields[$field_name] = $widget->setName($inputName);
+            if($widget instanceof FormWidget){
+                /**
+                 * @var FormWidget $widget
+                 */
+                $widget->setName($inputName);
+            }
+            $fields[$field_name] = $widget;
         }
         return $fields;
     }
 
-    protected function getFieldWidget(string $field_name, bool $translateLabel) : ?FormWidget{
+    protected function getFieldWidget(string $field_name, bool $translateLabel) : ?View{
         return $this->$field_name->getWidget()
         ->setLabel($translateLabel ? Translation::getTranslation($field_name) : $field_name);
     }
@@ -299,7 +307,7 @@ abstract class TableMapper implements SearchableInterface
     /**
      * @inheritdoc
      */
-    public function getTableHeaders(bool $translateLabel = true) : array{
+    public function getResultHeaders(bool $translateLabel = true) : array{
         $headers = [""];
         /**
          * @var DataTypeAbstract $field
@@ -313,15 +321,33 @@ abstract class TableMapper implements SearchableInterface
     /**
      * @inheritdoc
      */
-    public function getTableQuery() : SelectQueryPreparerAbstract{
+    public function getResultQuery() : SelectQueryPreparerAbstract{
         return \CoreDB::database()->select(static::getTableName())
         ->select(static::getTableName(), ["ID AS edit_actions", "*"]);
+    }
+
+
+    /**
+     * @inheritdoc
+     */
+    public function getPaginationLimit(): int{
+        return self::PAGE_LIMIT;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getResultsViewer() : ResultsViewer{
+        return new Table();
     }
 
     /**
      * @inheritdoc
      */
     public function postProcessRow(&$row) : void{
+        if(!isset($row["edit_actions"])){
+            return;
+        }
         $row["edit_actions"] = ViewGroup::create("div", "d-flex")
             ->addField(
                 ViewGroup::create("a", "mr-2 rowdelete")

@@ -298,15 +298,14 @@ class MySQLDriver extends DatabaseDriver
     }
 
     /**
-     * Returns all foreign key descriptions in database
-     * @return PDOStatement All defined references in database
+     * @inheritdoc
      */
     public static function getAllTableReferences(): PDOStatement
     {
         return CoreDB::database()->select("INFORMATION_SCHEMA.KEY_COLUMN_USAGE", "", false)
             ->select("", ["TABLE_NAME", "COLUMN_NAME", "REFERENCED_TABLE_NAME", "REFERENCED_COLUMN_NAME"])
             ->condition("REFERENCED_TABLE_SCHEMA", DB_NAME)
-            ->params(["scheme" => DB_NAME])->execute();
+            ->execute();
     }
 
     /**
