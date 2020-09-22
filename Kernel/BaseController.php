@@ -48,7 +48,8 @@ abstract class BaseController implements ControllerInterface
     {
         $this->arguments = $arguments;
         $this->method = isset($this->arguments[0]) ? $this->arguments[0] : null;
-        $this->setTitle(Variable::getByKey("site_name")->value);
+        $siteName = Variable::getByKey("site_name");
+        $this->setTitle($siteName ? $siteName->value : "CoreDB");
     }
 
     /**

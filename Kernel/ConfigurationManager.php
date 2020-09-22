@@ -3,6 +3,7 @@
 namespace CoreDB\Kernel;
 
 use CoreDB;
+use CoreDB\Kernel\Database\DatabaseInstallationException;
 use CoreDB\Kernel\Database\DataType\DataTypeAbstract;
 use CoreDB\Kernel\Database\DataType\DateTime;
 use CoreDB\Kernel\Database\DataType\EnumaratedList;
@@ -44,7 +45,12 @@ class ConfigurationManager
                 continue;
             }
             $definition = Yaml::parseFile($file->getPathname());
-            $table_definition = TableDefinition::getDefinition($definition["table_name"]);
+
+            try{
+                $table_definition = TableDefinition::getDefinition($definition["table_name"]);
+            }catch(DatabaseInstallationException $ex){
+                $table_definition = new TableDefinition($definition["table_name"]);
+            }
             $table_definition->setComment($definition["table_comment"]);
             $table_definition->fields = [];
             $fields = $definition["fields"];
@@ -107,6 +113,7 @@ class ConfigurationManager
             } catch (Exception $ex) {
             }
         }
+        $alterQueryPreparer->execute();
     }
 
     public function exportTableConfiguration()

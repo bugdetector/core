@@ -32,7 +32,7 @@ class Variable extends TableMapper
         return $variable;
     }
 
-    public static function getByKey(string $key)
+    public static function getByKey(string $key) : ?Variable
     {
         try {
             return self::get(["key" => $key]);

@@ -16,14 +16,15 @@ class CoreRenderer
     {
         $loader = new \Twig\Loader\FilesystemLoader($template_directories);
         $twig_options = [];
-        if (ENVIROMENT == "production") {
+        $enviroment = defined("ENVIROMENT") ? ENVIROMENT : "development";
+        if ($enviroment == "production") {
             $twig_options["cache"] = "../cache";
         }else{
             $twig_options["debug"] = true;
         }
         $this->twig = new \Twig\Environment($loader, $twig_options);
         $this->twig->addExtension(new CoreTwigExtension());
-        if(ENVIROMENT == "development"){
+        if($enviroment == "development"){
             $this->twig->addExtension(new \Twig\Extension\DebugExtension());
         }
     }

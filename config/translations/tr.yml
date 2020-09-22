@@ -1,4 +1,4 @@
-tables: Tablolarsadas
+tables: Tablolar
 management: Yönetim
 profile: Profil
 logout: 'Oturumu Kapat'
@@ -163,3 +163,11 @@ cannot_empty: '%s boş bırakılamaz.'
 class_not_found: 'Belirtilen sınıf bulunamadı.'
 new_filter: 'Yeni Filtre'
 all: Tümü
+install_welcome: 'CoreDB''ye Hoşgeldiniz'
+install_description: 'Lütfen veritabanı bağlantısı sağlamak için aşağıdaki formu doldurun. Yönetici rolüne sahip bir kullanıcı oluşturmak için de kullanıcı adı, isim, e-posta ve şifrenizi belirtin.'
+db_server: 'Veritabanı sunucusu'
+db_name: 'Veritabanı adı'
+db_user: 'Veritabanı kullanıcı adı'
+db_password: 'Veritabanı bağlantı şifresi'
+cant_connect_to_database: 'Veritabanına bağlanılamadı.'
+all_configuration_imported: 'Tüm yapılandırma başarıyla oluşturuldu.'

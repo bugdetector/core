@@ -39,7 +39,8 @@ abstract class BaseTheme extends BaseController
     public function buildSidebar()
     {
         $this->sidebar = Sidebar::create("ul", "navbar-nav bg-gradient-primary sidebar sidebar-dark accordion toggled position-sticky");
-        if (\CoreDB::currentUser()->isAdmin()) {
+        $currentUser = \CoreDB::currentUser();
+        if ($currentUser && $currentUser->isAdmin()) {
             $this->sidebar->addNavItem(
                 NavItem::create(
                     "fa fa-tachometer-alt",

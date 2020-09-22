@@ -15,7 +15,7 @@ class TableDefinition
     public array $fields = [];
     public bool $table_exist = false;
     
-    private function __construct(string $table_name)
+    public function __construct(string $table_name)
     {
         $this->table_name = $table_name;
     }

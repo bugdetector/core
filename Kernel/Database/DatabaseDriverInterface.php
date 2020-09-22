@@ -32,6 +32,13 @@ interface DatabaseDriverInterface
     const ENUMARATED_LIST = "enumarated_list";
 
     /**
+     * Check database connection and return result.
+     * @return bool
+     *  Database connection availability.
+     */
+    public static function checkConnection(string $dbServer, string $dbName, string $dbUsername, string $dbPassword) : bool;
+
+    /**
      * Excecute Query
      * @param QueryPreparerAbstract $query
      *  Query object to execute

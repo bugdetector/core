@@ -2,11 +2,13 @@
 
 namespace Src\Entity;
 
+use CoreDB\Kernel\Database\DatabaseInstallationException;
 use CoreDB\Kernel\Database\DataType\DataTypeAbstract;
 use CoreDB\Kernel\Database\DataType\ShortText;
 use CoreDB\Kernel\Database\SelectQueryPreparerAbstract;
 use CoreDB\Kernel\Database\TableDefinition;
 use CoreDB\Kernel\TableMapper;
+use DirectoryIterator;
 use Exception;
 use PDO;
 use Src\Views\TextElement;
@@ -62,7 +64,13 @@ class Translation extends TableMapper
     public static function getTranslation($key, array $arguments = null)
     {
         if (!isset(self::$cache[$key])) {
-            $translation = Translation::get(["key" => $key]);
+            try{
+                $translation = Translation::get(["key" => $key]);
+            }catch(DatabaseInstallationException $ex){
+                $language = Translation::getLanguage();
+                self::$cache = Yaml::parseFile(Translation::BACKUP_PATH."/{$language}.yml");
+                return isset(self::$cache[$key]) ? self::$cache[$key] : $key;
+            }
             self::$cache[$key] = $translation ? $translation->{Translation::getLanguage()}->getValue() : $key;
         }
         return !$arguments ? self::$cache[$key] : vsprintf(self::$cache[$key], $arguments);
@@ -93,8 +101,17 @@ class Translation extends TableMapper
                     }
                     self::$available_languages[] = $field_name;
                 }
-            } catch (Exception $ex) {
-                self::$available_languages[] = "en";
+            } catch (DatabaseInstallationException $ex) {
+                /**
+                 * @var DirectoryIterator $fileInfo
+                 */
+                foreach (new DirectoryIterator(self::BACKUP_PATH) as $fileInfo) {
+                    if (!$fileInfo->isDot()) {
+                        if (!$fileInfo->isDir()) {
+                            self::$available_languages[] = pathinfo($fileInfo->getFilename(), PATHINFO_FILENAME);
+                        }
+                    }
+                }
             }
         }
         return self::$available_languages;
@@ -108,6 +125,7 @@ class Translation extends TableMapper
                 $translations = Yaml::parseFile($importPath);
                 foreach($translations as $key => $translation){
                     $record = Translation::get(["key" => $key ]) ? : new Translation();
+                    $record->key->setValue($key);
                     $record->{$language}->setValue($translation);
                     $record->save();
                 }

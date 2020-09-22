@@ -2,7 +2,7 @@
 
 namespace CoreDB\Kernel;
 
-use Src\Controller\AccessDeniedController;
+use Src\Controller\AccessdeniedController;
 use Src\Controller\LoginController;
 use Src\Controller\MainpageController;
 use Src\Controller\NotFoundController;
@@ -49,7 +49,7 @@ class Router
             if (!\CoreDB::currentUser()->isLoggedIn()) {
                 \CoreDB::goTo(LoginController::getUrl(), ["destination" => \CoreDB::requestUrl()]);
             } else {
-                $this->controller = new AccessDeniedController([]);
+                $this->controller = new AccessdeniedController([]);
             }
         }
         $this->controller->processPage();
@@ -57,6 +57,10 @@ class Router
     }
 
     public function getControllerFromUrl($url){
+        if(strpos($url, BASE_URL) === 0){
+            $count = 1;
+            $url = str_replace(BASE_URL."/", "", $url, $count);
+        }
         $current_arguments = explode("/", preg_replace("/\?.*/", "", $url));
         if (!$current_arguments[0]) {
             $mainpageClass = self::MAINPAGE;

@@ -17,7 +17,7 @@ fields:
     column_name: en
     primary_key: false
     autoIncrement: false
-    isNull: false
+    isNull: true
     isUnique: false
     default: null
     comment: 'English translation.'
@@ -27,7 +27,7 @@ fields:
     column_name: tr
     primary_key: false
     autoIncrement: false
-    isNull: false
+    isNull: true
     isUnique: false
     default: null
     comment: 'Turkish translation.'

@@ -27,6 +27,7 @@ use CoreDB\Kernel\Database\TruncateQueryPreparerAbstract;
 use CoreDB\Kernel\Database\UpdateQueryPreparerAbstract;
 use CoreDB\Kernel\Database\DatabaseDriver;
 use CoreDB\Kernel\Database\DataType\Checkbox;
+use CoreDB\Kernel\Database\DatabaseInstallationException;
 use \PDO;
 use \PDOException;
 use \PDOStatement;
@@ -36,18 +37,31 @@ class MySQLDriver extends DatabaseDriver
     private static $instance;
     private PDO $connection;
 
-    private function __construct()
+    private function __construct(string $dbServer, string $dbName, string $dbUsername, string $dbPassword)
     {
         try {
             self::$instance = $this;
-            $this->connection = new PDO("mysql:host=" . DB_SERVER . ";dbname=" . DB_NAME, DB_USER, DB_PASSWORD);
+            $this->connection = new PDO("mysql:host=" . $dbServer . ";dbname=" . $dbName, $dbUsername, $dbPassword);
             $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->connection->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
             $this->connection->query("SET NAMES UTF8");
         } catch (PDOException $ex) {
-            die("Can't connect to database.");
+            throw new DatabaseInstallationException("Can't connect to database.");
         }
     }
+
+    /**
+     * @inheritdoc
+     */
+    public static function checkConnection(string $dbServer, string $dbName, string $dbUsername, string $dbPassword) : bool{
+        try {
+            new PDO("mysql:host=" . $dbServer . ";dbname=" . $dbName, $dbUsername, $dbPassword);
+            return true;
+        } catch (PDOException $ex) {
+            return false;
+        }
+    }
+
     /**
      *
      * @return MySQLDriver
@@ -55,7 +69,11 @@ class MySQLDriver extends DatabaseDriver
     public static function getInstance(): MySQLDriver
     {
         if (self::$instance == null) {
-            return new self();
+            if(defined("DB_SERVER") && defined("DB_NAME") && defined("DB_USER") && defined("DB_PASSWORD")){
+                return new self(DB_SERVER, DB_NAME, DB_USER, DB_PASSWORD);
+            }else{
+                throw new DatabaseInstallationException("Missing database configuration.");
+            }
         }
         return self::$instance;
     }
@@ -74,6 +92,9 @@ class MySQLDriver extends DatabaseDriver
         } catch (PDOException $ex) {
             if ($this->connection->inTransaction()) {
                 $this->connection->rollBack();
+            }
+            if($ex->getCode() == "42S02"){
+                throw new DatabaseInstallationException($ex->getMessage());
             }
             throw $ex;
         }

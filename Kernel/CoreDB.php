@@ -4,6 +4,7 @@ use CoreDB\Kernel\BaseController;
 use CoreDB\Kernel\ConfigurationManager;
 use CoreDB\Kernel\Database\MySQL\MySQLDriver;
 use CoreDB\Kernel\Database\DatabaseDriver;
+use CoreDB\Kernel\Database\DatabaseInstallationException;
 use CoreDB\Kernel\Messenger;
 use CoreDB\Kernel\Router;
 use Src\Entity\User;
@@ -12,6 +13,8 @@ use Src\JWT;
 class CoreDB
 {
     const ENCRYPTION_METHOD = "aes128";
+
+    private static $current_user;
 
     public static function get_current_date()
     {
@@ -66,8 +69,8 @@ class CoreDB
 
     public static function goTo(string $uri, $params = [])
     {
-        if(!empty($params)){
-            $uri .= "?".http_build_query($params);
+        if (!empty($params)) {
+            $uri .= "?" . http_build_query($params);
         }
         header("Location: $uri");
         die();
@@ -133,10 +136,14 @@ class CoreDB
 
     public static function baseHost()
     {
-        $trusted_hosts = explode(",", TRUSTED_HOSTS);
-        if (!in_array($_SERVER["HTTP_HOST"], $trusted_hosts)) {
-            return $trusted_hosts[0];
-        } else {
+        if(defined("TRUSTED_HOSTS")){
+            $trusted_hosts = explode(",", TRUSTED_HOSTS);
+            if (!in_array($_SERVER["HTTP_HOST"], $trusted_hosts)) {
+                return $trusted_hosts[0];
+            } else {
+                return $_SERVER["HTTP_HOST"];
+            }
+        }else{
             return $_SERVER["HTTP_HOST"];
         }
     }
@@ -146,28 +153,31 @@ class CoreDB
      * @global User $current_user
      * @return User
      */
-    public static function currentUser() : User
+    public static function currentUser(): ?User
     {
-        global $current_user;
-        if ($current_user) {
-            return $current_user;
-        } else {
-            if (isset($_SESSION[BASE_URL . "-UID"])) {
-                $current_user = User::get($_SESSION[BASE_URL . "-UID"]);
-            } elseif (isset($_COOKIE["session-token"])) {
-                $jwt = JWT::createFromString($_COOKIE["session-token"]);
-                $current_user = User::get($jwt->getPayload()->ID);
-                $_SESSION[BASE_URL . "-UID"] = $current_user->ID;
-            } 
-            if(!$current_user) {
-                $current_user = new User();
-                $current_user->username->setValue("guest");
+        try {
+            if (self::$current_user) {
+                return self::$current_user;
+            } else {
+                if (isset($_SESSION[BASE_URL . "-UID"])) {
+                    self::$current_user = User::get($_SESSION[BASE_URL . "-UID"]);
+                } elseif (isset($_COOKIE["session-token"])) {
+                    $jwt = JWT::createFromString($_COOKIE["session-token"]);
+                    self::$current_user = User::get($jwt->getPayload()->ID);
+                    $_SESSION[BASE_URL . "-UID"] = self::$current_user->ID;
+                }
+                if (!self::$current_user) {
+                    self::$current_user = new User();
+                    self::$current_user->username->setValue("guest");
+                }
             }
+            return self::$current_user;
+        } catch (DatabaseInstallationException $ex) {
+            return null;
         }
-        return $current_user;
     }
 
-    public static function database() : DatabaseDriver
+    public static function database(): DatabaseDriver
     {
         return MySQLDriver::getInstance();
     }
@@ -177,7 +187,7 @@ class CoreDB
      * @return Messenger
      *  Messenger Instance
      */
-    public static function messenger() : Messenger
+    public static function messenger(): Messenger
     {
         return Messenger::getInstance();
     }
@@ -187,7 +197,7 @@ class CoreDB
      * @return BaseController
      * Active Controller
      */
-    public static function controller() : BaseController
+    public static function controller(): BaseController
     {
         return Router::getInstance()->getController();
     }
@@ -197,7 +207,7 @@ class CoreDB
      * @return ConfigurationManager
      * Configuration Manager
      */
-    public static function config() : ConfigurationManager
+    public static function config(): ConfigurationManager
     {
         return ConfigurationManager::getInstance();
     }
