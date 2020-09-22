@@ -11,6 +11,7 @@ use Exception;
 use PDO;
 use Src\Views\TextElement;
 use Src\Views\ViewGroup;
+use Symfony\Component\Yaml\Yaml;
 
 class Translation extends TableMapper
 {
@@ -19,7 +20,7 @@ class Translation extends TableMapper
     private static $available_languages;
     private static $instance;
 
-    const BACKUP_PATH = __DIR__ . "/../../translations/translations.json";
+    const BACKUP_PATH = __DIR__ . "/../../config/translations";
 
     public ShortText $key;
     public ShortText $en;
@@ -101,30 +102,30 @@ class Translation extends TableMapper
 
     public static function importTranslations()
     {
-        $translations = json_decode(file_get_contents(Translation::BACKUP_PATH), true);
-        \CoreDB::database()->beginTransaction();
-        self::clear();
-        foreach ($translations as $translation) {
-            $translate = new Translation();
-            $translate->map($translation);
-            $translate->insert();
+        foreach(self::getAvailableLanguageList() as $language){
+            $importPath = Translation::BACKUP_PATH."/{$language}.yml";
+            if(is_file($importPath)){
+                $translations = Yaml::parseFile($importPath);
+                foreach($translations as $key => $translation){
+                    $record = Translation::get(["key" => $key ]) ? : new Translation();
+                    $record->{$language}->setValue($translation);
+                    $record->save();
+                }
+            }
         }
-        \CoreDB::database()->commit();
     }
 
     public static function exportTranslations()
     {
-        $translations = \CoreDB::database()
-        ->select(self::getTableName())
-        ->execute()
-        ->fetchAll(PDO::FETCH_OBJ);
-        if (file_exists(Translation::BACKUP_PATH)) {
-            unlink(Translation::BACKUP_PATH);
+        foreach(self::getAvailableLanguageList() as $language){
+            $translations = \CoreDB::database()
+            ->select(self::getTableName(), "t")
+            ->select("t", ["key", $language])
+            ->execute()
+            ->fetchAll(PDO::FETCH_KEY_PAIR);
+            $exportPath = self::BACKUP_PATH."/{$language}.yml";
+            file_put_contents($exportPath, Yaml::dump($translations));
         }
-        foreach ($translations as $translation) {
-            unset($translation->ID, $translation->created_at, $translation->last_updated);
-        }
-        file_put_contents(Translation::BACKUP_PATH, json_encode($translations, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
     }
 
     /**

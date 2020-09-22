@@ -1,0 +1,165 @@
+tables: Tablolar
+management: Yönetim
+profile: Profil
+logout: 'Oturumu Kapat'
+new_table: 'Yeni Tablo'
+add: Ekle
+edit: Düzenle
+drop_table: 'Tabloyu Kaldır'
+username: 'Kullanıcı adı'
+login: 'Oturum aç'
+password: Şifre
+forgot_password: 'Şifremi Unuttum'
+wrong_credidental: 'Kullanıcı adı ya da şifre yanlış.'
+too_many_login_fails: 'Çok fazla hatalı giriş yaptınız. 10 dk sonra tekrar deneyiniz.'
+name: İsim
+surname: Soyisim
+phone: 'Telefon numarası'
+update_success: 'Başarıyla güncellendi.'
+last_access: 'Son erişim'
+access_denied: 'Erişim Engellendi'
+email: E-posta
+save: Kaydet
+current_pass: 'Geçerli Şifre'
+password_again: 'Şifre (tekrar)'
+username_exist: 'Bu kullanıcı adıyla bir kullanıcı bulunuyor.'
+password_validation_error: 'Şifre en az 8 karakter uzunluğunda olmalı. Büyük harf, küçük harf, noktalama işareti ve rakam bulundurmalı. .'
+created_at: 'Oluşturulma Tarihi'
+role: Rol
+table_select_info: 'İşlem yapmak için bir tablo seçin.'
+info: Bilgi
+error: Hata!
+warning: Uyarı!
+search: Arama
+available_characters: 'Kullanılabilir karakterler: %s'
+column_name: 'Kolon Adı'
+data_type: 'Veri Tipi'
+unique: Benzersiz
+table_name: 'Tablo Adı'
+new_field: 'Yeni Alan'
+length: Uzunluk
+reference_table: 'İlişkili Tablo'
+record_removed: 'Kayıt silindi.'
+invalid_operation: 'Geçersiz işlem.'
+table_create_success: 'Tablo başarıyla oluşturuldu.'
+table_deleted: '%s tablosu silindi.'
+forgot_password_question: 'Şifreni mi unuttun'
+wrong_username_or_email: 'Kullanıcı adı ya da e-posta yanlış.'
+reset: Sıfırla
+cancel: Vazgeç
+ok: Tamam
+record_remove_accept: 'Bu kaydı silmek istediğinize emin misiniz?'
+delete: Sil
+clear_cache: 'Önbelleği Temizle'
+password_reset_success: 'Şifre başarıyla sıfırlandı.'
+reset_password: 'Şifre Sıfırla'
+link_used: 'Bu bağlantı daha önce kullanılmış olabilir.'
+password_reset_mail_success: 'Şifre sıfırlama e-postası gönderildi.'
+sorry: Maalesef
+page_not_found: 'Sayfa Bulunamadı.'
+insert_success: 'Kayıt başarıyla eklendi.'
+drop_accept: '%s tablosunu kaldırmak istediğinize emin misiniz?'
+result_summary: 'Toplam %d kayıttan %d-%d arası görüntüleniyor.'
+invalid_key: 'Geçersiz anahtar.'
+ip_blocked: 'Güvenilmez istekler nedeniyle IP adresiniz engellenmiştir.'
+account_blocked: 'Hesabınız kilitlenmiştir. Lütfen şifrenizi sıfırlayarak sisteme yeniden giriş yapın.'
+translations: Çeviriler
+import: 'İçe aktar'
+export: 'Dışa aktar'
+lang_import_info: 'Bu seçenek sadece translations/translations.json dosyasındaki çevirileri içe aktarır.'
+lang_export_info: 'Bu seçenek çevirileri, translations/translations.json dosyasına dışa aktarır.'
+export_success: 'Başarıyla dışarı aktarıldı.'
+import_success: 'Başarıyla içe aktarıldı.'
+truncate: 'Tabloyu Boşalt'
+truncate_accept: '%s tablosunu boşaltmak istediğinize emin misiniz?'
+table_truncated: '%s tablosu boşaltıldı.'
+remember_me: 'Beni Hatırla'
+none: Hiçbiri
+field_drop_accept: '%s kolonunu kaldırmak istediğinize emin misiniz?'
+field_dropped: '%s kolonu kaldırıldı.'
+number_of_members: 'Üye Sayısı'
+table_count: 'Tablo Sayısı'
+translation_count: 'Çeviri yapılmış metin sayısı'
+login_welcome: Hoşgeldiniz
+dashboard: 'Gözetim Paneli'
+'yes': Evet
+'no': Hayır
+edit_table: 'Tablo Düzenle'
+back_to_mainpage: 'Anasayfaya Dön'
+table_comment: 'Tablo Yorumu'
+'Contains blocked IP adresses. These IP adresses can''t login to site.': 'Engellenmiş IP adreslerini tutar. Bu Ip adresleri siteye giremezler.'
+'Contains cached data. You can use this table via Cache class.': 'Önbelleklenmiş verileri tutar. Bu tabloyu Cache sınıfı ile kullanabilirsiniz.'
+'Contains e-mail template in many languages. You can add new one.': 'Bir çok dil için e-posta şablonları bulundurur. Yeni bir tane ekleyebilirsiniz.'
+'Contains failed login attempts by user and IP address to site.': 'IP adresi ve kullanıcı bazında siteye yapılan hatalı oturum açma girişimlerini tutar.'
+'Contains reset password request tokens.': 'Şifre sıfırlama isteği jetonlarını tutar.'
+'Contains roles. You can add new one.': 'Rolleri barindırır. Yeni bir tane ekleyebilirsiniz.'
+'Contains site translations. You can add new one.': 'Site çevirilerini barındırır. Yeni bir tane ekleyebilirsiniz.'
+'Contains site Users fundemantal data. Connected with User class.': 'Site kullanıcılarının temel verilerini barındırır. User sınıfı ile bağlıdır.'
+'Constains User''s roles. Look at User::roles': 'Kullanıcıların rollerini barındırır. Bkz: User::roles'
+'Contains less secure site Variables. For more security use config.php. Connected via Variable class.': 'config.php üzerindekine göre daha az güvenli site değişkenlerini barındırır. Variable sınıfı ile bağlıdır.'
+'Importtant log of actions.': 'Önemli hareketlerin kayıtları.'
+email_not_available: 'Bu e-posta adresi kullanılmaktadır.'
+last_updated: 'Son Güncelleme'
+user: Kullanıcı
+change_success: 'Tüm değişiklikler başarıyla kaydedildi'
+drop_column: 'Kolonu Kaldır'
+at_least_one_column: 'Lütfen en az bir kolon tanımlayın.'
+column_name_required: 'Kolon ismi gereklidir.'
+password_match_error: 'Şifreler uyuşmuyor.'
+active: Etkin
+column_comment: 'Kolon Yorumu'
+list_values: 'Liste Değerleri'
+list_values_description: 'Virgülle ayrılmış değerler giriniz.'
+integer: 'Tam sayı'
+float: 'Ondalıklı sayı'
+short_text: 'Kısa metin'
+text: Metin
+long_text_or_html: 'Uzun metin ya da HTML'
+date: Tarih
+datetime: Tarih-Zaman
+file: Dosya
+list: Liste
+no_change_on_table: 'Tablo üzerinde değişiklik algılanmadı.'
+cache_cleared: 'Tüm önbellekler temizlendi.'
+time: Zaman
+not_empty: 'Boş Değil'
+reference: Referans
+checkbox: 'Onay Kutusu'
+current_pass_wrong: 'Geçerli şifrenizi yanlış girdiniz.'
+entities: Varlıklar
+config_import: 'Yapılandırmayı içe aktar'
+config_export: 'Yapılandırmayı dışa aktar'
+users: Kullanıcılar
+roles: Roller
+key: Anahtar
+en: İnglizce
+tr: Türkçe
+entity_select_info: 'İşlem yapmak için bir varlık seçin.'
+file_name: 'Dosya ismi'
+file_size: 'Dosya boyutu'
+mime_type: 'Mime tipi'
+an_error_occured: 'Bilinmeyen bir hata oluştu.'
+profile_photo: 'Profil resmi'
+export_as_class: 'Tabloyu sınıf olarak dışa aktar'
+title: Başlık
+description: Açıklama
+viewable_queries: 'Görüntülenebilir Sorgular'
+filters: Filtreler
+result_fields: 'Sonuç alanları'
+paging_limit: 'Sayfalama limiti'
+order_by: 'Sıralama şekli'
+result_view_template: 'Sonuç görüntüleme şablonu'
+card_template_class: 'Kart görünümü şablon sınıfı'
+'Administration title.': 'Yönetimsel başlık.'
+'Administration description.': 'Yönetimsel açıklama.'
+'Paginate results with limit. Default: 100.': 'Sonuçları verilen sınıra göre sayfalar. Varsayılan: 100.'
+'Order by and order direction.': 'Neye göre sıralanacağı ve sırala şekli.'
+'Use a template to show results.': 'Sonuç görüntülemek için bir şablon kullanın.'
+table: Tablo
+custom_card: 'Özel kart'
+'Enter a view name if you selected result view template as card.': 'Eğer sonuç görüntüleme şablonunu özel kart seçtiyseniz bir view sınıf ismi girin.'
+'Programming key.': 'Programlama anahtarı.'
+cannot_empty: '%s boş bırakılamaz.'
+class_not_found: 'Belirtilen sınıf bulunamadı.'
+new_filter: 'Yeni Filtre'
+all: Tümü

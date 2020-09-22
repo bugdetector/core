@@ -1,0 +1,165 @@
+tables: Tables
+management: Management
+profile: Profile
+logout: Logout
+new_table: 'New Table'
+add: Add
+edit: Edit
+drop_table: 'Remove Table'
+username: Username
+login: Login
+password: Password
+forgot_password: 'Forget Password'
+wrong_credidental: 'Wrong username or password.'
+too_many_login_fails: 'Too many login fails. Please try again 10 minutes later.'
+name: Name
+surname: Surname
+phone: Phone
+update_success: 'Updated successfuly.'
+last_access: 'Last access'
+access_denied: 'Access Denied'
+email: E-mail
+save: Save
+current_pass: 'Current Password'
+password_again: 'Password (again)'
+username_exist: 'An user with same username exist.'
+password_validation_error: 'The password must be at least 8 characters long and must contain uppercase letter, lowercase letter, punctioation and number. '
+created_at: 'Created Date'
+role: Role
+table_select_info: 'Select a table to make a transaction.'
+info: Info
+error: Error!
+warning: Warning!
+search: Search
+available_characters: 'Available characters: %s'
+column_name: 'Column Name'
+data_type: 'Data Type'
+unique: Unique
+table_name: 'Table Name'
+new_field: 'New Field'
+length: Length
+reference_table: 'Reference Table'
+record_removed: 'Record removed.'
+invalid_operation: 'Invalid operation.'
+table_create_success: 'Table created successfully.'
+table_deleted: '%s table deleted.'
+forgot_password_question: 'Forgot Your Password'
+wrong_username_or_email: 'Wrong username or e-mail.'
+reset: Reset
+cancel: Cancel
+ok: OK
+record_remove_accept: 'Are you sure to remove that record?'
+delete: Delete
+clear_cache: 'Clear Cache'
+password_reset_success: 'Password reset successfully.'
+reset_password: 'Reset Password'
+link_used: 'This link maybe used before.'
+password_reset_mail_success: 'Password reset e-mail has send.'
+sorry: Sorry
+page_not_found: 'Page Not Found'
+insert_success: 'Record inserted succesfully.'
+drop_accept: 'Are you sure want to drop table %s?'
+result_summary: 'Out of %d records %d-%d is monitoring.'
+invalid_key: 'Invalid key.'
+ip_blocked: 'Due to untrusted transactions, your IP has been blocked.'
+account_blocked: 'Your user account has been blocked. Please login after reset password.'
+translations: Translations
+import: Import
+export: Export
+lang_import_info: 'This option only imports translations on translations/translations.json file.'
+lang_export_info: 'This will exports translations on translations/translations.json file.'
+export_success: 'Exported succesfully.'
+import_success: 'Imported successfully.'
+truncate: 'Truncate Table'
+truncate_accept: 'Are you sure want to truncate table %s?'
+table_truncated: '%s table truncated.'
+remember_me: 'Remember me'
+none: None
+field_drop_accept: 'Are you sure want to drop field %s?'
+field_dropped: '%s field dropped.'
+number_of_members: 'Number of Members'
+table_count: 'Table Count'
+translation_count: 'Translated text count'
+login_welcome: Welcome
+dashboard: Dashboard
+'yes': 'Yes'
+'no': 'No'
+edit_table: 'Edit Table'
+back_to_mainpage: 'Back To Mainpage'
+table_comment: 'Table Comment'
+'Contains blocked IP adresses. These IP adresses can''t login to site.': 'Contains blocked IP adresses. These IP adresses can''t login to site.'
+'Contains cached data. You can use this table via Cache class.': 'Contains cached data. You can use this table via Cache class.'
+'Contains e-mail template in many languages. You can add new one.': 'Contains e-mail template in many languages. You can add new one.'
+'Contains failed login attempts by user and IP address to site.': 'Contains failed login attempts by user and IP address to site.'
+'Contains reset password request tokens.': 'Contains reset password request tokens.'
+'Contains roles. You can add new one.': 'Contains roles. You can add new one.'
+'Contains site translations. You can add new one.': 'Contains site translations. You can add new one.'
+'Contains site Users fundemantal data. Connected with User class.': 'Contains site Users fundemantal data. Connected with User class.'
+'Constains User''s roles. Look at User::roles': 'Constains User''s roles. Look at User::roles'
+'Contains less secure site Variables. For more security use config.php. Connected via Variable class.': 'Contains less secure site Variables. For more security use config.php. Connected via Variable class.'
+'Importtant log of actions.': 'Importtant log of actions.'
+email_not_available: 'This email address is currently used.'
+last_updated: 'Last Updated'
+user: User
+change_success: 'All changes saved successfully'
+drop_column: 'Drop Column'
+at_least_one_column: 'Please describe at least one column.'
+column_name_required: 'Column name required.'
+password_match_error: 'Passwords not match.'
+active: Active
+column_comment: 'Column Comment'
+list_values: 'List Values'
+list_values_description: 'Enter values seperated with comma.'
+integer: Integer
+float: 'Float number'
+short_text: 'Short text'
+text: Text
+long_text_or_html: 'Long text or HTML'
+date: Date
+datetime: Date-Time
+file: File
+list: List
+no_change_on_table: 'There is no change on table.'
+cache_cleared: 'Cache cleared.'
+time: Time
+not_empty: 'Not Empty'
+reference: Reference
+checkbox: Checkbox
+current_pass_wrong: 'Entered current password wrong.'
+entities: Entities
+config_import: 'Import configuration'
+config_export: 'Export configuration'
+users: Users
+roles: Roles
+key: Key
+en: English
+tr: Turkish
+entity_select_info: ' Select an entity to make a transaction.'
+file_name: 'File name'
+file_size: 'File size'
+mime_type: 'Mime type'
+an_error_occured: 'An unknown error occured.'
+profile_photo: 'Profile photo'
+export_as_class: 'Export table as class'
+title: Title
+description: Description
+viewable_queries: 'Viewable Queries'
+filters: Filters
+result_fields: 'Result fields'
+paging_limit: 'Paging limit'
+order_by: 'Order by'
+result_view_template: 'Result view template'
+card_template_class: 'Card view template class'
+'Administration title.': 'Administration title.'
+'Administration description.': 'Administration description.'
+'Paginate results with limit. Default: 100.': 'Paginate results with limit. Default: 100.'
+'Order by and order direction.': 'Order by and order direction.'
+'Use a template to show results.': 'Use a template to show results.'
+table: Table
+custom_card: 'Custom card'
+'Enter a view name if you selected result view template as card.': 'Enter a view name if you selected result view template as card.'
+'Programming key.': 'Programming key.'
+cannot_empty: '%s cannot be empty.'
+class_not_found: 'Defined class not found.'
+new_filter: 'New Filter'
+all: All
