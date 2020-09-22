@@ -1,4 +1,4 @@
-tables: Tablolar
+tables: Tablolarsadas
 management: Yönetim
 profile: Profil
 logout: 'Oturumu Kapat'
@@ -66,8 +66,8 @@ account_blocked: 'Hesabınız kilitlenmiştir. Lütfen şifrenizi sıfırlayarak
 translations: Çeviriler
 import: 'İçe aktar'
 export: 'Dışa aktar'
-lang_import_info: 'Bu seçenek sadece translations/translations.json dosyasındaki çevirileri içe aktarır.'
-lang_export_info: 'Bu seçenek çevirileri, translations/translations.json dosyasına dışa aktarır.'
+lang_import_info: 'Bu seçenek sadece config/translations dosyasındaki kullanılabilir dil çevirilerini içe aktarır.'
+lang_export_info: 'Bu seçenek çevirileri, config/translations dizinine dışa aktarır.'
 export_success: 'Başarıyla dışarı aktarıldı.'
 import_success: 'Başarıyla içe aktarıldı.'
 truncate: 'Tabloyu Boşalt'
