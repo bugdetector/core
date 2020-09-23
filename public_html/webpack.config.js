@@ -29,11 +29,6 @@ module.exports = (env, argv) => {
       table_struct_form : ["./src/forms/table_struct_form.js"],
       insert_form : ["./src/forms/insert_form.js"],
       /**
-       * Screens
-       */
-      table_screen : ["./src/screens/table_screen.js"],
-      translation_screen : ["./src/screens/translation_screen.js"],
-      /**
        * Views
        */
       side_table_list : ["./src/views/side_table_list.js"],

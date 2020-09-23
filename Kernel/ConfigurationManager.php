@@ -25,7 +25,7 @@ class ConfigurationManager
     private function __construct()
     {
         if (empty($this->entityConfig)) {
-            $this->entityConfig = Yaml::parseFile("../config/entity_config.yml");
+            $this->entityConfig = Yaml::parseFile(__DIR__."/../config/entity_config.yml");
         }
     }
 
@@ -40,7 +40,7 @@ class ConfigurationManager
     public function importTableConfiguration()
     {
         $tables = [];
-        foreach (new DirectoryIterator("../config/table_structure") as $file) {
+        foreach (new DirectoryIterator(__DIR__."/../config/table_structure") as $file) {
             if ($file->isDot()) {
                 continue;
             }
@@ -118,10 +118,10 @@ class ConfigurationManager
 
     public function exportTableConfiguration()
     {
-        CoreDB::cleanDirectory("../config/table_structure");
+        CoreDB::cleanDirectory(__DIR__."/../config/table_structure");
         foreach (CoreDB::database()->getTableList() as $table_name) {
             $definition = TableDefinition::getDefinition($table_name);
-            file_put_contents("../config/table_structure/{$table_name}.yml", Yaml::dump($definition->toArray(), 4, 2, Yaml::DUMP_OBJECT_AS_MAP));
+            file_put_contents(__DIR__."/../config/table_structure/{$table_name}.yml", Yaml::dump($definition->toArray(), 4, 2, Yaml::DUMP_OBJECT_AS_MAP));
         }
     }
 

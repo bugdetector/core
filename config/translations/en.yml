@@ -66,8 +66,6 @@ account_blocked: 'Your user account has been blocked. Please login after reset p
 translations: Translations
 import: Import
 export: Export
-lang_import_info: 'This option only imports available language translations on config/translations directory.'
-lang_export_info: 'This option will exports translations on config/translations directory.'
 export_success: 'Exported succesfully.'
 import_success: 'Imported successfully.'
 truncate: 'Truncate Table'

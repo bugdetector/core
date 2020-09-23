@@ -115,50 +115,6 @@ class AjaxController extends ServiceController
     }
 
     /**
-     * Imports translations
-     */
-    public function langimp()
-    {
-        try {
-            Translation::importTranslations();
-            $this->createMessage(Translation::getTranslation("import_success"), Messenger::SUCCESS);
-        } catch (Exception $ex) {
-            $this->createMessage($ex->getMessage());
-        }
-    }
-
-    /**
-     * Exports translations
-     */
-    public function langexp()
-    {
-        try {
-            Translation::exportTranslations();
-            $this->createMessage(Translation::getTranslation("export_success"), Messenger::SUCCESS);
-        } catch (Exception $ex) {
-            $this->createMessage($ex->getMessage());
-        }
-    }
-
-    /**
-     * Exports table configuration
-     */
-    public function tableConfigurationExport()
-    {
-        CoreDB::config()->exportTableConfiguration();
-        $this->createMessage(Translation::getTranslation("export_success"), Messenger::SUCCESS);
-    }
-
-    /**
-     * Imports table configuration
-     */
-    public function tableConfigurationImport()
-    {
-        CoreDB::config()->importTableConfiguration();
-        $this->createMessage(Translation::getTranslation("import_success"), Messenger::SUCCESS);
-    }
-
-    /**
      * Clears cache table and twig cache
      */
     public function clearCache()

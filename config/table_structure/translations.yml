@@ -12,8 +12,7 @@ fields:
     default: null
     comment: 'Translation Key.'
   en:
-    type: short_text
-    length: '10000'
+    type: text
     column_name: en
     primary_key: false
     autoIncrement: false
@@ -22,8 +21,7 @@ fields:
     default: null
     comment: 'English translation.'
   tr:
-    type: short_text
-    length: '10000'
+    type: text
     column_name: tr
     primary_key: false
     autoIncrement: false

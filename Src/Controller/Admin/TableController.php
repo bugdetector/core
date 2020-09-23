@@ -49,7 +49,6 @@ class TableController extends AdminController
     protected function addDefaultJsFiles()
     {
         parent::addDefaultJsFiles();
-        $this->addJsFiles("dist/table_screen/table_screen.js");
     }
 
     protected function addDefaultTranslations()

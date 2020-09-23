@@ -34,14 +34,17 @@ class Translation extends TableMapper
     {
         if (!Translation::$language) {
             $supportedLangs = Translation::getAvailableLanguageList();
-            $languages = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
+            $languages = explode(',', !IS_CLI ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : $_SERVER["LANG"] );
             foreach ($languages as $language) {
-                $language = preg_replace("/-.*/", "", $language);
+                $language = preg_replace(!IS_CLI ? "/-.*/" : "/_.*/" , "", $language);
                 if (in_array($language, $supportedLangs)) {
                     // Set the page locale to the first supported language found
                     Translation::$language = $language;
                     break;
                 }
+            }
+            if(!Translation::$language){
+                Translation::$language = LANGUAGE;
             }
         }
         return self::$language;
@@ -170,26 +173,5 @@ class Translation extends TableMapper
         $fields = array_merge(["ID AS edit_actions", "key"], $this->getAvailableLanguageList());
         return \CoreDB::database()->select($this->getTableName(), "t")
         ->select("t", $fields);
-    }
-
-    public function actions(): array
-    {
-        $actions = parent::actions();
-        $actions[] = ViewGroup::create("a", "d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-1 mb-1 lang-imp")
-        ->addField(
-            ViewGroup::create("i", "fa fa-file-import text-white-50")
-        )->addAttribute("href", "#")
-        ->addField(TextElement::create(Translation::getTranslation("import")));
-        $actions[] = ViewGroup::create("a", "d-sm-inline-block btn btn-sm btn-primary shadow-sm mr-1 mb-1 lang-exp")
-        ->addField(
-            ViewGroup::create("i", "fa fa-file-export text-white-50")
-        )->addAttribute("href", "#")
-        ->addField(TextElement::create(Translation::getTranslation("export")));
-
-        \CoreDB::controller()->addJsFiles("dist/translation_screen/translation_screen.js");
-        \CoreDB::controller()->addFrontendTranslation("lang_import_info");
-        \CoreDB::controller()->addFrontendTranslation("lang_export_info");
-
-        return $actions;
     }
 }
