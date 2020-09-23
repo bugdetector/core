@@ -8,8 +8,8 @@
     
    
 
-> MYSQL 5.0 : create user core_multisite_user@localhost;
-> MYSQL 8.0 : CREATE USER core_multisite_user@localhost IDENTIFIED WITH mysql_native_password BY "core_multisite1234";
+> MYSQL 5.0 : create user core_user@localhost;
+> MYSQL 8.0 : CREATE USER core_user@localhost IDENTIFIED WITH mysql_native_password BY "core_1234";
 
     
       
@@ -18,28 +18,19 @@
     
     
 
-> MYSQL 5.0: GRANT ALL PRIVILEGES ON core_multisite.* To 'core_multisite_user'@'localhost' IDENTIFIED BY  'core_multisite1234';
-> MYSQL 8.0: GRANT ALL PRIVILEGES ON core.* To 'core_multisite_user'@'localhost' WITH GRANT OPTION
+> MYSQL 5.0: GRANT ALL PRIVILEGES ON core_multisite.* To 'core_user'@'localhost' IDENTIFIED BY  'core_1234';
+> MYSQL 8.0: GRANT ALL PRIVILEGES ON core.* To 'core_user'@'localhost' WITH GRANT OPTION
 
     
       
   ## Yapılandırma işlemleri
-   1. "config_example.php" dosyasını kopyalayın üzerinden veritabanı bağlantısı için gerekli olan bilgiler girin.
+   1. Siteye erişerek yükleme ekranından veritabanı bağlantı bilgisi ve yeni kullanıcı oluşturulması için adımları izleyin.
 
     
-   2. .htaccess_example dosyasını da .htaccess olarak kopyalayın ve istediğiniz şekilde düzenleyin.
-
-> Sitenin HTTP ya da HTTPS kulandığı bildirin.
-> E-posta ayarlarını bildirin.
-> EMAIL_USERNAME, sistem e-posta gönderdiği zaman görülecek olan kullanıcı adıdır.
->TIMEZONE, varsayılan zaman dilimidir.
-> LANGUAGE, varsayılan sistem dilidir.
+   2. .htaccess_example dosyasını .htaccess olarak kopyalayın ve istediğiniz şekilde düzenleyin.
 
     
    4. Siteye tarayıcı üzerinden erişin ve yüklemeyi tamamlayın.
-    
-    
-   Varsayılan kullanıcı adı: root şifre: 1234
    
      
    ## Önemli Kontroller
@@ -47,7 +38,7 @@
    verildiğinden emin olun.
    
    Sadece geliştirme ortamları için, canlı ortamlar için değil,
-   "kernel/migrations" ve "translations" dizinlerine yazma ve dosya
+   "config/" dizinine yazma ve dosya
    oluşturma izinlerini verin.
 
   ## Bağımlılıklar
