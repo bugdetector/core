@@ -80,7 +80,7 @@ field_dropped: '%s kolonu kaldırıldı.'
 number_of_members: 'Üye Sayısı'
 table_count: 'Tablo Sayısı'
 translation_count: 'Çeviri yapılmış metin sayısı'
-login_welcome: Hoşgeldiniz
+welcome: Hoşgeldiniz
 dashboard: 'Gözetim Paneli'
 'yes': Evet
 'no': Hayır
@@ -171,3 +171,4 @@ db_user: 'Veritabanı kullanıcı adı'
 db_password: 'Veritabanı bağlantı şifresi'
 cant_connect_to_database: 'Veritabanına bağlanılamadı.'
 all_configuration_imported: 'Tüm yapılandırma başarıyla oluşturuldu.'
+mainpage_welcome_message: "<div class=\"text-center\">\r\n    <h2 class=\"text-primary\">CoreDB'ye Hoşgeldiniz</h2>\r\n    <i class=\"text-info\">Bu sayfayı görüntülüyorsunuz çünkü henüz kendi temanızda sayfanın yapısını değiştirmediniz.</i>\r\n    <p>CoreDB geliştiriciler için bütün sisteme kuş gözü bakılmasına imkan sağlayan bir içerik yönetim sistemidir. </p>\r\n    <p>Kendi temanızda sistemde bulunan bütün görünümleri değiştirebilirsiniz.</p>\r\n    <p>Yeni varlık tipleri oluşturabilirsiniz.</p>\r\n    <p>CoreDB de her sınıf bir modüldür.</p>\r\n    <p>CoreDB yüksek seviyede okunabilir ve yönetilebilir kod ortamı sağlamak için tasarlanmıştır.</p>\r\n    <p>Dökümantasyon yakında sağlanacaktır.</p>\r\n</div>"

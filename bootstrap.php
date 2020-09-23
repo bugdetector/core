@@ -9,6 +9,9 @@ include __DIR__.'/Kernel/CoreDB.php';
 try{
     if(is_file( __DIR__.'/config/config.php')){
         include __DIR__.'/config/config.php';
+        $configurationLoaded = true;
+    }else{
+        $configurationLoaded = false;
     }
     
     $host = \CoreDB::baseHost();
@@ -19,6 +22,10 @@ try{
     session_start();
     CoreDB\Kernel\Router::getInstance()->route();
 }catch(DatabaseInstallationException $ex){
-    CoreDB::goTo(InstallController::getUrl());
+    if(!$configurationLoaded){
+        CoreDB::goTo(InstallController::getUrl());
+    }else{
+        echo $ex->getMessage();
+    }
 }
 

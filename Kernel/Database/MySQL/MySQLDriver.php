@@ -35,7 +35,7 @@ use \PDOStatement;
 class MySQLDriver extends DatabaseDriver
 {
     private static $instance;
-    private PDO $connection;
+    private ?PDO $connection = null;
 
     private function __construct(string $dbServer, string $dbName, string $dbUsername, string $dbPassword)
     {
@@ -82,6 +82,9 @@ class MySQLDriver extends DatabaseDriver
     public function execute(QueryPreparerAbstract $query): PDOStatement
     {
         try {
+            if(!$this->connection){
+                throw new DatabaseInstallationException("Database connection not provided.");
+            }
             $statement = $this->connection->prepare($query->getQuery());
             $statement->execute($query->getParams());
             return $statement;
