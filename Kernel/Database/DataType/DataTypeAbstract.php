@@ -80,18 +80,16 @@ abstract class DataTypeAbstract
     }
 
     /**
-     * Return value.
+     * Set value.
      */
-    //abstract public function setValue($value);
+
+    public function setValue($value){
+        $this->value = \CoreDB::cleanXSS($value);
+    }
+
     /**
      * Return value.
      */
-    //abstract public function getValue();
-
-    public function setValue($value){
-        $this->value = $value;
-    }
-
     public function getValue(){
         return $this->value;
     }

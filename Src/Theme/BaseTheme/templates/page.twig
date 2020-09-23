@@ -18,7 +18,14 @@
 						</div>
 					{% endblock %}
 					{% block content %}
-						{{ controller.echoContent() }}
+					<div class="row">
+						<div class="col-md-12">
+							<div class="card p2">
+								{{ controller.printMessages() }}
+								{{ controller.echoContent()|raw }}
+							</div>
+						</div>
+					</div>
 					{% endblock %}
 				</div>
 			</div>

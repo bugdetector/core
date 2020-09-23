@@ -102,15 +102,13 @@ class LoginForm extends Form
     public function submit()
     {
         //login successful
-        global $current_user;
-        $current_user = $this->user;
-        $current_user->last_access->setValue(\CoreDB::get_current_date());
-        $current_user->save();
+        $this->user->last_access->setValue(\CoreDB::get_current_date());
+        $this->user->save();
         $_SESSION[BASE_URL . "-UID"] = $this->user->ID;
         if (isset($_POST["remember-me"]) && $_POST["remember-me"]) {
             $jwt = new JWT();
             $payload = new stdClass();
-            $payload->ID = $current_user->ID->getValue();
+            $payload->ID = $this->user->ID->getValue();
             $jwt->setPayload($payload);
             setcookie("session-token", $jwt->createToken(), strtotime("+1 day"), BASE_URL, $_SERVER["HTTP_HOST"], false, true);
         }
@@ -126,7 +124,7 @@ class LoginForm extends Form
             ->execute();
         if (isset($_GET["destination"])) {
             \CoreDB::goTo(BASE_URL . $_GET["destination"]);
-        } elseif (\CoreDB::currentUser()->isAdmin()) {
+        } elseif ($this->user->isAdmin()) {
             \CoreDB::goTo(AdminController::getUrl());
         } else {
             \CoreDB::goTo(MainpageController::getUrl());

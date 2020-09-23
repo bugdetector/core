@@ -37,6 +37,10 @@ class DateTime extends DataTypeAbstract
         return $widget;
     }
 
+    public function setValue($value){
+        $this->value = date("Y-m-d H:i:s", strtotime($value));
+    }
+
     /**
      * @inheritdoc
      */

@@ -3,6 +3,7 @@ define("DB_SERVER", "%db_server");
 define("DB_NAME", "%db_name");
 define("DB_USER", "%db_user");
 define("DB_PASSWORD", "%db_password");
+define("HASH_SALT", "%hash_salt");
 
 define("TIMEZONE", "Europe/Istanbul");
 

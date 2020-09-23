@@ -39,15 +39,11 @@ class MySQLDriver extends DatabaseDriver
 
     private function __construct(string $dbServer, string $dbName, string $dbUsername, string $dbPassword)
     {
-        try {
-            self::$instance = $this;
-            $this->connection = new PDO("mysql:host=" . $dbServer . ";dbname=" . $dbName, $dbUsername, $dbPassword);
-            $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $this->connection->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
-            $this->connection->query("SET NAMES UTF8");
-        } catch (PDOException $ex) {
-            throw new DatabaseInstallationException("Can't connect to database.");
-        }
+        self::$instance = $this;
+        $this->connection = new PDO("mysql:host=" . $dbServer . ";dbname=" . $dbName, $dbUsername, $dbPassword);
+        $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $this->connection->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
+        $this->connection->query("SET NAMES UTF8");
     }
 
     /**

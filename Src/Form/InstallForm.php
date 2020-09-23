@@ -4,9 +4,12 @@ namespace Src\Form;
 
 use CoreDB\Kernel\Database\MySQL\MySQLDriver;
 use CoreDB\Kernel\Messenger;
-use Src\Controller\LoginController;
+use Src\Controller\MainpageController;
+use Src\Entity\DBObject;
+use Src\Entity\Role;
 use Src\Entity\Translation;
 use Src\Entity\User;
+use Src\Entity\Variable;
 use Src\Form\Widget\InputWidget;
 
 class InstallForm extends Form
@@ -117,18 +120,21 @@ class InstallForm extends Form
     public function submit()
     {
         $exampleConfig = file_get_contents("../config/config_example.php");
+        $hashSalt = base64_encode(random_bytes(50));
         $config = str_replace(
             [
                 "%db_server",
                 "%db_name",
                 "%db_user",
                 "%db_password",
+                "%hash_salt"
             ],
             [
                 $this->request["db_server"],
                 $this->request["db_name"],
                 $this->request["db_user"],
                 $this->request["db_password"],
+                $hashSalt
             ],
             $exampleConfig
         );
@@ -139,13 +145,29 @@ class InstallForm extends Form
         define("DB_PASSWORD", $this->request["db_password"]);
         \CoreDB::config()->importTableConfiguration();
         Translation::importTranslations(); 
-        \CoreDB::database()->insert(User::getTableName(), [
+        $user = new DBObject(User::getTableName(), [
             "username" => $this->request["username"],
             "name" => $this->request["name"],
             "email" => $this->request["email"],
             "password" => password_hash($this->request["password"], PASSWORD_BCRYPT),
+        ]);
+        $user->save();
+        $adminRole = new Role();
+        $adminRole->role->setValue("Admin");
+        $adminRole->save();
+        \CoreDB::database()->insert("users_roles", [
+            "user_id" => $user->ID,
+            "role_id" => $adminRole->ID->getValue()
         ])->execute();
+        $siteName = Variable::create("site_name");
+        $siteName->value->setValue("CoreDB");
+        $siteName->save();
+        
+        $hashSaltVar = Variable::create("hash_salt");
+        $hashSaltVar->value->setValue($hashSalt);
+        $hashSaltVar->save();
+        $_SESSION[BASE_URL."-UID"] = $user->ID;
         $this->setMessage(Translation::getTranslation("all_configuration_imported"));
-        \CoreDB::goTo(LoginController::getUrl());
+        \CoreDB::goTo(MainpageController::getUrl());
     }
 }

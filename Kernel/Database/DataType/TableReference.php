@@ -3,6 +3,7 @@
 namespace CoreDB\Kernel\Database\DataType;
 
 use CoreDB;
+use Src\Entity\DBObject;
 use Src\Entity\Translation;
 use Src\Form\Widget\FormWidget;
 use Src\Form\Widget\SelectWidget;
@@ -59,6 +60,17 @@ class TableReference extends DataTypeAbstract
         $widget->setNullElement(Translation::getTranslation("all"))
         ->removeAttribute("required");
         return $widget;
+    }
+
+    public function setValue($value){
+        $valueAvailable = \CoreDB::database()->select($this->reference_table)
+        ->condition("ID", $value)
+        ->execute()->rowCount();
+        if($valueAvailable){
+            $this->value = $value;
+        }else{
+            $this->value = "";
+        }
     }
 
     /**

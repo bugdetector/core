@@ -15,7 +15,7 @@ class LoginController extends BaseTheme
     {
         parent::__construct($arguments);
         $this->body_classes = ["bg-gradient-success"];
-        $this->setTitle(Translation::getTranslation("login_welcome")."!");
+        $this->setTitle(Translation::getTranslation("welcome")."!");
     }
     public function getTemplateFile() : string
     {
@@ -29,7 +29,9 @@ class LoginController extends BaseTheme
 
     public function preprocessPage()
     {
-
+        if(\CoreDB::currentUser()->isLoggedIn()){
+            \CoreDB::goTo(MainpageController::getUrl());
+        }
         $this->form = new LoginForm();
         $this->form->processForm();
     }

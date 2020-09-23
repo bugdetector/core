@@ -35,7 +35,7 @@ class Integer extends DataTypeAbstract
 
     public function setValue($value)
     {
-        $this->value = intval($value);
+        $this->value = $value ? intval($value) : "";
     }
 
     /**
@@ -43,6 +43,6 @@ class Integer extends DataTypeAbstract
      */
     public function getSearchWidget() : FormWidget
     {
-        return $this->getWidget();
+        return $this->getWidget()->removeAttribute("required");
     }
 }

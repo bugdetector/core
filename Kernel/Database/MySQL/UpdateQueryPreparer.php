@@ -19,8 +19,6 @@ class UpdateQueryPreparer extends UpdateQueryPreparerAbstract
         foreach ($this->fields as $key => $field) {
             if ($field === "NULL" || (!is_numeric($field) && !$field)) {
                 $field = null;
-            } else {
-                $field = \CoreDB::cleanXSS($field);
             }
             $fields .= ($index>0 ? ", ": "")." `$key` = :$key";
             $this->params[":".$key] = $field;

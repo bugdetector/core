@@ -4,7 +4,6 @@ use CoreDB\Kernel\BaseController;
 use CoreDB\Kernel\ConfigurationManager;
 use CoreDB\Kernel\Database\MySQL\MySQLDriver;
 use CoreDB\Kernel\Database\DatabaseDriver;
-use CoreDB\Kernel\Database\DatabaseInstallationException;
 use CoreDB\Kernel\Messenger;
 use CoreDB\Kernel\Router;
 use Src\Entity\User;
@@ -149,32 +148,29 @@ class CoreDB
     }
 
     /**
-     *
-     * @global User $current_user
+     * Returns current user.
      * @return User
      */
-    public static function currentUser(): ?User
+    public static function currentUser(): User
     {
-        try {
-            if (self::$current_user) {
-                return self::$current_user;
-            } else {
-                if (isset($_SESSION[BASE_URL . "-UID"])) {
-                    self::$current_user = User::get($_SESSION[BASE_URL . "-UID"]);
-                } elseif (isset($_COOKIE["session-token"])) {
-                    $jwt = JWT::createFromString($_COOKIE["session-token"]);
-                    self::$current_user = User::get($jwt->getPayload()->ID);
-                    $_SESSION[BASE_URL . "-UID"] = self::$current_user->ID;
-                }
-                if (!self::$current_user) {
-                    self::$current_user = new User();
+        if (self::$current_user) {
+            return self::$current_user;
+        } else {
+            if (isset($_SESSION[BASE_URL . "-UID"])) {
+                self::$current_user = User::get($_SESSION[BASE_URL . "-UID"]);
+            } elseif (isset($_COOKIE["session-token"])) {
+                $jwt = JWT::createFromString($_COOKIE["session-token"]);
+                self::$current_user = User::get($jwt->getPayload()->ID);
+                $_SESSION[BASE_URL . "-UID"] = self::$current_user->ID;
+            }
+            if (!self::$current_user) {
+                self::$current_user = new User();
+                if(isset(self::$current_user->username)){
                     self::$current_user->username->setValue("guest");
                 }
             }
-            return self::$current_user;
-        } catch (DatabaseInstallationException $ex) {
-            return null;
         }
+        return self::$current_user;
     }
 
     public static function database(): DatabaseDriver

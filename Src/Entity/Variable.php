@@ -28,7 +28,7 @@ class Variable extends TableMapper
     public static function create($key) : Variable
     {
         $variable = new Variable();
-        $variable->key = $key;
+        $variable->key->setValue($key);
         return $variable;
     }
 

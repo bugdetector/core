@@ -5,6 +5,7 @@ namespace Src\Entity;
 use CoreDB\Kernel\Database\DatabaseInstallationException;
 use CoreDB\Kernel\Database\DataType\DataTypeAbstract;
 use CoreDB\Kernel\Database\DataType\ShortText;
+use CoreDB\Kernel\Database\DataType\Text;
 use CoreDB\Kernel\Database\SelectQueryPreparerAbstract;
 use CoreDB\Kernel\Database\TableDefinition;
 use CoreDB\Kernel\TableMapper;
@@ -25,8 +26,8 @@ class Translation extends TableMapper
     const BACKUP_PATH = __DIR__ . "/../../config/translations";
 
     public ShortText $key;
-    public ShortText $en;
-    public ShortText $tr;
+    public Text $en;
+    public Text $tr;
 
 
     public static function getLanguage()
