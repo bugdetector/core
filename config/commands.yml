@@ -1,2 +1,3 @@
 - Src\Command\ConfigurationExportCommand
 - Src\Command\ConfigurationImportCommand
+- Src\Command\AddAdminUserCommand

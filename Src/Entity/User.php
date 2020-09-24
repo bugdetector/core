@@ -112,7 +112,10 @@ class User extends TableMapper
     {
         if (!$this->checkUsernameInsertAvailable()) {
             throw new Exception(Translation::getTranslation("username_exist"));
-        } elseif (!$this->checkEmailInsertAvailable()) {
+        } elseif(!filter_var($this->email, FILTER_VALIDATE_EMAIL)){
+            throw new Exception(Translation::getTranslation("enter_valid_mail"));
+        }
+         elseif (!$this->checkEmailInsertAvailable()) {
             throw new Exception(Translation::getTranslation("email_not_available"));
         }
         return parent::insert();

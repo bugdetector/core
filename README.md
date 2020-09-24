@@ -25,7 +25,11 @@
       
   ## Yapılandırma işlemleri
    1. Siteye erişerek yükleme ekranından veritabanı bağlantı bilgisi ve yeni kullanıcı oluşturulması için adımları izleyin.
-
+   
+   Ya da config/ dizini altında bulunan config_example.php dosyasını kopyalayın ve veri tabanı bağlantı bilgilerini girin.
+   Daha sonra `php bin/console config:export` komutunu çalıştırın.
+   Oturum açabilmek için aşağıdaki komutla bir yönetici kullanıcı oluşturabilirsiniz.
+  `php bin/console.php user:add-admin root bakiyucel38@gmail.com "Murat Baki" 1234`
     
    2. .htaccess_example dosyasını .htaccess olarak kopyalayın ve istediğiniz şekilde düzenleyin.
 

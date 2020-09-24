@@ -38,6 +38,13 @@ class EntityReference extends DataTypeAbstract
     }
 
     /**
+     * @inheritdoc
+     */
+    public function setValue($value){
+        $this->value = $value;
+    }
+
+    /**
      * Pseudo function. There is no use.
      * @inheritdoc
      */

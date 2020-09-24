@@ -28,6 +28,8 @@ class SearchForm extends Form
     public CollapsableCard $search_input_group;
     public Pagination $pagination;
     public string $summary_text;
+    
+    private array $searchableFields = [];
     private SelectQueryPreparerAbstract $query;
     
     private function __construct(SearchableInterface $object, $translateLabels = true)
@@ -42,6 +44,42 @@ class SearchForm extends Form
         $this->pagination = new Pagination(isset($_GET["page"]) ? $_GET["page"] : 1, $this->object->getPaginationLimit());
         \CoreDB::controller()->addJsFiles("dist/search_form/search_form.js");
         \CoreDB::controller()->addFrontendTranslation("record_remove_accept");
+
+        $search_input_group = new ViewGroup("div", "row");
+        
+        /**
+         * @var DataTypeAbstract $dataType
+         */
+        foreach ($this->object->getSearchFormFields($this->translateLabels) as $field_name => $searchWidget) {
+            $this->searchableFields[] = $field_name;
+            $search_input_group->addField(
+                ViewGroup::create("div", "col-sm-3")->addField(
+                    $searchWidget
+                    ->setValue(isset($this->request[$field_name]) ? $this->request[$field_name] : "")
+                    ->addAttribute("autocomplete", "off")
+                )
+            );
+        }
+
+        /**
+         * Adding search and reset buttons
+         */
+        $search_input_group->addField(
+            ViewGroup::create("div", "col-sm-12 d-flex mt-2")
+                ->addField(
+                    InputWidget::create("search")
+                        ->setType("submit")
+                        ->setValue(Translation::getTranslation("search"))
+                        ->addClass("btn btn-primary mr-sm-1")
+                )->addField(
+                    InputWidget::create("search")
+                        ->setType("reset")
+                        ->setValue(Translation::getTranslation("reset"))
+                        ->addClass("btn btn-danger ml-sm-1")
+                )
+        );
+
+        $this->search_input_group->setContent($search_input_group);
     }
 
 
@@ -81,7 +119,7 @@ class SearchForm extends Form
             $this->query->orderBy("`$orderBy` $orderDirection");
         }
 
-        foreach ($this->headers as $column_name => $value) {
+        foreach ($this->searchableFields as $column_name) {
             if (isset($params[$column_name]) && $params[$column_name] !== "") {
                 if (isset($this->object->$column_name) && in_array(get_class($this->object->$column_name), [DateTime::class, Date::class, Time::class])) {
                     $dates = explode("&", $params[$column_name]);
@@ -102,41 +140,6 @@ class SearchForm extends Form
         $this->query->limit($this->pagination->limit, ($this->pagination->page -1) * $this->pagination->limit);
         $queryResult = $this->query->execute();
         $this->data = $queryResult->fetchAll(PDO::FETCH_ASSOC);
-
-        $search_input_group = new ViewGroup("div", "row");
-        
-        /**
-         * @var DataTypeAbstract $dataType
-         */
-        foreach ($this->object->getSearchFormFields($this->translateLabels) as $field_name => $searchWidget) {
-            $search_input_group->addField(
-                ViewGroup::create("div", "col-sm-3")->addField(
-                    $searchWidget
-                    ->setValue(isset($this->request[$field_name]) ? $this->request[$field_name] : "")
-                    ->addAttribute("autocomplete", "off")
-                )
-            );
-        }
-
-        /**
-         * Adding search and reset buttons
-         */
-        $search_input_group->addField(
-            ViewGroup::create("div", "col-sm-12 d-flex mt-2")
-                ->addField(
-                    InputWidget::create("search")
-                        ->setType("submit")
-                        ->setValue(Translation::getTranslation("search"))
-                        ->addClass("btn btn-primary mr-sm-1")
-                )->addField(
-                    InputWidget::create("search")
-                        ->setType("reset")
-                        ->setValue(Translation::getTranslation("reset"))
-                        ->addClass("btn btn-danger ml-sm-1")
-                )
-        );
-
-        $this->search_input_group->setContent($search_input_group);
         
         foreach($this->data as &$row){
             $this->object->postProcessRow($row);
