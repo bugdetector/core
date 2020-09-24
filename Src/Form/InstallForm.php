@@ -152,18 +152,12 @@ class InstallForm extends Form
             "password" => password_hash($this->request["password"], PASSWORD_BCRYPT),
         ]);
         $user->save();
-        $adminRole = new Role();
-        $adminRole->role->setValue("Admin");
-        $adminRole->save();
         \CoreDB::database()->insert("users_roles", [
             "user_id" => $user->ID,
-            "role_id" => $adminRole->ID->getValue()
+            "role_id" => 1 // Admin role
         ])->execute();
-        $siteName = Variable::create("site_name");
-        $siteName->value->setValue("CoreDB");
-        $siteName->save();
         
-        $hashSaltVar = Variable::create("hash_salt");
+        $hashSaltVar = Variable::getByKey("hash_salt");
         $hashSaltVar->value->setValue($hashSalt);
         $hashSaltVar->save();
         $_SESSION[BASE_URL."-UID"] = $user->ID;

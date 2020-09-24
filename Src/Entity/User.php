@@ -167,7 +167,7 @@ class User extends TableMapper
 
     public function isAdmin()
     {
-        return $this->isUserInRole("ADMIN");
+        return $this->isUserInRole("Admin");
     }
 
     public function isLoggedIn(): bool

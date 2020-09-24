@@ -35,29 +35,25 @@ abstract class TableMapper implements SearchableInterface
 
     public function __construct(string $tableName = null, array $mapData = [])
     {
-        try {
-            $table_definition = TableDefinition::getDefinition($this->getTableName());
-            /**
-             * @var DataTypeAbstract $field
-             */
-            foreach ($table_definition->fields as $field_name => $field) {
-                $this->{$field_name} = $field;
-            }
-            $this->map($mapData, true);
-            $this->changed_fields = [];
+        $table_definition = TableDefinition::getDefinition($this->getTableName());
+        /**
+         * @var DataTypeAbstract $field
+         */
+        foreach ($table_definition->fields as $field_name => $field) {
+            $this->{$field_name} = $field;
+        }
+        $this->map($mapData, true);
+        $this->changed_fields = [];
 
-            $entityConfig = CoreDB::config()->getEntityInfoByClass(static::class);
-            if ($entityConfig) {
-                $this->entityName = array_key_first($entityConfig);
-                $this->entityConfig =  $entityConfig[$this->entityName];
-                if (isset($this->entityConfig[EntityReference::CONNECTION_MANY_TO_MANY])) {
-                    foreach ($this->entityConfig[EntityReference::CONNECTION_MANY_TO_MANY] as $fieldEntityName => $config) {
-                        $this->{$fieldEntityName} = new EntityReference($fieldEntityName, $this, $config, EntityReference::CONNECTION_MANY_TO_MANY);
-                    }
+        $entityConfig = CoreDB::config()->getEntityInfoByClass(static::class);
+        if ($entityConfig) {
+            $this->entityName = array_key_first($entityConfig);
+            $this->entityConfig =  $entityConfig[$this->entityName];
+            if (isset($this->entityConfig[EntityReference::CONNECTION_MANY_TO_MANY])) {
+                foreach ($this->entityConfig[EntityReference::CONNECTION_MANY_TO_MANY] as $fieldEntityName => $config) {
+                    $this->{$fieldEntityName} = new EntityReference($fieldEntityName, $this, $config, EntityReference::CONNECTION_MANY_TO_MANY);
                 }
             }
-        } catch (DatabaseInstallationException $ex) {
-            $this->ID = new Integer("ID");
         }
     }
     public function __get($name)

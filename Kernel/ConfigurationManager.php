@@ -13,6 +13,7 @@ use CoreDB\Kernel\Database\TableDefinition;
 use DirectoryIterator;
 use Exception;
 use Src\Entity\Cache;
+use Src\Entity\DBObject;
 use Symfony\Component\Yaml\Yaml;
 
 class ConfigurationManager
@@ -114,6 +115,20 @@ class ConfigurationManager
             }
         }
         $alterQueryPreparer->execute();
+
+        $dumpTables = Yaml::parseFile(__DIR__."/../config/dump_tables.yml");
+        foreach($dumpTables as $tableName => $dumpByColumn){
+            $dataFilePath = __DIR__."/../config/table_dump_data/{$tableName}.yml";
+            if(!is_file($dataFilePath)){
+                continue;
+            }
+            $tableData = Yaml::parseFile($dataFilePath);
+            foreach($tableData as $parseKey => $data){
+                $object = DBObject::get([$dumpByColumn => $parseKey], $tableName) ? : new DBObject($tableName) ;
+                $object->map($data);
+                $object->save();
+            }
+        }
     }
 
     public function exportTableConfiguration()
@@ -122,6 +137,19 @@ class ConfigurationManager
         foreach (CoreDB::database()->getTableList() as $table_name) {
             $definition = TableDefinition::getDefinition($table_name);
             file_put_contents(__DIR__."/../config/table_structure/{$table_name}.yml", Yaml::dump($definition->toArray(), 4, 2, Yaml::DUMP_OBJECT_AS_MAP));
+        }
+        //Dump table data
+        $dumpTables = Yaml::parseFile(__DIR__."/../config/dump_tables.yml");
+        foreach($dumpTables as $tableName => $dumpByColumn){
+            $query = \CoreDB::database()->select($tableName)
+            ->execute();
+            $tableData = [];
+            foreach($query->fetchAll(\PDO::FETCH_ASSOC) as $data){
+                $key = $data[$dumpByColumn];
+                unset($data["ID"], $data["created_at"], $data["last_updated"]);
+                $tableData[$key] = $data;
+            }
+            file_put_contents(__DIR__."/../config/table_dump_data/{$tableName}.yml",Yaml::dump($tableData, 4, 2, Yaml::DUMP_OBJECT_AS_MAP));
         }
     }
 
