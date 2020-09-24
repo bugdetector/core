@@ -15,7 +15,6 @@ class JWT
     private $typ;
     private $payload;
 
-    const ENCRYPTION_KEY = "ukkdyDrzCCx2wP9c";
     const IV = ";WAm{]y.chB^VB%~";
 
     public function __construct(string $alg = "AES128", string $typ = "JWT")
@@ -162,7 +161,7 @@ class JWT
      */
     private function encrypt($pure_string)
     {
-        $encrypted_string = openssl_encrypt($pure_string, $this->alg, self::ENCRYPTION_KEY, OPENSSL_RAW_DATA, self::IV);
+        $encrypted_string = openssl_encrypt($pure_string, $this->alg, HASH_SALT, OPENSSL_RAW_DATA, self::IV);
         return base64_encode($encrypted_string);
     }
     
@@ -173,7 +172,7 @@ class JWT
     private function decrypt($encrypted_string)
     {
         $encrypted_string = base64_decode($encrypted_string);
-        $decrypted_string = openssl_decrypt($encrypted_string, $this->alg, self::ENCRYPTION_KEY, OPENSSL_RAW_DATA, self::IV);
+        $decrypted_string = openssl_decrypt($encrypted_string, $this->alg, HASH_SALT, OPENSSL_RAW_DATA, self::IV);
         return $decrypted_string;
     }
 }
