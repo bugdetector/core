@@ -6,6 +6,7 @@ use CoreDB\Kernel\BaseController;
 use Src\Controller\Admin\EntityController;
 use Src\Controller\Admin\TableController;
 use Src\Controller\AdminController;
+use Src\Controller\LoginController;
 use Src\Controller\LogoutController;
 use Src\Entity\Translation;
 use Src\Views\Navbar;
@@ -69,7 +70,7 @@ abstract class BaseTheme extends BaseController
                 NavItem::create(
                     "fa fa-sign-in-alt",
                     Translation::getTranslation("login"),
-                    LogoutController::getUrl()
+                    LoginController::getUrl()
                 )->setTagName("div")
             );
         }
