@@ -2,15 +2,8 @@
 
 namespace CoreDB\Kernel;
 
-use Src\Controller\AccessdeniedController;
-use Src\Controller\LoginController;
-use Src\Controller\MainpageController;
-use Src\Controller\NotFoundController;
-
 class Router
 {
-    const MAINPAGE = MainpageController::class;
-
     /**
      * Controller matched route
      *
@@ -47,9 +40,9 @@ class Router
         $this->controller = $this->getControllerFromUrl($route);
         if (!$this->controller->checkAccess()) {
             if (!\CoreDB::currentUser()->isLoggedIn()) {
-                \CoreDB::goTo(LoginController::getUrl(), ["destination" => \CoreDB::requestUrl()]);
+                \CoreDB::goTo($this->getControllerFromUrl("login"), ["destination" => \CoreDB::requestUrl()]);
             } else {
-                $this->controller = new AccessdeniedController([]);
+                $this->controller = $this->getControllerFromUrl("accessdenied");
             }
         }
         $this->controller->processPage();
@@ -61,29 +54,32 @@ class Router
             $count = 1;
             $url = str_replace(BASE_URL."/", "", $url, $count);
         }
-        $current_arguments = explode("/", preg_replace("/\?.*/", "", $url));
-        if (!$current_arguments[0]) {
-            $mainpageClass = self::MAINPAGE;
-            return new $mainpageClass($current_arguments);
+        $currentArguments = explode("/", preg_replace("/\?.*/", "", $url));
+        if (!$currentArguments[0]) {
+            $currentArguments[0] = "mainpage";
         }
-        $namespace = "Src\\Controller\\";
-        $controller_name = null;
-        foreach ($current_arguments as $page) {
+        $namespaceSrc = "Src\\Controller\\";
+        $namespaceApp = "App\\Controller\\";
+        $controllerName = null;
+        foreach ($currentArguments as $page) {
             $page = mb_convert_case($page, MB_CASE_TITLE);
-            $temp_controller_name = "{$namespace}{$page}Controller";
+            $tempSrcControllerName = "{$namespaceSrc}{$page}Controller";
+            $tempAppControllerName = "{$namespaceApp}{$page}Controller";
 
-            if (class_exists($temp_controller_name)) {
-                $namespace = "{$namespace}{$page}\\";
-                $controller_name = $temp_controller_name;
-                array_shift($current_arguments);
+            if(class_exists($tempAppControllerName)){
+                $controllerName = $tempAppControllerName;
+                array_shift($currentArguments);
+            }else if (class_exists($tempSrcControllerName)) {
+                $controllerName = $tempSrcControllerName;
+                array_shift($currentArguments);
             } else {
                 break;
             }
         }
-        if(!$controller_name){
-            $controller_name = NotFoundController::class;
+        if(!$controllerName){
+            return $this->getControllerFromUrl("notfound");
         }
-        return new $controller_name($current_arguments);
+        return new $controllerName($currentArguments);
     }
 
     /**

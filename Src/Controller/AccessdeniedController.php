@@ -3,7 +3,7 @@
 namespace Src\Controller;
 
 use Src\Entity\Translation;
-use Src\Theme\BaseTheme\BaseTheme;
+use Src\BaseTheme\BaseTheme;
 
 class AccessdeniedController extends BaseTheme
 {

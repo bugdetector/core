@@ -1,6 +1,6 @@
 <?php
 
-namespace Src\Theme\BaseTheme;
+namespace Src\BaseTheme;
 
 use CoreDB\Kernel\BaseController;
 use Src\Controller\Admin\EntityController;

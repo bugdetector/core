@@ -7,7 +7,7 @@ use Src\Entity\ResetPassword;
 use Src\Entity\Translation;
 use Src\Entity\User;
 use Src\Form\ResetPasswordForm;
-use Src\Theme\BaseTheme\BaseTheme;
+use Src\BaseTheme\BaseTheme;
 
 class Reset_PasswordController extends BaseTheme
 {

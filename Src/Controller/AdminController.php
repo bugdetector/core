@@ -3,7 +3,7 @@
 namespace Src\Controller;
 
 use CoreDB;
-use Src\Theme\BaseTheme\BaseTheme;
+use Src\BaseTheme\BaseTheme;
 use Src\Entity\Translation;
 use Src\Entity\User;
 use Src\Entity\Variable;

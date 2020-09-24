@@ -2,7 +2,7 @@
 
 namespace Src\Theme;
 
-use Src\Theme\BaseTheme\BaseTheme;
+use Src\BaseTheme\BaseTheme;
 use Src\Theme\CoreRenderer;
 
 abstract class View

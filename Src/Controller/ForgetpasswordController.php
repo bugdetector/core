@@ -6,7 +6,7 @@ use Src\Entity\Translation;
 use Src\Entity\User;
 use Src\Form\ForgetPasswordForm;
 use Src\Form\LoginForm;
-use Src\Theme\BaseTheme\BaseTheme;
+use Src\BaseTheme\BaseTheme;
 
 class ForgetpasswordController extends BaseTheme
 {

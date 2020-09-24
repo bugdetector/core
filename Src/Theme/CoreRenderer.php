@@ -1,7 +1,7 @@
 <?php
 namespace Src\Theme;
 
-use App\Twig\CoreTwigExtension;
+use Src\Theme\CoreTwigExtension;
 use CoreDB\Kernel\BaseController;
 use Src\Theme\View;
 use Src\Form\Form;

@@ -10,7 +10,7 @@
         "psr-4": {
         "CoreDB\\Kernel\\":"Kernel/",
         "Src\\" : "Src/",
-        "App\\Twig\\" : "Src/Twig"
+        "App\\" : "App/"
         }
     }
 }

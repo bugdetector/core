@@ -2,10 +2,10 @@
 
 namespace Src\Controller;
 
+use App\Theme\CustomTheme;
 use Src\Entity\Translation;
-use Src\BaseTheme\BaseTheme;
 
-class MainpageController extends BaseTheme
+class MainpageController extends CustomTheme
 {
 
     public $content;
@@ -21,6 +21,6 @@ class MainpageController extends BaseTheme
     }
     public function echoContent()
     {
-        return Translation::getTranslation("mainpage_welcome_message");
+        return "Hello";
     }
 }

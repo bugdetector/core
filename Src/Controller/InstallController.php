@@ -6,7 +6,7 @@ use CoreDB\Kernel\Database\DatabaseInstallationException;
 use Src\Entity\Translation;
 use Src\Entity\Variable;
 use Src\Form\InstallForm;
-use Src\Theme\BaseTheme\BaseTheme;
+use Src\BaseTheme\BaseTheme;
 
 class InstallController extends BaseTheme {
 

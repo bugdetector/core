@@ -1,5 +1,5 @@
 <?php
-namespace App\Twig;
+namespace Src\Theme;
 
 use Src\Entity\Translation;
 use Twig\Extension\AbstractExtension;

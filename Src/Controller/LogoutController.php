@@ -3,7 +3,7 @@
 namespace Src\Controller;
 
 use Src\Entity\User;
-use Src\Theme\BaseTheme\BaseTheme;
+use Src\BaseTheme\BaseTheme;
 
 class LogoutController extends BaseTheme
 {

@@ -4,7 +4,7 @@ namespace Src\Controller;
 
 use Src\Entity\Translation;
 use Src\Form\LoginForm;
-use Src\Theme\BaseTheme\BaseTheme;
+use Src\BaseTheme\BaseTheme;
 
 class LoginController extends BaseTheme
 {
