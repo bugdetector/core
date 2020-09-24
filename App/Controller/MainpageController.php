@@ -21,6 +21,6 @@ class MainpageController extends CustomTheme
     }
     public function echoContent()
     {
-        return "Hello";
+        return Translation::getTranslation("mainpage_welcome_message");
     }
 }

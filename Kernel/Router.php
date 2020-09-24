@@ -67,9 +67,11 @@ class Router
             $tempAppControllerName = "{$namespaceApp}{$page}Controller";
 
             if(class_exists($tempAppControllerName)){
+                $namespaceApp = "{$namespaceApp}{$page}\\";
                 $controllerName = $tempAppControllerName;
                 array_shift($currentArguments);
             }else if (class_exists($tempSrcControllerName)) {
+                $namespaceSrc = "{$namespaceSrc}{$page}\\";
                 $controllerName = $tempSrcControllerName;
                 array_shift($currentArguments);
             } else {
