@@ -41,7 +41,7 @@ abstract class DataTypeAbstract
      * @return FormWidget
      *  Available form widget for search form
      */
-    abstract public function getSearchWidget(): FormWidget;
+    abstract public function getSearchWidget(): ?FormWidget;
 
     /**
      * Return this object equals $dataType

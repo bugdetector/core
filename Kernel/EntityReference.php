@@ -77,7 +77,7 @@ class EntityReference extends DataTypeAbstract
         return $widget;
     }
 
-    public function getSearchWidget(): FormWidget
+    public function getSearchWidget(): ?FormWidget
     {
         return $this->getWidget();
     }

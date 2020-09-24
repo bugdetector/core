@@ -41,8 +41,8 @@ class File extends TableReference
     /**
      * @inheritdoc
      */
-    public function getSearchWidget() : FormWidget
+    public function getSearchWidget() : ?FormWidget
     {
-        return $this->getWidget()->removeAttribute("required");
+        return null;
     }
 }

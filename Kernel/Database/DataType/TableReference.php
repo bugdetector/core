@@ -51,7 +51,7 @@ class TableReference extends DataTypeAbstract
     /**
      * @inheritdoc
      */
-    public function getSearchWidget() : FormWidget
+    public function getSearchWidget() : ?FormWidget
     {
         /**
          * @var SelectWidget

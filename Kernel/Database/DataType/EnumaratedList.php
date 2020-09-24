@@ -53,7 +53,7 @@ class EnumaratedList extends DataTypeAbstract
     /**
      * @inheritdoc
      */
-    public function getSearchWidget(): FormWidget
+    public function getSearchWidget(): ?FormWidget
     {
         return $this->getWidget()->removeAttribute("required");
     }

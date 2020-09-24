@@ -304,8 +304,11 @@ abstract class TableMapper implements SearchableInterface
             if ($field instanceof EntityReference) {
                 $inputName .= "[]";
             }
-            $fields[$field_name] = $field->getSearchWidget()->setName($inputName)
+            $widget = $field->getSearchWidget();
+            if($widget){
+                $fields[$field_name] = $widget->setName($inputName)
                 ->setLabel($translateLabel ? Translation::getTranslation($field_name) : $field_name);
+            }
         }
         return $fields;
     }
