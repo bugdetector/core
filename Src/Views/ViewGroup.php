@@ -26,6 +26,11 @@ class ViewGroup extends View
         return "view_group.twig";
     }
 
+    public function setTagName(string $tag_name) : ViewGroup{
+        $this->tag_name = $tag_name;
+        return $this;
+    }
+
     public function addClassToChildren(bool $addClassToChildren) : ViewGroup
     {
         $this->addClassToChildren = $addClassToChildren;

@@ -2,7 +2,7 @@
 
 namespace Src\Views;
 
-class Sidebar extends ViewGroup
+class Navbar extends ViewGroup
 {
 
     public function __construct(string $tag_name, string $wrapper_class)
@@ -10,9 +10,9 @@ class Sidebar extends ViewGroup
         parent::__construct($tag_name, $wrapper_class);
     }
     
-    public static function create(string $tag_name, string $wrapper_class) : Sidebar
+    public static function create(string $tag_name, string $wrapper_class) : Navbar
     {
-        return new Sidebar($tag_name, $wrapper_class);
+        return new Navbar($tag_name, $wrapper_class);
     }
 
     public function addNavItem(NavItem $item)
@@ -23,6 +23,6 @@ class Sidebar extends ViewGroup
 
     public function getTemplateFile() : string
     {
-        return "sidebar.twig";
+        return "navbar.twig";
     }
 }

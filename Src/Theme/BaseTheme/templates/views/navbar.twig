@@ -1,0 +1,23 @@
+<!-- Navbar -->
+<{{view.tag_name}} class='{{ view.classes|join(" ") }}' {{ view.renderAttributes()|raw }}>
+
+	<!-- Navbar -->
+	<ul class="navbar-nav ml-auto d-flex justify-content-between w-100">
+		<li
+			class="nav-item">
+			<!-- Sidebar Toggle (Topbar) -->
+			<button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3 mt-3">
+				<i class="fa fa-bars"></i>
+			</button>
+		</li>
+		<li class="nav-item">
+			<a class="navbar-brand" href="{{ constant("BASE_URL") }}"></a>
+		</li>
+
+		{% for field in view.fields %}
+			{{ field }}
+		{% endfor %}
+	</ul>
+
+</{{view.tag_name}}>
+<!-- Navbar -->

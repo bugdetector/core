@@ -1,1 +1,8 @@
-<{{view.tagName}} class='{{ view.classes|join(" ") }}' {{ view.renderAttributes()|raw }}>{{ view.text }}</{{view.tagName}}>
+<{{view.tagName}} class='{{ view.classes|join(" ") }}' {{ view.renderAttributes()|raw }}>
+{% if view.raw %}
+    {{ view.text|raw }}
+{% else %}
+    {{ view.text }}
+{% endif %}
+
+</{{view.tagName}}>

@@ -4,16 +4,13 @@ namespace Src\Entity;
 
 use CoreDB\Kernel\Database\DatabaseInstallationException;
 use CoreDB\Kernel\Database\DataType\DataTypeAbstract;
+use CoreDB\Kernel\Database\DataType\LongText;
 use CoreDB\Kernel\Database\DataType\ShortText;
-use CoreDB\Kernel\Database\DataType\Text;
 use CoreDB\Kernel\Database\SelectQueryPreparerAbstract;
 use CoreDB\Kernel\Database\TableDefinition;
 use CoreDB\Kernel\TableMapper;
 use DirectoryIterator;
-use Exception;
 use PDO;
-use Src\Views\TextElement;
-use Src\Views\ViewGroup;
 use Symfony\Component\Yaml\Yaml;
 
 class Translation extends TableMapper
@@ -26,14 +23,20 @@ class Translation extends TableMapper
     const BACKUP_PATH = __DIR__ . "/../../config/translations";
 
     public ShortText $key;
-    public Text $en;
-    public Text $tr;
+    public LongText $en;
+    public LongText $tr;
 
 
     public static function getLanguage()
     {
+        $supportedLangs = Translation::getAvailableLanguageList();
+        if(isset($_GET["lang"]) && in_array($_GET["lang"], $supportedLangs)){
+            $_SESSION["lang"] = $_GET["lang"];
+        }
+        if(isset($_SESSION["lang"]) && in_array($_SESSION["lang"], $supportedLangs)){
+            Translation::$language = $_SESSION["lang"];
+        }
         if (!Translation::$language) {
-            $supportedLangs = Translation::getAvailableLanguageList();
             $languages = explode(',', !IS_CLI ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : $_SERVER["LANG"] );
             foreach ($languages as $language) {
                 $language = preg_replace(!IS_CLI ? "/-.*/" : "/_.*/" , "", $language);

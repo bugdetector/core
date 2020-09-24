@@ -6,13 +6,18 @@ use CoreDB\Kernel\BaseController;
 use Src\Controller\Admin\EntityController;
 use Src\Controller\Admin\TableController;
 use Src\Controller\AdminController;
+use Src\Controller\LogoutController;
 use Src\Entity\Translation;
+use Src\Views\Navbar;
 use Src\Views\NavItem;
 use Src\Views\Sidebar;
+use Src\Views\TextElement;
+use Src\Views\ViewGroup;
 
 abstract class BaseTheme extends BaseController
 {
 
+    public Navbar $navbar;
     public Sidebar $sidebar;
     public $body_classes = [];
 
@@ -28,12 +33,67 @@ abstract class BaseTheme extends BaseController
 
     public function processPage()
     {
+        $this->buildNavbar();
         $this->buildSidebar();
         $this->addDefaultJsFiles();
         $this->addDefaultCssFiles();
         $this->addDefaultTranslations();
         $this->preprocessPage();
         $this->render();
+    }
+    
+    public function buildNavbar(){
+        $this->navbar = Navbar::create("nav", "navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow");
+        $currentUser = \CoreDB::currentUser();
+        $userDropdown = NavItem::create(
+            ViewGroup::create("img", "img-profile rounded-circle")
+            ->addAttribute("src", BASE_URL."/assets/default-profile-picture.png"),
+            ""
+        );
+        if($currentUser->isLoggedIn()){
+            $userDropdown->addDropdownItem(
+                NavItem::create(
+                    "fa fa-user",
+                    Translation::getTranslation("profile"),
+                    $currentUser->editUrl()
+                )->setTagName("div")
+            )->addDropdownItem(
+                NavItem::create(
+                    "fa fa-sign-out-alt",
+                    Translation::getTranslation("logout"),
+                    LogoutController::getUrl()
+                )->setTagName("div")
+            );
+        }else{
+            $userDropdown->addDropdownItem(
+                NavItem::create(
+                    "fa fa-sign-in-alt",
+                    Translation::getTranslation("login"),
+                    LogoutController::getUrl()
+                )->setTagName("div")
+            );
+        }
+        $userDropdown->addDropdownItem(
+            NavItem::create("", "", "")
+            ->setTagName("div")
+            ->addClass("dropdown-divider")
+        );
+        $translateIcons = Translation::get(["key" => "language_icon"]);
+        foreach(Translation::getAvailableLanguageList() as $language){
+            $userDropdown->addDropdownItem(
+                NavItem::create(
+                    TextElement::create($translateIcons->$language->getValue())
+                    ->setTagName("div")
+                    ->setIsRaw(true)
+                    ->addClass("d-inline-block"), 
+                    Translation::getTranslation($language), 
+                    "?lang={$language}")
+                ->setTagName("div")
+            );
+        }
+        $this->navbar->addNavItem(
+            $userDropdown
+        );
     }
 
     public function buildSidebar()

@@ -8,6 +8,7 @@ class TextElement extends View
 {
     public $tagName = "text";
     public $text;
+    public bool $raw = false;
 
     public function __construct($text)
     {
@@ -17,6 +18,11 @@ class TextElement extends View
     public static function create($text) : TextElement
     {
         return new TextElement($text);
+    }
+
+    public function setIsRaw(bool $raw) : TextElement {
+        $this->raw = $raw;
+        return $this;
     }
 
     public function setTagName(string $tagName) : TextElement
