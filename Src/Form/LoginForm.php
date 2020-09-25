@@ -3,9 +3,7 @@
 namespace Src\Form;
 
 use CoreDB;
-use CoreDB\Kernel\Router;
 use Src\Controller\AdminController;
-use Src\Controller\MainpageController;
 use Src\Entity\Logins;
 use Src\Entity\Translation;
 use Src\Entity\User;
@@ -16,6 +14,8 @@ use stdClass;
 
 class LoginForm extends Form
 {
+    private const PASSWORD_FALSE_COUNT = "PASSWORD_FALSE_COUNT";
+    private const LOGIN_UNTRUSTED_ACTIONS = "LOGIN_UNTRUSTED_ACTIONS";
     public string $method = "POST";
 
     private ?User $user;
@@ -64,7 +64,7 @@ class LoginForm extends Form
         }
 
         //if login fails for more than 10 times block this ip
-        if (isset($_SESSION[LOGIN_UNTRUSTED_ACTIONS]) && $_SESSION[LOGIN_UNTRUSTED_ACTIONS] > 10) {
+        if (isset($_SESSION[self::LOGIN_UNTRUSTED_ACTIONS]) && $_SESSION[self::LOGIN_UNTRUSTED_ACTIONS] > 10) {
             if (User::getLoginTryCountOfIp() > 10) {
                 User::blockIpAddress();
             }
@@ -76,13 +76,13 @@ class LoginForm extends Form
             $this->setError("username", Translation::getTranslation("ip_blocked"));
         }
         if (empty($this->errors) && (!$this->user || !password_verify($this->request["password"], $this->user->password))) {
-            if (isset($_SESSION[LOGIN_UNTRUSTED_ACTIONS])) {
-                $_SESSION[LOGIN_UNTRUSTED_ACTIONS]++;
-                if ($_SESSION[LOGIN_UNTRUSTED_ACTIONS] > 3) {
+            if (isset($_SESSION[self::LOGIN_UNTRUSTED_ACTIONS])) {
+                $_SESSION[self::LOGIN_UNTRUSTED_ACTIONS]++;
+                if ($_SESSION[self::LOGIN_UNTRUSTED_ACTIONS] > 3) {
                     $this->setError("password", Translation::getTranslation("too_many_login_fails"));
                 }
             } else {
-                $_SESSION[LOGIN_UNTRUSTED_ACTIONS] = 1;
+                $_SESSION[self::LOGIN_UNTRUSTED_ACTIONS] = 1;
             }
             $this->setError("password", Translation::getTranslation("wrong_credidental"));
         }
@@ -110,13 +110,13 @@ class LoginForm extends Form
             $payload = new stdClass();
             $payload->ID = $this->user->ID->getValue();
             $jwt->setPayload($payload);
-            setcookie("session-token", $jwt->createToken(), strtotime("+1 day"), BASE_URL, $_SERVER["HTTP_HOST"], false, true);
+            setcookie("session-token", $jwt->createToken(), strtotime("+1 week"), SITE_ROOT, \CoreDB::baseHost(), false, true);
         }
 
         Watchdog::log("login", $this->user->username);
 
-        unset($_SESSION[PASSWORD_FALSE_COUNT]);
-        unset($_SESSION[LOGIN_UNTRUSTED_ACTIONS]);
+        unset($_SESSION[self::PASSWORD_FALSE_COUNT]);
+        unset($_SESSION[self::LOGIN_UNTRUSTED_ACTIONS]);
 
         //Clearing failed login actions
         CoreDB::database()->delete(Logins::getTableName())
@@ -127,17 +127,17 @@ class LoginForm extends Form
         } elseif ($this->user->isAdmin()) {
             \CoreDB::goTo(AdminController::getUrl());
         } else {
-            \CoreDB::goTo(MainpageController::getUrl());
+            \CoreDB::goTo(BASE_URL);
         }
     }
 
     protected function csrfTokenCheckFailed()
     {
         parent::csrfTokenCheckFailed();
-        if (isset($_SESSION[LOGIN_UNTRUSTED_ACTIONS])) {
-            $_SESSION[LOGIN_UNTRUSTED_ACTIONS]++;
+        if (isset($_SESSION[self::LOGIN_UNTRUSTED_ACTIONS])) {
+            $_SESSION[self::LOGIN_UNTRUSTED_ACTIONS]++;
         } else {
-            $_SESSION[LOGIN_UNTRUSTED_ACTIONS] = 1;
+            $_SESSION[self::LOGIN_UNTRUSTED_ACTIONS] = 1;
         }
     }
 }

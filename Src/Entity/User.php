@@ -13,8 +13,6 @@ use CoreDB\Kernel\TableMapper;
 use Exception;
 use Src\Form\UserInsertForm;
 
-define("PASSWORD_FALSE_COUNT", "PASSWORD_FALSE_COUNT");
-define("LOGIN_UNTRUSTED_ACTIONS", "LOGIN_UNTRUSTED_ACTIONS");
 class User extends TableMapper
 {
     public File $profile_photo;

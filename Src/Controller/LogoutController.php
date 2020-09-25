@@ -2,7 +2,6 @@
 
 namespace Src\Controller;
 
-use Src\Entity\User;
 use Src\BaseTheme\BaseTheme;
 
 class LogoutController extends BaseTheme
@@ -17,8 +16,8 @@ class LogoutController extends BaseTheme
     public function preprocessPage()
     {
         session_destroy();
-        setcookie("session-token", "");
-        \CoreDB::goTo(MainpageController::getUrl());
+        setcookie("session-token", "", 0, SITE_ROOT, \CoreDB::baseHost(), false, true);
+        \CoreDB::goTo(BASE_URL);
     }
 
 

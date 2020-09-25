@@ -40,7 +40,7 @@ class Router
         $this->controller = $this->getControllerFromUrl($route);
         if (!$this->controller->checkAccess()) {
             if (!\CoreDB::currentUser()->isLoggedIn()) {
-                \CoreDB::goTo($this->getControllerFromUrl("login"), ["destination" => \CoreDB::requestUrl()]);
+                \CoreDB::goTo($this->getControllerFromUrl("login")->getUrl(), ["destination" => \CoreDB::requestUrl()]);
             } else {
                 $this->controller = $this->getControllerFromUrl("accessdenied");
             }

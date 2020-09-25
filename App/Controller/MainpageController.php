@@ -1,6 +1,6 @@
 <?php
 
-namespace Src\Controller;
+namespace App\Controller;
 
 use App\Theme\CustomTheme;
 use Src\Entity\Translation;

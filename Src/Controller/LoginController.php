@@ -30,7 +30,7 @@ class LoginController extends BaseTheme
     public function preprocessPage()
     {
         if(\CoreDB::currentUser()->isLoggedIn()){
-            \CoreDB::goTo(MainpageController::getUrl());
+            \CoreDB::goTo(BASE_URL);
         }
         $this->form = new LoginForm();
         $this->form->processForm();
