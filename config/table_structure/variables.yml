@@ -20,3 +20,20 @@ fields:
     isUnique: false
     default: null
     comment: Value.
+  type:
+    type: enumarated_list
+    values:
+      integer: integer
+      float: float
+      checkbox: checkbox
+      text: text
+      date: date
+      datetime: datetime
+      hidden: hidden
+    column_name: type
+    primary_key: false
+    autoIncrement: false
+    isNull: false
+    isUnique: false
+    default: null
+    comment: ''

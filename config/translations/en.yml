@@ -175,3 +175,7 @@ add_admin: 'Create an administrator user.'
 enter_valid_mail: 'Please enter a valid email address.'
 'on': Active
 'off': Passive
+hidden: Hidden
+type: Type
+value: Value
+variables: 'Configuration variables'

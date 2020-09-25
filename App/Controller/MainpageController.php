@@ -16,6 +16,12 @@ class MainpageController extends CustomTheme
 
     public function preprocessPage()
     {
+        \CoreDB::HTMLMail(
+            "bakiyucel38@gmail.com",
+            "deneme",
+            "deneme mail",
+            "Murat Baki Yücel"
+        );
         $this->setTitle(Translation::getTranslation("welcome"));
         
     }

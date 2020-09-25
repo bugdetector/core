@@ -175,3 +175,7 @@ add_admin: 'Bir yönetici kullanıcı oluşturun.'
 enter_valid_mail: 'Lütfen geçerli bir e-posta adresi giriniz.'
 'on': Aktif
 'off': Pasif
+hidden: Gizli
+type: Tip
+value: Değer
+variables: 'Yapılandırma değerleri'

@@ -6,7 +6,9 @@ use CoreDB\Kernel\Database\MySQL\MySQLDriver;
 use CoreDB\Kernel\Database\DatabaseDriver;
 use CoreDB\Kernel\Messenger;
 use CoreDB\Kernel\Router;
+use Src\Entity\Translation;
 use Src\Entity\User;
+use Src\Entity\Variable;
 use Src\JWT;
 
 class CoreDB
@@ -22,18 +24,19 @@ class CoreDB
 
     public static function HTMLMail($email, $subject, $message, $username)
     {
+        $siteMail = Variable::getByKey("email_address")->value->getValue();
         $mail = new \PHPMailer\PHPMailer\PHPMailer();
         $mail->IsSMTP();
         $mail->SMTPAuth = true;
-        $mail->SMTPSecure = SMTP_SECURE;
-        $mail->Host = SMTP_HOST;
-        $mail->Port = SMTP_PORT;
+        $mail->SMTPSecure = Variable::getByKey("email_smtp_secure")->value->getValue();
+        $mail->Host = Variable::getByKey("email_smtp_host")->value->getValue();
+        $mail->Port = Variable::getByKey("email_smtp_port")->value->getValue();
         $mail->IsHTML(true);
-        $mail->SetLanguage("en", "phpmailer/language");
+        $mail->SetLanguage(Translation::getLanguage(), "phpmailer/language");
         $mail->CharSet  = "utf-8";
-        $mail->Username = EMAIL;
-        $mail->Password = EMAIL_PASSWORD;
-        $mail->SetFrom(EMAIL, EMAIL_USERNAME);
+        $mail->Username = $siteMail;
+        $mail->Password = Variable::getByKey("email_password")->value->getValue();
+        $mail->SetFrom($siteMail, Variable::getByKey("email_username")->value->getValue());
         $mail->AddAddress($email, $username);
         $mail->Subject = $subject;
         $mail->Body = $message;

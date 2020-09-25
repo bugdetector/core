@@ -18,10 +18,3 @@ define("TRUSTED_HOSTS", "localhost,127.0.0.1");
  */
 
 define("ENVIROMENT", "development");
-
-define("EMAIL", "farmakonerciyes@gmail.com");
-define("EMAIL_PASSWORD", "spbepjrlwrsnwjnf");
-define("SMTP_HOST", "smtp.gmail.com");
-define("SMTP_PORT", 465);
-define("SMTP_SECURE", "ssl");
-define("EMAIL_USERNAME", "CoreDB");

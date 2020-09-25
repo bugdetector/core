@@ -13,3 +13,5 @@ file:
   class: Src\Entity\File
 viewable_queries: 
   class: Src\Entity\ViewableQueries
+variables:
+  class: Src\Entity\Variable
