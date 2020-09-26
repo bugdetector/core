@@ -20,10 +20,9 @@ class InstallController extends BaseTheme {
     public function checkAccess(): bool
     {
         try{
-            global $configurationLoaded;
             $hashSalt = Variable::getByKey("hash_salt");
             if(!defined("HASH_SALT") || !$hashSalt || $hashSalt->value->getValue() != HASH_SALT){
-                return true && !$configurationLoaded;
+                return true && !CONFIGURATON_LOADED;
             }else{
                 return false;
             }

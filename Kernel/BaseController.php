@@ -16,6 +16,7 @@ abstract class BaseController implements ControllerInterface
     public $method;
     
     public string $title = "";
+    public array $metaTags = [];
     public $js_files = [];
     public $js_codes = [];
     public $css_files = [];
@@ -48,8 +49,12 @@ abstract class BaseController implements ControllerInterface
     {
         $this->arguments = $arguments;
         $this->method = isset($this->arguments[0]) ? $this->arguments[0] : null;
-        $siteName = Variable::getByKey("site_name");
-        $this->setTitle($siteName ? $siteName->value : "CoreDB");
+        $siteName = Variable::getByKey("site_name")->value->getValue();
+        $this->setTitle($siteName);
+        $this->addMetaTag("description", [
+            "name" => "description",
+            "content" => $siteName
+        ]);
     }
 
     /**
@@ -115,6 +120,10 @@ abstract class BaseController implements ControllerInterface
         } else if(!in_array($js_file_path, $this->js_files)){
             $this->js_files[] = $js_file_path;
         }
+    }
+
+    protected function addMetaTag($index,$attributes){
+        $this->metaTags[] = $attributes;
     }
 
     public function addJsCode(string $js_code)

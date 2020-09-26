@@ -234,4 +234,16 @@ class User extends TableMapper
     {
         return "{$this->name} {$this->surname}";
     }
+
+    public function getProfilePhotoUrl(){
+        if($this->profile_photo->getValue()){
+            /**
+             * @var \Src\Entity\File $photo
+             */
+            $photo = \Src\Entity\File::get($this->profile_photo->getValue());
+            return $photo->getUrl();
+        }else{
+            return BASE_URL."/assets/default-profile-picture.png";
+        }
+    }
 }

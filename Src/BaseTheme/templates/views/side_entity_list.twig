@@ -2,7 +2,7 @@
 	class="card shadow mb-4">
 	<!-- Card Header - Accordion -->
 	<a href="#entity_list" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true">
-		<h6 class="m-0 font-weight-bold text-primary">{{ t("entities") }}</h6>
+		<div class="m-0 font-weight-bold text-primary">{{ t("entities") }}</div>
 	</a>
 	<!-- Card Content - Collapse -->
 	<div class="collapse show" id="entity_list">
@@ -10,6 +10,7 @@
 			<div class="input-group mb-3">
 				<div class="input-group-prepend">
 					<span class="input-group-text">
+						<label for="entity_search_field" class="sr-only">{{ t("search") }}</label>
 						<i class="fa fa-search"></i>
 					</span>
 				</div>
@@ -22,7 +23,9 @@
 							<span class="fa fa-cube"></span>
 							{{ t(entity_name) }}
 						</a>
-						<button type="button" class="btn btn-info dropdown-toggle dropdown-toggle-split" style="max-width: min-content;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+						<button type="button" class="btn btn-info dropdown-toggle dropdown-toggle-split" style="max-width: min-content;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<span class="sr-only">{{ t("toggle") }}</span>
+						</button>
 						<div class="dropdown-menu bg-gradient-info">
 							<a class="dropdown-item" href="{{ constant("BASE_URL") ~ "/admin/entity/insert/" ~ entity_name }}">
 								<i class="fa fa-save"></i>

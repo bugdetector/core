@@ -19,6 +19,7 @@ class ForgetPasswordForm extends Form
         $this->addClass("user");
         $this->addField(
             InputWidget::create("username")
+            ->setLabel(Translation::getTranslation("username"))
             ->addClass("form-control-user")
             ->addAttribute("placeholder", Translation::getTranslation("username"))
             ->addAttribute("required", "true")
@@ -26,6 +27,7 @@ class ForgetPasswordForm extends Form
         );
         $this->addField(
             InputWidget::create("email")
+            ->setLabel(Translation::getTranslation("email"))
             ->addClass("form-control-user")
             ->addAttribute("placeholder", Translation::getTranslation("email"))
             ->addAttribute("required", "true")

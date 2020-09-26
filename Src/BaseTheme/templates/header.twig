@@ -1,25 +1,25 @@
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	{% for metaTag  in controller.metaTags %}
+		<meta {% for key, value in metaTag %} {{ key }}="{{ value }}" {% endfor %}>
+	{% endfor %}
 	<link rel="icon" href="{{ constant("BASE_URL") ~ "/assets/favicon.png" }}"/>
 	<title>
-        {{ controller.title }}
+		{{ controller.title }}
 	</title>
-    {% for js_file  in controller.js_files %}
-        <script src="{{ ("http" not in js_file) ? (constant("BASE_URL") ~ "/" ~ js_file) ~ "?" ~ getHashedFilemTime(js_file) : js_file }}"></script>
-    {% endfor %}
+	{% for js_file  in controller.js_files %}
+		<script src="{{ ("http" not in js_file) ? (constant("BASE_URL") ~ "/" ~ js_file) ~ "?" ~ getHashedFilemTime(js_file) : js_file }}"></script>
+	{% endfor %}
 
-    {% for css_file  in controller.css_files %}
-        <link rel="stylesheet" href="{{ ("http" not in css_file) ? (constant("BASE_URL") ~ "/" ~ css_file) ~ "?" ~ getHashedFilemTime(css_file) : css_file }}"/>
-    {% endfor %}
+	{% for css_file  in controller.css_files %}
+		<link rel="stylesheet" href="{{ ("http" not in css_file) ? (constant("BASE_URL") ~ "/" ~ css_file) ~ "?" ~ getHashedFilemTime(css_file) : css_file }}"/>
+	{% endfor %}
 
 	<script>
 		var root = "{{ constant("BASE_URL") }}";
-		var translations = {{ controller.frontend_translations|json_encode()|raw }};
-		{{ controller.js_codes|join(";")|raw }}
-		var language = '{{ Translation.getLanguage() }}';
+var translations = {{ controller.frontend_translations|json_encode()|raw }};
+{{ controller.js_codes|join(";")|raw }}
+var language = '{{ Translation.getLanguage() }}';
 	</script>
 	<style>
-		{{ controller.css_codes|join(";")|raw }}
-	</style>
+		{{controller.css_codes|join(";")|raw}}</style>
 </head>

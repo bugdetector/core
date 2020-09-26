@@ -44,6 +44,9 @@ abstract class FormWidget extends View
 
     public function render()
     {
+        if(!isset($this->attributes["id"])){
+            $this->addAttribute("id", "input_{$this->name}");
+        }
         CoreRenderer::getInstance([])->renderWidget($this);
     }
 }

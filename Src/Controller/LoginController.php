@@ -14,7 +14,7 @@ class LoginController extends BaseTheme
     public function __construct($arguments)
     {
         parent::__construct($arguments);
-        $this->body_classes = ["bg-gradient-success"];
+        $this->body_classes = ["bg-gradient-info"];
         $this->setTitle(Translation::getTranslation("welcome")."!");
     }
     public function getTemplateFile() : string

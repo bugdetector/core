@@ -20,6 +20,7 @@ class ResetPasswordForm extends Form
         $this->addClass("user");
         $this->addField(
             InputWidget::create("password")
+                ->setLabel(Translation::getTranslation("password"))
                 ->setType("password")
                 ->addClass("form-control-user")
                 ->addAttribute("placeholder", Translation::getTranslation("password"))
@@ -28,6 +29,7 @@ class ResetPasswordForm extends Form
         );
         $this->addField(
             InputWidget::create("password2")
+                ->setLabel(Translation::getTranslation("password_again"))
                 ->setType("password")
                 ->addClass("form-control-user")
                 ->addAttribute("placeholder", Translation::getTranslation("password_again"))

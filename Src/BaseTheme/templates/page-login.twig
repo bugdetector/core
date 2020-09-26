@@ -1,8 +1,6 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		{% include 'header.twig' %}
-	</head>
+<html lang="{{ language() }}">
+	{% include 'header.twig' %}
 	<body class="{{ controller.body_classes|join(' ') }}">
 		<div
 			class="container">

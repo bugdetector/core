@@ -2,22 +2,25 @@
 <{{view.tag_name}} class='{{ view.classes|join(" ") }}' {{ view.renderAttributes()|raw }}>
 
 	<!-- Navbar -->
-	<ul class="navbar-nav ml-auto d-flex justify-content-between w-100">
-		<li
+	<nav class="navbar-nav ml-auto d-flex justify-content-between w-100">
+		<div
 			class="nav-item">
 			<!-- Sidebar Toggle (Topbar) -->
 			<button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3 mt-3">
+				<span class="sr-only">{{ t("toggle") }}</span>
 				<i class="fa fa-bars"></i>
 			</button>
-		</li>
-		<li class="nav-item">
-			<a class="navbar-brand" href="{{ constant("BASE_URL") }}"></a>
-		</li>
+		</div>
+		<div class="nav-item">
+			<a class="navbar-brand" href="{{ constant("BASE_URL") }}">
+			<span class="sr-only">{{ t("mainpage") }}</span>
+			</a>
+		</div>
 
 		{% for field in view.fields %}
 			{{ field }}
 		{% endfor %}
-	</ul>
+	</nav>
 
 </{{view.tag_name}}>
 <!-- Navbar -->

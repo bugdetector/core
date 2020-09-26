@@ -14,7 +14,7 @@ class NavItem extends ViewGroup
         string $href = '#',
         bool $is_active = false
     ) {
-        parent::__construct("li", "nav-item");
+        parent::__construct("div", "nav-item");
         if($is_active){
             $this->addClass("active");
         }

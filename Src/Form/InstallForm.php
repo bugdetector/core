@@ -4,9 +4,7 @@ namespace Src\Form;
 
 use CoreDB\Kernel\Database\MySQL\MySQLDriver;
 use CoreDB\Kernel\Messenger;
-use Src\Controller\MainpageController;
 use Src\Entity\DBObject;
-use Src\Entity\Role;
 use Src\Entity\Translation;
 use Src\Entity\User;
 use Src\Entity\Variable;
@@ -24,6 +22,7 @@ class InstallForm extends Form
         }
         $this->addField(
             InputWidget::create("db_server")
+                ->setLabel(Translation::getTranslation("db_server"))
                 ->addClass("form-control-user")
                 ->addAttribute("placeholder", Translation::getTranslation("db_server"))
                 ->addAttribute("required", "true")
@@ -31,6 +30,7 @@ class InstallForm extends Form
         );
         $this->addField(
             InputWidget::create("db_name")
+                ->setLabel(Translation::getTranslation("db_name"))
                 ->addClass("form-control-user")
                 ->addAttribute("placeholder", Translation::getTranslation("db_name"))
                 ->addAttribute("required", "true")
@@ -38,6 +38,7 @@ class InstallForm extends Form
         );
         $this->addField(
             InputWidget::create("db_user")
+                ->setLabel(Translation::getTranslation("db_user"))
                 ->addClass("form-control-user")
                 ->addAttribute("placeholder", Translation::getTranslation("db_user"))
                 ->addAttribute("required", "true")
@@ -45,6 +46,7 @@ class InstallForm extends Form
         );
         $this->addField(
             InputWidget::create("db_password")
+                ->setLabel(Translation::getTranslation("password"))
                 ->setType("password")
                 ->addClass("form-control-user")
                 ->addAttribute("placeholder", Translation::getTranslation("db_password"))
@@ -53,6 +55,7 @@ class InstallForm extends Form
         );
         $this->addField(
             InputWidget::create("username")
+                ->setLabel(Translation::getTranslation("username"))
                 ->addClass("form-control-user")
                 ->addAttribute("placeholder", Translation::getTranslation("username"))
                 ->addAttribute("required", "true")
@@ -60,6 +63,7 @@ class InstallForm extends Form
         );
         $this->addField(
             InputWidget::create("name")
+                ->setLabel(Translation::getTranslation("name"))
                 ->addClass("form-control-user")
                 ->addAttribute("placeholder", Translation::getTranslation("name"))
                 ->addAttribute("required", "true")
@@ -67,6 +71,7 @@ class InstallForm extends Form
         );
         $this->addField(
             InputWidget::create("email")
+                ->setLabel(Translation::getTranslation("email"))
                 ->setType("email")
                 ->addClass("form-control-user")
                 ->addAttribute("placeholder", Translation::getTranslation("email"))
@@ -75,6 +80,7 @@ class InstallForm extends Form
         );
         $this->addField(
             InputWidget::create("password")
+                ->setLabel(Translation::getTranslation("password"))
                 ->setType("password")
                 ->addClass("form-control-user")
                 ->addAttribute("placeholder", Translation::getTranslation("password"))
@@ -162,6 +168,6 @@ class InstallForm extends Form
         $hashSaltVar->save();
         $_SESSION[BASE_URL."-UID"] = $user->ID;
         $this->setMessage(Translation::getTranslation("all_configuration_imported"));
-        \CoreDB::goTo(MainpageController::getUrl());
+        \CoreDB::goTo(BASE_URL);
     }
 }

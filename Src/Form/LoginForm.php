@@ -26,6 +26,7 @@ class LoginForm extends Form
         $this->addClass("user");
         $this->addField(
             InputWidget::create("username")
+            ->setLabel(Translation::getTranslation("username"))
             ->addClass("form-control-user")
             ->addAttribute("placeholder", Translation::getTranslation("username"))
             ->addAttribute("required", "true")
@@ -33,6 +34,7 @@ class LoginForm extends Form
         );
         $this->addField(
             InputWidget::create("password")
+            ->setLabel(Translation::getTranslation("password"))
             ->setType("password")
             ->addClass("form-control-user")
             ->addAttribute("placeholder", Translation::getTranslation("password"))

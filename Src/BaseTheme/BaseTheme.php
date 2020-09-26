@@ -9,11 +9,11 @@ use Src\Controller\AdminController;
 use Src\Controller\LoginController;
 use Src\Controller\LogoutController;
 use Src\Entity\Translation;
+use Src\Views\Image;
 use Src\Views\Navbar;
 use Src\Views\NavItem;
 use Src\Views\Sidebar;
 use Src\Views\TextElement;
-use Src\Views\ViewGroup;
 
 abstract class BaseTheme extends BaseController
 {
@@ -36,6 +36,7 @@ abstract class BaseTheme extends BaseController
     {
         $this->buildNavbar();
         $this->buildSidebar();
+        $this->addDefaultMetaTags();
         $this->addDefaultJsFiles();
         $this->addDefaultCssFiles();
         $this->addDefaultTranslations();
@@ -47,8 +48,8 @@ abstract class BaseTheme extends BaseController
         $this->navbar = Navbar::create("nav", "navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow");
         $currentUser = \CoreDB::currentUser();
         $userDropdown = NavItem::create(
-            ViewGroup::create("img", "img-profile rounded-circle")
-            ->addAttribute("src", BASE_URL."/assets/default-profile-picture.png"),
+            Image::create($currentUser->getProfilePhotoUrl(), $currentUser->getFullName())
+            ->addClass("img-profile rounded-circle"),
             ""
         );
         if($currentUser->isLoggedIn()){
@@ -57,13 +58,13 @@ abstract class BaseTheme extends BaseController
                     "fa fa-user",
                     Translation::getTranslation("profile"),
                     $currentUser->editUrl()
-                )->setTagName("div")
+                )
             )->addDropdownItem(
                 NavItem::create(
                     "fa fa-sign-out-alt",
                     Translation::getTranslation("logout"),
                     LogoutController::getUrl()
-                )->setTagName("div")
+                )
             );
         }else{
             $userDropdown->addDropdownItem(
@@ -71,12 +72,11 @@ abstract class BaseTheme extends BaseController
                     "fa fa-sign-in-alt",
                     Translation::getTranslation("login"),
                     LoginController::getUrl()
-                )->setTagName("div")
+                )
             );
         }
         $userDropdown->addDropdownItem(
             NavItem::create("", "", "")
-            ->setTagName("div")
             ->addClass("dropdown-divider")
         );
         $translateIcons = Translation::get(["key" => "language_icon"]);
@@ -89,7 +89,6 @@ abstract class BaseTheme extends BaseController
                     ->addClass("d-inline-block"), 
                     Translation::getTranslation($language), 
                     "?lang={$language}")
-                ->setTagName("div")
             );
         }
         $this->navbar->addNavItem(
@@ -99,7 +98,7 @@ abstract class BaseTheme extends BaseController
 
     public function buildSidebar()
     {
-        $this->sidebar = Sidebar::create("ul", "navbar-nav bg-gradient-primary sidebar sidebar-dark accordion toggled position-sticky");
+        $this->sidebar = Sidebar::create("div", "navbar-nav bg-gradient-primary sidebar sidebar-dark accordion toggled position-sticky");
         $currentUser = \CoreDB::currentUser();
         if ($currentUser->isAdmin()) {
             $this->sidebar->addNavItem(
@@ -135,6 +134,16 @@ abstract class BaseTheme extends BaseController
 
     public function echoContent()
     {
+    }
+
+    protected function addDefaultMetaTags(){
+        $this->addMetaTag("charset", [
+            "charset" => "utf-8"
+        ]);
+        $this->addMetaTag("viewport",[
+            "name" => "viewport",
+            "content" => "width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes"
+        ]);
     }
     
     protected function addDefaultJsFiles()

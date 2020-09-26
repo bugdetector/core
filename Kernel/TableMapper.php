@@ -367,6 +367,10 @@ abstract class TableMapper implements SearchableInterface
                 ViewGroup::create("a", "mr-2 rowdelete")
                     ->addField(
                         ViewGroup::create("i", "fa fa-times text-danger core-control")
+                    )->addField(
+                        TextElement::create(
+                            Translation::getTranslation("delete")
+                        )->addClass("sr-only")
                     )
                     ->addAttribute("data-table", $this->getTableName())
                     ->addAttribute("data-id", $row["edit_actions"])
@@ -375,6 +379,10 @@ abstract class TableMapper implements SearchableInterface
                 ViewGroup::create("a", "ml-2")
                     ->addField(
                         ViewGroup::create("i", "fa fa-edit text-primary core-control")
+                    )->addField(
+                        TextElement::create(
+                            Translation::getTranslation("edit")
+                        )->addClass("sr-only")
                     )
                     ->addAttribute("href", $this->editUrl($row["edit_actions"]))
             );

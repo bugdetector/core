@@ -10,9 +10,9 @@ define("IS_CLI", php_sapi_name() === 'cli');
 try{
     if(is_file( __DIR__.'/config/config.php')){
         include __DIR__.'/config/config.php';
-        $configurationLoaded = true;
+        define("CONFIGURATON_LOADED", true);
     }else{
-        $configurationLoaded = false;
+        define("CONFIGURATON_LOADED", false);
     }
     if(!IS_CLI){
         $host = \CoreDB::baseHost();
