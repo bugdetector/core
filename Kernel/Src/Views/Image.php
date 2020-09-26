@@ -6,14 +6,16 @@ use Src\Theme\View;
 
 class Image extends View
 {
-    public $src;
-    public $alt;
+    public string $src;
+    public string $alt;
+    public bool $showAlt;
 
-    public static function create(string $src, string $alt) : Image
+    public static function create(string $src, string $alt, bool $showAlt = false) : Image
     {
         $image = new Image();
         $image->src = $src;
         $image->alt = $alt;
+        $image->showAlt = $showAlt;
         return $image;
     }
 

@@ -48,7 +48,7 @@ abstract class BaseTheme extends BaseController
         $this->navbar = Navbar::create("nav", "navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow");
         $currentUser = \CoreDB::currentUser();
         $userDropdown = NavItem::create(
-            Image::create($currentUser->getProfilePhotoUrl(), $currentUser->getFullName())
+            Image::create($currentUser->getProfilePhotoUrl(), $currentUser->getFullName(), true)
             ->addClass("img-profile rounded-circle"),
             ""
         );
