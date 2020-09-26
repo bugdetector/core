@@ -1,0 +1,58 @@
+{% extends "page.twig" %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card p-2">
+                {{ controller.printMessages() }}
+                <textarea class="form-control" style="height: calc(100vh - 150px)">
+<?php
+
+namespace App\Entity;
+
+use CoreDB\Kernel\TableMapper;
+{% for used in controller.usedClasses %}
+use {{ used }};
+{% endfor %}
+
+/**
+ * Object relation with table {{ controller.table_name }}
+ * @author {{ controller.author }}
+ */
+
+class {{ controller.table_name|title| replace( {"_" : ""} ) }} extends TableMapper
+{
+{% for constName, const in controller.consts %}
+    /**
+    * {{ constName }} description.
+    */
+    public const {{ constName }} = "{{ const }}";
+{% endfor %}
+{% if controller.consts|length > 0 %}
+
+{% endif %}
+{% for fieldName, fieldClass in controller.fields %}
+    /**
+    * @var {{ fieldClass }} ${{ fieldName }}
+    * {{ controller.fieldComments[fieldName]  }}
+    */
+    public {{ fieldClass }} ${{ fieldName }};
+{% endfor %}
+
+    /**
+     * @inheritdoc
+     */
+    public static function getTableName(): string
+    {
+        return "{{ controller.table_name }}";
+    }
+}
+</textarea>
+            </div>
+        </div>
+	</div>
+{% endblock %}

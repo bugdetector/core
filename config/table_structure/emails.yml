@@ -1,0 +1,31 @@
+table_name: emails
+table_comment: 'Contains e-mail template in many languages. You can add new one.'
+fields:
+  key:
+    type: short_text
+    length: '255'
+    column_name: key
+    primary_key: false
+    autoIncrement: false
+    isNull: false
+    isUnique: true
+    default: null
+    comment: 'Email key.'
+  en:
+    type: long_text
+    column_name: en
+    primary_key: false
+    autoIncrement: false
+    isNull: false
+    isUnique: false
+    default: null
+    comment: 'English translation.'
+  tr:
+    type: long_text
+    column_name: tr
+    primary_key: false
+    autoIncrement: false
+    isNull: false
+    isUnique: false
+    default: null
+    comment: 'Turkish translation.'

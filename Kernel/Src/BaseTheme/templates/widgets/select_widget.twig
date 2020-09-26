@@ -1,0 +1,15 @@
+<div>
+<label for="{{ widget.attributes["id"] }}" class="font-weight-bold text-primary">{{ widget.label }}</label>
+<select name='{{ widget.name }}' class='{{ widget.classes|join(" ") }}' {{ widget.renderAttributes()|raw }}>
+
+	{{ widget.null_element }}
+	{% for option in widget.options %}
+		{{option}}
+	{% endfor %}
+</select>
+{% if widget.description %}
+	<small for="{{ widget.attributes["id"] }}" class="d-block">
+		{{ widget.description }}
+	</small>
+{% endif %}
+</div>

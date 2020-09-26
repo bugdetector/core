@@ -1,0 +1,5 @@
+<{{ view.tag_name }} class='{{ view.classes|join(" ") }}' {{ view.renderAttributes()|raw }}>
+{% for field in view.fields %}
+    {{ field }}
+{% endfor %}
+</{{ view.tag_name }}>

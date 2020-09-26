@@ -1,0 +1,17 @@
+users:
+  class: Src\Entity\User
+  manyToMany:
+    roles:
+      mergeTable: "users_roles"
+      selfKey: "user_id"
+      foreignKey: "role_id"
+roles:
+  class: Src\Entity\Role
+translations:
+  class: Src\Entity\Translation
+file:
+  class: Src\Entity\File
+viewable_queries: 
+  class: Src\Entity\ViewableQueries
+variables:
+  class: Src\Entity\Variable

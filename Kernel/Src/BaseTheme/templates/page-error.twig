@@ -1,0 +1,21 @@
+{% extends "page.twig" %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block content %}
+	<div class="text-center">
+		<div class="error mx-auto" data-text="{{ controller.error_code }}">{{ controller.error_code }}</div>
+		<p class="lead text-gray-800 mb-5">
+			{{ t("sorry") }}
+		</p>
+		<p class="lead text-gray-800 mb-5">
+			{{ controller.message }}
+		</p>
+		<a href="{{ constant("BASE_URL") }}">
+			<i class="fa fa-arrow-left"></i>
+			{{ t("back_to_mainpage") }}
+		</a>
+	</div>
+{% endblock %}

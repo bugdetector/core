@@ -1,0 +1,12 @@
+{% extends "page.twig" %}
+
+{% block content %}
+	<div class="row">
+        <div class="col-md-12">
+            <div class="card p-2">
+                {{ controller.printMessages() }}
+                {{ controller.form }}
+            </div>
+        </div>
+	</div>
+{% endblock %}

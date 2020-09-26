@@ -1,0 +1,18 @@
+<div
+	class='card shadow mb-4 p-0 {{ view.classes|join(" ") }}' {{ view.renderAttributes() }}>
+	<!-- Card Header - Accordion -->
+	<a href="#{{view.id}}" class="d-block card-header py-3 {{ view.opened ? : " collapsed" }}" data-toggle="collapse" role="button" aria-expanded="true">
+		<div class="m-0 font-weight-bold text-primary">
+			{% if view.sortable %}
+				<i class="fa fa-arrows-alt text-info move_icon"></i>
+			{% endif %}			
+			{{ view.title }}
+		</div>
+	</a>
+	<!-- Card Content - Collapse -->
+	<div class="collapse {{ view.opened ? " show" : " " }}" id="{{view.id}}">
+		<div class="card-body">
+			{{ view.content }}
+		</div>
+	</div>
+</div>

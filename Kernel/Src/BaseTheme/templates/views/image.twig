@@ -1,0 +1,5 @@
+{% if view.showAlt %}
+    <span class="text-gray-700 mr-1">{{ view.alt }}</span>
+{% endif %}
+
+<img src="{{ view.src }}" alt="{{ view.alt }}" class='{{ view.classes|join(" ") }}' {{ view.renderAttributes()|raw }} />

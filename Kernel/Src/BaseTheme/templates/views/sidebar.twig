@@ -1,0 +1,27 @@
+<!-- Sidebar -->
+<{{ view.tag_name }} class='{{ view.classes|join(" ") }}' {{ view.renderAttributes()|raw }}>
+	<!-- Sidebar - Brand -->
+	<a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ constant("BASE_URL") }}">
+		<span class="sr-only">{{ t("mainpage") }}</span>
+		<div class="sidebar-brand-icon rotate-n-15">
+			<img src="{{ constant("BASE_URL") ~ "/assets/favicon.png" }}" style="max-width: 30px;" alt="favicon"/>
+		</div>
+		<div class="sidebar-brand-text mx-3"><img class="w-100" src="{{ constant("BASE_URL") ~ "/assets/logo.png" }}" alt="logo"/></div>
+	</a>
+	<!-- Divider -->
+	<hr class="sidebar-divider my-0"/>
+	{% for field in view.fields %}
+		{{ field }}
+	{% endfor %}
+
+	<!-- Divider -->
+	<hr
+	class="sidebar-divider d-none d-md-block">
+	<!-- Sidebar Toggler (Sidebar) -->
+	<div class="text-center d-none d-md-inline">
+		<button class="rounded-circle border-0" id="sidebarToggle">
+			<span class="sr-only">{{ t("toggle") }}</span>
+		</button>
+	</div>
+</{{ view.tag_name }}>
+<!-- End of Sidebar -->

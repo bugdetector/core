@@ -1,0 +1,32 @@
+site_name:
+  key: site_name
+  value: CoreDB
+  type: text
+hash_salt:
+  key: hash_salt
+  value: mjfuMgspJmuYAPixCWqYouOAYsgVB0FKx04t26aAECehIY51qMVDbOT3F96GYVQ8S4s=
+  type: hidden
+email_address:
+  key: email_address
+  value: null
+  type: text
+email_password:
+  key: email_password
+  value: null
+  type: hidden
+email_smtp_host:
+  key: email_smtp_host
+  value: smtp.gmail.com
+  type: text
+email_smtp_port:
+  key: email_smtp_port
+  value: '465'
+  type: integer
+email_smtp_secure:
+  key: email_smtp_secure
+  value: ssl
+  type: text
+email_username:
+  key: email_username
+  value: CoreDB
+  type: text

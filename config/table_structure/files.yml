@@ -1,0 +1,53 @@
+table_name: files
+table_comment: 'Contains uploaded files data.'
+fields:
+  file_name:
+    type: short_text
+    length: '255'
+    column_name: file_name
+    primary_key: false
+    autoIncrement: false
+    isNull: true
+    isUnique: false
+    default: null
+    comment: 'File original name.'
+  file_path:
+    type: short_text
+    length: '255'
+    column_name: file_path
+    primary_key: false
+    autoIncrement: false
+    isNull: true
+    isUnique: true
+    default: null
+    comment: 'Uploaded path.'
+  file_size:
+    type: short_text
+    length: '255'
+    column_name: file_size
+    primary_key: false
+    autoIncrement: false
+    isNull: true
+    isUnique: false
+    default: null
+    comment: 'File size.'
+  mime_type:
+    type: short_text
+    length: '255'
+    column_name: mime_type
+    primary_key: false
+    autoIncrement: false
+    isNull: true
+    isUnique: false
+    default: null
+    comment: 'File mime type.'
+  extension:
+    type: short_text
+    length: '255'
+    column_name: extension
+    primary_key: false
+    autoIncrement: false
+    isNull: true
+    isUnique: false
+    default: null
+    comment: 'File extension.'

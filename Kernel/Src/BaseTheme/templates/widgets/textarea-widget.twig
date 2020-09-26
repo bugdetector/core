@@ -1,0 +1,13 @@
+<div>
+{% if widget.label %}
+	<label for="{{ widget.attributes["id"] }}" class="font-weight-bold text-primary">
+		{{ widget.label }}
+	</label>
+{% endif %}
+<textarea name='{{ widget.name }}' class='{{ widget.classes|join(" ") }}' {{ widget.renderAttributes()|raw }}>{{ widget.value }}</textarea>
+{% if widget.description %}
+	<small for="{{ widget.attributes["id"] }}">
+		{{ widget.description }}
+	</small>
+{% endif %}
+</div>

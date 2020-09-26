@@ -1,0 +1,31 @@
+table_name: translations
+table_comment: 'Contains site translations. You can add new one.'
+fields:
+  key:
+    type: short_text
+    length: '255'
+    column_name: key
+    primary_key: false
+    autoIncrement: false
+    isNull: false
+    isUnique: true
+    default: null
+    comment: 'Translation Key.'
+  en:
+    type: long_text
+    column_name: en
+    primary_key: false
+    autoIncrement: false
+    isNull: true
+    isUnique: false
+    default: null
+    comment: 'English translation.'
+  tr:
+    type: long_text
+    column_name: tr
+    primary_key: false
+    autoIncrement: false
+    isNull: true
+    isUnique: false
+    default: null
+    comment: 'Turkish translation.'

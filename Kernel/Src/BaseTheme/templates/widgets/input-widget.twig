@@ -1,0 +1,27 @@
+<div>
+{% if widget.label %}
+	<label for="{{ widget.attributes["id"] }}" class="font-weight-bold text-primary">
+		{{ widget.label }}
+	</label>
+{% endif %}
+{% if widget.file %}
+	<div class="mx-1 mb-2">
+		<a href="{{ widget.file.getUrl() }}" target="_blank">
+			{% if widget.file.isImage %}
+				<img src='{{ widget.file.getUrl() }}' class="img-thumbnail">
+			{% else %}
+				{{ widget.file.file_name }}
+			{% endif %}
+		</a>
+		<a class="mr-2 rowdelete" data-table="files" data-id="{{ widget.file.ID }}" href="#">
+    		<i class="fa fa-times text-danger core-control"></i>
+		</a>
+	</div>
+{% endif %}
+	<input type='{{ widget.type }}' name='{{ widget.name }}' class='{{ widget.classes|join(" ") }}' {{ widget.renderAttributes()|raw }} value='{{ widget.value }}'/>
+{% if widget.description %}
+	<small for="{{ widget.attributes["id"] }}" class="d-block">
+		{{ widget.description }}
+	</small>
+{% endif %}
+</div>

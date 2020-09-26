@@ -1,0 +1,33 @@
+<div class="col-12 mt-4" id="pagination">
+	<nav aria-label="...">
+		<div class="pagination justify-content-center">
+			<div class="page-item  {{ view.page == 1 ? "disabled" : "" }}">
+				<a class="page-link" href='{{ view.query_link ~ "&page=1" }}'>
+					<span class="sr-only">first</span>
+					<i class="fa fa-angle-double-left"></i>
+				</a>
+			</div>
+			<div class="page-item {{ view.page == 1 ? "disabled" : "" }}">
+				<a class="page-link" href='{{ view.query_link ~ "&page=" ~ (view.page - 1) }}'>
+					<span class="sr-only">before</span>
+					<i class="fa fa-angle-left"></i>
+				</a>
+			</div>
+			{% for i in  (view.page > 5 ? view.page - 4 : 1)..(view.page + 5 < view.getPageCount() ? view.page + 4 : view.getPageCount() ) %}
+                <div class='page-item {{ i == view.page ? "active" : "" }}'><a class='page-link' href='{{ view.query_link ~ "&page=" ~ i }}'>{{ i }}</a></div>
+            {% endfor %}
+			<div class="page-item {{ view.page == view.getPageCount() ? "disabled" : "" }}">
+				<a class="page-link" href='{{ view.query_link ~ "&page=" ~ (view.page + 1) }}'>
+					<span class="sr-only">next</span>
+					<i class="fa fa-angle-right"></i>
+				</a>
+			</div>
+			<div class="page-item {{ view.page == view.getPageCount() ? "disabled" : "" }}">
+				<a class="page-link" href='{{ view.query_link ~ "&page=" ~ view.getPageCount() }}'>
+					<span class="sr-only">last</span>
+					<i class="fa fa-angle-double-right"></i>
+				</a>
+			</div>
+		</div>
+	</nav>
+</div>

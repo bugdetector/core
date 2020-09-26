@@ -2,14 +2,14 @@
 
  1. Tablo oluşturmak için aşağıdaki komutu kullanabilirsiniz.
 
-> CREATE DATABASE core_multisite CHARACTER SET utf8 COLLATE utf8_general_ci;
+> CREATE DATABASE core CHARACTER SET utf8 COLLATE utf8_general_ci;
 
   2. Veri tabanını kullanmak için sadece localhost üzerinden bağlanabilen özel bir mysql kullanıcısı oluşturun.
     
    
 
-> MYSQL 5.0 : create user core_multisite_user@localhost;
-> MYSQL 8.0 : CREATE USER core_multisite_user@localhost IDENTIFIED WITH mysql_native_password BY "core_multisite1234";
+> MYSQL 5.0 : create user core_user@localhost;
+> MYSQL 8.0 : CREATE USER core_user@localhost IDENTIFIED WITH mysql_native_password BY "core_1234";
 
     
       
@@ -18,32 +18,23 @@
     
     
 
-> MYSQL 5.0: GRANT ALL PRIVILEGES ON core_multisite.* To 'core_multisite_user'@'localhost' IDENTIFIED BY  'core_multisite1234';
-> MYSQL 8.0: GRANT ALL PRIVILEGES ON core_multisite.* To 'core_multisite_user'@'localhost' WITH GRANT OPTION
+> MYSQL 5.0: GRANT ALL PRIVILEGES ON core_multisite.* To 'core_user'@'localhost' IDENTIFIED BY  'core_1234';
+> MYSQL 8.0: GRANT ALL PRIVILEGES ON core.* To 'core_user'@'localhost' WITH GRANT OPTION
 
     
       
   ## Yapılandırma işlemleri
-   1. "config_example.php" dosyasını kopyalayın üzerinden veritabanı bağlantısı için gerekli olan bilgiler girin.
-
-> VERSION parametresinin 0 olması gerekmektedir.
-
+   1. Siteye erişerek yükleme ekranından veritabanı bağlantı bilgisi ve yeni kullanıcı oluşturulması için adımları izleyin.
+   
+   Ya da config/ dizini altında bulunan config_example.php dosyasını kopyalayın ve veri tabanı bağlantı bilgilerini girin.
+   Daha sonra `php bin/console config:export` komutunu çalıştırın.
+   Oturum açabilmek için aşağıdaki komutla bir yönetici kullanıcı oluşturabilirsiniz.
+  `php bin/console.php user:add-admin root bakiyucel38@gmail.com "Murat Baki" 1234`
     
-   2. .htaccess_example dosyasını da .htaccess olarak kopyalayın ve istediğiniz şekilde düzenleyin.
-
-> Sitenin HTTP ya da HTTPS kulandığı bildirin.
-> SITE_NAME kısmına sitenin adını yazın
-> E-posta ayarlarını bildirin.
-> EMAIL_USERNAME, sistem e-posta gönderdiği zaman görülecek olan kullanıcı adıdır.
->PAGE_SIZE_LIMIT, tablolar ekranında sayfalama yapılırken gösterilecek bir sayfa boyutunu gösterir.
->TIMEZONE, varsayılan zaman dilimidir.
-> LANGUAGE, varsayılan sistem dilidir.
+   2. .htaccess_example dosyasını .htaccess olarak kopyalayın ve istediğiniz şekilde düzenleyin.
 
     
    4. Siteye tarayıcı üzerinden erişin ve yüklemeyi tamamlayın.
-    
-    
-   Varsayılan kullanıcı adı: root şifre: 1234
    
      
    ## Önemli Kontroller
@@ -51,5 +42,17 @@
    verildiğinden emin olun.
    
    Sadece geliştirme ortamları için, canlı ortamlar için değil,
-   "kernel/migrations" ve "translations" dizinlerine yazma ve dosya
-   oluştutma izinlerini verin.
+   "config/" dizinine yazma ve dosya
+   oluşturma izinlerini verin.
+
+  ## Bağımlılıklar
+  PHP v > 7.4
+
+  php-common
+  php-intl
+  php-mbstring
+  php-mysql
+
+   5. Kod standardı kontrolü
+  phpcs --standard=PSR12 <file>
+  phpcbf --standard=PSR12 <file>

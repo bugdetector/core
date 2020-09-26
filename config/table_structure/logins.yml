@@ -1,0 +1,23 @@
+table_name: logins
+table_comment: 'Contains failed login attempts by user and IP address to site.'
+fields:
+  ip_address:
+    type: short_text
+    length: '16'
+    column_name: ip_address
+    primary_key: false
+    autoIncrement: false
+    isNull: false
+    isUnique: false
+    default: null
+    comment: 'Ip address.'
+  username:
+    type: short_text
+    length: '255'
+    column_name: username
+    primary_key: false
+    autoIncrement: false
+    isNull: false
+    isUnique: false
+    default: null
+    comment: 'Username or email filled in login screen.'

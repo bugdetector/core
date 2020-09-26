@@ -1,0 +1,25 @@
+{% extends "forms/form.twig" %}
+
+{% block fields %}
+    {{ form.fields["form_id"] }}
+    {{ form.fields["form_build_id"] }}
+    {{ form.fields["form_token"] }}
+	<div class="form-group">
+		{{ form.fields["username"] }}
+	</div>
+	<div class="form-group">
+		{{ form.fields["password"] }}
+	</div>
+	<div class="form-group">
+		<div class="custom-control custom-checkbox small">
+			<input type="checkbox" class="custom-control-input" id="remember-me" value="remember-me" name="remember-me"/>
+			<label class="custom-control-label" for="remember-me">{{ t("remember_me") }}</label>
+		</div>
+		<input type="submit" class="btn btn-primary btn-user btn-block" value="{{ t("login") }}" name="login">
+	</div>
+	<hr/>
+	<div class="text-center">
+		<a class="small" href="{{ constant("BASE_URL") ~ "/forgetpassword" }}">
+			{{ t("forgot_password") }}</a>
+	</div>
+{% endblock %}
