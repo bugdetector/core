@@ -9,7 +9,7 @@
     "autoload": {
         "psr-4": {
         "CoreDB\\Kernel\\":"Kernel/",
-        "Src\\" : "Src/",
+        "Src\\" : "Kernel/Src/",
         "App\\" : "App/"
         }
     }
