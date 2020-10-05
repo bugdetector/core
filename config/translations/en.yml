@@ -180,3 +180,4 @@ type: Type
 value: Value
 variables: 'Configuration variables'
 mainpage: 'Main page'
+config_file_write_error: 'Config file (config/config.php) is not writable. Please give write permission before continue to config file or create your own file and use command line.'
