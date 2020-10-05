@@ -4,7 +4,7 @@ site_name:
   type: text
 hash_salt:
   key: hash_salt
-  value: mjfuMgspJmuYAPixCWqYouOAYsgVB0FKx04t26aAECehIY51qMVDbOT3F96GYVQ8S4s=
+  value: null
   type: hidden
 email_address:
   key: email_address

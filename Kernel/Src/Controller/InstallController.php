@@ -10,7 +10,7 @@ use Src\BaseTheme\BaseTheme;
 
 class InstallController extends BaseTheme {
 
-    public InstallForm $installForm;
+    public ?InstallForm $installForm = null;
 
     public function __construct($arguments)
     {
@@ -43,11 +43,15 @@ class InstallController extends BaseTheme {
     {
         $this->body_classes[] = "bg-gradient-info";
         $this->setTitle(Translation::getTranslation("install_welcome"));
-        if(is_file("../config/config.php")){
-            unlink("../config/config.php");
+        if(!@fopen("../config/config.php", "w+")){
+            $this->createMessage(Translation::getTranslation("config_file_write_error"));
+        }else{
+            if(is_file("../config/config.php")){
+                unlink("../config/config.php");
+            }
+            $this->installForm = new InstallForm();
+            $this->installForm->processForm();
         }
-        $this->installForm = new InstallForm();
-        $this->installForm->processForm();
     }
 
     public function getTemplateFile(): string

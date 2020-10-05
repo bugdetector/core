@@ -164,8 +164,10 @@ class InstallForm extends Form
         ])->execute();
         
         $hashSaltVar = Variable::getByKey("hash_salt");
-        $hashSaltVar->value->setValue($hashSalt);
-        $hashSaltVar->save();
+        if(!$hashSaltVar->value){
+            $hashSaltVar->value->setValue($hashSalt);
+            $hashSaltVar->save();
+        }
         $_SESSION[BASE_URL."-UID"] = $user->ID;
         $this->setMessage(Translation::getTranslation("all_configuration_imported"));
         \CoreDB::goTo(BASE_URL);
