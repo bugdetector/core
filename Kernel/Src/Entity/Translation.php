@@ -20,7 +20,7 @@ class Translation extends TableMapper
     private static $available_languages;
     private static $instance;
 
-    const BACKUP_PATH = __DIR__ . "/../../config/translations";
+    const BACKUP_PATH = __DIR__ . "/../../../config/translations";
 
     public ShortText $key;
     public LongText $en;

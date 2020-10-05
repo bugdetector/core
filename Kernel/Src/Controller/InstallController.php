@@ -14,7 +14,7 @@ class InstallController extends BaseTheme {
 
     public function __construct($arguments)
     {
-        parent::__construct($arguments);
+        $this->arguments = $arguments;
     }
 
     public function checkAccess(): bool
