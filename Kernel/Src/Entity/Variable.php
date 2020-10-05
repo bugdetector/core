@@ -39,11 +39,7 @@ class Variable extends TableMapper
 
     public static function getByKey(string $key) : ?Variable
     {
-        try {
-            return self::get(["key" => $key]);
-        } catch (Exception $ex) {
-            return null;
-        }
+        return self::get(["key" => $key]);
     }
 
     public function getResultHeaders(bool $translateLabel = true) : array
