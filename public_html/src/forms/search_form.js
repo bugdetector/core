@@ -1,4 +1,4 @@
-$(document).on("click", ".rowdelete",function(e){
+$(document).on("click", ".rowdelete",function (e) {
     e.preventDefault();
     let button = $(this);
     let table_name = $(this).data("table");
@@ -6,12 +6,12 @@ $(document).on("click", ".rowdelete",function(e){
     alert({
         message: _t("record_remove_accept"),
         title: _t("warning"),
-        callback: function(){
+        callback: function () {
             $.ajax({
-                url: `${root}/admin/ajax/delete`,
+                url: `${root} / admin / ajax / delete`,
                 method: "post",
                 data: {table: table_name, id: id},
-                success: function(){
+                success: function () {
                     button.parents("tr").fadeOut(1000);
                 }
             })

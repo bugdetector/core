@@ -2,16 +2,19 @@
 
 namespace Src\Theme;
 
-abstract class ResultsViewer extends View{
+abstract class ResultsViewer extends View
+{
     public array $headers;
     public array $data;
     public bool $orderable = false;
-    public function setHeaders(array $headers){
+    public function setHeaders(array $headers)
+    {
         $this->headers = $headers;
         return $this;
     }
 
-    public function setData(array $data){
+    public function setData(array $data)
+    {
         $this->data = $data;
         return $this;
     }

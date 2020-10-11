@@ -51,11 +51,11 @@ $(function ($) {
 
     $(document).on("click", ".clear-cache", function (e) {
         e.preventDefault();
-        $.ajax(`${root}/admin/ajax/clearCache`);
+        $.ajax(`${root} / admin / ajax / clearCache`);
     });
 })
 
-window._t = function(key, args) {
+window._t = function (key, args) {
     if (args) {
         return translations[key].format(args);
     }

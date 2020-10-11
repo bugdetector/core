@@ -24,8 +24,11 @@ class InsertController extends TableController
             if (!$this->object) {
                 Router::getInstance()->route(NotFoundController::getUrl());
             }
-            $this->setTitle(Translation::getTranslation("edit") . " | " . $this->table_name . " ID: {$this->object->ID}");
-        } else{
+            $this->setTitle(
+                Translation::getTranslation("edit") . " | " .
+                $this->table_name . " ID: {$this->object->ID}"
+            );
+        } else {
             $this->object = new DBObject($this->table_name);
             $this->setTitle(Translation::getTranslation("add") . " | " . $this->table_name);
         }

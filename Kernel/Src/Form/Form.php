@@ -3,7 +3,6 @@
 namespace Src\Form;
 
 use CoreDB\Kernel\Messenger;
-
 use Src\Entity\Translation;
 use Src\Entity\User;
 use Src\Form\Widget\FormWidget;
@@ -15,7 +14,7 @@ use Src\Views\ViewGroup;
 
 abstract class Form extends View
 {
-    const ENCRYPTION_METHOD = "aes128";
+    public const ENCRYPTION_METHOD = "aes128";
 
     public string $form_id;
     public string $form_build_id;
@@ -52,7 +51,7 @@ abstract class Form extends View
         if (isset($this->request["form_id"]) && $this->request["form_id"] == $this->getFormId()) {
             if ($this->checkCsrfToken() && $this->validate() && empty($this->errors)) {
                 $this->submit();
-            } 
+            }
             if (!empty($this->errors)) {
                 foreach ($this->errors as $field_name => $value) {
                     if (isset($this->fields[$field_name])) {
@@ -64,16 +63,23 @@ abstract class Form extends View
         }
     }
 
-    protected function restoreValues(){
+    protected function restoreValues()
+    {
         foreach ($this->fields as $field_name => $field) {
-            if (!in_array($field_name, ["form_id", "form_build_id", "form_token"]) && isset($this->request[$field_name])) {
+            if (
+                !in_array(
+                    $field_name,
+                    ["form_id", "form_build_id", "form_token"]
+                ) &&
+                isset($this->request[$field_name])
+            ) {
                 $this->fields[$field_name]->setValue($this->request[$field_name]);
             }
         }
     }
 
     abstract public function getFormId(): string;
-    abstract public function validate() : bool;
+    abstract public function validate(): bool;
     abstract public function submit();
 
     public function getTemplateFile(): string
@@ -94,9 +100,9 @@ abstract class Form extends View
 
     public function addField(View $field)
     {
-        if($field instanceof FormWidget){
+        if ($field instanceof FormWidget) {
             $this->fields[$field->name] = $field;
-        }else{
+        } else {
             $this->fields[] = $field;
         }
         return $this;
@@ -104,8 +110,8 @@ abstract class Form extends View
 
     public function setError(string $field_name, string $message)
     {
-        if(!isset($this->errors[$field_name])){
-            $this->errors[$field_name] = ViewGroup::create("div","");
+        if (!isset($this->errors[$field_name])) {
+            $this->errors[$field_name] = ViewGroup::create("div", "");
         }
         $this->errors[$field_name]->addField(
             AlertMessage::create($message)

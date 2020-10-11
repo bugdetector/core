@@ -1,5 +1,5 @@
-window.loadCheckbox = function(element) {
-    if(window.$(element).attr("disabled")){
+window.loadCheckbox = function (element) {
+    if (window.$(element).attr("disabled")) {
         return;
     }
     let replace = $("<div class='checkbox_div'>" + element.outerHTML + "</div>");
@@ -21,7 +21,7 @@ window.loadCheckbox = function(element) {
     window.$(element).replaceWith(replace);
 }
 
-window.$(function($){
+window.$(function ($) {
     $("input[type='checkbox']").each(function (i, element) {
         loadCheckbox(element);
     });

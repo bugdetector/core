@@ -19,7 +19,7 @@ class InputWidget extends FormWidget
     public function setType(string $type)
     {
         $this->type = $type;
-        if($type == "checkbox"){
+        if ($type == "checkbox") {
             \CoreDB::controller()->addJsFiles("dist/checkbox/checkbox.js");
         }
         return $this;
@@ -33,13 +33,13 @@ class InputWidget extends FormWidget
     public function setValue($value)
     {
         $this->value = $value;
-        if($this->type == "checkbox"){
-            if($this->value){
+        if ($this->type == "checkbox") {
+            if ($this->value) {
                 $this->addAttribute("checked", "true");
-            }else{
+            } else {
                 $this->removeAttribute("checked");
             }
-        }else if($this->type == "file"){
+        } elseif ($this->type == "file") {
             $this->file = File::get($value);
         }
         return $this;
@@ -48,12 +48,12 @@ class InputWidget extends FormWidget
     public function addClass(string $class_name): View
     {
         $classesToAdd = explode(" ", $class_name);
-        if(in_array("dateinput", $classesToAdd) || in_array("datetimeinput", $classesToAdd)){
+        if (in_array("dateinput", $classesToAdd) || in_array("datetimeinput", $classesToAdd)) {
             \CoreDB::controller()->addJsFiles("dist/datetimepicker/datetimepicker.js");
             \CoreDB::controller()->addCssFiles("dist/datetimepicker/datetimepicker.css");
-        }else if(in_array("daterangeinput", $classesToAdd)){
+        } elseif (in_array("daterangeinput", $classesToAdd)) {
             \CoreDB::controller()->addJsFiles("dist/daterangepicker/daterangepicker.js");
-            \CoreDB::controller()->addCssFiles("dist/daterangepicker/daterangepicker.css",);
+            \CoreDB::controller()->addCssFiles("dist/daterangepicker/daterangepicker.css");
         }
         return parent::addClass($class_name);
     }

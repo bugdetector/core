@@ -14,7 +14,7 @@ class NavPills extends ViewGroup
     {
         $this->addField(
             ViewGroup::create("div", "nav-item")->addField(
-                ViewGroup::create("a", "nav-link".($is_active ? " active": ""))
+                ViewGroup::create("a", "nav-link" . ($is_active ? " active" : ""))
                 ->addAttribute("href", $href)
                 ->addField(TextElement::create($label))
             )

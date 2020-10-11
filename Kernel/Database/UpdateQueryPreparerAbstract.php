@@ -26,7 +26,12 @@ abstract class UpdateQueryPreparerAbstract extends QueryPreparerAbstract
      * @return UpdateQueryPreparerAbstract
      *  Self
      */
-    abstract public function condition(string $column, $value, string $operator = "=", string $connect = "AND") : UpdateQueryPreparerAbstract;
+    abstract public function condition(
+        string $column,
+        $value,
+        string $operator = "=",
+        string $connect = "AND"
+    ): UpdateQueryPreparerAbstract;
     
-    abstract public function getCondition() : string;
+    abstract public function getCondition(): string;
 }

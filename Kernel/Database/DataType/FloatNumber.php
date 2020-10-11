@@ -27,7 +27,7 @@ class FloatNumber extends DataTypeAbstract
         ->setType("number")
         ->setDescription(Translation::getTranslation($this->comment))
         ->addAttribute("step", "0.01");
-        if(!$this->isNull){
+        if (!$this->isNull) {
             $widget->addAttribute("required", "true");
         }
         return $widget;
@@ -42,7 +42,7 @@ class FloatNumber extends DataTypeAbstract
     /**
      * @inheritdoc
      */
-    public function getSearchWidget() : FormWidget
+    public function getSearchWidget(): FormWidget
     {
         return $this->getWidget()->removeAttribute("required");
     }

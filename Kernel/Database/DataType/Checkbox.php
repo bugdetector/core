@@ -27,7 +27,7 @@ class Checkbox extends DataTypeAbstract
         ->setDescription(Translation::getTranslation($this->comment))
         ->removeClass("form-control")
         ->setValue($this->value);
-        if(!$this->isNull){
+        if (!$this->isNull) {
             $widget->addAttribute("required", "true");
         }
         return $widget;
@@ -40,7 +40,7 @@ class Checkbox extends DataTypeAbstract
     /**
      * @inheritdoc
      */
-    public function getSearchWidget() : FormWidget
+    public function getSearchWidget(): FormWidget
     {
         return SelectWidget::create("")
         ->setOptions([

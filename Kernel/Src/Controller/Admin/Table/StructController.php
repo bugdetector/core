@@ -3,7 +3,6 @@
 namespace Src\Controller\Admin\Table;
 
 use CoreDB\Kernel\Messenger;
-
 use Src\Controller\Admin\TableController;
 use Src\Entity\Translation;
 use Src\Form\TableStructForm;

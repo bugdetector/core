@@ -28,9 +28,9 @@ use CoreDB\Kernel\Database\UpdateQueryPreparerAbstract;
 use CoreDB\Kernel\Database\DatabaseDriver;
 use CoreDB\Kernel\Database\DataType\Checkbox;
 use CoreDB\Kernel\Database\DatabaseInstallationException;
-use \PDO;
-use \PDOException;
-use \PDOStatement;
+use PDO;
+use PDOException;
+use PDOStatement;
 
 class MySQLDriver extends DatabaseDriver
 {
@@ -49,7 +49,12 @@ class MySQLDriver extends DatabaseDriver
     /**
      * @inheritdoc
      */
-    public static function checkConnection(string $dbServer, string $dbName, string $dbUsername, string $dbPassword) : bool{
+    public static function checkConnection(
+        string $dbServer,
+        string $dbName,
+        string $dbUsername,
+        string $dbPassword
+    ): bool {
         try {
             new PDO("mysql:host=" . $dbServer . ";dbname=" . $dbName, $dbUsername, $dbPassword);
             return true;
@@ -65,9 +70,9 @@ class MySQLDriver extends DatabaseDriver
     public static function getInstance(): MySQLDriver
     {
         if (self::$instance == null) {
-            if(defined("DB_SERVER") && defined("DB_NAME") && defined("DB_USER") && defined("DB_PASSWORD")){
+            if (defined("DB_SERVER") && defined("DB_NAME") && defined("DB_USER") && defined("DB_PASSWORD")) {
                 return new self(DB_SERVER, DB_NAME, DB_USER, DB_PASSWORD);
-            }else{
+            } else {
                 throw new DatabaseInstallationException("Missing database configuration.");
             }
         }
@@ -82,7 +87,7 @@ class MySQLDriver extends DatabaseDriver
     public function execute(QueryPreparerAbstract $query): PDOStatement
     {
         try {
-            if(!$this->connection){
+            if (!$this->connection) {
                 throw new DatabaseInstallationException("Database connection not provided.");
             }
             $statement = $this->connection->prepare($query->getQuery());
@@ -92,7 +97,7 @@ class MySQLDriver extends DatabaseDriver
             if ($this->connection->inTransaction()) {
                 $this->connection->rollBack();
             }
-            if($ex->getCode() == "42S02"){
+            if ($ex->getCode() == "42S02") {
                 throw new DatabaseInstallationException($ex->getMessage());
             }
             throw $ex;
@@ -166,7 +171,7 @@ class MySQLDriver extends DatabaseDriver
     /**
      * @inheritdoc
      */
-    public function create(TableDefinition $table, bool $excludeForeignKeys = false) : CreateQueryPreparerAbstract
+    public function create(TableDefinition $table, bool $excludeForeignKeys = false): CreateQueryPreparerAbstract
     {
         return new CreateQueryPreparer($table, $excludeForeignKeys);
     }
@@ -174,7 +179,7 @@ class MySQLDriver extends DatabaseDriver
     /**
      * @inheritdoc
      */
-    public function alter(TableDefinition $table = null) : AlterQueryPreparerAbstract
+    public function alter(TableDefinition $table = null): AlterQueryPreparerAbstract
     {
         return new AlterQueryPreparer($table);
     }
@@ -208,15 +213,7 @@ class MySQLDriver extends DatabaseDriver
 
     public static function quote(string $string): string
     {
-        return self::getInstance()->_quote($string);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function _quote(string $string): string
-    {
-        return $this->connection->quote($string);
+        return self::getInstance()->connection->quote($string);
     }
 
     /**
@@ -229,8 +226,10 @@ class MySQLDriver extends DatabaseDriver
         foreach ($descriptions as $index => $description) {
             $field = null;
             $type = substr($description["Type"], 0, strpos($description["Type"], "(") ?: strlen($description["Type"]));
-            if ($type == "int" && ($description["Key"] == "MUL" ||
-                ($description["Key"] == "UNI" && self::isUniqueForeignKey($table, $description["Field"])))) {
+            if (
+                $type == "int" && ($description["Key"] == "MUL" ||
+                ($description["Key"] == "UNI" && self::isUniqueForeignKey($table, $description["Field"])))
+            ) {
                 $type = "table_reference";
             }
             switch ($type) {
@@ -265,9 +264,9 @@ class MySQLDriver extends DatabaseDriver
                 case "table_reference":
                     $fk_description = self::getForeignKeyDescription($table, $description["Field"]);
                     $reference_table = !empty($fk_description) ? $fk_description["REFERENCED_TABLE_NAME"] : "";
-                    if($reference_table == "files"){
+                    if ($reference_table == "files") {
                         $field = new File($description["Field"]);
-                    }else{
+                    } else {
                         $field = new TableReference($description["Field"]);
                         $field->reference_table = $reference_table;
                     }
@@ -426,7 +425,7 @@ class MySQLDriver extends DatabaseDriver
         } elseif ($class_name == TableReference::class) {
             $type_description .= "INT";
         } elseif ($class_name == EnumaratedList::class) {
-            $type_description .= "ENUM('".implode("','", $dataType->values)."')";
+            $type_description .= "ENUM('" . implode("','", $dataType->values) . "')";
         }
         if (!$dataType->isNull) {
             $type_description .= " NOT NULL";
@@ -440,14 +439,14 @@ class MySQLDriver extends DatabaseDriver
         if ($dataType->default) {
             $type_description .= " DEFAULT {$dataType->default}";
         }
-        $type_description .= " COMMENT ".\CoreDB::database()->quote($dataType->comment);
+        $type_description .= " COMMENT " . \CoreDB::database()->quote($dataType->comment);
         return $type_description;
     }
 
     /**
      * @inheritdoc
      */
-    public function currentTimestamp() : string
+    public function currentTimestamp(): string
     {
         return "CURRENT_TIMESTAMP";
     }

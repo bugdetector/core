@@ -10,10 +10,10 @@ class InsertQueryPreparer extends InsertQueryPreparerAbstract
     /**
      * @inheritdoc
      */
-    public function getQuery() : string
+    public function getQuery(): string
     {
-        return "INSERT INTO `".
-                $this->table."` ".
+        return "INSERT INTO `" .
+                $this->table . "` " .
                 $this->getBackQuery();
     }
     
@@ -27,12 +27,12 @@ class InsertQueryPreparer extends InsertQueryPreparerAbstract
             if ($field === "NULL" || (!is_numeric($field) && !$field)) {
                 $field = null;
             }
-            $fields.= ($index>0 ? ", `" : "`").$key."`";
-            $values.= ($index>0 ? ", " : "")." ? ";
+            $fields .= ($index > 0 ? ", `" : "`") . $key . "`";
+            $values .= ($index > 0 ? ", " : "") . " ? ";
             $this->params[] = $field;
             $index++;
         }
         
-        return $fields.") ".$values.")";
+        return $fields . ") " . $values . ")";
     }
 }

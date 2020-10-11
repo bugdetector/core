@@ -10,7 +10,7 @@ class Sidebar extends ViewGroup
         parent::__construct($tag_name, $wrapper_class);
     }
     
-    public static function create(string $tag_name, string $wrapper_class) : Sidebar
+    public static function create(string $tag_name, string $wrapper_class): Sidebar
     {
         return new Sidebar($tag_name, $wrapper_class);
     }
@@ -21,7 +21,7 @@ class Sidebar extends ViewGroup
         return $this;
     }
 
-    public function getTemplateFile() : string
+    public function getTemplateFile(): string
     {
         return "sidebar.twig";
     }

@@ -15,7 +15,7 @@ class AdminController extends BaseTheme
     public $number_of_members;
     public $cards = [];
     
-    public function checkAccess() : bool
+    public function checkAccess(): bool
     {
         return \CoreDB::currentUser()->isAdmin();
     }
@@ -27,9 +27,9 @@ class AdminController extends BaseTheme
     
     public function preprocessPage()
     {
-        $this->setTitle(Variable::getByKey("site_name")->value." | ".Translation::getTranslation("dashboard"));
+        $this->setTitle(Variable::getByKey("site_name")->value . " | " . Translation::getTranslation("dashboard"));
         $this->number_of_members = CoreDB::database()->select(User::getTableName())
-        ->select_with_function(["COUNT(*) as count"])
+        ->selectWithFunction(["COUNT(*) as count"])
         ->execute()->fetchObject()->count;
         $this->cards[] = BasicCard::create()
         ->setBorderClass("border-left-primary")

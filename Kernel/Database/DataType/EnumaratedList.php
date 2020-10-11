@@ -43,10 +43,11 @@ class EnumaratedList extends DataTypeAbstract
         return $widget;
     }
 
-    public function setValue($value){
-        if(in_array($value, $this->values)){
+    public function setValue($value)
+    {
+        if (in_array($value, $this->values)) {
             $this->value = $value;
-        }else{
+        } else {
             $this->value = "";
         }
     }

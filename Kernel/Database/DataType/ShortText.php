@@ -25,7 +25,7 @@ class ShortText extends DataTypeAbstract
         $widget = InputWidget::create("")
         ->setDescription(Translation::getTranslation($this->comment))
         ->setValue($this->value);
-        if(!$this->isNull){
+        if (!$this->isNull) {
             $widget->addAttribute("required", "true");
         }
         return $widget;
@@ -34,7 +34,7 @@ class ShortText extends DataTypeAbstract
     /**
      * @inheritdoc
      */
-    public function getSearchWidget() : FormWidget
+    public function getSearchWidget(): FormWidget
     {
         return $this->getWidget()->removeAttribute("required");
     }

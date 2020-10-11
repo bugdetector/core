@@ -29,7 +29,7 @@ abstract class BaseTheme extends BaseController
 
     public static function getTemplateDirectories(): array
     {
-        return [__DIR__."/templates"];
+        return [__DIR__ . "/templates"];
     }
 
     public function processPage()
@@ -44,15 +44,19 @@ abstract class BaseTheme extends BaseController
         $this->render();
     }
     
-    public function buildNavbar(){
-        $this->navbar = Navbar::create("nav", "navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow");
+    public function buildNavbar()
+    {
+        $this->navbar = Navbar::create(
+            "nav",
+            "navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"
+        );
         $currentUser = \CoreDB::currentUser();
         $userDropdown = NavItem::create(
             Image::create($currentUser->getProfilePhotoUrl(), $currentUser->getFullName(), true)
             ->addClass("img-profile rounded-circle"),
             ""
         );
-        if($currentUser->isLoggedIn()){
+        if ($currentUser->isLoggedIn()) {
             $userDropdown->addDropdownItem(
                 NavItem::create(
                     "fa fa-user",
@@ -66,7 +70,7 @@ abstract class BaseTheme extends BaseController
                     LogoutController::getUrl()
                 )
             );
-        }else{
+        } else {
             $userDropdown->addDropdownItem(
                 NavItem::create(
                     "fa fa-sign-in-alt",
@@ -80,15 +84,16 @@ abstract class BaseTheme extends BaseController
             ->addClass("dropdown-divider")
         );
         $translateIcons = Translation::get(["key" => "language_icon"]);
-        foreach(Translation::getAvailableLanguageList() as $language){
+        foreach (Translation::getAvailableLanguageList() as $language) {
             $userDropdown->addDropdownItem(
                 NavItem::create(
                     TextElement::create($translateIcons->$language->getValue())
                     ->setTagName("div")
                     ->setIsRaw(true)
-                    ->addClass("d-inline-block"), 
-                    Translation::getTranslation($language), 
-                    "?lang={$language}")
+                    ->addClass("d-inline-block"),
+                    Translation::getTranslation($language),
+                    "?lang={$language}"
+                )
             );
         }
         $this->navbar->addNavItem(
@@ -98,28 +103,31 @@ abstract class BaseTheme extends BaseController
 
     public function buildSidebar()
     {
-        $this->sidebar = Sidebar::create("div", "navbar-nav bg-gradient-primary sidebar sidebar-dark accordion toggled position-sticky");
+        $this->sidebar = Sidebar::create(
+            "div",
+            "navbar-nav bg-gradient-primary sidebar sidebar-dark accordion toggled position-sticky"
+        );
         $currentUser = \CoreDB::currentUser();
         if ($currentUser->isAdmin()) {
             $this->sidebar->addNavItem(
                 NavItem::create(
                     "fa fa-tachometer-alt",
                     Translation::getTranslation("dashboard"),
-                    BASE_URL. "/admin",
+                    BASE_URL . "/admin",
                     static::class == AdminController::class
                 )
             )->addNavItem(
                 NavItem::create(
                     "fa fa-cube",
                     Translation::getTranslation("entities"),
-                    BASE_URL."/admin/entity",
+                    BASE_URL . "/admin/entity",
                     $this instanceof EntityController
                 )
             )->addNavItem(
                 NavItem::create(
                     "fa fa-chart-area",
                     Translation::getTranslation("tables"),
-                    BASE_URL."/admin/table",
+                    BASE_URL . "/admin/table",
                     $this instanceof TableController
                 )
             )->addNavItem(
@@ -136,11 +144,12 @@ abstract class BaseTheme extends BaseController
     {
     }
 
-    protected function addDefaultMetaTags(){
+    protected function addDefaultMetaTags()
+    {
         $this->addMetaTag("charset", [
             "charset" => "utf-8"
         ]);
-        $this->addMetaTag("viewport",[
+        $this->addMetaTag("viewport", [
             "name" => "viewport",
             "content" => "width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes"
         ]);

@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Src\Views;
 
@@ -10,7 +10,7 @@ class Image extends View
     public string $alt;
     public bool $showAlt;
 
-    public static function create(string $src, string $alt, bool $showAlt = false) : Image
+    public static function create(string $src, string $alt, bool $showAlt = false): Image
     {
         $image = new Image();
         $image->src = $src;
@@ -19,9 +19,8 @@ class Image extends View
         return $image;
     }
 
-    public function getTemplateFile() : string
+    public function getTemplateFile(): string
     {
         return "image.twig";
     }
-
 }

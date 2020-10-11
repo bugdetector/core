@@ -3,13 +3,12 @@
 namespace CoreDB\Kernel;
 
 use Exception;
-use Src\Entity\User;
 
-abstract class ServiceController  extends BaseController
+abstract class ServiceController extends BaseController
 {
 
-    const RESPONSE_TYPE_JSON = 0;
-    const RESPONSE_TYPE_RAW = 1;
+    public const RESPONSE_TYPE_JSON = 0;
+    public const RESPONSE_TYPE_RAW = 1;
     public $arguments = [];
     public $messages = [];
     public $method;
@@ -75,12 +74,15 @@ abstract class ServiceController  extends BaseController
      * @param string $title
      *  Page Title
      */
-    public function setTitle(string $title) : void{}
+    public function setTitle(string $title): void
+    {
+    }
 
     /**
      * No theme.
      */
-    public static function getTemplateDirectories() : array{
+    public static function getTemplateDirectories(): array
+    {
         return [];
     }
 }

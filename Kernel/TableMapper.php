@@ -51,7 +51,12 @@ abstract class TableMapper implements SearchableInterface
             $this->entityConfig =  $entityConfig[$this->entityName];
             if (isset($this->entityConfig[EntityReference::CONNECTION_MANY_TO_MANY])) {
                 foreach ($this->entityConfig[EntityReference::CONNECTION_MANY_TO_MANY] as $fieldEntityName => $config) {
-                    $this->{$fieldEntityName} = new EntityReference($fieldEntityName, $this, $config, EntityReference::CONNECTION_MANY_TO_MANY);
+                    $this->{$fieldEntityName} = new EntityReference(
+                        $fieldEntityName,
+                        $this,
+                        $config,
+                        EntityReference::CONNECTION_MANY_TO_MANY
+                    );
                 }
             }
         }
@@ -177,7 +182,11 @@ abstract class TableMapper implements SearchableInterface
     public function toArray(): array
     {
         foreach ($this as $field_name => $field) {
-            if (!($field instanceof DataTypeAbstract) || ($field instanceof EntityReference) || in_array($field_name, ["ID", "created_at", "last_updated", "changed_fields"])) {
+            if (
+                !($field instanceof DataTypeAbstract) ||
+                ($field instanceof EntityReference) ||
+                in_array($field_name, ["ID", "created_at", "last_updated", "changed_fields"])
+            ) {
                 continue;
             }
             $object_as_array[$field_name] = $field->getValue();
@@ -262,7 +271,10 @@ abstract class TableMapper implements SearchableInterface
     {
         $fields = [];
         foreach ($this as $field_name => $field) {
-            if (!($field instanceof DataTypeAbstract) || in_array($field_name, ["ID", "table", "created_at", "last_updated"])) {
+            if (
+                !($field instanceof DataTypeAbstract) ||
+                in_array($field_name, ["ID", "table", "created_at", "last_updated"])
+            ) {
                 continue;
             }
             $widget = $this->getFieldWidget($field_name, $translateLabel);
@@ -305,9 +317,9 @@ abstract class TableMapper implements SearchableInterface
                 $inputName .= "[]";
             }
             $widget = $field->getSearchWidget();
-            if($widget){
+            if ($widget) {
                 $fields[$field_name] = $widget->setName($inputName)
-                ->setLabel($translateLabel ? Translation::getTranslation($field_name) : $field_name);
+                    ->setLabel($translateLabel ? Translation::getTranslation($field_name) : $field_name);
             }
         }
         return $fields;
@@ -323,7 +335,8 @@ abstract class TableMapper implements SearchableInterface
          * @var DataTypeAbstract $field
          */
         foreach (TableDefinition::getDefinition(static::getTableName())->fields as $field) {
-            $headers[$field->column_name] = $translateLabel ? Translation::getTranslation($field->column_name) : $field->column_name;
+            $headers[$field->column_name] = $translateLabel ?
+                Translation::getTranslation($field->column_name) : $field->column_name;
         }
         return $headers;
     }
@@ -403,16 +416,18 @@ abstract class TableMapper implements SearchableInterface
                 ->addField(TextElement::create(Translation::getTranslation("add")))
         ];
     }
-    public function editUrl($value = NULL)
+    public function editUrl($value = null)
     {
         if (!$value) {
             $value = $this->ID->getValue();
         }
         $isEntity = static::class != DBObject::class;
-        return BASE_URL . "/admin/" . ($isEntity ? "entity" : "table") . "/insert/" . ($isEntity ? $this->entityName : $this->getTableName()) . "/{$value}";
+        return BASE_URL . "/admin/" .
+        ($isEntity ? "entity" : "table") . "/insert/" .
+        ($isEntity ? $this->entityName : $this->getTableName()) . "/{$value}";
     }
 
-    function includeFiles($from = null)
+    public function includeFiles($from = null)
     {
         foreach (\CoreDB::normalizeFiles($from) as $file_key => $fileInfo) {
             if ($fileInfo["size"] != 0) {

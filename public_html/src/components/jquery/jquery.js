@@ -56,7 +56,6 @@ $(document).ajaxError(function (evt, request, settings) {
                 bootbox.alert(resp.messages[0].join("<br/>"));
             }
         } catch (ex) {
-
         }
     }
 });
@@ -70,7 +69,6 @@ $(document).ajaxSuccess(function (evt, request, settings) {
                 bootbox.alert(resp.messages[3].join("<br/>"));
             }
         } catch (ex) {
-
         }
     }
 });

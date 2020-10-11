@@ -1,4 +1,4 @@
-$(function($){
+$(function ($) {
     $(document).on("click", ".newfield", function () {
         let button = $(this);
         let index = $(".column_definition").length;
@@ -8,9 +8,9 @@ $(function($){
             data: { index: index },
             success: function (data) {
                 let row = $(data);
-                button.parents(".row.mt-4.mb-5").before(row);
+                button.parents(".row.mt-4.mb-5").prev().append(row);
                 selectpicker(row.find(".selectpicker"));
-                row.find(`input[name='fields[${index}][field_name]']`).focus();
+                row.find(`input[name = 'fields[${index}][field_name]']`).focus();
                 row.find("input[type='checkbox']").each(function (i, element) {
                     loadCheckbox(element);
                 });
@@ -52,7 +52,7 @@ $(function($){
             okLabel: _t("yes"),
             callback: function () {
                 $.ajax({
-                    url: `${root}/admin/ajax/dropfield`,
+                    url: `${root} / admin / ajax / dropfield`,
                     method: "post",
                     dataType: "json",
                     data: { tablename: tablename, column: column },
@@ -67,7 +67,8 @@ $(function($){
     $("#new_table").on("submit", function () {
         if ($(".has-error input:enabled").length !== 0) {
             alert(
-                { message: _t("check_wrong_fields") });
+                { message: _t("check_wrong_fields") }
+            );
             return false;
         }
     });

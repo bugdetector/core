@@ -5,7 +5,8 @@ namespace CoreDB\Kernel;
 use CoreDB\Kernel\Database\SelectQueryPreparerAbstract;
 use Src\Theme\ResultsViewer;
 
-interface SearchableInterface{
+interface SearchableInterface
+{
     public const PAGE_LIMIT = 100;
 
     /**
@@ -19,27 +20,27 @@ interface SearchableInterface{
      * @return ResultsViewer
      * ResultsViewer
      */
-    public function getResultsViewer() : ResultsViewer;
+    public function getResultsViewer(): ResultsViewer;
     /**
      * Return table headers.
      * @return array
      *  Table headers.
      */
-    public function getResultHeaders(bool $translateLabel = true) : array;
+    public function getResultHeaders(bool $translateLabel = true): array;
     /**
      * Return table search widgets.
      * @return array
      *  Table search widgets.
      */
-    public function getSearchFormFields(bool $translateLabel = true) : array;
+    public function getSearchFormFields(bool $translateLabel = true): array;
     /**
      * Return a query which will filtered by search form.
      * @return SelectQueryPreparerAbstract
      *  Query.
      */
-    public function getResultQuery() : SelectQueryPreparerAbstract;
+    public function getResultQuery(): SelectQueryPreparerAbstract;
     /**
      * Process a result row.
      */
-    public function postProcessRow(&$row) : void;
+    public function postProcessRow(&$row): void;
 }

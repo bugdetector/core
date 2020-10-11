@@ -1,6 +1,5 @@
 <?php
 
-
 namespace CoreDB\Kernel\Database\MySQL;
 
 use CoreDB\Kernel\Database\DropQueryPreparerAbstract;

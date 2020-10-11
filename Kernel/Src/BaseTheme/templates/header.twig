@@ -7,7 +7,7 @@
 		{{ controller.title }}
 	</title>
 	{% for js_file  in controller.js_files %}
-		<script src="{{ ("http" not in js_file) ? (constant("BASE_URL") ~ "/" ~ js_file) ~ "?" ~ getHashedFilemTime(js_file) : js_file }}"></script>
+		<script {{ ("http" in js_file) ? "async" }} src="{{ ("http" not in js_file) ? (constant("BASE_URL") ~ "/" ~ js_file) ~ "?" ~ getHashedFilemTime(js_file) : js_file }}"></script>
 	{% endfor %}
 
 	{% for css_file  in controller.css_files %}

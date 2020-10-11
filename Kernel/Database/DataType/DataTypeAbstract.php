@@ -66,12 +66,12 @@ abstract class DataTypeAbstract
         return $equals;
     }
 
-    public function toArray() : array
+    public function toArray(): array
     {
         $array = [];
         $array["type"] = array_search(get_class($this), \CoreDB::database()->dataTypes());
         foreach ($this as $field_name => $field) {
-            if($field_name == "value"){
+            if ($field_name == "value") {
                 continue;
             }
             $array[$field_name] = $field;
@@ -83,14 +83,16 @@ abstract class DataTypeAbstract
      * Set value.
      */
 
-    public function setValue($value){
+    public function setValue($value)
+    {
         $this->value = \CoreDB::cleanXSS($value);
     }
 
     /**
      * Return value.
      */
-    public function getValue(){
+    public function getValue()
+    {
         return $this->value;
     }
 

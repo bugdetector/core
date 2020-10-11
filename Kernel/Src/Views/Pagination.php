@@ -1,7 +1,6 @@
 <?php
 
 namespace Views;
-
 namespace Src\Views;
 
 use CoreDB\Kernel\SearchableInterface;
@@ -20,7 +19,7 @@ class Pagination extends View
         $this->limit = $limit;
         $params = $_GET;
         unset($params["page"]);
-        $this->query_link = BASE_URL.\CoreDB::requestUrl() . "?" . http_build_query(array_filter($params));
+        $this->query_link = BASE_URL . \CoreDB::requestUrl() . "?" . http_build_query(array_filter($params));
     }
 
     public function getTemplateFile(): string
