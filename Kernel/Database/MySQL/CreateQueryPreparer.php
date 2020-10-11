@@ -30,13 +30,15 @@ class CreateQueryPreparer extends CreateQueryPreparerAbstract
                 /**
                  * @var TableReference $field
                  */
-                $references_query[] = "FOREIGN KEY (`{$field->column_name}`) REFERENCES `{$field->reference_table}`(ID)";
+                $references_query[] =
+                "FOREIGN KEY (`{$field->column_name}`) REFERENCES `{$field->reference_table}`(ID)";
             }
         }
         $query .= implode(",\n", $fields_query);
-        $query .= !empty($unique_query)? ",\n".implode(",\n", $unique_query) : "";
-        $query .= !empty($references_query)? ",\n".implode(",\n", $references_query) : "";
-        $query .= "\n) CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT ".\CoreDB::database()->quote($this->definition->table_comment).";";
+        $query .= !empty($unique_query) ? ",\n" . implode(",\n", $unique_query) : "";
+        $query .= !empty($references_query) ? ",\n" . implode(",\n", $references_query) : "";
+        $query .= "\n) CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT " .
+                \CoreDB::database()->quote($this->definition->table_comment) . ";";
         return $query;
     }
 

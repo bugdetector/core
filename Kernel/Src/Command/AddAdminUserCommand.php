@@ -10,7 +10,8 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class AddAdminUserCommand extends Command{
+class AddAdminUserCommand extends Command
+{
     protected static $defaultName = "user:add-admin";
 
     protected function configure()
@@ -35,11 +36,11 @@ class AddAdminUserCommand extends Command{
             "active" => 1,
             "roles" => [1]
         ]);
-        try{
+        try {
             $user->save();
             $output->writeln(Translation::getTranslation("insert_success"));
             return Command::SUCCESS;
-        }catch(Exception $ex){
+        } catch (Exception $ex) {
             $output->writeln($ex->getMessage());
             return Command::FAILURE;
         }

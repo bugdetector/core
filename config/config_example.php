@@ -1,4 +1,5 @@
 <?php
+
 define("DB_SERVER", "%db_server");
 define("DB_NAME", "%db_name");
 define("DB_USER", "%db_user");

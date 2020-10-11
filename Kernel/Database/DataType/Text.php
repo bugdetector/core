@@ -26,7 +26,7 @@ class Text extends DataTypeAbstract
         $widget = TextareaWidget::create("")
         ->setDescription(Translation::getTranslation($this->comment))
         ->setValue($this->value);
-        if(!$this->isNull){
+        if (!$this->isNull) {
             $widget->addAttribute("required", "true");
         }
         return $widget;
@@ -35,7 +35,7 @@ class Text extends DataTypeAbstract
     /**
      * @inheritdoc
      */
-    public function getSearchWidget() : FormWidget
+    public function getSearchWidget(): FormWidget
     {
         return InputWidget::create("");
     }
@@ -43,10 +43,11 @@ class Text extends DataTypeAbstract
     /**
      * @inheritdoc
      */
-    public function setValue($value){
-        if(is_array($value)){
+    public function setValue($value)
+    {
+        if (is_array($value)) {
             $this->value = json_encode($value);
-        }else{
+        } else {
             $this->value = $value;
         }
     }

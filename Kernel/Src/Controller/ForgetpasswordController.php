@@ -3,9 +3,7 @@
 namespace Src\Controller;
 
 use Src\Entity\Translation;
-use Src\Entity\User;
 use Src\Form\ForgetPasswordForm;
-use Src\Form\LoginForm;
 use Src\BaseTheme\BaseTheme;
 
 class ForgetpasswordController extends BaseTheme
@@ -17,14 +15,14 @@ class ForgetpasswordController extends BaseTheme
     {
         parent::__construct($arguments);
         $this->body_classes = ["bg-gradient-info"];
-        $this->setTitle(Translation::getTranslation("forgot_password_question")."?");
+        $this->setTitle(Translation::getTranslation("forgot_password_question") . "?");
     }
-    public function getTemplateFile() : string
+    public function getTemplateFile(): string
     {
         return "page-login.twig";
     }
 
-    public function checkAccess() : bool
+    public function checkAccess(): bool
     {
         return !\CoreDB::currentUser()->isLoggedIn();
     }
@@ -35,7 +33,9 @@ class ForgetpasswordController extends BaseTheme
         $this->form->processForm();
     }
 
-    protected function addDefaultJsFiles(){}
+    protected function addDefaultJsFiles()
+    {
+    }
 
 
     public function echoContent()

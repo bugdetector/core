@@ -7,15 +7,15 @@ use CoreDB\Kernel\Database\SelectQueryPreparerAbstract;
 class SelectQueryPreparer extends SelectQueryPreparerAbstract
 {
 
-    public function getQuery() : string
+    public function getQuery(): string
     {
-        return "SELECT ".$this->distinct.
-                $this->get_fields()." FROM ".
-                $this->getTables()." ".
-                $this->getCondition()." ".
-                $this->getGroupBy()." ".
-                $this->getHaving()." ".
-                $this->getOrderBy()." ".
+        return "SELECT " . $this->distinct .
+                $this->getFields() . " FROM " .
+                $this->getTables() . " " .
+                $this->getCondition() . " " .
+                $this->getGroupBy() . " " .
+                $this->getHaving() . " " .
+                $this->getOrderBy() . " " .
                 $this->getLimit();
     }
     
@@ -38,9 +38,9 @@ class SelectQueryPreparer extends SelectQueryPreparerAbstract
             if ($this->quote) {
                 $table["tableName"] = "`{$table["tableName"]}`";
             }
-            $tables.= (isset($table["join"]) ? $table["join"]." JOIN " : " ").
-            $table["tableName"].($table["alias"] ? " AS ".$table["alias"] : " ")
-            .(isset($table["on"]) && $table["on"] ? " ON ".$table["on"]." " : " ");
+            $tables .= (isset($table["join"]) ? $table["join"] . " JOIN " : " ") .
+            $table["tableName"] . ($table["alias"] ? " AS " . $table["alias"] : " ")
+            . (isset($table["on"]) && $table["on"] ? " ON " . $table["on"] . " " : " ");
             $index++;
         }
         return $tables;
@@ -55,12 +55,12 @@ class SelectQueryPreparer extends SelectQueryPreparerAbstract
             $this->fields = array();
         }
         foreach ($fields as $field) {
-            array_push($this->fields, ($table ? $table."." : "").$field);
+            array_push($this->fields, ($table ? $table . "." : "") . $field);
         }
         return $this;
     }
     
-    private function get_fields()
+    private function getFields()
     {
         if (!$this->fields) {
             return "*";
@@ -68,7 +68,7 @@ class SelectQueryPreparer extends SelectQueryPreparerAbstract
         $index = 0;
         $fields = "";
         foreach ($this->fields as $field) {
-            $fields.= ($index>0 ? ", ": "").$field;
+            $fields .= ($index > 0 ? ", " : "") . $field;
             $index++;
         }
         return $fields;
@@ -76,7 +76,7 @@ class SelectQueryPreparer extends SelectQueryPreparerAbstract
     
     private function getOrderBy()
     {
-        return $this->orderBy ? "ORDER BY ".$this->orderBy : "";
+        return $this->orderBy ? "ORDER BY " . $this->orderBy : "";
     }
 
     private function getGroupBy()
@@ -92,38 +92,42 @@ class SelectQueryPreparer extends SelectQueryPreparerAbstract
     /**
      * @inheritdoc
      */
-    public function condition(string $column, $value, string $operator = "=", string $connect = "AND") : SelectQueryPreparerAbstract
-    {
+    public function condition(
+        string $column,
+        $value,
+        string $operator = "=",
+        string $connect = "AND"
+    ): SelectQueryPreparerAbstract {
         $placeholder = str_replace(".", "_", $column);
         $columnInfo = explode(".", $column);
         $column = $columnInfo[0];
         $fieldName = isset($columnInfo[1]) ? ".{$columnInfo[1]}" : "";
         $index = 0;
-        while(isset($this->params[":$placeholder"])){
+        while (isset($this->params[":$placeholder"])) {
             $placeholder = "{$column}_{$index}";
         }
-        if($operator == "IN"){
+        if ($operator == "IN") {
             $condition = "(";
-            foreach($value as $index => $val){
-                $condition .= ($condition != "(" ? "," : "").":{$placeholder}_{$index}";
+            foreach ($value as $index => $val) {
+                $condition .= ($condition != "(" ? "," : "") . ":{$placeholder}_{$index}";
                 $this->params[":{$placeholder}_{$index}"] = $val;
             }
             $condition .= ")";
-        }else{
+        } else {
             $condition = ":$placeholder";
             $this->params[":$placeholder"] = $value;
         }
-        $this->condition .= ($this->condition ? $connect : "")." `$column`$fieldName $operator $condition ";
+        $this->condition .= ($this->condition ? $connect : "") . " `$column`$fieldName $operator $condition ";
         return $this;
     }
     
     private function getCondition()
     {
-        return $this->condition ? "WHERE ".$this->condition: "";
+        return $this->condition ? "WHERE " . $this->condition : "";
     }
     
     private function getLimit()
     {
-        return $this->limit ? "LIMIT ".$this->limit.($this->offset ? " OFFSET ".$this->offset : "") : "";
+        return $this->limit ? "LIMIT " . $this->limit . ($this->offset ? " OFFSET " . $this->offset : "") : "";
     }
 }

@@ -1,5 +1,5 @@
 <?php
-
+// phpcs:ignoreFile
 use CoreDB\Kernel\BaseController;
 use CoreDB\Kernel\ConfigurationManager;
 use CoreDB\Kernel\Database\MySQL\MySQLDriver;
@@ -13,11 +13,9 @@ use Src\JWT;
 
 class CoreDB
 {
-    const ENCRYPTION_METHOD = "aes128";
+    private static $currentUser;
 
-    private static $current_user;
-
-    public static function get_current_date()
+    public static function currentDate()
     {
         return date("Y-m-d H:i:s");
     }
@@ -133,19 +131,23 @@ class CoreDB
             }
         }
         // we are done...
-        return strip_tags($dom->saveHTML(), "<table><thead><tbody><tr><td><label><strong><p><em><i><u><ul><li><a><img><blockquote><span><pre><code><br><h1><h2><h3><h4><h5><h6><div>");
+        return strip_tags(
+            $dom->saveHTML(),
+            "<table><thead><tbody><tr><td><label><strong><p><em><i><u><ul><li><a>" .
+            "<img><blockquote><span><pre><code><br><h1><h2><h3><h4><h5><h6><div>"
+        );
     }
 
     public static function baseHost()
     {
-        if(defined("TRUSTED_HOSTS")){
+        if (defined("TRUSTED_HOSTS")) {
             $trusted_hosts = explode(",", TRUSTED_HOSTS);
             if (!in_array($_SERVER["HTTP_HOST"], $trusted_hosts)) {
                 return $trusted_hosts[0];
             } else {
                 return $_SERVER["HTTP_HOST"];
             }
-        }else{
+        } else {
             return $_SERVER["HTTP_HOST"];
         }
     }
@@ -156,24 +158,24 @@ class CoreDB
      */
     public static function currentUser(): User
     {
-        if (self::$current_user) {
-            return self::$current_user;
+        if (self::$currentUser) {
+            return self::$currentUser;
         } else {
             if (isset($_SESSION[BASE_URL . "-UID"])) {
-                self::$current_user = User::get($_SESSION[BASE_URL . "-UID"]);
+                self::$currentUser = User::get($_SESSION[BASE_URL . "-UID"]);
             } elseif (isset($_COOKIE["session-token"])) {
                 $jwt = JWT::createFromString($_COOKIE["session-token"]);
-                self::$current_user = User::get($jwt->getPayload()->ID);
-                $_SESSION[BASE_URL . "-UID"] = self::$current_user->ID;
+                self::$currentUser = User::get($jwt->getPayload()->ID);
+                $_SESSION[BASE_URL . "-UID"] = self::$currentUser->ID;
             }
-            if (!self::$current_user) {
-                self::$current_user = new User();
-                if(isset(self::$current_user->username)){
-                    self::$current_user->username->setValue("guest");
+            if (!self::$currentUser) {
+                self::$currentUser = new User();
+                if (isset(self::$currentUser->username)) {
+                    self::$currentUser->username->setValue("guest");
                 }
             }
         }
-        return self::$current_user;
+        return self::$currentUser;
     }
 
     public static function database(): DatabaseDriver

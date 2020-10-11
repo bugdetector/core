@@ -1,4 +1,4 @@
-$(function(){
+$(function () {
     if (window.innerWidth < 768) {
         $('#table_list').toggleClass('show');
         $('a[href=\"#table_list\"]').toggleClass('collapsed');
@@ -19,7 +19,7 @@ $(function(){
             okLabel: _t("yes"),
             callback: function () {
                 $.ajax({
-                    url: `${root}/admin/ajax/truncate`,
+                    url: `${root} / admin / ajax / truncate`,
                     type: 'POST',
                     dataType: 'json',
                     data: { tablename: tablename },
@@ -41,7 +41,7 @@ $(function(){
             okLabel: _t("yes"),
             callback: function () {
                 $.ajax({
-                    url: `${root}/admin/ajax/drop`,
+                    url: `${root} / admin / ajax / drop`,
                     type: 'POST',
                     dataType: 'json',
                     data: { tablename: tablename },

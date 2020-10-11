@@ -47,26 +47,30 @@ class AjaxController extends ServiceController
     }
 
 
-    public function getTableColumns(){
+    public function getTableColumns()
+    {
         $column_options = [];
-        if($_POST["type"] == TableAndColumnSelector::TYPE_FIELD){
+        if ($_POST["type"] == TableAndColumnSelector::TYPE_FIELD) {
             $column_options["*"] = Translation::getTranslation("all");
         }
         $table = isset($_POST["table"]) ? $_POST["table"] : null;
-        if($table){
-            foreach(\CoreDB::database()->getTableDescription($table) as $fieldName => $field){
+        if ($table) {
+            foreach (\CoreDB::database()->getTableDescription($table) as $fieldName => $field) {
                 $column_options[$fieldName] = $fieldName;
             }
         }
         return $column_options;
     }
 
-    public function getTableAndColumnSelector(){
+    public function getTableAndColumnSelector()
+    {
         $this->response_type = self::RESPONSE_TYPE_RAW;
         $index = $_POST["index"];
         $type = $_POST["type"];
         $name = $_POST["name"];
-        $title = $type == TableAndColumnSelector::TYPE_COMPARISON ? Translation::getTranslation("filters") : Translation::getTranslation("result_fields");
+        $title = Translation::getTranslation(
+            $type == TableAndColumnSelector::TYPE_COMPARISON ? "filters" : "result_fields"
+        );
         $widget = new TableAndColumnSelector($title, $name, $type);
         $widget->setValue(json_encode([
             $index => []

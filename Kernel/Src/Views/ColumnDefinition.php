@@ -122,10 +122,11 @@ class ColumnDefinition extends CollapsableCard
             ViewGroup::create("div", "col-sm-3")
                 ->addField($data_type_select)
         )->addField(
-            ViewGroup::create("div", "col-sm-2 ".(!$reference_table_select->value ? "d-none" : ""))
+            ViewGroup::create("div", "col-sm-2 " . (!$reference_table_select->value ? "d-none" : ""))
                 ->addField($reference_table_select)
         )->addField(
-            ViewGroup::create("div", "col-sm-2 ".(!($this->dataType instanceof \CoreDB\Kernel\Database\DataType\ShortText) ? "d-none" : ""))
+            ViewGroup::create("div", "col-sm-2 " .
+                (!($this->dataType instanceof \CoreDB\Kernel\Database\DataType\ShortText) ? "d-none" : ""))
                 ->addField($field_length)
         )->addField(
             ViewGroup::create("div", "col-sm-2")
@@ -134,7 +135,7 @@ class ColumnDefinition extends CollapsableCard
             ViewGroup::create("div", "col-sm-2")
                 ->addField($not_empty_checkbox)
         )->addField(
-            ViewGroup::create("div", "col-sm-12 ".(!$list_values_input->value ? "d-none" : ""))
+            ViewGroup::create("div", "col-sm-12 " . (!$list_values_input->value ? "d-none" : ""))
                 ->addField($list_values_input)
         )->addField(
             ViewGroup::create("div", "col-sm-12")
@@ -143,7 +144,6 @@ class ColumnDefinition extends CollapsableCard
             ViewGroup::create("div", "col-sm-3")
                 ->addField($remove_button)
         );
-        
     }
 
     public static function create($name, $dataType = null): ColumnDefinition

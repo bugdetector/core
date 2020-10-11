@@ -2,7 +2,7 @@ import {$} from "../jquery/jquery";
 import "bootstrap-daterangepicker";
 import "bootstrap-daterangepicker/daterangepicker.css";
 
-$(function($){
+$(function ($) {
     $(".daterangeinput").daterangepicker({
         autoUpdateInput: false,
         locale: {

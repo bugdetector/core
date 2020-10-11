@@ -30,19 +30,19 @@ class Variable extends TableMapper
         return "variables";
     }
 
-    public static function create($key) : Variable
+    public static function create($key): Variable
     {
         $variable = new Variable();
         $variable->key->setValue($key);
         return $variable;
     }
 
-    public static function getByKey(string $key) : ?Variable
+    public static function getByKey(string $key): ?Variable
     {
         return self::get(["key" => $key]);
     }
 
-    public function getResultHeaders(bool $translateLabel = true) : array
+    public function getResultHeaders(bool $translateLabel = true): array
     {
         $headers = [""];
         $fields = [
@@ -72,16 +72,16 @@ class Variable extends TableMapper
 
     protected function getFieldWidget(string $field_name, bool $translateLabel): ?View
     {
-        if($field_name == "value"){
+        if ($field_name == "value") {
             if (!$this->type->getValue()) {
                 return null;
             } else {
                 $type = $this->type->getValue();
-                if($type == "hidden"){
+                if ($type == "hidden") {
                     $type = "text";
                 }
                 $dataTypes = \CoreDB::database()->dataTypes();
-                if(isset($dataTypes[$type])){
+                if (isset($dataTypes[$type])) {
                     /**
                      * @var DataTypeAbstract
                      */
@@ -94,6 +94,6 @@ class Variable extends TableMapper
                 }
             }
         }
-        return parent::getFieldWidget($field_name, $translateLabel);   
+        return parent::getFieldWidget($field_name, $translateLabel);
     }
 }

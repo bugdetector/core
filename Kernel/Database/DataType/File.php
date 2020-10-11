@@ -32,7 +32,7 @@ class File extends TableReference
         ->setDescription(Translation::getTranslation($this->comment))
         ->removeClass("form-control")
         ->setValue($this->value);
-        if(!$this->isNull){
+        if (!$this->isNull) {
             $widget->addAttribute("required", "true");
         }
         return $widget;
@@ -41,7 +41,7 @@ class File extends TableReference
     /**
      * @inheritdoc
      */
-    public function getSearchWidget() : ?FormWidget
+    public function getSearchWidget(): ?FormWidget
     {
         return null;
     }

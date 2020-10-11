@@ -7,7 +7,8 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ConfigurationImportCommand extends Command{
+class ConfigurationImportCommand extends Command
+{
     protected static $defaultName = "config:import";
 
     protected function configure()

@@ -31,20 +31,21 @@ class Time extends DataTypeAbstract
         ->addAttribute("data-target", "#" . $rand_id)
         ->addAttribute("data-toggle", "datetimepicker")
         ->addAttribute("autocomplete", "off");
-        if(!$this->isNull){
+        if (!$this->isNull) {
             $widget->addAttribute("required", "true");
         }
         return $widget;
     }
 
-    public function setValue($value){
+    public function setValue($value)
+    {
         $this->value = date("H:i:s", strtotime($value));
     }
 
     /**
      * @inheritdoc
      */
-    public function getSearchWidget() : FormWidget
+    public function getSearchWidget(): FormWidget
     {
         return InputWidget::create("")
         ->addClass("daterangeinput");

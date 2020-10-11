@@ -9,7 +9,8 @@ abstract class SelectQueryPreparerAbstract extends QueryPreparerAbstract
     protected $condition;
     protected $orderBy;
     protected $groupBy;
-    protected $limit, $offset;
+    protected $limit;
+    protected $offset;
     protected $quote;
     protected $distinct = "";
     protected $having;
@@ -108,7 +109,7 @@ abstract class SelectQueryPreparerAbstract extends QueryPreparerAbstract
      * @return $this
      *  Chaining
      */
-    public function select_with_function(array $functions) : SelectQueryPreparerAbstract
+    public function selectWithFunction(array $functions): SelectQueryPreparerAbstract
     {
         if (!$this->fields) {
             $this->fields = array();
@@ -116,18 +117,6 @@ abstract class SelectQueryPreparerAbstract extends QueryPreparerAbstract
         foreach ($functions as $function) {
             array_push($this->fields, $function);
         }
-        return $this;
-    }
-
-    /**
-     * Set null fields
-     * @return $this
-     *  Chaining
-     */
-    public function unset_fields()
-    {
-        unset($this->fields);
-        $this->fields = array();
         return $this;
     }
     
@@ -183,7 +172,12 @@ abstract class SelectQueryPreparerAbstract extends QueryPreparerAbstract
      * @return SelectQueryPreparerAbstract
      *  Self
      */
-    abstract public function condition(string $column, $value, string $operator = "=", string $connect = "AND") : SelectQueryPreparerAbstract;
+    abstract public function condition(
+        string $column,
+        $value,
+        string $operator = "=",
+        string $connect = "AND"
+    ): SelectQueryPreparerAbstract;
     
     /**
      * Range results

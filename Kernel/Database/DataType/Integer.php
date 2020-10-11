@@ -27,7 +27,7 @@ class Integer extends DataTypeAbstract
         ->setType("number")
         ->setDescription(Translation::getTranslation($this->comment))
         ->setValue(strval($this->value));
-        if(!$this->isNull){
+        if (!$this->isNull) {
             $widget->addAttribute("required", "true");
         }
         return $widget;
@@ -41,7 +41,7 @@ class Integer extends DataTypeAbstract
     /**
      * @inheritdoc
      */
-    public function getSearchWidget() : FormWidget
+    public function getSearchWidget(): FormWidget
     {
         return $this->getWidget()->removeAttribute("required");
     }

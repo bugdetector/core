@@ -26,7 +26,8 @@ class Role extends TableMapper
     /**
      * @inheritdoc
      */
-    public function getResultHeaders(bool $translateLabel = true) : array{
+    public function getResultHeaders(bool $translateLabel = true): array
+    {
         $headers = parent::getResultHeaders($translateLabel);
         unset($headers["ID"], $headers["created_at"], $headers["last_updated"]);
         return $headers;
@@ -34,7 +35,8 @@ class Role extends TableMapper
     /**
      * @inheritdoc
      */
-    public function getSearchFormFields(bool $translateLabel = true) : array{
+    public function getSearchFormFields(bool $translateLabel = true): array
+    {
         $fields = parent::getSearchFormFields($translateLabel);
         unset($fields["ID"], $fields["created_at"], $fields["last_updated"]);
         return $fields;
@@ -42,7 +44,8 @@ class Role extends TableMapper
     /**
      * @inheritdoc
      */
-    public function getResultQuery() : SelectQueryPreparerAbstract{
+    public function getResultQuery(): SelectQueryPreparerAbstract
+    {
         return \CoreDB::database()->select($this->getTableName(), "r")
         ->select("r", [
             "ID AS edit_actions",

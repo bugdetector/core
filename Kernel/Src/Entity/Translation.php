@@ -20,7 +20,7 @@ class Translation extends TableMapper
     private static $available_languages;
     private static $instance;
 
-    const BACKUP_PATH = __DIR__ . "/../../../config/translations";
+    private const BACKUP_PATH = __DIR__ . "/../../../config/translations";
 
     public ShortText $key;
     public LongText $en;
@@ -30,23 +30,23 @@ class Translation extends TableMapper
     public static function getLanguage()
     {
         $supportedLangs = Translation::getAvailableLanguageList();
-        if(isset($_GET["lang"]) && in_array($_GET["lang"], $supportedLangs)){
+        if (isset($_GET["lang"]) && in_array($_GET["lang"], $supportedLangs)) {
             $_SESSION["lang"] = $_GET["lang"];
         }
-        if(isset($_SESSION["lang"]) && in_array($_SESSION["lang"], $supportedLangs)){
+        if (isset($_SESSION["lang"]) && in_array($_SESSION["lang"], $supportedLangs)) {
             Translation::$language = $_SESSION["lang"];
         }
         if (!Translation::$language) {
-            $languages = explode(',', !IS_CLI ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : $_SERVER["LANG"] );
+            $languages = explode(',', !IS_CLI ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : $_SERVER["LANG"]);
             foreach ($languages as $language) {
-                $language = preg_replace(!IS_CLI ? "/-.*/" : "/_.*/" , "", $language);
+                $language = preg_replace(!IS_CLI ? "/-.*/" : "/_.*/", "", $language);
                 if (in_array($language, $supportedLangs)) {
                     // Set the page locale to the first supported language found
                     Translation::$language = $language;
                     break;
                 }
             }
-            if(!Translation::$language){
+            if (!Translation::$language) {
                 Translation::$language = LANGUAGE;
             }
         }
@@ -61,8 +61,9 @@ class Translation extends TableMapper
         return "translations";
     }
 
-    public static function getInstance() : Translation{
-        if(!self::$instance){
+    public static function getInstance(): Translation
+    {
+        if (!self::$instance) {
             self::$instance = new Translation();
         }
         return self::$instance;
@@ -71,11 +72,11 @@ class Translation extends TableMapper
     public static function getTranslation($key, array $arguments = null)
     {
         if (!isset(self::$cache[$key])) {
-            try{
+            try {
                 $translation = Translation::get(["key" => $key]);
-            }catch(DatabaseInstallationException $ex){
+            } catch (DatabaseInstallationException $ex) {
                 $language = Translation::getLanguage();
-                self::$cache = Yaml::parseFile(Translation::BACKUP_PATH."/{$language}.yml");
+                self::$cache = Yaml::parseFile(Translation::BACKUP_PATH . "/{$language}.yml");
                 return isset(self::$cache[$key]) ? self::$cache[$key] : $key;
             }
             self::$cache[$key] = $translation ? $translation->{Translation::getLanguage()}->getValue() : $key;
@@ -126,11 +127,11 @@ class Translation extends TableMapper
 
     public static function importTranslations()
     {
-        foreach(self::getAvailableLanguageList() as $language){
-            $importPath = Translation::BACKUP_PATH."/{$language}.yml";
-            if(is_file($importPath)){
+        foreach (self::getAvailableLanguageList() as $language) {
+            $importPath = Translation::BACKUP_PATH . "/{$language}.yml";
+            if (is_file($importPath)) {
                 $translations = Yaml::parseFile($importPath);
-                foreach($translations as $key => $translation){
+                foreach ($translations as $key => $translation) {
                     $record = Translation::get(["key" => $key ]) ? : new Translation();
                     $record->key->setValue($key);
                     $record->{$language}->setValue($translation);
@@ -142,13 +143,13 @@ class Translation extends TableMapper
 
     public static function exportTranslations()
     {
-        foreach(self::getAvailableLanguageList() as $language){
+        foreach (self::getAvailableLanguageList() as $language) {
             $translations = \CoreDB::database()
             ->select(self::getTableName(), "t")
             ->select("t", ["key", $language])
             ->execute()
             ->fetchAll(PDO::FETCH_KEY_PAIR);
-            $exportPath = self::BACKUP_PATH."/{$language}.yml";
+            $exportPath = self::BACKUP_PATH . "/{$language}.yml";
             file_put_contents($exportPath, Yaml::dump($translations));
         }
     }
@@ -156,7 +157,8 @@ class Translation extends TableMapper
     /**
      * @inheritdoc
      */
-    public function getResultHeaders(bool $translateLabel = true) : array{
+    public function getResultHeaders(bool $translateLabel = true): array
+    {
         $headers = parent::getResultHeaders($translateLabel);
         unset($headers["ID"], $headers["created_at"], $headers["last_updated"]);
         return $headers;
@@ -164,7 +166,8 @@ class Translation extends TableMapper
     /**
      * @inheritdoc
      */
-    public function getSearchFormFields(bool $translateLabel = true) : array{
+    public function getSearchFormFields(bool $translateLabel = true): array
+    {
         $fields = parent::getSearchFormFields($translateLabel);
         unset($fields["ID"], $fields["created_at"], $fields["last_updated"]);
         return $fields;
@@ -172,7 +175,8 @@ class Translation extends TableMapper
     /**
      * @inheritdoc
      */
-    public function getResultQuery() : SelectQueryPreparerAbstract{
+    public function getResultQuery(): SelectQueryPreparerAbstract
+    {
         $fields = array_merge(["ID AS edit_actions", "key"], $this->getAvailableLanguageList());
         return \CoreDB::database()->select($this->getTableName(), "t")
         ->select("t", $fields);

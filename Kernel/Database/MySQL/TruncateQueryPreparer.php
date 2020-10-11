@@ -12,7 +12,7 @@ class TruncateQueryPreparer extends TruncateQueryPreparerAbstract
     }
 
 
-    public function getQuery() : string
+    public function getQuery(): string
     {
         return "TRUNCATE TABLE `{$this->table}`;";
     }

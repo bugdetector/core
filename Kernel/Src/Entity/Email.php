@@ -24,5 +24,4 @@ class Email extends TableMapper
     {
         return "emails";
     }
-
 }

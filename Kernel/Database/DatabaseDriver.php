@@ -19,7 +19,7 @@ use CoreDB\Kernel\Database\DataType\Time;
 abstract class DatabaseDriver implements DatabaseDriverInterface
 {
 
-    public static function dataTypes() : array
+    public static function dataTypes(): array
     {
         return [
             self::INTEGER => Integer::class,

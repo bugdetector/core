@@ -1,4 +1,5 @@
 <?php
+
 namespace Src\Theme;
 
 use Src\Entity\Translation;

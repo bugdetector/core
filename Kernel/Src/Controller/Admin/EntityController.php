@@ -1,4 +1,5 @@
 <?php
+
 namespace Src\Controller\Admin;
 
 use CoreDB\Kernel\Messenger;
@@ -18,7 +19,10 @@ class EntityController extends AdminController
 
     public function preprocessPage()
     {
-        if (isset($this->arguments[0]) && $this->arguments[0] && in_array($this->arguments[0], \CoreDB::config()->getEntityList())) {
+        if (
+            isset($this->arguments[0]) && $this->arguments[0] &&
+            in_array($this->arguments[0], \CoreDB::config()->getEntityList())
+        ) {
             $this->entityName = $this->arguments[0];
             $className = \CoreDB::config()->getEntityInfo($this->entityName)["class"];
             $this->object = new $className();
@@ -26,9 +30,12 @@ class EntityController extends AdminController
             /**
              * Creating table and table search form
              */
-            $this->setTitle(Translation::getTranslation("entities") . " | ".Translation::getTranslation($this->entityName));
+            $this->setTitle(
+                Translation::getTranslation("entities") . " | " .
+                Translation::getTranslation($this->entityName)
+            );
             $this->search_form = SearchForm::createByObject($this->object);
-        }else{
+        } else {
             $this->createMessage(Translation::getTranslation("entity_select_info"), Messenger::INFO);
             $this->setTitle(Translation::getTranslation("entities"));
         }

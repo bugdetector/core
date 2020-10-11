@@ -26,7 +26,7 @@ class ConfigurationManager
     private function __construct()
     {
         if (empty($this->entityConfig)) {
-            $this->entityConfig = Yaml::parseFile(__DIR__."/../config/entity_config.yml");
+            $this->entityConfig = Yaml::parseFile(__DIR__ . "/../config/entity_config.yml");
         }
     }
 
@@ -41,15 +41,15 @@ class ConfigurationManager
     public function importTableConfiguration()
     {
         $tables = [];
-        foreach (new DirectoryIterator(__DIR__."/../config/table_structure") as $file) {
+        foreach (new DirectoryIterator(__DIR__ . "/../config/table_structure") as $file) {
             if ($file->isDot()) {
                 continue;
             }
             $definition = Yaml::parseFile($file->getPathname());
 
-            try{
+            try {
                 $table_definition = TableDefinition::getDefinition($definition["table_name"]);
-            }catch(DatabaseInstallationException $ex){
+            } catch (DatabaseInstallationException $ex) {
                 $table_definition = new TableDefinition($definition["table_name"]);
             }
             $table_definition->setComment($definition["table_comment"]);
@@ -116,14 +116,14 @@ class ConfigurationManager
         }
         $alterQueryPreparer->execute();
 
-        $dumpTables = Yaml::parseFile(__DIR__."/../config/dump_tables.yml");
-        foreach($dumpTables as $tableName => $dumpByColumn){
-            $dataFilePath = __DIR__."/../config/table_dump_data/{$tableName}.yml";
-            if(!is_file($dataFilePath)){
+        $dumpTables = Yaml::parseFile(__DIR__ . "/../config/dump_tables.yml");
+        foreach ($dumpTables as $tableName => $dumpByColumn) {
+            $dataFilePath = __DIR__ . "/../config/table_dump_data/{$tableName}.yml";
+            if (!is_file($dataFilePath)) {
                 continue;
             }
             $tableData = Yaml::parseFile($dataFilePath);
-            foreach($tableData as $parseKey => $data){
+            foreach ($tableData as $parseKey => $data) {
                 $object = DBObject::get([$dumpByColumn => $parseKey], $tableName) ? : new DBObject($tableName) ;
                 $object->map($data);
                 $object->save();
@@ -133,23 +133,29 @@ class ConfigurationManager
 
     public function exportTableConfiguration()
     {
-        CoreDB::cleanDirectory(__DIR__."/../config/table_structure");
+        CoreDB::cleanDirectory(__DIR__ . "/../config/table_structure");
         foreach (CoreDB::database()->getTableList() as $table_name) {
             $definition = TableDefinition::getDefinition($table_name);
-            file_put_contents(__DIR__."/../config/table_structure/{$table_name}.yml", Yaml::dump($definition->toArray(), 4, 2, Yaml::DUMP_OBJECT_AS_MAP));
+            file_put_contents(
+                __DIR__ . "/../config/table_structure/{$table_name}.yml",
+                Yaml::dump($definition->toArray(), 4, 2, Yaml::DUMP_OBJECT_AS_MAP)
+            );
         }
         //Dump table data
-        $dumpTables = Yaml::parseFile(__DIR__."/../config/dump_tables.yml");
-        foreach($dumpTables as $tableName => $dumpByColumn){
+        $dumpTables = Yaml::parseFile(__DIR__ . "/../config/dump_tables.yml");
+        foreach ($dumpTables as $tableName => $dumpByColumn) {
             $query = \CoreDB::database()->select($tableName)
             ->execute();
             $tableData = [];
-            foreach($query->fetchAll(\PDO::FETCH_ASSOC) as $data){
+            foreach ($query->fetchAll(\PDO::FETCH_ASSOC) as $data) {
                 $key = $data[$dumpByColumn];
                 unset($data["ID"], $data["created_at"], $data["last_updated"]);
                 $tableData[$key] = $data;
             }
-            file_put_contents(__DIR__."/../config/table_dump_data/{$tableName}.yml",Yaml::dump($tableData, 4, 2, Yaml::DUMP_OBJECT_AS_MAP));
+            file_put_contents(
+                __DIR__ . "/../config/table_dump_data/{$tableName}.yml",
+                Yaml::dump($tableData, 4, 2, Yaml::DUMP_OBJECT_AS_MAP)
+            );
         }
     }
 
@@ -159,16 +165,19 @@ class ConfigurationManager
         \CoreDB::cleanDirectory("../cache", true);
     }
 
-    public function getEntityList(){
+    public function getEntityList()
+    {
         return array_keys($this->entityConfig);
     }
 
-    public function getEntityInfo(string $entityName){
+    public function getEntityInfo(string $entityName)
+    {
         return $this->entityConfig[$entityName];
     }
 
-    public function getEntityInfoByClass(string $className){
-        return array_filter($this->entityConfig, function($el) use ($className){
+    public function getEntityInfoByClass(string $className)
+    {
+        return array_filter($this->entityConfig, function ($el) use ($className) {
             return $el["class"] == $className;
         });
     }

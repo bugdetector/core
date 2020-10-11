@@ -15,7 +15,7 @@ class JWT
     private $typ;
     private $payload;
 
-    const IV = ";WAm{]y.chB^VB%~";
+    private const IV = ";WAm{]y.chB^VB%~";
 
     public function __construct(string $alg = "AES128", string $typ = "JWT")
     {
@@ -23,7 +23,7 @@ class JWT
         $this->typ = $typ;
     }
     
-    public static function createFromString(string $string) : self
+    public static function createFromString(string $string): self
     {
         $parts = explode(".", $string);
         if (count($parts) != 3) {
@@ -113,12 +113,12 @@ class JWT
     /**
      * returns generated signature
      */
-    private function generateSignature() : string
+    private function generateSignature(): string
     {
-        return $this->encrypt($this->getEncodedJoseHeader().".".$this->getEncodedPayload());
+        return $this->encrypt($this->getEncodedJoseHeader() . "." . $this->getEncodedPayload());
     }
     
-    public function validateSignature(string $signature):bool
+    public function validateSignature(string $signature): bool
     {
         return $this->decrypt($signature) == $this->generateSignature();
     }
@@ -127,7 +127,7 @@ class JWT
      * Returns encoded JOSE Header
      * @return string
      */
-    private function getEncodedJoseHeader() : string
+    private function getEncodedJoseHeader(): string
     {
         return base64_encode(json_encode(["alg" => $this->alg, "typ" => $this->typ]));
     }
@@ -150,7 +150,7 @@ class JWT
      * Returns encoded Payload
      * @return string
      */
-    private function getEncodedPayload() : string
+    private function getEncodedPayload(): string
     {
         return base64_encode(json_encode($this->payload));
     }

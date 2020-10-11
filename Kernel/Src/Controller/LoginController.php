@@ -15,28 +15,30 @@ class LoginController extends BaseTheme
     {
         parent::__construct($arguments);
         $this->body_classes = ["bg-gradient-info"];
-        $this->setTitle(Translation::getTranslation("welcome")."!");
+        $this->setTitle(Translation::getTranslation("welcome") . "!");
     }
-    public function getTemplateFile() : string
+    public function getTemplateFile(): string
     {
         return "page-login.twig";
     }
 
-    public function checkAccess() : bool
+    public function checkAccess(): bool
     {
         return true;
     }
 
     public function preprocessPage()
     {
-        if(\CoreDB::currentUser()->isLoggedIn()){
+        if (\CoreDB::currentUser()->isLoggedIn()) {
             \CoreDB::goTo(BASE_URL);
         }
         $this->form = new LoginForm();
         $this->form->processForm();
     }
 
-    protected function addDefaultJsFiles(){}
+    protected function addDefaultJsFiles()
+    {
+    }
 
     public function echoContent()
     {

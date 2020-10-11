@@ -18,25 +18,30 @@ use PDOStatement;
 interface DatabaseDriverInterface
 {
 
-    const INTEGER = "integer";
-    const FLOAT = "float";
-    const CHECKBOX = "checkbox";
-    const SHORT_TEXT = "short_text";
-    const TEXT = "text";
-    const LONG_TEXT = "long_text";
-    const DATE = "date";
-    const DATETIME = "datetime";
-    const TIME = "time";
-    const FILE = "file";
-    const TABLE_REFERENCE = "table_reference";
-    const ENUMARATED_LIST = "enumarated_list";
+    public const INTEGER = "integer";
+    public const FLOAT = "float";
+    public const CHECKBOX = "checkbox";
+    public const SHORT_TEXT = "short_text";
+    public const TEXT = "text";
+    public const LONG_TEXT = "long_text";
+    public const DATE = "date";
+    public const DATETIME = "datetime";
+    public const TIME = "time";
+    public const FILE = "file";
+    public const TABLE_REFERENCE = "table_reference";
+    public const ENUMARATED_LIST = "enumarated_list";
 
     /**
      * Check database connection and return result.
      * @return bool
      *  Database connection availability.
      */
-    public static function checkConnection(string $dbServer, string $dbName, string $dbUsername, string $dbPassword) : bool;
+    public static function checkConnection(
+        string $dbServer,
+        string $dbName,
+        string $dbUsername,
+        string $dbPassword
+    ): bool;
 
     /**
      * Excecute Query
@@ -69,7 +74,7 @@ interface DatabaseDriverInterface
      * @return SelectQueryPreparerAbstract
      *  Select query preparer
      */
-    public function select(string $table_name, string $alias = "", bool $quote = true) : SelectQueryPreparerAbstract;
+    public function select(string $table_name, string $alias = "", bool $quote = true): SelectQueryPreparerAbstract;
 
     /**
      * Insert new record to a table
@@ -80,7 +85,7 @@ interface DatabaseDriverInterface
      * @return InsertQueryPreparerAbstract
      *  Insert query preparer
      */
-    public function insert(string $table_name, array $fields) : InsertQueryPreparerAbstract;
+    public function insert(string $table_name, array $fields): InsertQueryPreparerAbstract;
 
     /**
      * Update a record in a table
@@ -91,7 +96,7 @@ interface DatabaseDriverInterface
      * @return UpdateQueryPreparerAbstract
      *  Update query preparer
      */
-    public function update(string $table_name, array $fields) : UpdateQueryPreparerAbstract;
+    public function update(string $table_name, array $fields): UpdateQueryPreparerAbstract;
 
     /**
      * Delete a record in a table
@@ -100,7 +105,7 @@ interface DatabaseDriverInterface
      * @return DeleteQueryPreparerAbstract
      *  Delete query preparer
      */
-    public function delete(string $table_name) : DeleteQueryPreparerAbstract;
+    public function delete(string $table_name): DeleteQueryPreparerAbstract;
     
     /**
      * Truncate a table
@@ -109,7 +114,7 @@ interface DatabaseDriverInterface
      * @return TruncateQueryPreparerAbstract
      *  Truncate query preparer
      */
-    public function truncate(string $table_name) : TruncateQueryPreparerAbstract;
+    public function truncate(string $table_name): TruncateQueryPreparerAbstract;
 
     /**
      * Drop a table or a column
@@ -120,7 +125,7 @@ interface DatabaseDriverInterface
      * @return DropQueryPreparerAbstract
      *  Drop query preparer
      */
-    public function drop(string $table_name, string $column = null) : DropQueryPreparerAbstract;
+    public function drop(string $table_name, string $column = null): DropQueryPreparerAbstract;
 
     /**
      * Create new table
@@ -129,7 +134,7 @@ interface DatabaseDriverInterface
      * @return CreateQueryPreparerAbstract
      *  Create query preparer
      */
-    public function create(TableDefinition $table) : CreateQueryPreparerAbstract;
+    public function create(TableDefinition $table): CreateQueryPreparerAbstract;
 
     /**
      * Alter table structure
@@ -138,7 +143,7 @@ interface DatabaseDriverInterface
      * @return AlterQueryPreparerAbstract
      *  Alter query preparer
      */
-    public function alter(TableDefinition $table = null) : AlterQueryPreparerAbstract;
+    public function alter(TableDefinition $table = null): AlterQueryPreparerAbstract;
 
     /**
      * Begin transaction
@@ -161,15 +166,6 @@ interface DatabaseDriverInterface
      *  Last insert ID
      */
     public function lastInsertId(): int;
-
-    /**
-     * Return quoted string
-     * @param string $string
-     *  String to quote
-     * @return string
-     *  Quoted string
-     */
-    public function _quote(string $string) : string;
 
     /**
      * Return quoted string
@@ -271,7 +267,7 @@ interface DatabaseDriverInterface
      * @return array
      *  Data types
      */
-    public static function dataTypes() : array;
+    public static function dataTypes(): array;
 
     /**
      * @param DataTypeAbstract $dataType
@@ -279,7 +275,7 @@ interface DatabaseDriverInterface
      * @return string
      * Database known name of field
      */
-    public function getColumnDefinition(DataTypeAbstract $dataType) : string;
+    public function getColumnDefinition(DataTypeAbstract $dataType): string;
 
     /**
      * Return current timestamp method for default value

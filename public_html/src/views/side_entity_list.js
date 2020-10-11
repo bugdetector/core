@@ -1,4 +1,4 @@
-$(function(){
+$(function () {
     if (window.innerWidth < 768) {
         $('#table_list').toggleClass('show');
         $('a[href=\"#table_list\"]').toggleClass('collapsed');

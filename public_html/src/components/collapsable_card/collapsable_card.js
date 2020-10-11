@@ -1,8 +1,8 @@
 import Sortable from "sortablejs";
-$(function($){
+$(function ($) {
     var list = $(".sortable_list");
-    if(list.find(".sortable").length > 0){
-        for(var item of list){
+    if (list.find(".sortable").length > 0) {
+        for (var item of list) {
             Sortable.create(item, {
                 animation: 100,
                 group: 'sortable_list',
@@ -12,6 +12,5 @@ $(function($){
                 filter: '.sortable-disabled',
               });
         }
-        
     }
 })

@@ -10,7 +10,7 @@ class Navbar extends ViewGroup
         parent::__construct($tag_name, $wrapper_class);
     }
     
-    public static function create(string $tag_name, string $wrapper_class) : Navbar
+    public static function create(string $tag_name, string $wrapper_class): Navbar
     {
         return new Navbar($tag_name, $wrapper_class);
     }
@@ -21,7 +21,7 @@ class Navbar extends ViewGroup
         return $this;
     }
 
-    public function getTemplateFile() : string
+    public function getTemplateFile(): string
     {
         return "navbar.twig";
     }
