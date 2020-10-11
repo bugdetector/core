@@ -1,0 +1,5 @@
+User-agent: *
+Crawl-delay: 10
+Allow: *
+Disallow: /admin/*
+Disallow: /README.md
