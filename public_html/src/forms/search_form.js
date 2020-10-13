@@ -8,7 +8,7 @@ $(document).on("click", ".rowdelete",function (e) {
         title: _t("warning"),
         callback: function () {
             $.ajax({
-                url: `${root} / admin / ajax / delete`,
+                url: `${root}/admin/ajax/delete`,
                 method: "post",
                 data: {table: table_name, id: id},
                 success: function () {

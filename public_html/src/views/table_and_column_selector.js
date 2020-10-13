@@ -7,7 +7,7 @@ $(function () {
         var column_select = select.parents(".table_and_column_selector").find("select.column_select");
         var type = column_select.data("type");
         $.ajax({
-            url : `${root} / admin / ajax / getTableColumns`,
+            url : `${root}/admin/ajax/getTableColumns`,
             method: "post",
             dataType : "json",
             data: {table: select.val(), type: type},
@@ -35,7 +35,7 @@ $(function () {
         var button = $(this);
         var type = button.data("type");
         $.ajax({
-            url : `${root} / admin / ajax / getTableAndColumnSelector`,
+            url : `${root}/admin/ajax/getTableAndColumnSelector`,
             method : "post",
             data : {
                 index : button.parents(".filters, .fields").find(".table_and_column_selector").length,

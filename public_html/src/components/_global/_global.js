@@ -51,7 +51,7 @@ $(function ($) {
 
     $(document).on("click", ".clear-cache", function (e) {
         e.preventDefault();
-        $.ajax(`${root} / admin / ajax / clearCache`);
+        $.ajax(`${root}/admin/ajax/clearCache`);
     });
 })
 

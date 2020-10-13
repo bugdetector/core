@@ -3,7 +3,7 @@ $(function ($) {
         let button = $(this);
         let index = $(".column_definition").length;
         $.ajax({
-            url: root + "/admin/ajax/getColumnDefinition",
+            url: `${root}/admin/ajax/getColumnDefinition`,
             method: "post",
             data: { index: index },
             success: function (data) {
@@ -52,7 +52,7 @@ $(function ($) {
             okLabel: _t("yes"),
             callback: function () {
                 $.ajax({
-                    url: `${root} / admin / ajax / dropfield`,
+                    url: `${root}/admin/ajax/dropfield`,
                     method: "post",
                     dataType: "json",
                     data: { tablename: tablename, column: column },
