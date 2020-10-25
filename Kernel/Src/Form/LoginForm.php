@@ -107,7 +107,7 @@ class LoginForm extends Form
     public function submit()
     {
         //login successful
-        $this->user->last_access->setValue(\CoreDB::get_current_date());
+        $this->user->last_access->setValue(\CoreDB::currentDate());
         $this->user->save();
         $_SESSION[BASE_URL . "-UID"] = $this->user->ID;
         if (isset($_POST["remember-me"]) && $_POST["remember-me"]) {

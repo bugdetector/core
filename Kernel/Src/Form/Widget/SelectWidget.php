@@ -3,6 +3,7 @@
 namespace Src\Form\Widget;
 
 use Src\Entity\Translation;
+use Src\JWT;
 
 class SelectWidget extends FormWidget
 {
@@ -60,7 +61,7 @@ class SelectWidget extends FormWidget
         parent::render();
     }
 
-    public function setValue($value)
+    public function setValue($value): SelectWidget
     {
         if (is_array($value)) {
             foreach ($value as $key) {
@@ -70,6 +71,31 @@ class SelectWidget extends FormWidget
             }
         } else {
             $this->value = $value;
+        }
+        return $this;
+    }
+
+    public function setAutoComplete($referenceTable, $referenceColumn): SelectWidget
+    {
+        $this->addClass("autocomplete");
+        $autoCompleteJWT = new JWT();
+        $autoCompleteJWT->setPayload("autocomplete-" . $referenceTable . random_int(0, 100));
+        $autoCompleteToken = $autoCompleteJWT->createToken();
+        $_SESSION["autocomplete"][$autoCompleteToken] = [
+            "referenceTable" => $referenceTable,
+            "referenceColumn" => $referenceColumn
+        ];
+        $this->addAttribute("data-live-search", "true");
+        $this->addAttribute("data-autocomplete-token", $autoCompleteToken);
+        return $this;
+    }
+
+    public function createIfNotExist(bool $create_if_not_exist) : SelectWidget
+    {
+        if ($create_if_not_exist) {
+            $this->addClass("create-if-not-exist");
+        } else {
+            $this->removeClass("create-if-not-exist");
         }
         return $this;
     }

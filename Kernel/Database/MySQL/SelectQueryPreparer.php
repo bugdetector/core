@@ -105,8 +105,9 @@ class SelectQueryPreparer extends SelectQueryPreparerAbstract
         $index = 0;
         while (isset($this->params[":$placeholder"])) {
             $placeholder = "{$column}_{$index}";
+            $index++;
         }
-        if ($operator == "IN") {
+        if (is_array($value)) {
             $condition = "(";
             foreach ($value as $index => $val) {
                 $condition .= ($condition != "(" ? "," : "") . ":{$placeholder}_{$index}";

@@ -57,5 +57,11 @@
   php-mysql
 
    5. Kod standardı kontrolü
-  phpcs --standard=PSR12 <file>
-  phpcbf --standard=PSR12 <file>
+  
+  `phpcs --standard=PSR12 <file>` 
+
+  `phpcbf --standard=PSR12 <file>`
+  
+   6. Önyüz dosyalarının derlenmesi
+   Önyüz kodlarını derlerken git tarafından dosyaların takip edilebilmesi için 
+   `npm run build:dev` komutunu kullanın.

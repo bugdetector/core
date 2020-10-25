@@ -23,6 +23,7 @@ class EntityReference extends DataTypeAbstract
     public string $mergeTable;
     public string $selfKey;
     public string $foreignKey;
+    public bool $createIfNotExist = false;
 
     public function __construct(string $fieldEntityName, TableMapper &$object, array $config, string $connectionType)
     {
@@ -33,6 +34,7 @@ class EntityReference extends DataTypeAbstract
             $this->mergeTable = $config["mergeTable"];
             $this->selfKey = $config["selfKey"];
             $this->foreignKey = $config["foreignKey"];
+            $this->createIfNotExist = @$config["createIfNotExist"] ?: false;
             $this->value = $this->getCheckeds();
         }
     }
@@ -83,7 +85,9 @@ class EntityReference extends DataTypeAbstract
             $widget = SelectWidget::create("")
             ->setNullElement(null)
             ->addAttribute("multiple", "true")
-            ->setOptions($options);
+            ->setOptions($options)
+            ->setAutoComplete($referenceClass::getTableName(), "role")
+            ->createIfNotExist($this->createIfNotExist);
         }
         return $widget;
     }
