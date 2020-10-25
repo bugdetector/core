@@ -24,13 +24,27 @@ class DeleteQueryPreparer extends DeleteQueryPreparerAbstract
         string $operator = "=",
         string $connect = "AND"
     ): DeleteQueryPreparerAbstract {
-        $placeholder = $column;
+        $placeholder = str_replace(".", "_", $column);
+        $columnInfo = explode(".", $column);
+        $column = $columnInfo[0];
+        $fieldName = isset($columnInfo[1]) ? ".{$columnInfo[1]}" : "";
         $index = 0;
         while (isset($this->params[":$placeholder"])) {
             $placeholder = "{$column}_{$index}";
+            $index++;
         }
-        $this->condition .= ($this->condition ? $connect : "") . " `$column` $operator :$placeholder ";
-        $this->params[":$placeholder"] = $value;
+        if (is_array($value)) {
+            $condition = "(";
+            foreach ($value as $index => $val) {
+                $condition .= ($condition != "(" ? "," : "") . ":{$placeholder}_{$index}";
+                $this->params[":{$placeholder}_{$index}"] = $val;
+            }
+            $condition .= ")";
+        } else {
+            $condition = ":$placeholder";
+            $this->params[":$placeholder"] = $value;
+        }
+        $this->condition .= ($this->condition ? $connect : "") . " `$column`$fieldName $operator $condition ";
         return $this;
     }
 
