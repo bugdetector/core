@@ -1,8 +1,14 @@
 RewriteEngine On
 RewriteRule ^index\.php$ - [L]
+
+RewriteEngine on
+#RewriteCond %{HTTPS} off
+#RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
+#RewriteCond %{HTTP_HOST} !^www\. [NC]
+#RewriteRule .* https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule . index.php [L]
+RewriteRule ^.*$ /index.php [L,QSA]
 
 <IfModule php7_module>
    php_flag asp_tags Off
