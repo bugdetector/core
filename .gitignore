@@ -4,5 +4,4 @@ config/config.php
 .composer.lock
 vendor/
 public_html/node_modules/
-public_html/dist
 cache/
