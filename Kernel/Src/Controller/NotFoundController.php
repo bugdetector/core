@@ -5,7 +5,7 @@ namespace Src\Controller;
 use Src\Entity\Translation;
 use Src\BaseTheme\BaseTheme;
 
-class NotfoundController extends BaseTheme
+class NotFoundController extends BaseTheme
 {
 
     public $error_code = 404;

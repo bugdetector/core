@@ -38,6 +38,11 @@ class Integer extends DataTypeAbstract
         $this->value = $value ? intval($value) : "";
     }
 
+    public function getValue()
+    {
+        return intval($this->value);
+    }
+
     /**
      * @inheritdoc
      */

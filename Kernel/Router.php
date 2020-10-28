@@ -61,24 +61,36 @@ class Router
         }
         $namespaceSrc = "Src\\Controller\\";
         $namespaceApp = "App\\Controller\\";
-        $controllerName = null;
+        $srcControllerName = null;
+        $appControllerName = null;
+        $appControllerFound = true;
         foreach ($currentArguments as $page) {
             $page = str_replace("_", "", mb_convert_case($page, MB_CASE_TITLE));
             $tempSrcControllerName = "{$namespaceSrc}{$page}Controller";
             $tempAppControllerName = "{$namespaceApp}{$page}Controller";
 
-            if (class_exists($tempAppControllerName)) {
-                $namespaceApp = "{$namespaceApp}{$page}\\";
-                $controllerName = $tempAppControllerName;
-                array_shift($currentArguments);
-            } elseif (class_exists($tempSrcControllerName)) {
+            $controllerFound = false;
+            if (class_exists($tempSrcControllerName)) {
                 $namespaceSrc = "{$namespaceSrc}{$page}\\";
-                $controllerName = $tempSrcControllerName;
+                $srcControllerName = $tempSrcControllerName;
+                $controllerFound = true;
+                $appControllerName = "";
+            }
+            if ($appControllerFound && class_exists($tempAppControllerName)) {
+                $namespaceApp = "{$namespaceApp}{$page}\\";
+                $appControllerName = $tempAppControllerName;
+                $controllerFound = true;
+            }else{
+                $appControllerFound = false;
+            }
+            if($controllerFound){
                 array_shift($currentArguments);
-            } else {
+            }
+             else {
                 break;
             }
         }
+        $controllerName = $appControllerName ?: $srcControllerName;
         if (!$controllerName) {
             return $this->getControllerFromUrl("notfound");
         }
@@ -92,7 +104,7 @@ class Router
      */
     public function getUrl(string $controller): string
     {
-        $mainPath = explode("\\", str_replace("Src\\Controller\\", "", $controller));
+        $mainPath = explode("\\", str_replace(["Src\\Controller\\", "App\\Controller\\"], "", $controller));
         $route = "/";
         foreach ($mainPath as $path) {
             $route .= str_replace("controller", "", mb_strtolower($path)) . "/";
