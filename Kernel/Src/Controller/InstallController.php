@@ -23,7 +23,7 @@ class InstallController extends BaseTheme
         try {
             $hashSalt = Variable::getByKey("hash_salt");
             if (!defined("HASH_SALT") || !$hashSalt || $hashSalt->value->getValue() != HASH_SALT) {
-                return true && !CONFIGURATON_LOADED;
+                return !CONFIGURATON_LOADED;
             } else {
                 return false;
             }

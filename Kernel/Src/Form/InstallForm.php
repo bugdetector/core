@@ -166,7 +166,7 @@ class InstallForm extends Form
         ])->execute();
         
         $hashSaltVar = Variable::getByKey("hash_salt");
-        if (!$hashSaltVar->value) {
+        if (!$hashSaltVar->value->getValue()) {
             $hashSaltVar->value->setValue($hashSalt);
             $hashSaltVar->save();
         }
