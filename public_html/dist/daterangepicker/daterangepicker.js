@@ -134,7 +134,7 @@ window.$=window.jQuery=$=jquery__WEBPACK_IMPORTED_MODULE_1___default.a;window.bo
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! @preserve
  * bootbox.js
- * version: 5.4.0
+ * version: 5.5.1
  * author: Nick Payne <nick@kurai.co.uk>
  * license: MIT
  * http://bootboxjs.com/
@@ -196,210 +196,210 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
   var exports = {};
 
-  var VERSION = '5.0.0';
+  var VERSION = '5.5.1';
   exports.VERSION = VERSION;
 
   var locales = {
-      ar : {
-        OK      : 'موافق',
-        CANCEL  : 'الغاء',
-        CONFIRM : 'تأكيد'
-      },
-      bg_BG : {
-        OK      : 'Ок',
-        CANCEL  : 'Отказ',
-        CONFIRM : 'Потвърждавам'
-      },
-      br : {
-        OK      : 'OK',
-        CANCEL  : 'Cancelar',
-        CONFIRM : 'Sim'
-      },
-      cs : {
-        OK      : 'OK',
-        CANCEL  : 'Zrušit',
-        CONFIRM : 'Potvrdit'
-      },
-      da : {
-        OK      : 'OK',
-        CANCEL  : 'Annuller',
-        CONFIRM : 'Accepter'
-      },
-      de : {
-        OK      : 'OK',
-        CANCEL  : 'Abbrechen',
-        CONFIRM : 'Akzeptieren'
-      },
-      el : {
-        OK      : 'Εντάξει',
-        CANCEL  : 'Ακύρωση',
-        CONFIRM : 'Επιβεβαίωση'
-      },
-      en : {
-        OK      : 'OK',
-        CANCEL  : 'Cancel',
-        CONFIRM : 'OK'
-      },
-      es : {
-        OK      : 'OK',
-        CANCEL  : 'Cancelar',
-        CONFIRM : 'Aceptar'
-      },
-      eu : {
-        OK      : 'OK',
-        CANCEL  : 'Ezeztatu',
-        CONFIRM : 'Onartu'
-      },
-      et : {
-        OK      : 'OK',
-        CANCEL  : 'Katkesta',
-        CONFIRM : 'OK'
-      },
-      fa : {
-        OK      : 'قبول',
-        CANCEL  : 'لغو',
-        CONFIRM : 'تایید'
-      },
-      fi : {
-        OK      : 'OK',
-        CANCEL  : 'Peruuta',
-        CONFIRM : 'OK'
-      },
-      fr : {
-        OK      : 'OK',
-        CANCEL  : 'Annuler',
-        CONFIRM : 'Confirmer'
-      },
-      he : {
-        OK      : 'אישור',
-        CANCEL  : 'ביטול',
-        CONFIRM : 'אישור'
-      },
-      hu : {
-        OK      : 'OK',
-        CANCEL  : 'Mégsem',
-        CONFIRM : 'Megerősít'
-      },
-      hr : {
-        OK      : 'OK',
-        CANCEL  : 'Odustani',
-        CONFIRM : 'Potvrdi'
-      },
-      id : {
-        OK      : 'OK',
-        CANCEL  : 'Batal',
-        CONFIRM : 'OK'
-      },
-      it : {
-        OK      : 'OK',
-        CANCEL  : 'Annulla',
-        CONFIRM : 'Conferma'
-      },
-      ja : {
-        OK      : 'OK',
-        CANCEL  : 'キャンセル',
-        CONFIRM : '確認'
-      },
-      ka : {
-        OK: 'OK',
-        CANCEL: 'გაუქმება',
-        CONFIRM: 'დადასტურება'
-      },
-      ko : {
-        OK: 'OK',
-        CANCEL: '취소',
-        CONFIRM: '확인'
-      },
-      lt : {
-        OK      : 'Gerai',
-        CANCEL  : 'Atšaukti',
-        CONFIRM : 'Patvirtinti'
-      },
-      lv : {
-        OK      : 'Labi',
-        CANCEL  : 'Atcelt',
-        CONFIRM : 'Apstiprināt'
-      },
-      nl : {
-        OK      : 'OK',
-        CANCEL  : 'Annuleren',
-        CONFIRM : 'Accepteren'
-      },
-      no : {
-        OK      : 'OK',
-        CANCEL  : 'Avbryt',
-        CONFIRM : 'OK'
-      },
-      pl : {
-        OK      : 'OK',
-        CANCEL  : 'Anuluj',
-        CONFIRM : 'Potwierdź'
-      },
-      pt : {
-        OK      : 'OK',
-        CANCEL  : 'Cancelar',
-        CONFIRM : 'Confirmar'
-      },
-      ru : {
-        OK      : 'OK',
-        CANCEL  : 'Отмена',
-        CONFIRM : 'Применить'
-      },
-      sk : {
-        OK      : 'OK',
-        CANCEL  : 'Zrušiť',
-        CONFIRM : 'Potvrdiť'
-      },
-      sl : {
-        OK      : 'OK',
-        CANCEL  : 'Prekliči',
-        CONFIRM : 'Potrdi'
-      },
-      sq : {
-        OK      : 'OK',
-        CANCEL  : 'Anulo',
-        CONFIRM : 'Prano'
-      },
-      sv : {
-        OK      : 'OK',
-        CANCEL  : 'Avbryt',
-        CONFIRM : 'OK'
-      },
-      sw: {
-        OK      : 'Sawa',
-        CANCEL  : 'Ghairi',
-        CONFIRM: 'Thibitisha'
-      },
-      ta:{
-        OK      : 'சரி',
-        CANCEL  : 'ரத்து செய்',
-        CONFIRM : 'உறுதி செய்'
-      },
-      th : {
-        OK      : 'ตกลง',
-        CANCEL  : 'ยกเลิก',
-        CONFIRM : 'ยืนยัน'
-      },
-      tr : {
-        OK      : 'Tamam',
-        CANCEL  : 'İptal',
-        CONFIRM : 'Onayla'
-      },
-      uk : {
-        OK      : 'OK',
-        CANCEL  : 'Відміна',
-        CONFIRM : 'Прийняти'
-      },
-      zh_CN : {
-        OK      : 'OK',
-        CANCEL  : '取消',
-        CONFIRM : '确认'
-      },
-      zh_TW : {
-        OK      : 'OK',
-        CANCEL  : '取消',
-        CONFIRM : '確認'
-      }
+    ar : {
+      OK      : 'موافق',
+      CANCEL  : 'الغاء',
+      CONFIRM : 'تأكيد'
+    },
+    bg_BG : {
+      OK      : 'Ок',
+      CANCEL  : 'Отказ',
+      CONFIRM : 'Потвърждавам'
+    },
+    br : {
+      OK      : 'OK',
+      CANCEL  : 'Cancelar',
+      CONFIRM : 'Sim'
+    },
+    cs : {
+      OK      : 'OK',
+      CANCEL  : 'Zrušit',
+      CONFIRM : 'Potvrdit'
+    },
+    da : {
+      OK      : 'OK',
+      CANCEL  : 'Annuller',
+      CONFIRM : 'Accepter'
+    },
+    de : {
+      OK      : 'OK',
+      CANCEL  : 'Abbrechen',
+      CONFIRM : 'Akzeptieren'
+    },
+    el : {
+      OK      : 'Εντάξει',
+      CANCEL  : 'Ακύρωση',
+      CONFIRM : 'Επιβεβαίωση'
+    },
+    en : {
+      OK      : 'OK',
+      CANCEL  : 'Cancel',
+      CONFIRM : 'OK'
+    },
+    es : {
+      OK      : 'OK',
+      CANCEL  : 'Cancelar',
+      CONFIRM : 'Aceptar'
+    },
+    eu : {
+      OK      : 'OK',
+      CANCEL  : 'Ezeztatu',
+      CONFIRM : 'Onartu'
+    },
+    et : {
+      OK      : 'OK',
+      CANCEL  : 'Katkesta',
+      CONFIRM : 'OK'
+    },
+    fa : {
+      OK      : 'قبول',
+      CANCEL  : 'لغو',
+      CONFIRM : 'تایید'
+    },
+    fi : {
+      OK      : 'OK',
+      CANCEL  : 'Peruuta',
+      CONFIRM : 'OK'
+    },
+    fr : {
+      OK      : 'OK',
+      CANCEL  : 'Annuler',
+      CONFIRM : 'Confirmer'
+    },
+    he : {
+      OK      : 'אישור',
+      CANCEL  : 'ביטול',
+      CONFIRM : 'אישור'
+    },
+    hu : {
+      OK      : 'OK',
+      CANCEL  : 'Mégsem',
+      CONFIRM : 'Megerősít'
+    },
+    hr : {
+      OK      : 'OK',
+      CANCEL  : 'Odustani',
+      CONFIRM : 'Potvrdi'
+    },
+    id : {
+      OK      : 'OK',
+      CANCEL  : 'Batal',
+      CONFIRM : 'OK'
+    },
+    it : {
+      OK      : 'OK',
+      CANCEL  : 'Annulla',
+      CONFIRM : 'Conferma'
+    },
+    ja : {
+      OK      : 'OK',
+      CANCEL  : 'キャンセル',
+      CONFIRM : '確認'
+    },
+    ka : {
+      OK: 'OK',
+      CANCEL: 'გაუქმება',
+      CONFIRM: 'დადასტურება'
+    },
+    ko : {
+      OK: 'OK',
+      CANCEL: '취소',
+      CONFIRM: '확인'
+    },
+    lt : {
+      OK      : 'Gerai',
+      CANCEL  : 'Atšaukti',
+      CONFIRM : 'Patvirtinti'
+    },
+    lv : {
+      OK      : 'Labi',
+      CANCEL  : 'Atcelt',
+      CONFIRM : 'Apstiprināt'
+    },
+    nl : {
+      OK      : 'OK',
+      CANCEL  : 'Annuleren',
+      CONFIRM : 'Accepteren'
+    },
+    no : {
+      OK      : 'OK',
+      CANCEL  : 'Avbryt',
+      CONFIRM : 'OK'
+    },
+    pl : {
+      OK      : 'OK',
+      CANCEL  : 'Anuluj',
+      CONFIRM : 'Potwierdź'
+    },
+    pt : {
+      OK      : 'OK',
+      CANCEL  : 'Cancelar',
+      CONFIRM : 'Confirmar'
+    },
+    ru : {
+      OK      : 'OK',
+      CANCEL  : 'Отмена',
+      CONFIRM : 'Применить'
+    },
+    sk : {
+      OK      : 'OK',
+      CANCEL  : 'Zrušiť',
+      CONFIRM : 'Potvrdiť'
+    },
+    sl : {
+      OK      : 'OK',
+      CANCEL  : 'Prekliči',
+      CONFIRM : 'Potrdi'
+    },
+    sq : {
+      OK      : 'OK',
+      CANCEL  : 'Anulo',
+      CONFIRM : 'Prano'
+    },
+    sv : {
+      OK      : 'OK',
+      CANCEL  : 'Avbryt',
+      CONFIRM : 'OK'
+    },
+    sw: {
+      OK      : 'Sawa',
+      CANCEL  : 'Ghairi',
+      CONFIRM: 'Thibitisha'
+    },
+    ta:{
+      OK      : 'சரி',
+      CANCEL  : 'ரத்து செய்',
+      CONFIRM : 'உறுதி செய்'
+    },
+    th : {
+      OK      : 'ตกลง',
+      CANCEL  : 'ยกเลิก',
+      CONFIRM : 'ยืนยัน'
+    },
+    tr : {
+      OK      : 'Tamam',
+      CANCEL  : 'İptal',
+      CONFIRM : 'Onayla'
+    },
+    uk : {
+      OK      : 'OK',
+      CANCEL  : 'Відміна',
+      CONFIRM : 'Прийняти'
+    },
+    zh_CN : {
+      OK      : 'OK',
+      CANCEL  : '取消',
+      CONFIRM : '确认'
+    },
+    zh_TW : {
+      OK      : 'OK',
+      CANCEL  : '取消',
+      CONFIRM : '確認'
+    }
   };
 
   var templates = {
@@ -480,7 +480,9 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     // Append "multiple" property to the select when using the "prompt" helper
     multiple: false,
     // Automatically scroll modal content when height exceeds viewport height
-    scrollable: false
+    scrollable: false,
+    // whether or not to destroy the modal on hide
+    reusable: false
   };
 
 
@@ -570,7 +572,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     if ($.fn.modal === undefined) {
       throw new Error(
         '"$.fn.modal" is not defined; please double check you have included ' +
-        'the Bootstrap JavaScript library. See http://getbootstrap.com/javascript/ ' +
+        'the Bootstrap JavaScript library. See https://getbootstrap.com/docs/4.4/getting-started/javascript/ ' +
         'for more details.'
       );
     }
@@ -709,8 +711,10 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     // setup & teardown required after the underlying
     // modal has performed certain actions.
 
-    // make sure we unbind any listeners once the dialog has definitively been dismissed
-    dialog.one('hide.bs.modal', { dialog: dialog }, unbindModal);
+    if(!options.reusable) {
+      // make sure we unbind any listeners once the dialog has definitively been dismissed
+      dialog.one('hide.bs.modal', { dialog: dialog }, unbindModal);
+    }
 
     if (options.onHide) {
       if ($.isFunction(options.onHide)) {
@@ -721,7 +725,9 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       }
     }
 
-    dialog.one('hidden.bs.modal', { dialog: dialog }, destroyModal);
+    if(!options.reusable) {
+      dialog.one('hidden.bs.modal', { dialog: dialog }, destroyModal);
+    }
 
     if (options.onHidden) {
       if ($.isFunction(options.onHidden)) {
@@ -755,7 +761,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     // Bootbox event listeners; used to decouple some
     // behaviours from their respective triggers
 
-    if (options.backdrop !== 'static') {
+    if (options.backdrop === true) {
       // A boolean true/false according to the Bootstrap docs
       // should show a dialog the user can dismiss by clicking on
       // the background.
@@ -819,7 +825,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     $(options.container).append(dialog);
 
     dialog.modal({
-      backdrop: options.backdrop ? 'static' : false,
+      backdrop: options.backdrop,
       keyboard: false,
       show: false
     });
@@ -1390,12 +1396,19 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     // make sure any supplied options take precedence over defaults
     options = $.extend({}, defaults, options);
 
+    //make sure backdrop is either true, false, or 'static'
+    if (!options.backdrop) {
+      options.backdrop = (options.backdrop === false || options.backdrop === 0) ? false : 'static';
+    } else {
+      options.backdrop = typeof options.backdrop === 'string' && options.backdrop.toLowerCase() === 'static' ? 'static' : true;
+    } 
+
     // no buttons is still a valid dialog but it's cleaner to always have
     // a buttons object to iterate over, even if it's empty
     if (!options.buttons) {
       options.buttons = {};
     }
-
+    
     buttons = options.buttons;
 
     total = getKeyLength(buttons);
@@ -3160,7 +3173,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./util */ "./node_modules/bootstrap/js/src/util.js");
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.5.2): modal.js
+ * Bootstrap (v4.5.3): modal.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -3174,54 +3187,54 @@ __webpack_require__.r(__webpack_exports__);
  * ------------------------------------------------------------------------
  */
 
-const NAME               = 'modal'
-const VERSION            = '4.5.2'
-const DATA_KEY           = 'bs.modal'
-const EVENT_KEY          = `.${DATA_KEY}`
-const DATA_API_KEY       = '.data-api'
+const NAME = 'modal'
+const VERSION = '4.5.3'
+const DATA_KEY = 'bs.modal'
+const EVENT_KEY = `.${DATA_KEY}`
+const DATA_API_KEY = '.data-api'
 const JQUERY_NO_CONFLICT = jquery__WEBPACK_IMPORTED_MODULE_0___default.a.fn[NAME]
-const ESCAPE_KEYCODE     = 27 // KeyboardEvent.which value for Escape (Esc) key
+const ESCAPE_KEYCODE = 27 // KeyboardEvent.which value for Escape (Esc) key
 
 const Default = {
-  backdrop : true,
-  keyboard : true,
-  focus    : true,
-  show     : true
+  backdrop: true,
+  keyboard: true,
+  focus: true,
+  show: true
 }
 
 const DefaultType = {
-  backdrop : '(boolean|string)',
-  keyboard : 'boolean',
-  focus    : 'boolean',
-  show     : 'boolean'
+  backdrop: '(boolean|string)',
+  keyboard: 'boolean',
+  focus: 'boolean',
+  show: 'boolean'
 }
 
-const EVENT_HIDE              = `hide${EVENT_KEY}`
-const EVENT_HIDE_PREVENTED    = `hidePrevented${EVENT_KEY}`
-const EVENT_HIDDEN            = `hidden${EVENT_KEY}`
-const EVENT_SHOW              = `show${EVENT_KEY}`
-const EVENT_SHOWN             = `shown${EVENT_KEY}`
-const EVENT_FOCUSIN           = `focusin${EVENT_KEY}`
-const EVENT_RESIZE            = `resize${EVENT_KEY}`
-const EVENT_CLICK_DISMISS     = `click.dismiss${EVENT_KEY}`
-const EVENT_KEYDOWN_DISMISS   = `keydown.dismiss${EVENT_KEY}`
-const EVENT_MOUSEUP_DISMISS   = `mouseup.dismiss${EVENT_KEY}`
+const EVENT_HIDE = `hide${EVENT_KEY}`
+const EVENT_HIDE_PREVENTED = `hidePrevented${EVENT_KEY}`
+const EVENT_HIDDEN = `hidden${EVENT_KEY}`
+const EVENT_SHOW = `show${EVENT_KEY}`
+const EVENT_SHOWN = `shown${EVENT_KEY}`
+const EVENT_FOCUSIN = `focusin${EVENT_KEY}`
+const EVENT_RESIZE = `resize${EVENT_KEY}`
+const EVENT_CLICK_DISMISS = `click.dismiss${EVENT_KEY}`
+const EVENT_KEYDOWN_DISMISS = `keydown.dismiss${EVENT_KEY}`
+const EVENT_MOUSEUP_DISMISS = `mouseup.dismiss${EVENT_KEY}`
 const EVENT_MOUSEDOWN_DISMISS = `mousedown.dismiss${EVENT_KEY}`
-const EVENT_CLICK_DATA_API    = `click${EVENT_KEY}${DATA_API_KEY}`
+const EVENT_CLICK_DATA_API = `click${EVENT_KEY}${DATA_API_KEY}`
 
-const CLASS_NAME_SCROLLABLE         = 'modal-dialog-scrollable'
+const CLASS_NAME_SCROLLABLE = 'modal-dialog-scrollable'
 const CLASS_NAME_SCROLLBAR_MEASURER = 'modal-scrollbar-measure'
-const CLASS_NAME_BACKDROP           = 'modal-backdrop'
-const CLASS_NAME_OPEN               = 'modal-open'
-const CLASS_NAME_FADE               = 'fade'
-const CLASS_NAME_SHOW               = 'show'
-const CLASS_NAME_STATIC             = 'modal-static'
+const CLASS_NAME_BACKDROP = 'modal-backdrop'
+const CLASS_NAME_OPEN = 'modal-open'
+const CLASS_NAME_FADE = 'fade'
+const CLASS_NAME_SHOW = 'show'
+const CLASS_NAME_STATIC = 'modal-static'
 
-const SELECTOR_DIALOG         = '.modal-dialog'
-const SELECTOR_MODAL_BODY     = '.modal-body'
-const SELECTOR_DATA_TOGGLE    = '[data-toggle="modal"]'
-const SELECTOR_DATA_DISMISS   = '[data-dismiss="modal"]'
-const SELECTOR_FIXED_CONTENT  = '.fixed-top, .fixed-bottom, .is-fixed, .sticky-top'
+const SELECTOR_DIALOG = '.modal-dialog'
+const SELECTOR_MODAL_BODY = '.modal-body'
+const SELECTOR_DATA_TOGGLE = '[data-toggle="modal"]'
+const SELECTOR_DATA_DISMISS = '[data-dismiss="modal"]'
+const SELECTOR_FIXED_CONTENT = '.fixed-top, .fixed-bottom, .is-fixed, .sticky-top'
 const SELECTOR_STICKY_CONTENT = '.sticky-top'
 
 /**
@@ -3232,15 +3245,15 @@ const SELECTOR_STICKY_CONTENT = '.sticky-top'
 
 class Modal {
   constructor(element, config) {
-    this._config              = this._getConfig(config)
-    this._element             = element
-    this._dialog              = element.querySelector(SELECTOR_DIALOG)
-    this._backdrop            = null
-    this._isShown             = false
-    this._isBodyOverflowing   = false
+    this._config = this._getConfig(config)
+    this._element = element
+    this._dialog = element.querySelector(SELECTOR_DIALOG)
+    this._backdrop = null
+    this._isShown = false
+    this._isBodyOverflowing = false
     this._ignoreBackdropClick = false
-    this._isTransitioning     = false
-    this._scrollbarWidth      = 0
+    this._isTransitioning = false
+    this._scrollbarWidth = 0
   }
 
   // Getters
@@ -3291,11 +3304,11 @@ class Modal {
     jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).on(
       EVENT_CLICK_DISMISS,
       SELECTOR_DATA_DISMISS,
-      (event) => this.hide(event)
+      event => this.hide(event)
     )
 
     jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._dialog).on(EVENT_MOUSEDOWN_DISMISS, () => {
-      jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).one(EVENT_MOUSEUP_DISMISS, (event) => {
+      jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).one(EVENT_MOUSEUP_DISMISS, event => {
         if (jquery__WEBPACK_IMPORTED_MODULE_0___default()(event.target).is(this._element)) {
           this._ignoreBackdropClick = true
         }
@@ -3340,10 +3353,10 @@ class Modal {
     jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._dialog).off(EVENT_MOUSEDOWN_DISMISS)
 
     if (transition) {
-      const transitionDuration  = _util__WEBPACK_IMPORTED_MODULE_1__["default"].getTransitionDurationFromElement(this._element)
+      const transitionDuration = _util__WEBPACK_IMPORTED_MODULE_1__["default"].getTransitionDurationFromElement(this._element)
 
       jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element)
-        .one(_util__WEBPACK_IMPORTED_MODULE_1__["default"].TRANSITION_END, (event) => this._hideModal(event))
+        .one(_util__WEBPACK_IMPORTED_MODULE_1__["default"].TRANSITION_END, event => this._hideModal(event))
         .emulateTransitionEnd(transitionDuration)
     } else {
       this._hideModal()
@@ -3352,7 +3365,7 @@ class Modal {
 
   dispose() {
     [window, this._element, this._dialog]
-      .forEach((htmlElement) => jquery__WEBPACK_IMPORTED_MODULE_0___default()(htmlElement).off(EVENT_KEY))
+      .forEach(htmlElement => jquery__WEBPACK_IMPORTED_MODULE_0___default()(htmlElement).off(EVENT_KEY))
 
     /**
      * `document` has 2 events `EVENT_FOCUSIN` and `EVENT_CLICK_DATA_API`
@@ -3363,15 +3376,15 @@ class Modal {
 
     jquery__WEBPACK_IMPORTED_MODULE_0___default.a.removeData(this._element, DATA_KEY)
 
-    this._config              = null
-    this._element             = null
-    this._dialog              = null
-    this._backdrop            = null
-    this._isShown             = null
-    this._isBodyOverflowing   = null
+    this._config = null
+    this._element = null
+    this._dialog = null
+    this._backdrop = null
+    this._isShown = null
+    this._isBodyOverflowing = null
     this._ignoreBackdropClick = null
-    this._isTransitioning     = null
-    this._scrollbarWidth      = null
+    this._isTransitioning = null
+    this._scrollbarWidth = null
   }
 
   handleUpdate() {
@@ -3394,7 +3407,7 @@ class Modal {
       const hideEventPrevented = jquery__WEBPACK_IMPORTED_MODULE_0___default.a.Event(EVENT_HIDE_PREVENTED)
 
       jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).trigger(hideEventPrevented)
-      if (hideEventPrevented.defaultPrevented) {
+      if (hideEventPrevented.isDefaultPrevented()) {
         return
       }
 
@@ -3464,12 +3477,13 @@ class Modal {
       if (this._config.focus) {
         this._element.focus()
       }
+
       this._isTransitioning = false
       jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).trigger(shownEvent)
     }
 
     if (transition) {
-      const transitionDuration  = _util__WEBPACK_IMPORTED_MODULE_1__["default"].getTransitionDurationFromElement(this._dialog)
+      const transitionDuration = _util__WEBPACK_IMPORTED_MODULE_1__["default"].getTransitionDurationFromElement(this._dialog)
 
       jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._dialog)
         .one(_util__WEBPACK_IMPORTED_MODULE_1__["default"].TRANSITION_END, transitionComplete)
@@ -3482,7 +3496,7 @@ class Modal {
   _enforceFocus() {
     jquery__WEBPACK_IMPORTED_MODULE_0___default()(document)
       .off(EVENT_FOCUSIN) // Guard against infinite focus loop
-      .on(EVENT_FOCUSIN, (event) => {
+      .on(EVENT_FOCUSIN, event => {
         if (document !== event.target &&
             this._element !== event.target &&
             jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).has(event.target).length === 0) {
@@ -3493,7 +3507,7 @@ class Modal {
 
   _setEscapeEvent() {
     if (this._isShown) {
-      jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).on(EVENT_KEYDOWN_DISMISS, (event) => {
+      jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).on(EVENT_KEYDOWN_DISMISS, event => {
         if (this._config.keyboard && event.which === ESCAPE_KEYCODE) {
           event.preventDefault()
           this.hide()
@@ -3508,7 +3522,7 @@ class Modal {
 
   _setResizeEvent() {
     if (this._isShown) {
-      jquery__WEBPACK_IMPORTED_MODULE_0___default()(window).on(EVENT_RESIZE, (event) => this.handleUpdate(event))
+      jquery__WEBPACK_IMPORTED_MODULE_0___default()(window).on(EVENT_RESIZE, event => this.handleUpdate(event))
     } else {
       jquery__WEBPACK_IMPORTED_MODULE_0___default()(window).off(EVENT_RESIZE)
     }
@@ -3536,8 +3550,8 @@ class Modal {
   }
 
   _showBackdrop(callback) {
-    const animate = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).hasClass(CLASS_NAME_FADE)
-      ? CLASS_NAME_FADE : ''
+    const animate = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).hasClass(CLASS_NAME_FADE) ?
+      CLASS_NAME_FADE : ''
 
     if (this._isShown && this._config.backdrop) {
       this._backdrop = document.createElement('div')
@@ -3549,11 +3563,12 @@ class Modal {
 
       jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._backdrop).appendTo(document.body)
 
-      jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).on(EVENT_CLICK_DISMISS, (event) => {
+      jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).on(EVENT_CLICK_DISMISS, event => {
         if (this._ignoreBackdropClick) {
           this._ignoreBackdropClick = false
           return
         }
+
         if (event.target !== event.currentTarget) {
           return
         }
@@ -3611,8 +3626,7 @@ class Modal {
   // ----------------------------------------------------------------------
 
   _adjustDialog() {
-    const isModalOverflowing =
-      this._element.scrollHeight > document.documentElement.clientHeight
+    const isModalOverflowing = this._element.scrollHeight > document.documentElement.clientHeight
 
     if (!this._isBodyOverflowing && isModalOverflowing) {
       this._element.style.paddingLeft = `${this._scrollbarWidth}px`
@@ -3711,7 +3725,7 @@ class Modal {
       const _config = {
         ...Default,
         ...jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data(),
-        ...typeof config === 'object' && config ? config : {}
+        ...(typeof config === 'object' && config ? config : {})
       }
 
       if (!data) {
@@ -3723,6 +3737,7 @@ class Modal {
         if (typeof data[config] === 'undefined') {
           throw new TypeError(`No method named "${config}"`)
         }
+
         data[config](relatedTarget)
       } else if (_config.show) {
         data.show(relatedTarget)
@@ -3745,8 +3760,8 @@ jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).on(EVENT_CLICK_DATA_API,
     target = document.querySelector(selector)
   }
 
-  const config = jquery__WEBPACK_IMPORTED_MODULE_0___default()(target).data(DATA_KEY)
-    ? 'toggle' : {
+  const config = jquery__WEBPACK_IMPORTED_MODULE_0___default()(target).data(DATA_KEY) ?
+    'toggle' : {
       ...jquery__WEBPACK_IMPORTED_MODULE_0___default()(target).data(),
       ...jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data()
     }
@@ -3755,7 +3770,7 @@ jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).on(EVENT_CLICK_DATA_API,
     event.preventDefault()
   }
 
-  const $target = jquery__WEBPACK_IMPORTED_MODULE_0___default()(target).one(EVENT_SHOW, (showEvent) => {
+  const $target = jquery__WEBPACK_IMPORTED_MODULE_0___default()(target).one(EVENT_SHOW, showEvent => {
     if (showEvent.isDefaultPrevented()) {
       // Only register focus restorer if modal will actually get shown
       return
@@ -3802,7 +3817,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.5.2): util.js
+ * Bootstrap (v4.5.3): util.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -3836,6 +3851,7 @@ function getSpecialTransitionEndEvent() {
       if (jquery__WEBPACK_IMPORTED_MODULE_0___default()(event.target).is(this)) {
         return event.handleObj.handler.apply(this, arguments) // eslint-disable-line prefer-rest-params
       }
+
       return undefined
     }
   }
@@ -3873,9 +3889,9 @@ const Util = {
 
   getUID(prefix) {
     do {
-      // eslint-disable-next-line no-bitwise
       prefix += ~~(Math.random() * MAX_UID) // "~~" acts like a faster Math.floor() here
     } while (document.getElementById(prefix))
+
     return prefix
   },
 
@@ -3889,7 +3905,7 @@ const Util = {
 
     try {
       return document.querySelector(selector) ? selector : null
-    } catch (err) {
+    } catch (_) {
       return null
     }
   },
@@ -3926,7 +3942,6 @@ const Util = {
     jquery__WEBPACK_IMPORTED_MODULE_0___default()(element).trigger(TRANSITION_END)
   },
 
-  // TODO: Remove in v5
   supportsTransitionEnd() {
     return Boolean(TRANSITION_END)
   },
@@ -3939,9 +3954,9 @@ const Util = {
     for (const property in configTypes) {
       if (Object.prototype.hasOwnProperty.call(configTypes, property)) {
         const expectedTypes = configTypes[property]
-        const value         = config[property]
-        const valueType     = value && Util.isElement(value)
-          ? 'element' : toType(value)
+        const value = config[property]
+        const valueType = value && Util.isElement(value) ?
+          'element' : toType(value)
 
         if (!new RegExp(expectedTypes).test(valueType)) {
           throw new Error(

@@ -154,7 +154,7 @@ window.$=window.jQuery=$=jquery__WEBPACK_IMPORTED_MODULE_1___default.a;window.bo
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! @preserve
  * bootbox.js
- * version: 5.4.0
+ * version: 5.5.1
  * author: Nick Payne <nick@kurai.co.uk>
  * license: MIT
  * http://bootboxjs.com/
@@ -216,210 +216,210 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
   var exports = {};
 
-  var VERSION = '5.0.0';
+  var VERSION = '5.5.1';
   exports.VERSION = VERSION;
 
   var locales = {
-      ar : {
-        OK      : 'موافق',
-        CANCEL  : 'الغاء',
-        CONFIRM : 'تأكيد'
-      },
-      bg_BG : {
-        OK      : 'Ок',
-        CANCEL  : 'Отказ',
-        CONFIRM : 'Потвърждавам'
-      },
-      br : {
-        OK      : 'OK',
-        CANCEL  : 'Cancelar',
-        CONFIRM : 'Sim'
-      },
-      cs : {
-        OK      : 'OK',
-        CANCEL  : 'Zrušit',
-        CONFIRM : 'Potvrdit'
-      },
-      da : {
-        OK      : 'OK',
-        CANCEL  : 'Annuller',
-        CONFIRM : 'Accepter'
-      },
-      de : {
-        OK      : 'OK',
-        CANCEL  : 'Abbrechen',
-        CONFIRM : 'Akzeptieren'
-      },
-      el : {
-        OK      : 'Εντάξει',
-        CANCEL  : 'Ακύρωση',
-        CONFIRM : 'Επιβεβαίωση'
-      },
-      en : {
-        OK      : 'OK',
-        CANCEL  : 'Cancel',
-        CONFIRM : 'OK'
-      },
-      es : {
-        OK      : 'OK',
-        CANCEL  : 'Cancelar',
-        CONFIRM : 'Aceptar'
-      },
-      eu : {
-        OK      : 'OK',
-        CANCEL  : 'Ezeztatu',
-        CONFIRM : 'Onartu'
-      },
-      et : {
-        OK      : 'OK',
-        CANCEL  : 'Katkesta',
-        CONFIRM : 'OK'
-      },
-      fa : {
-        OK      : 'قبول',
-        CANCEL  : 'لغو',
-        CONFIRM : 'تایید'
-      },
-      fi : {
-        OK      : 'OK',
-        CANCEL  : 'Peruuta',
-        CONFIRM : 'OK'
-      },
-      fr : {
-        OK      : 'OK',
-        CANCEL  : 'Annuler',
-        CONFIRM : 'Confirmer'
-      },
-      he : {
-        OK      : 'אישור',
-        CANCEL  : 'ביטול',
-        CONFIRM : 'אישור'
-      },
-      hu : {
-        OK      : 'OK',
-        CANCEL  : 'Mégsem',
-        CONFIRM : 'Megerősít'
-      },
-      hr : {
-        OK      : 'OK',
-        CANCEL  : 'Odustani',
-        CONFIRM : 'Potvrdi'
-      },
-      id : {
-        OK      : 'OK',
-        CANCEL  : 'Batal',
-        CONFIRM : 'OK'
-      },
-      it : {
-        OK      : 'OK',
-        CANCEL  : 'Annulla',
-        CONFIRM : 'Conferma'
-      },
-      ja : {
-        OK      : 'OK',
-        CANCEL  : 'キャンセル',
-        CONFIRM : '確認'
-      },
-      ka : {
-        OK: 'OK',
-        CANCEL: 'გაუქმება',
-        CONFIRM: 'დადასტურება'
-      },
-      ko : {
-        OK: 'OK',
-        CANCEL: '취소',
-        CONFIRM: '확인'
-      },
-      lt : {
-        OK      : 'Gerai',
-        CANCEL  : 'Atšaukti',
-        CONFIRM : 'Patvirtinti'
-      },
-      lv : {
-        OK      : 'Labi',
-        CANCEL  : 'Atcelt',
-        CONFIRM : 'Apstiprināt'
-      },
-      nl : {
-        OK      : 'OK',
-        CANCEL  : 'Annuleren',
-        CONFIRM : 'Accepteren'
-      },
-      no : {
-        OK      : 'OK',
-        CANCEL  : 'Avbryt',
-        CONFIRM : 'OK'
-      },
-      pl : {
-        OK      : 'OK',
-        CANCEL  : 'Anuluj',
-        CONFIRM : 'Potwierdź'
-      },
-      pt : {
-        OK      : 'OK',
-        CANCEL  : 'Cancelar',
-        CONFIRM : 'Confirmar'
-      },
-      ru : {
-        OK      : 'OK',
-        CANCEL  : 'Отмена',
-        CONFIRM : 'Применить'
-      },
-      sk : {
-        OK      : 'OK',
-        CANCEL  : 'Zrušiť',
-        CONFIRM : 'Potvrdiť'
-      },
-      sl : {
-        OK      : 'OK',
-        CANCEL  : 'Prekliči',
-        CONFIRM : 'Potrdi'
-      },
-      sq : {
-        OK      : 'OK',
-        CANCEL  : 'Anulo',
-        CONFIRM : 'Prano'
-      },
-      sv : {
-        OK      : 'OK',
-        CANCEL  : 'Avbryt',
-        CONFIRM : 'OK'
-      },
-      sw: {
-        OK      : 'Sawa',
-        CANCEL  : 'Ghairi',
-        CONFIRM: 'Thibitisha'
-      },
-      ta:{
-        OK      : 'சரி',
-        CANCEL  : 'ரத்து செய்',
-        CONFIRM : 'உறுதி செய்'
-      },
-      th : {
-        OK      : 'ตกลง',
-        CANCEL  : 'ยกเลิก',
-        CONFIRM : 'ยืนยัน'
-      },
-      tr : {
-        OK      : 'Tamam',
-        CANCEL  : 'İptal',
-        CONFIRM : 'Onayla'
-      },
-      uk : {
-        OK      : 'OK',
-        CANCEL  : 'Відміна',
-        CONFIRM : 'Прийняти'
-      },
-      zh_CN : {
-        OK      : 'OK',
-        CANCEL  : '取消',
-        CONFIRM : '确认'
-      },
-      zh_TW : {
-        OK      : 'OK',
-        CANCEL  : '取消',
-        CONFIRM : '確認'
-      }
+    ar : {
+      OK      : 'موافق',
+      CANCEL  : 'الغاء',
+      CONFIRM : 'تأكيد'
+    },
+    bg_BG : {
+      OK      : 'Ок',
+      CANCEL  : 'Отказ',
+      CONFIRM : 'Потвърждавам'
+    },
+    br : {
+      OK      : 'OK',
+      CANCEL  : 'Cancelar',
+      CONFIRM : 'Sim'
+    },
+    cs : {
+      OK      : 'OK',
+      CANCEL  : 'Zrušit',
+      CONFIRM : 'Potvrdit'
+    },
+    da : {
+      OK      : 'OK',
+      CANCEL  : 'Annuller',
+      CONFIRM : 'Accepter'
+    },
+    de : {
+      OK      : 'OK',
+      CANCEL  : 'Abbrechen',
+      CONFIRM : 'Akzeptieren'
+    },
+    el : {
+      OK      : 'Εντάξει',
+      CANCEL  : 'Ακύρωση',
+      CONFIRM : 'Επιβεβαίωση'
+    },
+    en : {
+      OK      : 'OK',
+      CANCEL  : 'Cancel',
+      CONFIRM : 'OK'
+    },
+    es : {
+      OK      : 'OK',
+      CANCEL  : 'Cancelar',
+      CONFIRM : 'Aceptar'
+    },
+    eu : {
+      OK      : 'OK',
+      CANCEL  : 'Ezeztatu',
+      CONFIRM : 'Onartu'
+    },
+    et : {
+      OK      : 'OK',
+      CANCEL  : 'Katkesta',
+      CONFIRM : 'OK'
+    },
+    fa : {
+      OK      : 'قبول',
+      CANCEL  : 'لغو',
+      CONFIRM : 'تایید'
+    },
+    fi : {
+      OK      : 'OK',
+      CANCEL  : 'Peruuta',
+      CONFIRM : 'OK'
+    },
+    fr : {
+      OK      : 'OK',
+      CANCEL  : 'Annuler',
+      CONFIRM : 'Confirmer'
+    },
+    he : {
+      OK      : 'אישור',
+      CANCEL  : 'ביטול',
+      CONFIRM : 'אישור'
+    },
+    hu : {
+      OK      : 'OK',
+      CANCEL  : 'Mégsem',
+      CONFIRM : 'Megerősít'
+    },
+    hr : {
+      OK      : 'OK',
+      CANCEL  : 'Odustani',
+      CONFIRM : 'Potvrdi'
+    },
+    id : {
+      OK      : 'OK',
+      CANCEL  : 'Batal',
+      CONFIRM : 'OK'
+    },
+    it : {
+      OK      : 'OK',
+      CANCEL  : 'Annulla',
+      CONFIRM : 'Conferma'
+    },
+    ja : {
+      OK      : 'OK',
+      CANCEL  : 'キャンセル',
+      CONFIRM : '確認'
+    },
+    ka : {
+      OK: 'OK',
+      CANCEL: 'გაუქმება',
+      CONFIRM: 'დადასტურება'
+    },
+    ko : {
+      OK: 'OK',
+      CANCEL: '취소',
+      CONFIRM: '확인'
+    },
+    lt : {
+      OK      : 'Gerai',
+      CANCEL  : 'Atšaukti',
+      CONFIRM : 'Patvirtinti'
+    },
+    lv : {
+      OK      : 'Labi',
+      CANCEL  : 'Atcelt',
+      CONFIRM : 'Apstiprināt'
+    },
+    nl : {
+      OK      : 'OK',
+      CANCEL  : 'Annuleren',
+      CONFIRM : 'Accepteren'
+    },
+    no : {
+      OK      : 'OK',
+      CANCEL  : 'Avbryt',
+      CONFIRM : 'OK'
+    },
+    pl : {
+      OK      : 'OK',
+      CANCEL  : 'Anuluj',
+      CONFIRM : 'Potwierdź'
+    },
+    pt : {
+      OK      : 'OK',
+      CANCEL  : 'Cancelar',
+      CONFIRM : 'Confirmar'
+    },
+    ru : {
+      OK      : 'OK',
+      CANCEL  : 'Отмена',
+      CONFIRM : 'Применить'
+    },
+    sk : {
+      OK      : 'OK',
+      CANCEL  : 'Zrušiť',
+      CONFIRM : 'Potvrdiť'
+    },
+    sl : {
+      OK      : 'OK',
+      CANCEL  : 'Prekliči',
+      CONFIRM : 'Potrdi'
+    },
+    sq : {
+      OK      : 'OK',
+      CANCEL  : 'Anulo',
+      CONFIRM : 'Prano'
+    },
+    sv : {
+      OK      : 'OK',
+      CANCEL  : 'Avbryt',
+      CONFIRM : 'OK'
+    },
+    sw: {
+      OK      : 'Sawa',
+      CANCEL  : 'Ghairi',
+      CONFIRM: 'Thibitisha'
+    },
+    ta:{
+      OK      : 'சரி',
+      CANCEL  : 'ரத்து செய்',
+      CONFIRM : 'உறுதி செய்'
+    },
+    th : {
+      OK      : 'ตกลง',
+      CANCEL  : 'ยกเลิก',
+      CONFIRM : 'ยืนยัน'
+    },
+    tr : {
+      OK      : 'Tamam',
+      CANCEL  : 'İptal',
+      CONFIRM : 'Onayla'
+    },
+    uk : {
+      OK      : 'OK',
+      CANCEL  : 'Відміна',
+      CONFIRM : 'Прийняти'
+    },
+    zh_CN : {
+      OK      : 'OK',
+      CANCEL  : '取消',
+      CONFIRM : '确认'
+    },
+    zh_TW : {
+      OK      : 'OK',
+      CANCEL  : '取消',
+      CONFIRM : '確認'
+    }
   };
 
   var templates = {
@@ -500,7 +500,9 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     // Append "multiple" property to the select when using the "prompt" helper
     multiple: false,
     // Automatically scroll modal content when height exceeds viewport height
-    scrollable: false
+    scrollable: false,
+    // whether or not to destroy the modal on hide
+    reusable: false
   };
 
 
@@ -590,7 +592,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     if ($.fn.modal === undefined) {
       throw new Error(
         '"$.fn.modal" is not defined; please double check you have included ' +
-        'the Bootstrap JavaScript library. See http://getbootstrap.com/javascript/ ' +
+        'the Bootstrap JavaScript library. See https://getbootstrap.com/docs/4.4/getting-started/javascript/ ' +
         'for more details.'
       );
     }
@@ -729,8 +731,10 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     // setup & teardown required after the underlying
     // modal has performed certain actions.
 
-    // make sure we unbind any listeners once the dialog has definitively been dismissed
-    dialog.one('hide.bs.modal', { dialog: dialog }, unbindModal);
+    if(!options.reusable) {
+      // make sure we unbind any listeners once the dialog has definitively been dismissed
+      dialog.one('hide.bs.modal', { dialog: dialog }, unbindModal);
+    }
 
     if (options.onHide) {
       if ($.isFunction(options.onHide)) {
@@ -741,7 +745,9 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       }
     }
 
-    dialog.one('hidden.bs.modal', { dialog: dialog }, destroyModal);
+    if(!options.reusable) {
+      dialog.one('hidden.bs.modal', { dialog: dialog }, destroyModal);
+    }
 
     if (options.onHidden) {
       if ($.isFunction(options.onHidden)) {
@@ -775,7 +781,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     // Bootbox event listeners; used to decouple some
     // behaviours from their respective triggers
 
-    if (options.backdrop !== 'static') {
+    if (options.backdrop === true) {
       // A boolean true/false according to the Bootstrap docs
       // should show a dialog the user can dismiss by clicking on
       // the background.
@@ -839,7 +845,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     $(options.container).append(dialog);
 
     dialog.modal({
-      backdrop: options.backdrop ? 'static' : false,
+      backdrop: options.backdrop,
       keyboard: false,
       show: false
     });
@@ -1410,12 +1416,19 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     // make sure any supplied options take precedence over defaults
     options = $.extend({}, defaults, options);
 
+    //make sure backdrop is either true, false, or 'static'
+    if (!options.backdrop) {
+      options.backdrop = (options.backdrop === false || options.backdrop === 0) ? false : 'static';
+    } else {
+      options.backdrop = typeof options.backdrop === 'string' && options.backdrop.toLowerCase() === 'static' ? 'static' : true;
+    } 
+
     // no buttons is still a valid dialog but it's cleaner to always have
     // a buttons object to iterate over, even if it's empty
     if (!options.buttons) {
       options.buttons = {};
     }
-
+    
     buttons = options.buttons;
 
     total = getKeyLength(buttons);
@@ -1586,7 +1599,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
-  * Bootstrap collapse.js v4.5.2 (https://getbootstrap.com/)
+  * Bootstrap collapse.js v4.5.3 (https://getbootstrap.com/)
   * Copyright 2011-2020 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
@@ -1595,8 +1608,10 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
   undefined;
 }(this, (function ($, Util) { 'use strict';
 
-  $ = $ && Object.prototype.hasOwnProperty.call($, 'default') ? $['default'] : $;
-  Util = Util && Object.prototype.hasOwnProperty.call(Util, 'default') ? Util['default'] : Util;
+  function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+  var $__default = /*#__PURE__*/_interopDefaultLegacy($);
+  var Util__default = /*#__PURE__*/_interopDefaultLegacy(Util);
 
   function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
@@ -1610,11 +1625,11 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
    */
 
   var NAME = 'collapse';
-  var VERSION = '4.5.2';
+  var VERSION = '4.5.3';
   var DATA_KEY = 'bs.collapse';
   var EVENT_KEY = "." + DATA_KEY;
   var DATA_API_KEY = '.data-api';
-  var JQUERY_NO_CONFLICT = $.fn[NAME];
+  var JQUERY_NO_CONFLICT = $__default['default'].fn[NAME];
   var Default = {
     toggle: true,
     parent: ''
@@ -1652,7 +1667,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
       for (var i = 0, len = toggleList.length; i < len; i++) {
         var elem = toggleList[i];
-        var selector = Util.getSelectorFromElement(elem);
+        var selector = Util__default['default'].getSelectorFromElement(elem);
         var filterElement = [].slice.call(document.querySelectorAll(selector)).filter(function (foundElem) {
           return foundElem === element;
         });
@@ -1680,7 +1695,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
     // Public
     _proto.toggle = function toggle() {
-      if ($(this._element).hasClass(CLASS_NAME_SHOW)) {
+      if ($__default['default'](this._element).hasClass(CLASS_NAME_SHOW)) {
         this.hide();
       } else {
         this.show();
@@ -1690,7 +1705,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     _proto.show = function show() {
       var _this = this;
 
-      if (this._isTransitioning || $(this._element).hasClass(CLASS_NAME_SHOW)) {
+      if (this._isTransitioning || $__default['default'](this._element).hasClass(CLASS_NAME_SHOW)) {
         return;
       }
 
@@ -1712,64 +1727,64 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       }
 
       if (actives) {
-        activesData = $(actives).not(this._selector).data(DATA_KEY);
+        activesData = $__default['default'](actives).not(this._selector).data(DATA_KEY);
 
         if (activesData && activesData._isTransitioning) {
           return;
         }
       }
 
-      var startEvent = $.Event(EVENT_SHOW);
-      $(this._element).trigger(startEvent);
+      var startEvent = $__default['default'].Event(EVENT_SHOW);
+      $__default['default'](this._element).trigger(startEvent);
 
       if (startEvent.isDefaultPrevented()) {
         return;
       }
 
       if (actives) {
-        Collapse._jQueryInterface.call($(actives).not(this._selector), 'hide');
+        Collapse._jQueryInterface.call($__default['default'](actives).not(this._selector), 'hide');
 
         if (!activesData) {
-          $(actives).data(DATA_KEY, null);
+          $__default['default'](actives).data(DATA_KEY, null);
         }
       }
 
       var dimension = this._getDimension();
 
-      $(this._element).removeClass(CLASS_NAME_COLLAPSE).addClass(CLASS_NAME_COLLAPSING);
+      $__default['default'](this._element).removeClass(CLASS_NAME_COLLAPSE).addClass(CLASS_NAME_COLLAPSING);
       this._element.style[dimension] = 0;
 
       if (this._triggerArray.length) {
-        $(this._triggerArray).removeClass(CLASS_NAME_COLLAPSED).attr('aria-expanded', true);
+        $__default['default'](this._triggerArray).removeClass(CLASS_NAME_COLLAPSED).attr('aria-expanded', true);
       }
 
       this.setTransitioning(true);
 
       var complete = function complete() {
-        $(_this._element).removeClass(CLASS_NAME_COLLAPSING).addClass(CLASS_NAME_COLLAPSE + " " + CLASS_NAME_SHOW);
+        $__default['default'](_this._element).removeClass(CLASS_NAME_COLLAPSING).addClass(CLASS_NAME_COLLAPSE + " " + CLASS_NAME_SHOW);
         _this._element.style[dimension] = '';
 
         _this.setTransitioning(false);
 
-        $(_this._element).trigger(EVENT_SHOWN);
+        $__default['default'](_this._element).trigger(EVENT_SHOWN);
       };
 
       var capitalizedDimension = dimension[0].toUpperCase() + dimension.slice(1);
       var scrollSize = "scroll" + capitalizedDimension;
-      var transitionDuration = Util.getTransitionDurationFromElement(this._element);
-      $(this._element).one(Util.TRANSITION_END, complete).emulateTransitionEnd(transitionDuration);
+      var transitionDuration = Util__default['default'].getTransitionDurationFromElement(this._element);
+      $__default['default'](this._element).one(Util__default['default'].TRANSITION_END, complete).emulateTransitionEnd(transitionDuration);
       this._element.style[dimension] = this._element[scrollSize] + "px";
     };
 
     _proto.hide = function hide() {
       var _this2 = this;
 
-      if (this._isTransitioning || !$(this._element).hasClass(CLASS_NAME_SHOW)) {
+      if (this._isTransitioning || !$__default['default'](this._element).hasClass(CLASS_NAME_SHOW)) {
         return;
       }
 
-      var startEvent = $.Event(EVENT_HIDE);
-      $(this._element).trigger(startEvent);
+      var startEvent = $__default['default'].Event(EVENT_HIDE);
+      $__default['default'](this._element).trigger(startEvent);
 
       if (startEvent.isDefaultPrevented()) {
         return;
@@ -1778,20 +1793,20 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       var dimension = this._getDimension();
 
       this._element.style[dimension] = this._element.getBoundingClientRect()[dimension] + "px";
-      Util.reflow(this._element);
-      $(this._element).addClass(CLASS_NAME_COLLAPSING).removeClass(CLASS_NAME_COLLAPSE + " " + CLASS_NAME_SHOW);
+      Util__default['default'].reflow(this._element);
+      $__default['default'](this._element).addClass(CLASS_NAME_COLLAPSING).removeClass(CLASS_NAME_COLLAPSE + " " + CLASS_NAME_SHOW);
       var triggerArrayLength = this._triggerArray.length;
 
       if (triggerArrayLength > 0) {
         for (var i = 0; i < triggerArrayLength; i++) {
           var trigger = this._triggerArray[i];
-          var selector = Util.getSelectorFromElement(trigger);
+          var selector = Util__default['default'].getSelectorFromElement(trigger);
 
           if (selector !== null) {
-            var $elem = $([].slice.call(document.querySelectorAll(selector)));
+            var $elem = $__default['default']([].slice.call(document.querySelectorAll(selector)));
 
             if (!$elem.hasClass(CLASS_NAME_SHOW)) {
-              $(trigger).addClass(CLASS_NAME_COLLAPSED).attr('aria-expanded', false);
+              $__default['default'](trigger).addClass(CLASS_NAME_COLLAPSED).attr('aria-expanded', false);
             }
           }
         }
@@ -1802,12 +1817,12 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       var complete = function complete() {
         _this2.setTransitioning(false);
 
-        $(_this2._element).removeClass(CLASS_NAME_COLLAPSING).addClass(CLASS_NAME_COLLAPSE).trigger(EVENT_HIDDEN);
+        $__default['default'](_this2._element).removeClass(CLASS_NAME_COLLAPSING).addClass(CLASS_NAME_COLLAPSE).trigger(EVENT_HIDDEN);
       };
 
       this._element.style[dimension] = '';
-      var transitionDuration = Util.getTransitionDurationFromElement(this._element);
-      $(this._element).one(Util.TRANSITION_END, complete).emulateTransitionEnd(transitionDuration);
+      var transitionDuration = Util__default['default'].getTransitionDurationFromElement(this._element);
+      $__default['default'](this._element).one(Util__default['default'].TRANSITION_END, complete).emulateTransitionEnd(transitionDuration);
     };
 
     _proto.setTransitioning = function setTransitioning(isTransitioning) {
@@ -1815,7 +1830,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     };
 
     _proto.dispose = function dispose() {
-      $.removeData(this._element, DATA_KEY);
+      $__default['default'].removeData(this._element, DATA_KEY);
       this._config = null;
       this._parent = null;
       this._element = null;
@@ -1828,12 +1843,12 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       config = _extends({}, Default, config);
       config.toggle = Boolean(config.toggle); // Coerce string values
 
-      Util.typeCheckConfig(NAME, config, DefaultType);
+      Util__default['default'].typeCheckConfig(NAME, config, DefaultType);
       return config;
     };
 
     _proto._getDimension = function _getDimension() {
-      var hasWidth = $(this._element).hasClass(DIMENSION_WIDTH);
+      var hasWidth = $__default['default'](this._element).hasClass(DIMENSION_WIDTH);
       return hasWidth ? DIMENSION_WIDTH : DIMENSION_HEIGHT;
     };
 
@@ -1842,7 +1857,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
       var parent;
 
-      if (Util.isElement(this._config.parent)) {
+      if (Util__default['default'].isElement(this._config.parent)) {
         parent = this._config.parent; // It's a jQuery object
 
         if (typeof this._config.parent.jquery !== 'undefined') {
@@ -1854,32 +1869,32 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
       var selector = "[data-toggle=\"collapse\"][data-parent=\"" + this._config.parent + "\"]";
       var children = [].slice.call(parent.querySelectorAll(selector));
-      $(children).each(function (i, element) {
+      $__default['default'](children).each(function (i, element) {
         _this3._addAriaAndCollapsedClass(Collapse._getTargetFromElement(element), [element]);
       });
       return parent;
     };
 
     _proto._addAriaAndCollapsedClass = function _addAriaAndCollapsedClass(element, triggerArray) {
-      var isOpen = $(element).hasClass(CLASS_NAME_SHOW);
+      var isOpen = $__default['default'](element).hasClass(CLASS_NAME_SHOW);
 
       if (triggerArray.length) {
-        $(triggerArray).toggleClass(CLASS_NAME_COLLAPSED, !isOpen).attr('aria-expanded', isOpen);
+        $__default['default'](triggerArray).toggleClass(CLASS_NAME_COLLAPSED, !isOpen).attr('aria-expanded', isOpen);
       }
     } // Static
     ;
 
     Collapse._getTargetFromElement = function _getTargetFromElement(element) {
-      var selector = Util.getSelectorFromElement(element);
+      var selector = Util__default['default'].getSelectorFromElement(element);
       return selector ? document.querySelector(selector) : null;
     };
 
     Collapse._jQueryInterface = function _jQueryInterface(config) {
       return this.each(function () {
-        var $this = $(this);
-        var data = $this.data(DATA_KEY);
+        var $element = $__default['default'](this);
+        var data = $element.data(DATA_KEY);
 
-        var _config = _extends({}, Default, $this.data(), typeof config === 'object' && config ? config : {});
+        var _config = _extends({}, Default, $element.data(), typeof config === 'object' && config ? config : {});
 
         if (!data && _config.toggle && typeof config === 'string' && /show|hide/.test(config)) {
           _config.toggle = false;
@@ -1887,7 +1902,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
         if (!data) {
           data = new Collapse(this, _config);
-          $this.data(DATA_KEY, data);
+          $element.data(DATA_KEY, data);
         }
 
         if (typeof config === 'string') {
@@ -1921,17 +1936,17 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
    */
 
 
-  $(document).on(EVENT_CLICK_DATA_API, SELECTOR_DATA_TOGGLE, function (event) {
+  $__default['default'](document).on(EVENT_CLICK_DATA_API, SELECTOR_DATA_TOGGLE, function (event) {
     // preventDefault only for <a> elements (which change the URL) not inside the collapsible element
     if (event.currentTarget.tagName === 'A') {
       event.preventDefault();
     }
 
-    var $trigger = $(this);
-    var selector = Util.getSelectorFromElement(this);
+    var $trigger = $__default['default'](this);
+    var selector = Util__default['default'].getSelectorFromElement(this);
     var selectors = [].slice.call(document.querySelectorAll(selector));
-    $(selectors).each(function () {
-      var $target = $(this);
+    $__default['default'](selectors).each(function () {
+      var $target = $__default['default'](this);
       var data = $target.data(DATA_KEY);
       var config = data ? 'toggle' : $trigger.data();
 
@@ -1944,11 +1959,11 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
    * ------------------------------------------------------------------------
    */
 
-  $.fn[NAME] = Collapse._jQueryInterface;
-  $.fn[NAME].Constructor = Collapse;
+  $__default['default'].fn[NAME] = Collapse._jQueryInterface;
+  $__default['default'].fn[NAME].Constructor = Collapse;
 
-  $.fn[NAME].noConflict = function () {
-    $.fn[NAME] = JQUERY_NO_CONFLICT;
+  $__default['default'].fn[NAME].noConflict = function () {
+    $__default['default'].fn[NAME] = JQUERY_NO_CONFLICT;
     return Collapse._jQueryInterface;
   };
 
@@ -1968,7 +1983,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
-  * Bootstrap dropdown.js v4.5.2 (https://getbootstrap.com/)
+  * Bootstrap dropdown.js v4.5.3 (https://getbootstrap.com/)
   * Copyright 2011-2020 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
@@ -1977,9 +1992,11 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
   undefined;
 }(this, (function ($, Popper, Util) { 'use strict';
 
-  $ = $ && Object.prototype.hasOwnProperty.call($, 'default') ? $['default'] : $;
-  Popper = Popper && Object.prototype.hasOwnProperty.call(Popper, 'default') ? Popper['default'] : Popper;
-  Util = Util && Object.prototype.hasOwnProperty.call(Util, 'default') ? Util['default'] : Util;
+  function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+  var $__default = /*#__PURE__*/_interopDefaultLegacy($);
+  var Popper__default = /*#__PURE__*/_interopDefaultLegacy(Popper);
+  var Util__default = /*#__PURE__*/_interopDefaultLegacy(Util);
 
   function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
@@ -1993,11 +2010,11 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
    */
 
   var NAME = 'dropdown';
-  var VERSION = '4.5.2';
+  var VERSION = '4.5.3';
   var DATA_KEY = 'bs.dropdown';
   var EVENT_KEY = "." + DATA_KEY;
   var DATA_API_KEY = '.data-api';
-  var JQUERY_NO_CONFLICT = $.fn[NAME];
+  var JQUERY_NO_CONFLICT = $__default['default'].fn[NAME];
   var ESCAPE_KEYCODE = 27; // KeyboardEvent.which value for Escape (Esc) key
 
   var SPACE_KEYCODE = 32; // KeyboardEvent.which value for space key
@@ -2075,11 +2092,11 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
     // Public
     _proto.toggle = function toggle() {
-      if (this._element.disabled || $(this._element).hasClass(CLASS_NAME_DISABLED)) {
+      if (this._element.disabled || $__default['default'](this._element).hasClass(CLASS_NAME_DISABLED)) {
         return;
       }
 
-      var isActive = $(this._menu).hasClass(CLASS_NAME_SHOW);
+      var isActive = $__default['default'](this._menu).hasClass(CLASS_NAME_SHOW);
 
       Dropdown._clearMenus();
 
@@ -2095,18 +2112,18 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
         usePopper = false;
       }
 
-      if (this._element.disabled || $(this._element).hasClass(CLASS_NAME_DISABLED) || $(this._menu).hasClass(CLASS_NAME_SHOW)) {
+      if (this._element.disabled || $__default['default'](this._element).hasClass(CLASS_NAME_DISABLED) || $__default['default'](this._menu).hasClass(CLASS_NAME_SHOW)) {
         return;
       }
 
       var relatedTarget = {
         relatedTarget: this._element
       };
-      var showEvent = $.Event(EVENT_SHOW, relatedTarget);
+      var showEvent = $__default['default'].Event(EVENT_SHOW, relatedTarget);
 
       var parent = Dropdown._getParentFromElement(this._element);
 
-      $(parent).trigger(showEvent);
+      $__default['default'](parent).trigger(showEvent);
 
       if (showEvent.isDefaultPrevented()) {
         return;
@@ -2118,7 +2135,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
          * Check for Popper dependency
          * Popper - https://popper.js.org
          */
-        if (typeof Popper === 'undefined') {
+        if (typeof Popper__default['default'] === 'undefined') {
           throw new TypeError('Bootstrap\'s dropdowns require Popper.js (https://popper.js.org/)');
         }
 
@@ -2126,7 +2143,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
         if (this._config.reference === 'parent') {
           referenceElement = parent;
-        } else if (Util.isElement(this._config.reference)) {
+        } else if (Util__default['default'].isElement(this._config.reference)) {
           referenceElement = this._config.reference; // Check if it's jQuery element
 
           if (typeof this._config.reference.jquery !== 'undefined') {
@@ -2138,41 +2155,41 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 
         if (this._config.boundary !== 'scrollParent') {
-          $(parent).addClass(CLASS_NAME_POSITION_STATIC);
+          $__default['default'](parent).addClass(CLASS_NAME_POSITION_STATIC);
         }
 
-        this._popper = new Popper(referenceElement, this._menu, this._getPopperConfig());
+        this._popper = new Popper__default['default'](referenceElement, this._menu, this._getPopperConfig());
       } // If this is a touch-enabled device we add extra
       // empty mouseover listeners to the body's immediate children;
       // only needed because of broken event delegation on iOS
       // https://www.quirksmode.org/blog/archives/2014/02/mouse_event_bub.html
 
 
-      if ('ontouchstart' in document.documentElement && $(parent).closest(SELECTOR_NAVBAR_NAV).length === 0) {
-        $(document.body).children().on('mouseover', null, $.noop);
+      if ('ontouchstart' in document.documentElement && $__default['default'](parent).closest(SELECTOR_NAVBAR_NAV).length === 0) {
+        $__default['default'](document.body).children().on('mouseover', null, $__default['default'].noop);
       }
 
       this._element.focus();
 
       this._element.setAttribute('aria-expanded', true);
 
-      $(this._menu).toggleClass(CLASS_NAME_SHOW);
-      $(parent).toggleClass(CLASS_NAME_SHOW).trigger($.Event(EVENT_SHOWN, relatedTarget));
+      $__default['default'](this._menu).toggleClass(CLASS_NAME_SHOW);
+      $__default['default'](parent).toggleClass(CLASS_NAME_SHOW).trigger($__default['default'].Event(EVENT_SHOWN, relatedTarget));
     };
 
     _proto.hide = function hide() {
-      if (this._element.disabled || $(this._element).hasClass(CLASS_NAME_DISABLED) || !$(this._menu).hasClass(CLASS_NAME_SHOW)) {
+      if (this._element.disabled || $__default['default'](this._element).hasClass(CLASS_NAME_DISABLED) || !$__default['default'](this._menu).hasClass(CLASS_NAME_SHOW)) {
         return;
       }
 
       var relatedTarget = {
         relatedTarget: this._element
       };
-      var hideEvent = $.Event(EVENT_HIDE, relatedTarget);
+      var hideEvent = $__default['default'].Event(EVENT_HIDE, relatedTarget);
 
       var parent = Dropdown._getParentFromElement(this._element);
 
-      $(parent).trigger(hideEvent);
+      $__default['default'](parent).trigger(hideEvent);
 
       if (hideEvent.isDefaultPrevented()) {
         return;
@@ -2182,13 +2199,13 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
         this._popper.destroy();
       }
 
-      $(this._menu).toggleClass(CLASS_NAME_SHOW);
-      $(parent).toggleClass(CLASS_NAME_SHOW).trigger($.Event(EVENT_HIDDEN, relatedTarget));
+      $__default['default'](this._menu).toggleClass(CLASS_NAME_SHOW);
+      $__default['default'](parent).toggleClass(CLASS_NAME_SHOW).trigger($__default['default'].Event(EVENT_HIDDEN, relatedTarget));
     };
 
     _proto.dispose = function dispose() {
-      $.removeData(this._element, DATA_KEY);
-      $(this._element).off(EVENT_KEY);
+      $__default['default'].removeData(this._element, DATA_KEY);
+      $__default['default'](this._element).off(EVENT_KEY);
       this._element = null;
       this._menu = null;
 
@@ -2211,7 +2228,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     _proto._addEventListeners = function _addEventListeners() {
       var _this = this;
 
-      $(this._element).on(EVENT_CLICK, function (event) {
+      $__default['default'](this._element).on(EVENT_CLICK, function (event) {
         event.preventDefault();
         event.stopPropagation();
 
@@ -2220,8 +2237,8 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     };
 
     _proto._getConfig = function _getConfig(config) {
-      config = _extends({}, this.constructor.Default, $(this._element).data(), config);
-      Util.typeCheckConfig(NAME, config, this.constructor.DefaultType);
+      config = _extends({}, this.constructor.Default, $__default['default'](this._element).data(), config);
+      Util__default['default'].typeCheckConfig(NAME, config, this.constructor.DefaultType);
       return config;
     };
 
@@ -2238,16 +2255,16 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     };
 
     _proto._getPlacement = function _getPlacement() {
-      var $parentDropdown = $(this._element.parentNode);
+      var $parentDropdown = $__default['default'](this._element.parentNode);
       var placement = PLACEMENT_BOTTOM; // Handle dropup
 
       if ($parentDropdown.hasClass(CLASS_NAME_DROPUP)) {
-        placement = $(this._menu).hasClass(CLASS_NAME_MENURIGHT) ? PLACEMENT_TOPEND : PLACEMENT_TOP;
+        placement = $__default['default'](this._menu).hasClass(CLASS_NAME_MENURIGHT) ? PLACEMENT_TOPEND : PLACEMENT_TOP;
       } else if ($parentDropdown.hasClass(CLASS_NAME_DROPRIGHT)) {
         placement = PLACEMENT_RIGHT;
       } else if ($parentDropdown.hasClass(CLASS_NAME_DROPLEFT)) {
         placement = PLACEMENT_LEFT;
-      } else if ($(this._menu).hasClass(CLASS_NAME_MENURIGHT)) {
+      } else if ($__default['default'](this._menu).hasClass(CLASS_NAME_MENURIGHT)) {
         placement = PLACEMENT_BOTTOMEND;
       }
 
@@ -2255,7 +2272,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     };
 
     _proto._detectNavbar = function _detectNavbar() {
-      return $(this._element).closest('.navbar').length > 0;
+      return $__default['default'](this._element).closest('.navbar').length > 0;
     };
 
     _proto._getOffset = function _getOffset() {
@@ -2301,13 +2318,13 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
     Dropdown._jQueryInterface = function _jQueryInterface(config) {
       return this.each(function () {
-        var data = $(this).data(DATA_KEY);
+        var data = $__default['default'](this).data(DATA_KEY);
 
         var _config = typeof config === 'object' ? config : null;
 
         if (!data) {
           data = new Dropdown(this, _config);
-          $(this).data(DATA_KEY, data);
+          $__default['default'](this).data(DATA_KEY, data);
         }
 
         if (typeof config === 'string') {
@@ -2330,7 +2347,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       for (var i = 0, len = toggles.length; i < len; i++) {
         var parent = Dropdown._getParentFromElement(toggles[i]);
 
-        var context = $(toggles[i]).data(DATA_KEY);
+        var context = $__default['default'](toggles[i]).data(DATA_KEY);
         var relatedTarget = {
           relatedTarget: toggles[i]
         };
@@ -2345,16 +2362,16 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
         var dropdownMenu = context._menu;
 
-        if (!$(parent).hasClass(CLASS_NAME_SHOW)) {
+        if (!$__default['default'](parent).hasClass(CLASS_NAME_SHOW)) {
           continue;
         }
 
-        if (event && (event.type === 'click' && /input|textarea/i.test(event.target.tagName) || event.type === 'keyup' && event.which === TAB_KEYCODE) && $.contains(parent, event.target)) {
+        if (event && (event.type === 'click' && /input|textarea/i.test(event.target.tagName) || event.type === 'keyup' && event.which === TAB_KEYCODE) && $__default['default'].contains(parent, event.target)) {
           continue;
         }
 
-        var hideEvent = $.Event(EVENT_HIDE, relatedTarget);
-        $(parent).trigger(hideEvent);
+        var hideEvent = $__default['default'].Event(EVENT_HIDE, relatedTarget);
+        $__default['default'](parent).trigger(hideEvent);
 
         if (hideEvent.isDefaultPrevented()) {
           continue;
@@ -2363,7 +2380,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 
         if ('ontouchstart' in document.documentElement) {
-          $(document.body).children().off('mouseover', null, $.noop);
+          $__default['default'](document.body).children().off('mouseover', null, $__default['default'].noop);
         }
 
         toggles[i].setAttribute('aria-expanded', 'false');
@@ -2372,14 +2389,14 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
           context._popper.destroy();
         }
 
-        $(dropdownMenu).removeClass(CLASS_NAME_SHOW);
-        $(parent).removeClass(CLASS_NAME_SHOW).trigger($.Event(EVENT_HIDDEN, relatedTarget));
+        $__default['default'](dropdownMenu).removeClass(CLASS_NAME_SHOW);
+        $__default['default'](parent).removeClass(CLASS_NAME_SHOW).trigger($__default['default'].Event(EVENT_HIDDEN, relatedTarget));
       }
     };
 
     Dropdown._getParentFromElement = function _getParentFromElement(element) {
       var parent;
-      var selector = Util.getSelectorFromElement(element);
+      var selector = Util__default['default'].getSelectorFromElement(element);
 
       if (selector) {
         parent = document.querySelector(selector);
@@ -2397,17 +2414,17 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       //  - If key is other than escape
       //    - If key is not up or down => not a dropdown command
       //    - If trigger inside the menu => not a dropdown command
-      if (/input|textarea/i.test(event.target.tagName) ? event.which === SPACE_KEYCODE || event.which !== ESCAPE_KEYCODE && (event.which !== ARROW_DOWN_KEYCODE && event.which !== ARROW_UP_KEYCODE || $(event.target).closest(SELECTOR_MENU).length) : !REGEXP_KEYDOWN.test(event.which)) {
+      if (/input|textarea/i.test(event.target.tagName) ? event.which === SPACE_KEYCODE || event.which !== ESCAPE_KEYCODE && (event.which !== ARROW_DOWN_KEYCODE && event.which !== ARROW_UP_KEYCODE || $__default['default'](event.target).closest(SELECTOR_MENU).length) : !REGEXP_KEYDOWN.test(event.which)) {
         return;
       }
 
-      if (this.disabled || $(this).hasClass(CLASS_NAME_DISABLED)) {
+      if (this.disabled || $__default['default'](this).hasClass(CLASS_NAME_DISABLED)) {
         return;
       }
 
       var parent = Dropdown._getParentFromElement(this);
 
-      var isActive = $(parent).hasClass(CLASS_NAME_SHOW);
+      var isActive = $__default['default'](parent).hasClass(CLASS_NAME_SHOW);
 
       if (!isActive && event.which === ESCAPE_KEYCODE) {
         return;
@@ -2416,17 +2433,17 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       event.preventDefault();
       event.stopPropagation();
 
-      if (!isActive || isActive && (event.which === ESCAPE_KEYCODE || event.which === SPACE_KEYCODE)) {
+      if (!isActive || event.which === ESCAPE_KEYCODE || event.which === SPACE_KEYCODE) {
         if (event.which === ESCAPE_KEYCODE) {
-          $(parent.querySelector(SELECTOR_DATA_TOGGLE)).trigger('focus');
+          $__default['default'](parent.querySelector(SELECTOR_DATA_TOGGLE)).trigger('focus');
         }
 
-        $(this).trigger('click');
+        $__default['default'](this).trigger('click');
         return;
       }
 
       var items = [].slice.call(parent.querySelectorAll(SELECTOR_VISIBLE_ITEMS)).filter(function (item) {
-        return $(item).is(':visible');
+        return $__default['default'](item).is(':visible');
       });
 
       if (items.length === 0) {
@@ -2478,11 +2495,11 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
    */
 
 
-  $(document).on(EVENT_KEYDOWN_DATA_API, SELECTOR_DATA_TOGGLE, Dropdown._dataApiKeydownHandler).on(EVENT_KEYDOWN_DATA_API, SELECTOR_MENU, Dropdown._dataApiKeydownHandler).on(EVENT_CLICK_DATA_API + " " + EVENT_KEYUP_DATA_API, Dropdown._clearMenus).on(EVENT_CLICK_DATA_API, SELECTOR_DATA_TOGGLE, function (event) {
+  $__default['default'](document).on(EVENT_KEYDOWN_DATA_API, SELECTOR_DATA_TOGGLE, Dropdown._dataApiKeydownHandler).on(EVENT_KEYDOWN_DATA_API, SELECTOR_MENU, Dropdown._dataApiKeydownHandler).on(EVENT_CLICK_DATA_API + " " + EVENT_KEYUP_DATA_API, Dropdown._clearMenus).on(EVENT_CLICK_DATA_API, SELECTOR_DATA_TOGGLE, function (event) {
     event.preventDefault();
     event.stopPropagation();
 
-    Dropdown._jQueryInterface.call($(this), 'toggle');
+    Dropdown._jQueryInterface.call($__default['default'](this), 'toggle');
   }).on(EVENT_CLICK_DATA_API, SELECTOR_FORM_CHILD, function (e) {
     e.stopPropagation();
   });
@@ -2492,11 +2509,11 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
    * ------------------------------------------------------------------------
    */
 
-  $.fn[NAME] = Dropdown._jQueryInterface;
-  $.fn[NAME].Constructor = Dropdown;
+  $__default['default'].fn[NAME] = Dropdown._jQueryInterface;
+  $__default['default'].fn[NAME].Constructor = Dropdown;
 
-  $.fn[NAME].noConflict = function () {
-    $.fn[NAME] = JQUERY_NO_CONFLICT;
+  $__default['default'].fn[NAME].noConflict = function () {
+    $__default['default'].fn[NAME] = JQUERY_NO_CONFLICT;
     return Dropdown._jQueryInterface;
   };
 
@@ -2516,7 +2533,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
-  * Bootstrap util.js v4.5.2 (https://getbootstrap.com/)
+  * Bootstrap util.js v4.5.3 (https://getbootstrap.com/)
   * Copyright 2011-2020 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
@@ -2525,11 +2542,13 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
   undefined;
 }(this, (function ($) { 'use strict';
 
-  $ = $ && Object.prototype.hasOwnProperty.call($, 'default') ? $['default'] : $;
+  function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+  var $__default = /*#__PURE__*/_interopDefaultLegacy($);
 
   /**
    * --------------------------------------------------------------------------
-   * Bootstrap (v4.5.2): util.js
+   * Bootstrap (v4.5.3): util.js
    * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
    * --------------------------------------------------------------------------
    */
@@ -2556,7 +2575,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       bindType: TRANSITION_END,
       delegateType: TRANSITION_END,
       handle: function handle(event) {
-        if ($(event.target).is(this)) {
+        if ($__default['default'](event.target).is(this)) {
           return event.handleObj.handler.apply(this, arguments); // eslint-disable-line prefer-rest-params
         }
 
@@ -2569,7 +2588,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     var _this = this;
 
     var called = false;
-    $(this).one(Util.TRANSITION_END, function () {
+    $__default['default'](this).one(Util.TRANSITION_END, function () {
       called = true;
     });
     setTimeout(function () {
@@ -2581,8 +2600,8 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
   }
 
   function setTransitionEndSupport() {
-    $.fn.emulateTransitionEnd = transitionEndEmulator;
-    $.event.special[Util.TRANSITION_END] = getSpecialTransitionEndEvent();
+    $__default['default'].fn.emulateTransitionEnd = transitionEndEmulator;
+    $__default['default'].event.special[Util.TRANSITION_END] = getSpecialTransitionEndEvent();
   }
   /**
    * --------------------------------------------------------------------------
@@ -2595,7 +2614,6 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     TRANSITION_END: 'bsTransitionEnd',
     getUID: function getUID(prefix) {
       do {
-        // eslint-disable-next-line no-bitwise
         prefix += ~~(Math.random() * MAX_UID); // "~~" acts like a faster Math.floor() here
       } while (document.getElementById(prefix));
 
@@ -2611,7 +2629,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
       try {
         return document.querySelector(selector) ? selector : null;
-      } catch (err) {
+      } catch (_) {
         return null;
       }
     },
@@ -2621,8 +2639,8 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       } // Get transition-duration of the element
 
 
-      var transitionDuration = $(element).css('transition-duration');
-      var transitionDelay = $(element).css('transition-delay');
+      var transitionDuration = $__default['default'](element).css('transition-duration');
+      var transitionDelay = $__default['default'](element).css('transition-delay');
       var floatTransitionDuration = parseFloat(transitionDuration);
       var floatTransitionDelay = parseFloat(transitionDelay); // Return 0 if element or transition duration is not found
 
@@ -2639,9 +2657,8 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       return element.offsetHeight;
     },
     triggerTransitionEnd: function triggerTransitionEnd(element) {
-      $(element).trigger(TRANSITION_END);
+      $__default['default'](element).trigger(TRANSITION_END);
     },
-    // TODO: Remove in v5
     supportsTransitionEnd: function supportsTransitionEnd() {
       return Boolean(TRANSITION_END);
     },
@@ -2684,11 +2701,11 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
       return Util.findShadowRoot(element.parentNode);
     },
     jQueryDetection: function jQueryDetection() {
-      if (typeof $ === 'undefined') {
+      if (typeof $__default['default'] === 'undefined') {
         throw new TypeError('Bootstrap\'s JavaScript requires jQuery. jQuery must be included before Bootstrap\'s JavaScript.');
       }
 
-      var version = $.fn.jquery.split(' ')[0].split('.');
+      var version = $__default['default'].fn.jquery.split(' ')[0].split('.');
       var minMajor = 1;
       var ltMajor = 2;
       var minMinor = 9;
@@ -2725,7 +2742,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./util */ "./node_modules/bootstrap/js/src/util.js");
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.5.2): modal.js
+ * Bootstrap (v4.5.3): modal.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -2739,54 +2756,54 @@ __webpack_require__.r(__webpack_exports__);
  * ------------------------------------------------------------------------
  */
 
-const NAME               = 'modal'
-const VERSION            = '4.5.2'
-const DATA_KEY           = 'bs.modal'
-const EVENT_KEY          = `.${DATA_KEY}`
-const DATA_API_KEY       = '.data-api'
+const NAME = 'modal'
+const VERSION = '4.5.3'
+const DATA_KEY = 'bs.modal'
+const EVENT_KEY = `.${DATA_KEY}`
+const DATA_API_KEY = '.data-api'
 const JQUERY_NO_CONFLICT = jquery__WEBPACK_IMPORTED_MODULE_0___default.a.fn[NAME]
-const ESCAPE_KEYCODE     = 27 // KeyboardEvent.which value for Escape (Esc) key
+const ESCAPE_KEYCODE = 27 // KeyboardEvent.which value for Escape (Esc) key
 
 const Default = {
-  backdrop : true,
-  keyboard : true,
-  focus    : true,
-  show     : true
+  backdrop: true,
+  keyboard: true,
+  focus: true,
+  show: true
 }
 
 const DefaultType = {
-  backdrop : '(boolean|string)',
-  keyboard : 'boolean',
-  focus    : 'boolean',
-  show     : 'boolean'
+  backdrop: '(boolean|string)',
+  keyboard: 'boolean',
+  focus: 'boolean',
+  show: 'boolean'
 }
 
-const EVENT_HIDE              = `hide${EVENT_KEY}`
-const EVENT_HIDE_PREVENTED    = `hidePrevented${EVENT_KEY}`
-const EVENT_HIDDEN            = `hidden${EVENT_KEY}`
-const EVENT_SHOW              = `show${EVENT_KEY}`
-const EVENT_SHOWN             = `shown${EVENT_KEY}`
-const EVENT_FOCUSIN           = `focusin${EVENT_KEY}`
-const EVENT_RESIZE            = `resize${EVENT_KEY}`
-const EVENT_CLICK_DISMISS     = `click.dismiss${EVENT_KEY}`
-const EVENT_KEYDOWN_DISMISS   = `keydown.dismiss${EVENT_KEY}`
-const EVENT_MOUSEUP_DISMISS   = `mouseup.dismiss${EVENT_KEY}`
+const EVENT_HIDE = `hide${EVENT_KEY}`
+const EVENT_HIDE_PREVENTED = `hidePrevented${EVENT_KEY}`
+const EVENT_HIDDEN = `hidden${EVENT_KEY}`
+const EVENT_SHOW = `show${EVENT_KEY}`
+const EVENT_SHOWN = `shown${EVENT_KEY}`
+const EVENT_FOCUSIN = `focusin${EVENT_KEY}`
+const EVENT_RESIZE = `resize${EVENT_KEY}`
+const EVENT_CLICK_DISMISS = `click.dismiss${EVENT_KEY}`
+const EVENT_KEYDOWN_DISMISS = `keydown.dismiss${EVENT_KEY}`
+const EVENT_MOUSEUP_DISMISS = `mouseup.dismiss${EVENT_KEY}`
 const EVENT_MOUSEDOWN_DISMISS = `mousedown.dismiss${EVENT_KEY}`
-const EVENT_CLICK_DATA_API    = `click${EVENT_KEY}${DATA_API_KEY}`
+const EVENT_CLICK_DATA_API = `click${EVENT_KEY}${DATA_API_KEY}`
 
-const CLASS_NAME_SCROLLABLE         = 'modal-dialog-scrollable'
+const CLASS_NAME_SCROLLABLE = 'modal-dialog-scrollable'
 const CLASS_NAME_SCROLLBAR_MEASURER = 'modal-scrollbar-measure'
-const CLASS_NAME_BACKDROP           = 'modal-backdrop'
-const CLASS_NAME_OPEN               = 'modal-open'
-const CLASS_NAME_FADE               = 'fade'
-const CLASS_NAME_SHOW               = 'show'
-const CLASS_NAME_STATIC             = 'modal-static'
+const CLASS_NAME_BACKDROP = 'modal-backdrop'
+const CLASS_NAME_OPEN = 'modal-open'
+const CLASS_NAME_FADE = 'fade'
+const CLASS_NAME_SHOW = 'show'
+const CLASS_NAME_STATIC = 'modal-static'
 
-const SELECTOR_DIALOG         = '.modal-dialog'
-const SELECTOR_MODAL_BODY     = '.modal-body'
-const SELECTOR_DATA_TOGGLE    = '[data-toggle="modal"]'
-const SELECTOR_DATA_DISMISS   = '[data-dismiss="modal"]'
-const SELECTOR_FIXED_CONTENT  = '.fixed-top, .fixed-bottom, .is-fixed, .sticky-top'
+const SELECTOR_DIALOG = '.modal-dialog'
+const SELECTOR_MODAL_BODY = '.modal-body'
+const SELECTOR_DATA_TOGGLE = '[data-toggle="modal"]'
+const SELECTOR_DATA_DISMISS = '[data-dismiss="modal"]'
+const SELECTOR_FIXED_CONTENT = '.fixed-top, .fixed-bottom, .is-fixed, .sticky-top'
 const SELECTOR_STICKY_CONTENT = '.sticky-top'
 
 /**
@@ -2797,15 +2814,15 @@ const SELECTOR_STICKY_CONTENT = '.sticky-top'
 
 class Modal {
   constructor(element, config) {
-    this._config              = this._getConfig(config)
-    this._element             = element
-    this._dialog              = element.querySelector(SELECTOR_DIALOG)
-    this._backdrop            = null
-    this._isShown             = false
-    this._isBodyOverflowing   = false
+    this._config = this._getConfig(config)
+    this._element = element
+    this._dialog = element.querySelector(SELECTOR_DIALOG)
+    this._backdrop = null
+    this._isShown = false
+    this._isBodyOverflowing = false
     this._ignoreBackdropClick = false
-    this._isTransitioning     = false
-    this._scrollbarWidth      = 0
+    this._isTransitioning = false
+    this._scrollbarWidth = 0
   }
 
   // Getters
@@ -2856,11 +2873,11 @@ class Modal {
     jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).on(
       EVENT_CLICK_DISMISS,
       SELECTOR_DATA_DISMISS,
-      (event) => this.hide(event)
+      event => this.hide(event)
     )
 
     jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._dialog).on(EVENT_MOUSEDOWN_DISMISS, () => {
-      jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).one(EVENT_MOUSEUP_DISMISS, (event) => {
+      jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).one(EVENT_MOUSEUP_DISMISS, event => {
         if (jquery__WEBPACK_IMPORTED_MODULE_0___default()(event.target).is(this._element)) {
           this._ignoreBackdropClick = true
         }
@@ -2905,10 +2922,10 @@ class Modal {
     jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._dialog).off(EVENT_MOUSEDOWN_DISMISS)
 
     if (transition) {
-      const transitionDuration  = _util__WEBPACK_IMPORTED_MODULE_1__["default"].getTransitionDurationFromElement(this._element)
+      const transitionDuration = _util__WEBPACK_IMPORTED_MODULE_1__["default"].getTransitionDurationFromElement(this._element)
 
       jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element)
-        .one(_util__WEBPACK_IMPORTED_MODULE_1__["default"].TRANSITION_END, (event) => this._hideModal(event))
+        .one(_util__WEBPACK_IMPORTED_MODULE_1__["default"].TRANSITION_END, event => this._hideModal(event))
         .emulateTransitionEnd(transitionDuration)
     } else {
       this._hideModal()
@@ -2917,7 +2934,7 @@ class Modal {
 
   dispose() {
     [window, this._element, this._dialog]
-      .forEach((htmlElement) => jquery__WEBPACK_IMPORTED_MODULE_0___default()(htmlElement).off(EVENT_KEY))
+      .forEach(htmlElement => jquery__WEBPACK_IMPORTED_MODULE_0___default()(htmlElement).off(EVENT_KEY))
 
     /**
      * `document` has 2 events `EVENT_FOCUSIN` and `EVENT_CLICK_DATA_API`
@@ -2928,15 +2945,15 @@ class Modal {
 
     jquery__WEBPACK_IMPORTED_MODULE_0___default.a.removeData(this._element, DATA_KEY)
 
-    this._config              = null
-    this._element             = null
-    this._dialog              = null
-    this._backdrop            = null
-    this._isShown             = null
-    this._isBodyOverflowing   = null
+    this._config = null
+    this._element = null
+    this._dialog = null
+    this._backdrop = null
+    this._isShown = null
+    this._isBodyOverflowing = null
     this._ignoreBackdropClick = null
-    this._isTransitioning     = null
-    this._scrollbarWidth      = null
+    this._isTransitioning = null
+    this._scrollbarWidth = null
   }
 
   handleUpdate() {
@@ -2959,7 +2976,7 @@ class Modal {
       const hideEventPrevented = jquery__WEBPACK_IMPORTED_MODULE_0___default.a.Event(EVENT_HIDE_PREVENTED)
 
       jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).trigger(hideEventPrevented)
-      if (hideEventPrevented.defaultPrevented) {
+      if (hideEventPrevented.isDefaultPrevented()) {
         return
       }
 
@@ -3029,12 +3046,13 @@ class Modal {
       if (this._config.focus) {
         this._element.focus()
       }
+
       this._isTransitioning = false
       jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).trigger(shownEvent)
     }
 
     if (transition) {
-      const transitionDuration  = _util__WEBPACK_IMPORTED_MODULE_1__["default"].getTransitionDurationFromElement(this._dialog)
+      const transitionDuration = _util__WEBPACK_IMPORTED_MODULE_1__["default"].getTransitionDurationFromElement(this._dialog)
 
       jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._dialog)
         .one(_util__WEBPACK_IMPORTED_MODULE_1__["default"].TRANSITION_END, transitionComplete)
@@ -3047,7 +3065,7 @@ class Modal {
   _enforceFocus() {
     jquery__WEBPACK_IMPORTED_MODULE_0___default()(document)
       .off(EVENT_FOCUSIN) // Guard against infinite focus loop
-      .on(EVENT_FOCUSIN, (event) => {
+      .on(EVENT_FOCUSIN, event => {
         if (document !== event.target &&
             this._element !== event.target &&
             jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).has(event.target).length === 0) {
@@ -3058,7 +3076,7 @@ class Modal {
 
   _setEscapeEvent() {
     if (this._isShown) {
-      jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).on(EVENT_KEYDOWN_DISMISS, (event) => {
+      jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).on(EVENT_KEYDOWN_DISMISS, event => {
         if (this._config.keyboard && event.which === ESCAPE_KEYCODE) {
           event.preventDefault()
           this.hide()
@@ -3073,7 +3091,7 @@ class Modal {
 
   _setResizeEvent() {
     if (this._isShown) {
-      jquery__WEBPACK_IMPORTED_MODULE_0___default()(window).on(EVENT_RESIZE, (event) => this.handleUpdate(event))
+      jquery__WEBPACK_IMPORTED_MODULE_0___default()(window).on(EVENT_RESIZE, event => this.handleUpdate(event))
     } else {
       jquery__WEBPACK_IMPORTED_MODULE_0___default()(window).off(EVENT_RESIZE)
     }
@@ -3101,8 +3119,8 @@ class Modal {
   }
 
   _showBackdrop(callback) {
-    const animate = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).hasClass(CLASS_NAME_FADE)
-      ? CLASS_NAME_FADE : ''
+    const animate = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).hasClass(CLASS_NAME_FADE) ?
+      CLASS_NAME_FADE : ''
 
     if (this._isShown && this._config.backdrop) {
       this._backdrop = document.createElement('div')
@@ -3114,11 +3132,12 @@ class Modal {
 
       jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._backdrop).appendTo(document.body)
 
-      jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).on(EVENT_CLICK_DISMISS, (event) => {
+      jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).on(EVENT_CLICK_DISMISS, event => {
         if (this._ignoreBackdropClick) {
           this._ignoreBackdropClick = false
           return
         }
+
         if (event.target !== event.currentTarget) {
           return
         }
@@ -3176,8 +3195,7 @@ class Modal {
   // ----------------------------------------------------------------------
 
   _adjustDialog() {
-    const isModalOverflowing =
-      this._element.scrollHeight > document.documentElement.clientHeight
+    const isModalOverflowing = this._element.scrollHeight > document.documentElement.clientHeight
 
     if (!this._isBodyOverflowing && isModalOverflowing) {
       this._element.style.paddingLeft = `${this._scrollbarWidth}px`
@@ -3276,7 +3294,7 @@ class Modal {
       const _config = {
         ...Default,
         ...jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data(),
-        ...typeof config === 'object' && config ? config : {}
+        ...(typeof config === 'object' && config ? config : {})
       }
 
       if (!data) {
@@ -3288,6 +3306,7 @@ class Modal {
         if (typeof data[config] === 'undefined') {
           throw new TypeError(`No method named "${config}"`)
         }
+
         data[config](relatedTarget)
       } else if (_config.show) {
         data.show(relatedTarget)
@@ -3310,8 +3329,8 @@ jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).on(EVENT_CLICK_DATA_API,
     target = document.querySelector(selector)
   }
 
-  const config = jquery__WEBPACK_IMPORTED_MODULE_0___default()(target).data(DATA_KEY)
-    ? 'toggle' : {
+  const config = jquery__WEBPACK_IMPORTED_MODULE_0___default()(target).data(DATA_KEY) ?
+    'toggle' : {
       ...jquery__WEBPACK_IMPORTED_MODULE_0___default()(target).data(),
       ...jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data()
     }
@@ -3320,7 +3339,7 @@ jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).on(EVENT_CLICK_DATA_API,
     event.preventDefault()
   }
 
-  const $target = jquery__WEBPACK_IMPORTED_MODULE_0___default()(target).one(EVENT_SHOW, (showEvent) => {
+  const $target = jquery__WEBPACK_IMPORTED_MODULE_0___default()(target).one(EVENT_SHOW, showEvent => {
     if (showEvent.isDefaultPrevented()) {
       // Only register focus restorer if modal will actually get shown
       return
@@ -3367,7 +3386,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.5.2): util.js
+ * Bootstrap (v4.5.3): util.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  * --------------------------------------------------------------------------
  */
@@ -3401,6 +3420,7 @@ function getSpecialTransitionEndEvent() {
       if (jquery__WEBPACK_IMPORTED_MODULE_0___default()(event.target).is(this)) {
         return event.handleObj.handler.apply(this, arguments) // eslint-disable-line prefer-rest-params
       }
+
       return undefined
     }
   }
@@ -3438,9 +3458,9 @@ const Util = {
 
   getUID(prefix) {
     do {
-      // eslint-disable-next-line no-bitwise
       prefix += ~~(Math.random() * MAX_UID) // "~~" acts like a faster Math.floor() here
     } while (document.getElementById(prefix))
+
     return prefix
   },
 
@@ -3454,7 +3474,7 @@ const Util = {
 
     try {
       return document.querySelector(selector) ? selector : null
-    } catch (err) {
+    } catch (_) {
       return null
     }
   },
@@ -3491,7 +3511,6 @@ const Util = {
     jquery__WEBPACK_IMPORTED_MODULE_0___default()(element).trigger(TRANSITION_END)
   },
 
-  // TODO: Remove in v5
   supportsTransitionEnd() {
     return Boolean(TRANSITION_END)
   },
@@ -3504,9 +3523,9 @@ const Util = {
     for (const property in configTypes) {
       if (Object.prototype.hasOwnProperty.call(configTypes, property)) {
         const expectedTypes = configTypes[property]
-        const value         = config[property]
-        const valueType     = value && Util.isElement(value)
-          ? 'element' : toType(value)
+        const value = config[property]
+        const valueType = value && Util.isElement(value) ?
+          'element' : toType(value)
 
         if (!new RegExp(expectedTypes).test(valueType)) {
           throw new Error(
