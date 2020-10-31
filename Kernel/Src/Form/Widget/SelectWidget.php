@@ -90,7 +90,7 @@ class SelectWidget extends FormWidget
         return $this;
     }
 
-    public function createIfNotExist(bool $create_if_not_exist) : SelectWidget
+    public function createIfNotExist(bool $create_if_not_exist): SelectWidget
     {
         if ($create_if_not_exist) {
             $this->addClass("create-if-not-exist");

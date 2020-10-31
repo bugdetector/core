@@ -80,13 +80,12 @@ class Router
                 $namespaceApp = "{$namespaceApp}{$page}\\";
                 $appControllerName = $tempAppControllerName;
                 $controllerFound = true;
-            }else{
+            } else {
                 $appControllerFound = false;
             }
-            if($controllerFound){
+            if ($controllerFound) {
                 array_shift($currentArguments);
-            }
-             else {
+            } else {
                 break;
             }
         }

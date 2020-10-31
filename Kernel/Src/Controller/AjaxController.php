@@ -1,4 +1,5 @@
 <?php
+
 namespace Src\Controller;
 
 use CoreDB\Kernel\ServiceController;
@@ -10,7 +11,7 @@ class AjaxController extends ServiceController
     {
         $autocompleteToken = @$_POST["token"];
         $data = @$_POST["data"];
-        if($autocompleteToken && isset($_SESSION["autocomplete"][$autocompleteToken])){
+        if ($autocompleteToken && isset($_SESSION["autocomplete"][$autocompleteToken])) {
             $autocompleteData = $_SESSION["autocomplete"][$autocompleteToken];
             $referenceTable = $autocompleteData["referenceTable"];
             $referenceColumn = $autocompleteData["referenceColumn"];

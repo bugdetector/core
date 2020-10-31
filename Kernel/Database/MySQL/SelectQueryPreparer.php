@@ -114,7 +114,7 @@ class SelectQueryPreparer extends SelectQueryPreparerAbstract
                 $this->params[":{$placeholder}_{$index}"] = $val;
             }
             $condition .= ")";
-        } elseif($value === null){
+        } elseif ($value === null) {
             $operator = "IS";
             $condition = "NULL";
         } else {
