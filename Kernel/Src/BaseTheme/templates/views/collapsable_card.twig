@@ -1,5 +1,5 @@
 <div
-	class='card shadow mb-4 p-0 {{ view.classes|join(" ") }}' {{ view.renderAttributes() }}>
+	class='card shadow mb-4 p-0 {{ view.classes|join(" ") }}' {{ view.renderAttributes()|raw }}>
 	<!-- Card Header - Accordion -->
 	<a href="#{{view.id}}" class="d-block card-header py-3 {{ view.opened ? : " collapsed" }}" data-toggle="collapse" role="button" aria-expanded="true">
 		<div class="m-0 font-weight-bold text-primary">

@@ -1,10 +1,11 @@
 {% extends "page.twig" %}
 
 {% block content %}
-<div class="row">
-    {% for card in controller.cards %}
-        {{ card }}
-    {% endfor %}
-    {{ controller.echoContent() }}
-</div>
+	{{ controller.printMessages() }}
+	<div class="row">
+		{% for card in controller.cards %}
+			{{ card }}
+		{% endfor %}
+		{{ controller.echoContent() }}
+	</div>
 {% endblock %}
