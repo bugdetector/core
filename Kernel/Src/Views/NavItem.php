@@ -24,7 +24,7 @@ class NavItem extends ViewGroup
             $iconField = $icon;
         }
         $this->addField(
-            ViewGroup::create("a", "nav-link")
+            ViewGroup::create("a", "nav-link ".($is_active ? "active" : ""))
             ->addAttribute("href", $href)
             ->addField($iconField)
             ->addField(TextElement::create($label)->setTagName("span"))
