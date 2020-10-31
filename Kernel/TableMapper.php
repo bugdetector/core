@@ -104,13 +104,13 @@ abstract class TableMapper implements SearchableInterface
      * @return TableMapper
      *  Object.
      */
-    public static function find(array $filter, string $table): ?TableMapper
+    public static function find(array $filter, string $table, $orderBy = "ID"): ?TableMapper
     {
         $query = \CoreDB::database()->select($table);
         foreach ($filter as $key => $value) {
             $query->condition($key, $value);
         }
-        $result = $query->orderBy("ID")
+        $result = $query->orderBy($orderBy)
             ->execute()
             ->fetch(\PDO::FETCH_ASSOC) ?: null;
         if ($result) {
@@ -130,13 +130,13 @@ abstract class TableMapper implements SearchableInterface
      * @return array
      *  TableMapper objects.
      */
-    public static function findAll(array $filter, string $table): array
+    public static function findAll(array $filter, string $table, $orderBy = "ID"): array
     {
         $query = CoreDB::database()->select($table);
         foreach ($filter as $key => $value) {
             $query->condition($key, $value);
         }
-        $results = $query->orderBy("ID")
+        $results = $query->orderBy($orderBy)
             ->execute()
             ->fetchAll(PDO::FETCH_ASSOC);
         $objects = [];
