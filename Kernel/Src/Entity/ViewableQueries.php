@@ -151,10 +151,12 @@ class ViewableQueries extends TableMapper
             foreach (json_decode($this->result_fields->getValue(), true) as $field) {
                 $tableDefinition = TableDefinition::getDefinition($field["table"]);
                 if ($field["column"] != "*") {
-                    $fields[$field["column"]] = $tableDefinition->fields[$field["column"]]
-                        ->getSearchWidget()
-                        ->setName($field["column"])
+                    $searchWidget = $tableDefinition->fields[$field["column"]]
+                    ->getSearchWidget();
+                    if($searchWidget){
+                        $fields[$field["column"]] =$searchWidget->setName($field["column"])
                         ->setLabel(Translation::getTranslation($field["column"]));
+                    }
                 } else {
                     foreach ($tableDefinition->fields as $fieldName => $tableField) {
                         $fields[$fieldName] = $tableField->getSearchWidget()

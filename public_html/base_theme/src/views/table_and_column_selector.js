@@ -38,7 +38,7 @@ $(function () {
             url : `${root}/admin/ajax/getTableAndColumnSelector`,
             method : "post",
             data : {
-                index : button.parents(".filters, .fields").find(".table_and_column_selector").length,
+                index : button.closest(".filters, .fields").find(".table_and_column_selector").length + 1,
                 type : type,
                 name : button.data("name")
             },
