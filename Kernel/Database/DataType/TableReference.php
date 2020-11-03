@@ -3,6 +3,7 @@
 namespace CoreDB\Kernel\Database\DataType;
 
 use CoreDB;
+use CoreDB\Kernel\Database\TableDefinition;
 use Src\Entity\Translation;
 use Src\Form\Widget\FormWidget;
 use Src\Form\Widget\SelectWidget;
@@ -24,22 +25,32 @@ class TableReference extends DataTypeAbstract
      */
     public function getWidget(): FormWidget
     {
-        $entries = CoreDB::database()
-        ->select($this->reference_table)
+        $referenceTableColumns = TableDefinition::getDefinition(
+            $this->reference_table
+            )->fields;
+        $firstColumnName = array_keys($referenceTableColumns)[1];
+        $entryQuery = CoreDB::database()
+        ->select($this->reference_table, "rt")
+        ->select("rt", ["ID", $firstColumnName])
         ->orderBy("ID")
-        ->execute()->fetchAll(\PDO::FETCH_NUM);
+        ->limit(10);
+        if($this->value){
+            $entryQuery->condition("rt.ID", $this->value);
+        }
+        $entries = $entryQuery
+        ->execute()->fetchAll(\PDO::FETCH_ASSOC);
         $options = [];
         foreach ($entries as $entry) {
-            $options[$entry[0]] = $entry[1];
+            $options[$entry["ID"]] = $entry[$firstColumnName];
         }
 
         $widget = SelectWidget::create("")
             ->setValue($this->value)
             ->setOptions($options)
+            ->setAutoComplete($this->reference_table, $firstColumnName)
             ->setDescription(Translation::getTranslation($this->comment))
             ->addClass("autocomplete")
-            ->addAttribute("data-reference-table", $this->reference_table)
-            ->addAttribute("data-reference-column", $this->column_name);
+            ->addAttribute("data-live-search", "true");
         if (!$this->isNull) {
             /**
              * @var SelectWidget $widget

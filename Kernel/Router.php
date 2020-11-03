@@ -91,7 +91,7 @@ class Router
         }
         $controllerName = $appControllerName ?: $srcControllerName;
         if (!$controllerName) {
-            return $this->getControllerFromUrl("notfound");
+            return $this->getControllerFromUrl("not_found");
         }
         return new $controllerName($currentArguments);
     }
