@@ -36,7 +36,7 @@ class FloatNumber extends DataTypeAbstract
 
     public function setValue($value)
     {
-        $this->value = $value ? floatval($value) : "";
+        $this->value = is_numeric($value) ? floatval($value) : "";
     }
 
     /**

@@ -25,4 +25,12 @@ class Sidebar extends ViewGroup
     {
         return "sidebar.twig";
     }
+
+    public function setIsOpened(bool $isOpened){
+        if($isOpened){
+            $this->removeClass("toggled");
+        }else{
+            $this->addClass("toggled");
+        }
+    }
 }

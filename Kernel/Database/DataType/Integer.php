@@ -35,7 +35,7 @@ class Integer extends DataTypeAbstract
 
     public function setValue($value)
     {
-        $this->value = $value ? intval($value) : "";
+        $this->value = is_numeric($value) ? intval($value) : "";
     }
 
     public function getValue()

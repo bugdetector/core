@@ -7,10 +7,11 @@ use Src\Theme\View;
 class NavItem extends ViewGroup
 {
     public string $collapse_id = "";
+    public bool $isCollapseOpened = false;
 
     public function __construct(
         $icon,
-        string $label,
+        $label,
         string $href = '#',
         bool $is_active = false
     ) {
@@ -27,14 +28,16 @@ class NavItem extends ViewGroup
             ViewGroup::create("a", "nav-link ".($is_active ? "active" : ""))
             ->addAttribute("href", $href)
             ->addField($iconField)
-            ->addField(TextElement::create($label)->setTagName("span"))
+            ->addField(
+                $label instanceof View ? $label : TextElement::create($label)->setTagName("span")
+            )
         );
-        $this->collapse_id = str_replace(" ", "_", mb_strtolower($label));
+        $this->collapse_id = $label instanceof View ? "" : str_replace([" ", "&", "-"], "_", mb_strtolower($label));
     }
 
     public static function create(
         $icon,
-        string $label,
+        $label,
         string $href = '#',
         bool $is_active = false
     ): NavItem {
@@ -97,5 +100,11 @@ class NavItem extends ViewGroup
         }
         $this->fields[1]->fields[0]->addField($item);
         return $this;
+    }
+
+    public function collapseOpened(){
+        $this->fields[1]->addClass("show");
+        $this->fields[0]->removeClass("collapsed");
+        $this->isCollapseOpened = true;
     }
 }

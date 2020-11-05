@@ -51,11 +51,13 @@ abstract class BaseTheme extends BaseController
             "navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"
         );
         $currentUser = \CoreDB::currentUser();
+        /**   */
         $userDropdown = NavItem::create(
             Image::create($currentUser->getProfilePhotoUrl(), $currentUser->getFullName(), true)
             ->addClass("img-profile rounded-circle"),
             ""
         );
+        $userDropdown->addClass("ml-auto");
         if ($currentUser->isLoggedIn()) {
             $userDropdown->addDropdownItem(
                 NavItem::create(

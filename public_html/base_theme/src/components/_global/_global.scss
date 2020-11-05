@@ -49,6 +49,7 @@ html {
   .container-fluid {
     padding-left: $grid-gutter-width;
     padding-right: $grid-gutter-width;
+    z-index: 0;
   }
   
   // Scroll to top button
@@ -156,4 +157,33 @@ th {
 
 .move_icon{
     cursor: move;
+}
+
+.nav-item.collapse-item{
+  white-space: inherit !important;
+  padding: 0px !important;
+  .nav-link, i{
+    color: $primary !important;
+    padding: 3px 0px 3px 0px !important;
+  }
+}
+
+.sidebar-toggled .sidebar.toggled{
+  .nav-item.collapse-item{
+    .nav-link{
+      width: 100% !important;
+    }
+  }
+}
+
+.sidebar{
+  z-index: 1;
+}
+
+.dropdown.no-arrow{
+  .nav-link{
+    &:after{
+      display: none;
+    }
+  }
 }

@@ -87,14 +87,14 @@ class SearchForm extends Form
 
     public static function createByObject(SearchableInterface $object, $translateLabels = true)
     {
-        $search_form = new SearchForm($object, $translateLabels);
+        $search_form = new static($object, $translateLabels);
         $search_form->processForm();
         return $search_form;
     }
 
     public static function createByTableName($table_name)
     {
-        $search_form = self::createByObject(new DBObject($table_name), false);
+        $search_form = static::createByObject(new DBObject($table_name), false);
         return $search_form;
     }
 
