@@ -33,7 +33,7 @@ class SearchForm extends Form
     private array $searchableFields = [];
     private SelectQueryPreparerAbstract $query;
     
-    private function __construct(SearchableInterface $object, $translateLabels = true)
+    protected function __construct(SearchableInterface $object, $translateLabels = true)
     {
         parent::__construct();
         $this->object = $object;

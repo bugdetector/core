@@ -153,8 +153,8 @@ class ViewableQueries extends TableMapper
                 if ($field["column"] != "*") {
                     $searchWidget = $tableDefinition->fields[$field["column"]]
                     ->getSearchWidget();
-                    if($searchWidget){
-                        $fields[$field["column"]] =$searchWidget->setName($field["column"])
+                    if ($searchWidget) {
+                        $fields[$field["column"]] = $searchWidget->setName($field["column"])
                         ->setLabel(Translation::getTranslation($field["column"]));
                     }
                 } else {

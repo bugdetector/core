@@ -20,7 +20,7 @@ abstract class View
 
     public function addClass(string $class_name): View
     {
-        if(!$this->hasClass($class_name)){
+        if (!$this->hasClass($class_name)) {
             $this->classes = array_merge($this->classes, explode(" ", $class_name));
         }
         return $this;

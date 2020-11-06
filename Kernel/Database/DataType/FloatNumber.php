@@ -39,6 +39,11 @@ class FloatNumber extends DataTypeAbstract
         $this->value = is_numeric($value) ? floatval($value) : "";
     }
 
+    public function getValue()
+    {
+        return floatval($this->value);
+    }
+
     /**
      * @inheritdoc
      */

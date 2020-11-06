@@ -27,14 +27,14 @@ class TableReference extends DataTypeAbstract
     {
         $referenceTableColumns = TableDefinition::getDefinition(
             $this->reference_table
-            )->fields;
+        )->fields;
         $firstColumnName = array_keys($referenceTableColumns)[1];
         $entryQuery = CoreDB::database()
         ->select($this->reference_table, "rt")
         ->select("rt", ["ID", $firstColumnName])
         ->orderBy("ID")
         ->limit(10);
-        if($this->value){
+        if ($this->value) {
             $entryQuery->condition("rt.ID", $this->value);
         }
         $entries = $entryQuery

@@ -25,7 +25,7 @@ class NavItem extends ViewGroup
             $iconField = $icon;
         }
         $this->addField(
-            ViewGroup::create("a", "nav-link ".($is_active ? "active" : ""))
+            ViewGroup::create("a", "nav-link " . ($is_active ? "active" : ""))
             ->addAttribute("href", $href)
             ->addField($iconField)
             ->addField(
@@ -102,7 +102,8 @@ class NavItem extends ViewGroup
         return $this;
     }
 
-    public function collapseOpened(){
+    public function collapseOpened()
+    {
         $this->fields[1]->addClass("show");
         $this->fields[0]->removeClass("collapsed");
         $this->isCollapseOpened = true;
