@@ -8,7 +8,7 @@ class LogoutController extends BaseTheme
 {
     
     
-    public function checkAccess() : bool
+    public function checkAccess(): bool
     {
         return \CoreDB::currentUser()->isLoggedIn();
     }

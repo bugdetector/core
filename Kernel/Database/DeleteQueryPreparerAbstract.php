@@ -1,4 +1,5 @@
 <?php
+
 namespace CoreDB\Kernel\Database;
 
 abstract class DeleteQueryPreparerAbstract extends QueryPreparerAbstract
@@ -22,12 +23,17 @@ abstract class DeleteQueryPreparerAbstract extends QueryPreparerAbstract
      * @return DeleteQueryPreparerAbstract
      *  Self
      */
-    abstract public function condition(string $column, $value, string $operator = "=", string $connect = "AND") : DeleteQueryPreparerAbstract;
+    abstract public function condition(
+        string $column,
+        $value,
+        string $operator = "=",
+        string $connect = "AND"
+    ): DeleteQueryPreparerAbstract;
     
     /**
      * Return condition string
      * @return string
      * Condition string
      */
-    abstract function getCondition() : string;
+    abstract public function getCondition(): string;
 }

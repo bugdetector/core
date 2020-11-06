@@ -7,15 +7,15 @@ use Src\Theme\View;
 
 class AlertMessage extends View
 {
-    const MESSAGE_TYPE_DANGER = "alert-danger";
-    const MESSAGE_TYPE_INFO = "alert-info";
-    const MESSAGE_TYPE_SUCCESS = "alert-success";
-    const MESSAGE_TYPE_WARNING = "alert-warning";
+    public const MESSAGE_TYPE_DANGER = "alert-danger";
+    public const MESSAGE_TYPE_INFO = "alert-info";
+    public const MESSAGE_TYPE_SUCCESS = "alert-success";
+    public const MESSAGE_TYPE_WARNING = "alert-warning";
 
     public $message;
     public $type;
 
-    public static function create(string $message, string $type = self::MESSAGE_TYPE_DANGER) : AlertMessage
+    public static function create(string $message, string $type = self::MESSAGE_TYPE_DANGER): AlertMessage
     {
         $alert_message = new AlertMessage();
         $alert_message->message = $message;
@@ -23,7 +23,7 @@ class AlertMessage extends View
         return $alert_message;
     }
 
-    public function getTemplateFile() : string
+    public function getTemplateFile(): string
     {
         return "alert_message.twig";
     }

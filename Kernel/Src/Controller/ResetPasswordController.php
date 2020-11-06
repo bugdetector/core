@@ -9,7 +9,7 @@ use Src\Entity\User;
 use Src\Form\ResetPasswordForm;
 use Src\BaseTheme\BaseTheme;
 
-class Reset_PasswordController extends BaseTheme
+class ResetPasswordController extends BaseTheme
 {
     
     public $form;
@@ -20,12 +20,12 @@ class Reset_PasswordController extends BaseTheme
         $this->body_classes = ["bg-gradient-info"];
         $this->setTitle(Translation::getTranslation("reset_password"));
     }
-    public function getTemplateFile() : string
+    public function getTemplateFile(): string
     {
         return "page-login.twig";
     }
 
-    public function checkAccess() : bool
+    public function checkAccess(): bool
     {
         return !\CoreDB::currentUser()->isLoggedIn();
     }
@@ -49,7 +49,9 @@ class Reset_PasswordController extends BaseTheme
         }
     }
 
-    protected function addDefaultJsFiles(){}
+    protected function addDefaultJsFiles()
+    {
+    }
 
     public function echoContent()
     {

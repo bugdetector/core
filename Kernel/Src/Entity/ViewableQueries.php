@@ -151,10 +151,12 @@ class ViewableQueries extends TableMapper
             foreach (json_decode($this->result_fields->getValue(), true) as $field) {
                 $tableDefinition = TableDefinition::getDefinition($field["table"]);
                 if ($field["column"] != "*") {
-                    $fields[$field["column"]] = $tableDefinition->fields[$field["column"]]
-                        ->getSearchWidget()
-                        ->setName($field["column"])
+                    $searchWidget = $tableDefinition->fields[$field["column"]]
+                    ->getSearchWidget();
+                    if ($searchWidget) {
+                        $fields[$field["column"]] = $searchWidget->setName($field["column"])
                         ->setLabel(Translation::getTranslation($field["column"]));
+                    }
                 } else {
                     foreach ($tableDefinition->fields as $fieldName => $tableField) {
                         $fields[$fieldName] = $tableField->getSearchWidget()
@@ -222,20 +224,29 @@ class ViewableQueries extends TableMapper
         } else {
             $this->filters->setValue("");
         }
-        if (isset($this->changed_fields["result_fields"]) && !is_array($this->changed_fields["result_fields"]["new_value"])) {
+        if (
+            isset($this->changed_fields["result_fields"]) &&
+            !is_array($this->changed_fields["result_fields"]["new_value"])
+        ) {
             throw new InvalidArgumentException(
                 Translation::getTranslation("cannot_empty", [
                     Translation::getTranslation("result_fields")
                 ])
             );
         }
-        if (isset($this->changed_fields["paging_limit"]) && (!$this->paging_limit->getValue() || $this->paging_limit->getValue() < 0)) {
+        if (
+            isset($this->changed_fields["paging_limit"]) &&
+            (!$this->paging_limit->getValue() || $this->paging_limit->getValue() < 0)
+        ) {
             $this->paging_limit->setValue(self::PAGE_LIMIT);
         }
         if (isset($this->changed_fields["card_template_class"])) {
-            if (!$this->card_template_class->getValue() || $this->result_view_template->getValue() == self::RESULT_TEMPLATE_TABLE) {
+            if (
+                !$this->card_template_class->getValue() ||
+                $this->result_view_template->getValue() == self::RESULT_TEMPLATE_TABLE
+            ) {
                 $this->card_template_class->setValue(Table::class);
-            } else if (!class_exists($this->card_template_class->getValue())) {
+            } elseif (!class_exists($this->card_template_class->getValue())) {
                 throw new InvalidArgumentException(Translation::getTranslation("class_not_found"));
             }
         }
@@ -259,7 +270,7 @@ class ViewableQueries extends TableMapper
             );
             $widget->setValue($this->result_fields);
             return $widget;
-        } elseif($field_name == "order_by"){
+        } elseif ($field_name == "order_by") {
             $widget = new TableAndColumnSelector(
                 Translation::getTranslation("order_by"),
                 $this->getTableName() . "[order_by]",
@@ -267,8 +278,7 @@ class ViewableQueries extends TableMapper
             );
             $widget->setValue($this->order_by);
             return $widget;
-        }
-        else {
+        } else {
             return parent::getFieldWidget($field_name, $translateLabel);
         }
     }
@@ -285,20 +295,30 @@ class ViewableQueries extends TableMapper
         $usedTables = array_values($usedTables);
         $query = \CoreDB::database()->select($usedTables[0]);
         foreach ($filters as $filter) {
-            $query->condition("{$filter["table"]}.{$filter["column"]}", $filter["compare_value"], $filter["comparation"]);
+            $query->condition(
+                "{$filter["table"]}.{$filter["column"]}",
+                $filter["compare_value"],
+                $filter["comparation"]
+            );
         }
         foreach ($fields as $field) {
             $query->select($field["table"], [$field["column"]]);
         }
         $paths = $this->findAllJoins($usedTables, $usedTables[0]);
         foreach ($paths as $tableName => $joinInfo) {
-            $query->join($tableName, $tableName, "{$joinInfo["selfKey"]} = {$joinInfo["foreignKey"]}", "LEFT");
+            $query->join(
+                $tableName,
+                $tableName,
+                "{$joinInfo["selfKey"]} = {$joinInfo["foreignKey"]}",
+                "LEFT"
+            );
         }
-        if($this->order_by->getValue()){
+        if ($this->order_by->getValue()) {
             $orderByData = json_decode($this->order_by->getValue(), true);
             $order_by_sentence = "";
-            foreach($orderByData as $data){
-                $order_by_sentence .= ($order_by_sentence ? ",": "")."{$data["table"]}.{$data["column"]} {$data["orderdirection"]}";
+            foreach ($orderByData as $data) {
+                $order_by_sentence .= ($order_by_sentence ? "," : "") .
+                "{$data["table"]}.{$data["column"]} {$data["orderdirection"]}";
             }
             $query->orderBy($order_by_sentence);
         }
@@ -309,7 +329,11 @@ class ViewableQueries extends TableMapper
     {
         $paths = [];
         foreach ($tables as $table) {
-            if ($table == $base_table || isset($joins[$base_table . "-" . $table]) || isset($joins[$base_table . "-" . $table])) {
+            if (
+                $table == $base_table ||
+                isset($joins[$base_table . "-" . $table]) ||
+                isset($joins[$base_table . "-" . $table])
+            ) {
                 continue;
             }
             $path = $this->findJoinPath($base_table, $table);
@@ -375,9 +399,9 @@ class ViewableQueries extends TableMapper
     protected function getTableGraph(): array
     {
         $cache = Cache::getByBundleAndKey("structure", "graph");
-        if($cache){
+        if ($cache) {
             return json_decode($cache->value->getValue(), true);
-        }else{
+        } else {
             $allReferences = \CoreDB::database()->getAllTableReferences()->fetchAll(PDO::FETCH_ASSOC);
             $graph = [];
             foreach ($allReferences as $reference) {

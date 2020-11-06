@@ -5,6 +5,7 @@ users:
       mergeTable: "users_roles"
       selfKey: "user_id"
       foreignKey: "role_id"
+      createIfNotExist: false
 roles:
   class: Src\Entity\Role
 translations:

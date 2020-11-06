@@ -17,8 +17,8 @@ class InstallForm extends Form
     {
         parent::__construct();
         $this->addClass("user");
-        if(!isset($this->request["save"])){
-            $this->setMessage( Translation::getTranslation("install_description"), Messenger::INFO );
+        if (!isset($this->request["save"])) {
+            $this->setMessage(Translation::getTranslation("install_description"), Messenger::INFO);
         }
         $this->addField(
             InputWidget::create("db_server")
@@ -110,14 +110,16 @@ class InstallForm extends Form
     public function validate(): bool
     {
         $driverClass = MySQLDriver::class;
-        if ($driverClass::checkConnection(
-            $this->request["db_server"],
-            $this->request["db_name"],
-            $this->request["db_user"],
-            $this->request["db_password"],
-        )){
+        if (
+            $driverClass::checkConnection(
+                $this->request["db_server"],
+                $this->request["db_name"],
+                $this->request["db_user"],
+                $this->request["db_password"],
+            )
+        ) {
             return true;
-        }else{
+        } else {
             $this->setError("db_server", Translation::getTranslation("cant_connect_to_database"));
             return false;
         }
@@ -150,7 +152,7 @@ class InstallForm extends Form
         define("DB_USER", $this->request["db_user"]);
         define("DB_PASSWORD", $this->request["db_password"]);
         \CoreDB::config()->importTableConfiguration();
-        Translation::importTranslations(); 
+        Translation::importTranslations();
         $user = new DBObject(User::getTableName(), [
             "username" => $this->request["username"],
             "name" => $this->request["name"],
@@ -164,11 +166,11 @@ class InstallForm extends Form
         ])->execute();
         
         $hashSaltVar = Variable::getByKey("hash_salt");
-        if(!$hashSaltVar->value){
+        if (!$hashSaltVar->value->getValue()) {
             $hashSaltVar->value->setValue($hashSalt);
             $hashSaltVar->save();
         }
-        $_SESSION[BASE_URL."-UID"] = $user->ID;
+        $_SESSION[BASE_URL . "-UID"] = $user->ID;
         $this->setMessage(Translation::getTranslation("all_configuration_imported"));
         \CoreDB::goTo(BASE_URL);
     }

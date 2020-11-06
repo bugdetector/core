@@ -23,19 +23,19 @@ abstract class BaseController implements ControllerInterface
     public $css_codes = [];
     public $frontend_translations = [];
 
-    abstract public static function getTemplateDirectories() : array;
+    abstract public static function getTemplateDirectories(): array;
 
     public function render()
     {
         CoreRenderer::getInstance($this::getTemplateDirectories())->renderController($this);
     }
 
-    public function setTitle(string $title) : void
+    public function setTitle(string $title): void
     {
         $this->title = $title;
     }
 
-    public function getTemplateFile() : string
+    public function getTemplateFile(): string
     {
         return "page.twig";
     }
@@ -67,7 +67,7 @@ abstract class BaseController implements ControllerInterface
     /**
      * @inheritdoc
      */
-    public function printMessages() : ViewGroup
+    public function printMessages(): ViewGroup
     {
         $types = [
             Messenger::ERROR => "alert-danger",
@@ -90,7 +90,8 @@ abstract class BaseController implements ControllerInterface
         return $message_group;
     }
 
-    public static function getUrl() : string{
+    public static function getUrl(): string
+    {
         return Router::getInstance()->getUrl(static::class);
     }
 
@@ -117,12 +118,13 @@ abstract class BaseController implements ControllerInterface
     {
         if (is_array($js_file_path)) {
             $this->js_files = array_unique(array_merge($this->js_files, $js_file_path));
-        } else if(!in_array($js_file_path, $this->js_files)){
+        } elseif (!in_array($js_file_path, $this->js_files)) {
             $this->js_files[] = $js_file_path;
         }
     }
 
-    protected function addMetaTag($index,$attributes){
+    protected function addMetaTag($index, $attributes)
+    {
         $this->metaTags[] = $attributes;
     }
 
@@ -138,7 +140,7 @@ abstract class BaseController implements ControllerInterface
     {
         if (is_array($css_file_path)) {
             $this->css_files = array_unique(array_merge($this->css_files, $css_file_path));
-        } else if(!in_array($css_file_path, $this->css_files)){
+        } elseif (!in_array($css_file_path, $this->css_files)) {
             $this->css_files[] = $css_file_path;
         }
     }

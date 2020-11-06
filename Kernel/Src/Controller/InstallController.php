@@ -8,7 +8,8 @@ use Src\Entity\Variable;
 use Src\Form\InstallForm;
 use Src\BaseTheme\BaseTheme;
 
-class InstallController extends BaseTheme {
+class InstallController extends BaseTheme
+{
 
     public ?InstallForm $installForm = null;
 
@@ -19,19 +20,20 @@ class InstallController extends BaseTheme {
 
     public function checkAccess(): bool
     {
-        try{
+        try {
             $hashSalt = Variable::getByKey("hash_salt");
-            if(!defined("HASH_SALT") || !$hashSalt || $hashSalt->value->getValue() != HASH_SALT){
-                return true && !CONFIGURATON_LOADED;
-            }else{
+            if (!defined("HASH_SALT") || !$hashSalt || $hashSalt->value->getValue() != HASH_SALT) {
+                return !CONFIGURATON_LOADED;
+            } else {
                 return false;
             }
-        }catch(DatabaseInstallationException $ex){
+        } catch (DatabaseInstallationException $ex) {
             return true;
         }
     }
 
-    public function processPage(){
+    public function processPage()
+    {
         $this->addDefaultJsFiles();
         $this->addDefaultCssFiles();
         $this->preprocessPage();
@@ -43,10 +45,10 @@ class InstallController extends BaseTheme {
     {
         $this->body_classes[] = "bg-gradient-info";
         $this->setTitle(Translation::getTranslation("install_welcome"));
-        if(!@fopen("../config/config.php", "w+")){
+        if (!@fopen("../config/config.php", "w+")) {
             $this->createMessage(Translation::getTranslation("config_file_write_error"));
-        }else{
-            if(is_file("../config/config.php")){
+        } else {
+            if (is_file("../config/config.php")) {
                 unlink("../config/config.php");
             }
             $this->installForm = new InstallForm();

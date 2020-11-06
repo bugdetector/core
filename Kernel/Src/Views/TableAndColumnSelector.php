@@ -6,7 +6,8 @@ use Src\Entity\Translation;
 use Src\Form\Widget\InputWidget;
 use Src\Form\Widget\SelectWidget;
 
-class TableAndColumnSelector extends CollapsableCard{
+class TableAndColumnSelector extends CollapsableCard
+{
 
     public const TYPE_COMPARISON = "comparison";
     public const TYPE_FIELD = "field";
@@ -42,14 +43,14 @@ class TableAndColumnSelector extends CollapsableCard{
         $this->name = $name;
         $this->type = $type;
         $this->setId($name);
-        foreach($this->availableComparationTypes as $comparation){
+        foreach ($this->availableComparationTypes as $comparation) {
             $this->comparationTypes[$comparation] = Translation::getTranslation($comparation);
         }
         $this->setOpened(true);
-        if($type == self::TYPE_COMPARISON){
+        if ($type == self::TYPE_COMPARISON) {
             $this->subCardTitle = Translation::getTranslation("new_filter");
             $this->addClass("filters");
-        }else{
+        } else {
             $this->subCardTitle = Translation::getTranslation("new_field");
             $this->addClass("fields");
         }
@@ -59,17 +60,21 @@ class TableAndColumnSelector extends CollapsableCard{
     public function setValue($value)
     {
         $values = json_decode(strval($value), true);
-        if(!is_array($values) || empty($values)){
+        if (!is_array($values) || empty($values)) {
             $values = [[]];
         }
         $this->content = ViewGroup::create("div", "sortable_list");
-        if(is_array($values)){
-            foreach($values as $index => $filter){
+        if (is_array($values)) {
+            foreach ($values as $index => $filter) {
                 $title = $this->subCardTitle;
-                if(array_key_exists("table", $filter) && array_key_exists("column", $filter)){
+                if (array_key_exists("table", $filter) && array_key_exists("column", $filter)) {
                     $title = "{$filter["table"]}.{$filter["column"]}";
-                    if($this->type == self::TYPE_COMPARISON && array_key_exists("comparation", $filter) && array_key_exists("compare_value", $filter)){
-                        $title.= " {$filter["comparation"]} {$filter["compare_value"]}";
+                    if (
+                        $this->type == self::TYPE_COMPARISON &&
+                        array_key_exists("comparation", $filter) &&
+                        array_key_exists("compare_value", $filter)
+                    ) {
+                        $title .= " {$filter["comparation"]} {$filter["compare_value"]}";
                     }
                 }
                 $this->content->addField(
@@ -93,7 +98,8 @@ class TableAndColumnSelector extends CollapsableCard{
             }
         }
         $this->content->addField(
-            ViewGroup::create("a", "btn btn-outline-primary mt-2 ". ($this->type == self::TYPE_COMPARISON ? "new_filter" : "new_field"))
+            ViewGroup::create("a", "btn btn-outline-primary mt-2 " .
+            ($this->type == self::TYPE_COMPARISON ? "new_filter" : "new_field"))
             ->addAttribute("href", "#")
             ->addField(
                 ViewGroup::create("i", "fa fa-add")
@@ -104,13 +110,14 @@ class TableAndColumnSelector extends CollapsableCard{
         );
     }
 
-    private function getTableAndColumnSelectboxes($index, array $description = null) : ViewGroup {
+    private function getTableAndColumnSelectboxes($index, array $description = null): ViewGroup
+    {
         $column_options = [];
-        if($this->type == self::TYPE_FIELD){
+        if ($this->type == self::TYPE_FIELD) {
             $column_options["*"] = Translation::getTranslation("all");
         }
-        if(isset($description["table"]) && $description["table"]){
-            foreach(\CoreDB::database()->getTableDescription($description["table"]) as $fieldName => $field){
+        if (isset($description["table"]) && $description["table"]) {
+            foreach (\CoreDB::database()->getTableDescription($description["table"]) as $fieldName => $field) {
                 $column_options[$fieldName] = $fieldName;
             }
         }
@@ -123,7 +130,7 @@ class TableAndColumnSelector extends CollapsableCard{
                     \CoreDB::database()->getTableList()
                 )
                 ->setLabel(Translation::getTranslation("table_name"))
-                ->setValue( isset($description["table"]) ? $description["table"] : "" )
+                ->setValue(isset($description["table"]) ? $description["table"] : "")
                 ->addClass("table_select")
             )
         )
@@ -133,36 +140,36 @@ class TableAndColumnSelector extends CollapsableCard{
                 SelectWidget::create("{$this->name}[{$index}][column]")
                 ->setOptions($column_options)
                 ->setLabel(Translation::getTranslation("column_name"))
-                ->setValue( isset($description["column"]) ? $description["column"] : "" )
+                ->setValue(isset($description["column"]) ? $description["column"] : "")
                 ->addClass("column_select")
                 ->addAttribute("data-type", $this->type)
             )
         );
-        if($this->type == self::TYPE_COMPARISON){
+        if ($this->type == self::TYPE_COMPARISON) {
             $widget->addField(
                 ViewGroup::create("div", "col-sm-2")
                 ->addField(
                     SelectWidget::create("{$this->name}[{$index}][comparation]")
                     ->setOptions($this->comparationTypes)
                     ->setLabel(Translation::getTranslation("comparation"))
-                    ->setValue( isset($description["comparation"]) ? $description["comparation"] : "" )
+                    ->setValue(isset($description["comparation"]) ? $description["comparation"] : "")
                 )
             )->addField(
                 ViewGroup::create("div", "col-sm-2")
                 ->addField(
                     InputWidget::create("{$this->name}[{$index}][compare_value]")
                     ->setLabel(Translation::getTranslation("compare_value"))
-                    ->setValue( isset($description["compare_value"]) ? $description["compare_value"] : "" )
+                    ->setValue(isset($description["compare_value"]) ? $description["compare_value"] : "")
                 )
             );
-        }elseif($this->type == self::TYPE_ORDER){
+        } elseif ($this->type == self::TYPE_ORDER) {
             $widget->addField(
                 ViewGroup::create("div", "col-sm-2")
                 ->addField(
                     SelectWidget::create("{$this->name}[{$index}][orderdirection]")
                     ->setOptions($this->orderOptions)
                     ->setLabel(Translation::getTranslation("order_direction"))
-                    ->setValue( isset($description["orderdirection"]) ? $description["orderdirection"] : "" )
+                    ->setValue(isset($description["orderdirection"]) ? $description["orderdirection"] : "")
                 )
             );
         }

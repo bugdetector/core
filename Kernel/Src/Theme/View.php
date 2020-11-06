@@ -11,20 +11,22 @@ abstract class View
     public $classes = [];
     public $attributes = [];
 
-    abstract public function getTemplateFile() : string;
+    abstract public function getTemplateFile(): string;
 
     public function render()
     {
         CoreRenderer::getInstance(BaseTheme::getTemplateDirectories())->renderView($this);
     }
 
-    public function addClass(string $class_name) : View
+    public function addClass(string $class_name): View
     {
-        $this->classes = array_merge($this->classes, explode(" ", $class_name));
+        if (!$this->hasClass($class_name)) {
+            $this->classes = array_merge($this->classes, explode(" ", $class_name));
+        }
         return $this;
     }
 
-    public function hasClass(string $class_name) : bool
+    public function hasClass(string $class_name): bool
     {
         return in_array($class_name, $this->classes);
     }
@@ -54,7 +56,7 @@ abstract class View
     {
         $render = "";
         foreach ($this->attributes as $name => $value) {
-            $render.= " $name='$value' ";
+            $render .= " $name='$value' ";
         }
         return $render;
     }

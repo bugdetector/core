@@ -21,7 +21,10 @@
 > MYSQL 5.0: GRANT ALL PRIVILEGES ON core_multisite.* To 'core_user'@'localhost' IDENTIFIED BY  'core_1234';
 > MYSQL 8.0: GRANT ALL PRIVILEGES ON core.* To 'core_user'@'localhost' WITH GRANT OPTION
 
-    
+  ## Yükleme
+  
+   1. Proje ana dizininde "composer install" çalıştırın.
+   2. public_html dizininde "npm install" çalıştırın.
       
   ## Yapılandırma işlemleri
    1. Siteye erişerek yükleme ekranından veritabanı bağlantı bilgisi ve yeni kullanıcı oluşturulması için adımları izleyin.
@@ -54,5 +57,11 @@
   php-mysql
 
    5. Kod standardı kontrolü
-  phpcs --standard=PSR12 <file>
-  phpcbf --standard=PSR12 <file>
+  
+  `phpcs --standard=PSR12 <file>` 
+
+  `phpcbf --standard=PSR12 <file>`
+  
+   6. Önyüz dosyalarının derlenmesi
+   Önyüz kodlarını derlerken git tarafından dosyaların takip edilebilmesi için 
+   `npm run build:dev` komutunu kullanın.

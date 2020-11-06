@@ -2,7 +2,7 @@
 <{{view.tag_name}} class='{{ view.classes|join(" ") }}' {{ view.renderAttributes()|raw }}>
 
 	<!-- Navbar -->
-	<nav class="navbar-nav ml-auto d-flex justify-content-between w-100">
+	<nav class="navbar-nav ml-auto d-flex w-100">
 		<div
 			class="nav-item">
 			<!-- Sidebar Toggle (Topbar) -->
@@ -11,7 +11,7 @@
 				<i class="fa fa-bars"></i>
 			</button>
 		</div>
-		<div class="nav-item">
+		<div class="nav-item ml-auto">
 			<a class="navbar-brand" href="{{ constant("BASE_URL") }}">
 			<span class="sr-only">{{ t("mainpage") }}</span>
 			</a>

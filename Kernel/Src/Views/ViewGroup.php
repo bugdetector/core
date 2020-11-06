@@ -16,7 +16,7 @@ class ViewGroup extends View
         $this->addClass($wrapper_class);
     }
 
-    public static function create(string $tag_name, string $wrapper_class) : ViewGroup
+    public static function create(string $tag_name, string $wrapper_class): ViewGroup
     {
         return new ViewGroup($tag_name, $wrapper_class);
     }
@@ -26,18 +26,19 @@ class ViewGroup extends View
         return "view_group.twig";
     }
 
-    public function setTagName(string $tag_name) : ViewGroup{
+    public function setTagName(string $tag_name): ViewGroup
+    {
         $this->tag_name = $tag_name;
         return $this;
     }
 
-    public function addClassToChildren(bool $addClassToChildren) : ViewGroup
+    public function addClassToChildren(bool $addClassToChildren): ViewGroup
     {
         $this->addClassToChildren = $addClassToChildren;
         return $this;
     }
 
-    public function addClass(string $class_name) : ViewGroup
+    public function addClass(string $class_name): ViewGroup
     {
         if (!$this->addClassToChildren) {
             parent::addClass($class_name);

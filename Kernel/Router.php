@@ -24,7 +24,7 @@ class Router
      *
      * @return Router
      */
-    public static function getInstance() : Router
+    public static function getInstance(): Router
     {
         if (!self::$instance) {
             self::$instance = new Router();
@@ -35,7 +35,7 @@ class Router
     public function route($route = null)
     {
         if (!$route) {
-            $route = trim(str_replace(BASE_URL, "", $_SERVER["REQUEST_SCHEME"]."://".\CoreDB::baseHost().$_SERVER["REQUEST_URI"]),"/");
+            $route = trim(\CoreDB::requestUrl(), "/");
         }
         $this->controller = $this->getControllerFromUrl($route);
         if (!$this->controller->checkAccess()) {
@@ -49,10 +49,11 @@ class Router
         die();
     }
 
-    public function getControllerFromUrl($url){
-        if(strpos($url, BASE_URL) === 0){
+    public function getControllerFromUrl($url)
+    {
+        if (strpos($url, BASE_URL) === 0) {
             $count = 1;
-            $url = str_replace(BASE_URL."/", "", $url, $count);
+            $url = str_replace(BASE_URL . "/", "", $url, $count);
         }
         $currentArguments = explode("/", preg_replace("/\?.*/", "", $url));
         if (!$currentArguments[0]) {
@@ -60,26 +61,37 @@ class Router
         }
         $namespaceSrc = "Src\\Controller\\";
         $namespaceApp = "App\\Controller\\";
-        $controllerName = null;
+        $srcControllerName = null;
+        $appControllerName = null;
+        $appControllerFound = true;
         foreach ($currentArguments as $page) {
-            $page = mb_convert_case($page, MB_CASE_TITLE);
+            $page = str_replace("_", "", mb_convert_case($page, MB_CASE_TITLE));
             $tempSrcControllerName = "{$namespaceSrc}{$page}Controller";
             $tempAppControllerName = "{$namespaceApp}{$page}Controller";
 
-            if(class_exists($tempAppControllerName)){
-                $namespaceApp = "{$namespaceApp}{$page}\\";
-                $controllerName = $tempAppControllerName;
-                array_shift($currentArguments);
-            }else if (class_exists($tempSrcControllerName)) {
+            $controllerFound = false;
+            if (class_exists($tempSrcControllerName)) {
                 $namespaceSrc = "{$namespaceSrc}{$page}\\";
-                $controllerName = $tempSrcControllerName;
+                $srcControllerName = $tempSrcControllerName;
+                $controllerFound = true;
+                $appControllerName = "";
+            }
+            if ($appControllerFound && class_exists($tempAppControllerName)) {
+                $namespaceApp = "{$namespaceApp}{$page}\\";
+                $appControllerName = $tempAppControllerName;
+                $controllerFound = true;
+            } else {
+                $appControllerFound = false;
+            }
+            if ($controllerFound) {
                 array_shift($currentArguments);
             } else {
                 break;
             }
         }
-        if(!$controllerName){
-            return $this->getControllerFromUrl("notfound");
+        $controllerName = $appControllerName ?: $srcControllerName;
+        if (!$controllerName) {
+            return $this->getControllerFromUrl("not_found");
         }
         return new $controllerName($currentArguments);
     }
@@ -89,16 +101,17 @@ class Router
      * @return string
      *  URL
      */
-    public function getUrl(string $controller) : string{
-        $mainPath = explode("\\", str_replace("Src\\Controller\\", "", $controller));
+    public function getUrl(string $controller): string
+    {
+        $mainPath = explode("\\", str_replace(["Src\\Controller\\", "App\\Controller\\"], "", $controller));
         $route = "/";
-        foreach($mainPath as $path){
-            $route .= str_replace("controller", "", mb_strtolower($path))."/";
+        foreach ($mainPath as $path) {
+            $route .= str_replace("controller", "", mb_strtolower($path)) . "/";
         }
-        return BASE_URL.$route;
+        return BASE_URL . $route;
     }
 
-    public static function getController() : ControllerInterface
+    public static function getController(): ControllerInterface
     {
         return self::$instance->controller;
     }

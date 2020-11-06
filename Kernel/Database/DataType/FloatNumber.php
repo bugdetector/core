@@ -27,7 +27,7 @@ class FloatNumber extends DataTypeAbstract
         ->setType("number")
         ->setDescription(Translation::getTranslation($this->comment))
         ->addAttribute("step", "0.01");
-        if(!$this->isNull){
+        if (!$this->isNull) {
             $widget->addAttribute("required", "true");
         }
         return $widget;
@@ -36,13 +36,18 @@ class FloatNumber extends DataTypeAbstract
 
     public function setValue($value)
     {
-        $this->value = $value ? floatval($value) : "";
+        $this->value = is_numeric($value) ? floatval($value) : "";
+    }
+
+    public function getValue()
+    {
+        return floatval($this->value);
     }
 
     /**
      * @inheritdoc
      */
-    public function getSearchWidget() : FormWidget
+    public function getSearchWidget(): FormWidget
     {
         return $this->getWidget()->removeAttribute("required");
     }

@@ -3,7 +3,6 @@
 namespace Src\Form;
 
 use CoreDB\Kernel\Messenger;
-
 use Src\Entity\ResetPassword;
 use Src\Entity\Translation;
 use Src\Entity\User;
@@ -45,7 +44,7 @@ class ForgetPasswordForm extends Form
         return "forget-password-form.twig";
     }
 
-    public function validate() : bool
+    public function validate(): bool
     {
         if (isset($this->request["reset"])) {
             if (!User::get(["username" => $this->request["username"], "email" => $this->request["email"]])) {
@@ -57,23 +56,28 @@ class ForgetPasswordForm extends Form
 
     public function submit()
     {
+        /** @var User */
         $user = User::get(["username" => $this->request["username"], "email" => $this->request["email"]]);
         $reset_password = new ResetPassword();
         $reset_password = ResetPassword::get(["user" => $user->ID]);
         if (!$reset_password) {
             $reset_password = new ResetPassword();
             $reset_password->user = $user->ID;
-            $reset_password->key = hash("SHA256", \CoreDB::get_current_date().json_encode($user->ID));
+            $reset_password->key = hash("SHA256", \CoreDB::currentDate() . json_encode($user->ID));
             $reset_password->save();
         }
         
-        $reset_link = BASE_URL."/reset_password/?USER=".$user->ID."&KEY=".$reset_password->key;
+        $reset_link = BASE_URL . "/reset_password/?USER=" . $user->ID . "&KEY=" . $reset_password->key;
         $message = Translation::getEmailTranslation("password_reset", [$reset_link, $reset_link]);
         $username = $user->getFullName();
         
         \CoreDB::HTMLMail($user->email, Translation::getTranslation("reset_password"), $message, $username);
         
-        \CoreDB::messenger()->createMessage(Translation::getTranslation("password_reset_mail_success"), Messenger::SUCCESS);
+        \CoreDB::messenger()
+        ->createMessage(
+            Translation::getTranslation("password_reset_mail_success"),
+            Messenger::SUCCESS
+        );
     }
 
     protected function csrfTokenCheckFailed()

@@ -35,7 +35,7 @@ class File extends TableMapper
     public function map(array $array, bool $isConstructor = false)
     {
         parent::map($array);
-        if(strpos($this->mime_type, "image/") !== false){
+        if (strpos($this->mime_type, "image/") !== false) {
             $this->isImage = true;
         }
     }
@@ -59,13 +59,13 @@ class File extends TableMapper
         $this->mime_type->setValue($fileInfo["type"]);
         $this->file_size->setValue($fileInfo["size"]);
         $this->extension->setValue(pathinfo($fileInfo["name"], PATHINFO_EXTENSION));
-        if(strpos($this->mime_type, "image/")){
+        if (strpos($this->mime_type, "image/")) {
             $this->isImage = true;
         }
 
         $file_url = getcwd() . "/files/uploaded/$table/$field_name/";
         is_dir($file_url) ?: mkdir($file_url, 0777, true);
-        $file_path = "$table/$field_name/" . md5($fileInfo["tmp_name"] . \CoreDB::get_current_date());
+        $file_path = "$table/$field_name/" . md5($fileInfo["tmp_name"] . \CoreDB::currentDate());
         $this->file_path->setValue($file_path);
         if (move_uploaded_file($fileInfo["tmp_name"], getcwd() . "/files/uploaded/{$this->file_path}")) {
             $this->save();
@@ -132,7 +132,7 @@ class File extends TableMapper
             ->setValue($this->ID)];
     }
 
-    function includeFiles($from = null)
+    public function includeFiles($from = null)
     {
         if ($from["size"] != 0) {
             if ($this->file_path->getValue()) {

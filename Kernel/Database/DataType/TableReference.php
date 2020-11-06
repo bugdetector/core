@@ -3,7 +3,7 @@
 namespace CoreDB\Kernel\Database\DataType;
 
 use CoreDB;
-use Src\Entity\DBObject;
+use CoreDB\Kernel\Database\TableDefinition;
 use Src\Entity\Translation;
 use Src\Form\Widget\FormWidget;
 use Src\Form\Widget\SelectWidget;
@@ -25,20 +25,33 @@ class TableReference extends DataTypeAbstract
      */
     public function getWidget(): FormWidget
     {
-        $entries = CoreDB::database()->select($this->reference_table)->orderBy("ID")->execute()->fetchAll(\PDO::FETCH_NUM);
+        $referenceTableColumns = TableDefinition::getDefinition(
+            $this->reference_table
+        )->fields;
+        $firstColumnName = array_keys($referenceTableColumns)[1];
+        $entryQuery = CoreDB::database()
+        ->select($this->reference_table, "rt")
+        ->select("rt", ["ID", $firstColumnName])
+        ->orderBy("ID")
+        ->limit(10);
+        if ($this->value) {
+            $entryQuery->condition("rt.ID", $this->value);
+        }
+        $entries = $entryQuery
+        ->execute()->fetchAll(\PDO::FETCH_ASSOC);
         $options = [];
         foreach ($entries as $entry) {
-            $options[$entry[0]] = $entry[1];
+            $options[$entry["ID"]] = $entry[$firstColumnName];
         }
 
         $widget = SelectWidget::create("")
             ->setValue($this->value)
             ->setOptions($options)
+            ->setAutoComplete($this->reference_table, $firstColumnName)
             ->setDescription(Translation::getTranslation($this->comment))
             ->addClass("autocomplete")
-            ->addAttribute("data-reference-table", $this->reference_table)
-            ->addAttribute("data-reference-column", $this->column_name);
-        if(!$this->isNull){
+            ->addAttribute("data-live-search", "true");
+        if (!$this->isNull) {
             /**
              * @var SelectWidget $widget
              */
@@ -51,7 +64,7 @@ class TableReference extends DataTypeAbstract
     /**
      * @inheritdoc
      */
-    public function getSearchWidget() : ?FormWidget
+    public function getSearchWidget(): ?FormWidget
     {
         /**
          * @var SelectWidget
@@ -62,13 +75,14 @@ class TableReference extends DataTypeAbstract
         return $widget;
     }
 
-    public function setValue($value){
+    public function setValue($value)
+    {
         $valueAvailable = \CoreDB::database()->select($this->reference_table)
         ->condition("ID", $value)
         ->execute()->rowCount();
-        if($valueAvailable){
+        if ($valueAvailable) {
             $this->value = $value;
-        }else{
+        } else {
             $this->value = "";
         }
     }

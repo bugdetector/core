@@ -53,7 +53,7 @@ class LoginForm extends Form
         return "login-form.twig";
     }
 
-    public function validate() : bool
+    public function validate(): bool
     {
         //if ip address is blocked not let to login
         if (User::isIpAddressBlocked()) {
@@ -77,7 +77,10 @@ class LoginForm extends Form
             }
             $this->setError("username", Translation::getTranslation("ip_blocked"));
         }
-        if (empty($this->errors) && (!$this->user || !password_verify($this->request["password"], $this->user->password))) {
+        if (
+            empty($this->errors) &&
+            (!$this->user || !password_verify($this->request["password"], $this->user->password))
+        ) {
             if (isset($_SESSION[self::LOGIN_UNTRUSTED_ACTIONS])) {
                 $_SESSION[self::LOGIN_UNTRUSTED_ACTIONS]++;
                 if ($_SESSION[self::LOGIN_UNTRUSTED_ACTIONS] > 3) {
@@ -104,7 +107,7 @@ class LoginForm extends Form
     public function submit()
     {
         //login successful
-        $this->user->last_access->setValue(\CoreDB::get_current_date());
+        $this->user->last_access->setValue(\CoreDB::currentDate());
         $this->user->save();
         $_SESSION[BASE_URL . "-UID"] = $this->user->ID;
         if (isset($_POST["remember-me"]) && $_POST["remember-me"]) {
@@ -112,7 +115,15 @@ class LoginForm extends Form
             $payload = new stdClass();
             $payload->ID = $this->user->ID->getValue();
             $jwt->setPayload($payload);
-            setcookie("session-token", $jwt->createToken(), strtotime("+1 week"), SITE_ROOT, \CoreDB::baseHost(), false, true);
+            setcookie(
+                "session-token",
+                $jwt->createToken(),
+                strtotime("+1 week"),
+                SITE_ROOT,
+                \CoreDB::baseHost(),
+                false,
+                true
+            );
         }
 
         Watchdog::log("login", $this->user->username);

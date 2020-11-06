@@ -14,26 +14,26 @@ module.exports = (env, argv) => {
       /**
        * Components
        */
-      _global: ["./src/components/_global/_global.js"],
-      icons: ["./src/components/icons/icons.js"],
-      checkbox : ["./src/components/checkbox/checkbox.js"],
-      select: ["./src/components/select/select.js"],
-      summernote: ["./src/components/summernote/summernote.js"],
-      datetimepicker : ["./src/components/datetimepicker/datetimepicker.js"],
-      daterangepicker : ["./src/components/daterangepicker/daterangepicker.js"],
-      collapsable_card : ["./src/components/collapsable_card/collapsable_card.js"],
+      _global: ["./base_theme/src/components/_global/_global.js"],
+      icons: ["./base_theme/src/components/icons/icons.js"],
+      checkbox : ["./base_theme/src/components/checkbox/checkbox.js"],
+      select: ["./base_theme/src/components/select/select.js"],
+      summernote: ["./base_theme/src/components/summernote/summernote.js"],
+      datetimepicker : ["./base_theme/src/components/datetimepicker/datetimepicker.js"],
+      daterangepicker : ["./base_theme/src/components/daterangepicker/daterangepicker.js"],
+      collapsable_card : ["./base_theme/src/components/collapsable_card/collapsable_card.js"],
       /**
        * Forms
        */
-      search_form : ["./src/forms/search_form.js"],
-      table_struct_form : ["./src/forms/table_struct_form.js"],
-      insert_form : ["./src/forms/insert_form.js"],
+      search_form : ["./base_theme/src/forms/search_form.js"],
+      table_struct_form : ["./base_theme/src/forms/table_struct_form.js"],
+      insert_form : ["./base_theme/src/forms/insert_form.js"],
       /**
        * Views
        */
-      side_table_list : ["./src/views/side_table_list.js"],
-      side_entity_list : ["./src/views/side_entity_list.js"],
-      table_and_column_selector : ["./src/views/table_and_column_selector.js"],
+      side_table_list : ["./base_theme/src/views/side_table_list.js"],
+      side_entity_list : ["./base_theme/src/views/side_entity_list.js"],
+      table_and_column_selector : ["./base_theme/src/views/table_and_column_selector.js"],
     },
     resolve: {
       modules: [

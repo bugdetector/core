@@ -27,21 +27,23 @@ class SearchForm extends Form
     public Table $table;
     public CollapsableCard $search_input_group;
     public Pagination $pagination;
+    public $page;
     public string $summary_text;
     
     private array $searchableFields = [];
     private SelectQueryPreparerAbstract $query;
     
-    private function __construct(SearchableInterface $object, $translateLabels = true)
+    protected function __construct(SearchableInterface $object, $translateLabels = true)
     {
         parent::__construct();
         $this->object = $object;
         $this->headers = $object->getResultHeaders($translateLabels);
         $this->query = $object->getResultQuery();
-        $this->translateLabels = $translateLabels;        
+        $this->translateLabels = $translateLabels;
         $this->search_input_group = new CollapsableCard(Translation::getTranslation("search"));
         $this->search_input_group->setId("search_input_group");
-        $this->pagination = new Pagination(isset($_GET["page"]) ? $_GET["page"] : 1, $this->object->getPaginationLimit());
+        $this->page = isset($_GET["page"]) ? $_GET["page"] : 1;
+        $this->pagination = new Pagination($this->page, $this->object->getPaginationLimit());
         \CoreDB::controller()->addJsFiles("dist/search_form/search_form.js");
         \CoreDB::controller()->addFrontendTranslation("record_remove_accept");
 
@@ -83,15 +85,16 @@ class SearchForm extends Form
     }
 
 
-    public static function createByObject(SearchableInterface $object, $translateLabels = true){
-        $search_form = new SearchForm($object, $translateLabels);
+    public static function createByObject(SearchableInterface $object, $translateLabels = true)
+    {
+        $search_form = new static($object, $translateLabels);
         $search_form->processForm();
         return $search_form;
     }
 
     public static function createByTableName($table_name)
     {
-        $search_form = self::createByObject(new DBObject($table_name), false);
+        $search_form = static::createByObject(new DBObject($table_name), false);
         return $search_form;
     }
 
@@ -112,8 +115,12 @@ class SearchForm extends Form
     public function submit()
     {
         $params = $this->request;
-        $this->pagination->page = isset($params["page"]) ? $params["page"] : 1;
-        $orderBy = isset($params["orderBy"]) && in_array($params["orderBy"], array_keys($this->headers)) ? $params["orderBy"] : null;
+        $this->pagination->page = $this->page;
+        $orderBy = isset($params["orderBy"]) &&
+            in_array(
+                $params["orderBy"],
+                array_keys($this->headers)
+            ) ? $params["orderBy"] : null;
         $orderDirection = isset($params["orderDirection"]) && $params["orderDirection"] == "DESC" ? "DESC" : "ASC";
         if ($orderBy) {
             $this->query->orderBy("`$orderBy` $orderDirection");
@@ -121,12 +128,18 @@ class SearchForm extends Form
 
         foreach ($this->searchableFields as $column_name) {
             if (isset($params[$column_name]) && $params[$column_name] !== "") {
-                if (isset($this->object->$column_name) && in_array(get_class($this->object->$column_name), [DateTime::class, Date::class, Time::class])) {
+                if (
+                    isset($this->object->$column_name) &&
+                    in_array(
+                        get_class($this->object->$column_name),
+                        [DateTime::class, Date::class, Time::class]
+                    )
+                ) {
                     $dates = explode("&", $params[$column_name]);
                     $this->query->condition($column_name, $dates[0] . " 00:00:00", ">=")
                     ->condition($column_name, $dates[1] . " 23:59:59", "<=");
-                } else if($this->object->$column_name instanceof EntityReference){
-                    $this->query->condition("{$column_name}.ID",  $params[$column_name], "IN");
+                } elseif ($this->object->$column_name instanceof EntityReference) {
+                    $this->query->condition("{$column_name}.ID", $params[$column_name], "IN");
                 } else {
                     $this->query->condition($column_name, "%{$params[$column_name]}%", "LIKE");
                 }
@@ -137,18 +150,19 @@ class SearchForm extends Form
     public function processForm()
     {
         $this->submit();
-        $this->query->limit($this->pagination->limit, ($this->pagination->page -1) * $this->pagination->limit);
+        $this->query->limit($this->pagination->limit, ($this->pagination->page - 1) * $this->pagination->limit);
         $queryResult = $this->query->execute();
         $this->data = $queryResult->fetchAll(PDO::FETCH_ASSOC);
         
-        foreach($this->data as &$row){
+        foreach ($this->data as &$row) {
             $this->object->postProcessRow($row);
         }
         $this->pagination->total_count = $this->query->limit(0)->execute()->rowCount();
         $this->summary_text = Translation::getTranslation("result_summary", [
             $this->pagination->total_count,
-            ($this->pagination->page -1) * $this->pagination->limit + 1,
-            ($this->pagination->page) * $this->pagination->limit > $this->pagination->total_count ? $this->pagination->total_count : ($this->pagination->page) * $this->pagination->limit
+            ($this->pagination->page - 1) * $this->pagination->limit + 1,
+            ($this->pagination->page) * $this->pagination->limit > $this->pagination->total_count ?
+            $this->pagination->total_count : ($this->pagination->page) * $this->pagination->limit
         ]);
         $this->viewer = $this->object->getResultsViewer()
         ->setHeaders($this->headers)

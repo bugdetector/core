@@ -25,9 +25,11 @@ class InsertController extends EntityController
             if (!$this->object) {
                 Router::getInstance()->route(NotFoundController::getUrl());
             }
-            $this->setTitle(Translation::getTranslation("edit") . " | " . Translation::getTranslation($this->entityName) . " ID: {$this->object->ID}");
+            $this->setTitle(Translation::getTranslation("edit") . " | " .
+            Translation::getTranslation($this->entityName) . " ID: {$this->object->ID}");
         } else {
-            $this->setTitle(Translation::getTranslation("add") . " | " . Translation::getTranslation($this->entityName));
+            $this->setTitle(Translation::getTranslation("add") . " | " .
+            Translation::getTranslation($this->entityName));
         }
         $this->insert_form = $this->object->getForm();
         $this->insert_form->processForm();

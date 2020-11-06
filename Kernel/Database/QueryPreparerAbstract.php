@@ -9,7 +9,7 @@ abstract class QueryPreparerAbstract
     protected string $table;
     protected $params = [];
     
-    abstract public function getQuery() : string;
+    abstract public function getQuery(): string;
 
     public function params(array $params)
     {
@@ -17,12 +17,12 @@ abstract class QueryPreparerAbstract
         return $this;
     }
     
-    public function getParams() : array
+    public function getParams(): array
     {
         return $this->params;
     }
     
-    public function execute() : PDOStatement
+    public function execute(): PDOStatement
     {
         return \CoreDB::database()->execute($this);
     }

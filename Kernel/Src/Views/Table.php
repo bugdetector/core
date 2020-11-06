@@ -20,7 +20,8 @@ class Table extends ResultsViewer
         if ($this->orderable) {
             $this->filter_params = array_filter($_GET);
             $this->orderBy = isset($this->filter_params["orderBy"]) ? $this->filter_params["orderBy"] : null;
-            $this->orderDirection = isset($this->filter_params["orderDirection"]) ? $this->filter_params["orderDirection"] : "";
+            $this->orderDirection = isset($this->filter_params["orderDirection"]) ?
+                                    $this->filter_params["orderDirection"] : "";
         }
         unset($this->filter_params["orderBy"], $this->filter_params["orderDirection"]);
         return $this;

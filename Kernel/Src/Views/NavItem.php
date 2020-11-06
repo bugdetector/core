@@ -7,41 +7,44 @@ use Src\Theme\View;
 class NavItem extends ViewGroup
 {
     public string $collapse_id = "";
+    public bool $isCollapseOpened = false;
 
     public function __construct(
         $icon,
-        string $label,
+        $label,
         string $href = '#',
         bool $is_active = false
     ) {
         parent::__construct("div", "nav-item");
-        if($is_active){
+        if ($is_active) {
             $this->addClass("active");
         }
-        if(is_string($icon)){
+        if (is_string($icon)) {
             $iconField = ViewGroup::create("i", $icon);
-        }else{
+        } else {
             $iconField = $icon;
         }
         $this->addField(
-            ViewGroup::create("a", "nav-link")
+            ViewGroup::create("a", "nav-link " . ($is_active ? "active" : ""))
             ->addAttribute("href", $href)
             ->addField($iconField)
-            ->addField(TextElement::create($label)->setTagName("span"))
+            ->addField(
+                $label instanceof View ? $label : TextElement::create($label)->setTagName("span")
+            )
         );
-        $this->collapse_id = str_replace(" ", "_", mb_strtolower($label));
+        $this->collapse_id = $label instanceof View ? "" : str_replace([" ", "&", "-"], "_", mb_strtolower($label));
     }
 
     public static function create(
         $icon,
-        string $label,
+        $label,
         string $href = '#',
         bool $is_active = false
-    ) : NavItem {
+    ): NavItem {
         return new NavItem($icon, $label, $href, $is_active);
     }
 
-    public function addDropdownItem(NavItem $item, bool $is_active = false, bool $dropdown_header = false) : NavItem
+    public function addDropdownItem(NavItem $item, bool $is_active = false, bool $dropdown_header = false): NavItem
     {
         if (!$this->hasClass("dropdown")) {
             $this->addClass("dropdown no-arrow");
@@ -61,7 +64,7 @@ class NavItem extends ViewGroup
         } else {
             $item->fields[0]->removeClass("nav-link")
             ->addClass("dropdown-item");
-            if($is_active){
+            if ($is_active) {
                 $item->addClass("active");
             }
         }
@@ -69,7 +72,7 @@ class NavItem extends ViewGroup
         return $this;
     }
 
-    public function addCollapsedItem(View $item, bool $is_active = false, bool $collase_header = false) : NavItem
+    public function addCollapsedItem(View $item, bool $is_active = false, bool $collase_header = false): NavItem
     {
         if (!$this->hasClass("collapsed")) {
             $this->fields[0]->addClass("collapsed")
@@ -91,11 +94,18 @@ class NavItem extends ViewGroup
             $item->addClass("collapse-header");
         } else {
             $item->addClass("collapse-item");
-            if($is_active){
+            if ($is_active) {
                 $item->addClass("active");
             }
         }
         $this->fields[1]->fields[0]->addField($item);
         return $this;
+    }
+
+    public function collapseOpened()
+    {
+        $this->fields[1]->addClass("show");
+        $this->fields[0]->removeClass("collapsed");
+        $this->isCollapseOpened = true;
     }
 }

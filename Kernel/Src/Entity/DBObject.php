@@ -1,4 +1,5 @@
 <?php
+
 namespace Src\Entity;
 
 use CoreDB\Kernel\TableMapper;
@@ -24,7 +25,8 @@ class DBObject extends TableMapper
     /**
      * @inheritdoc
      */
-    public static function get($filter, string $table_name = null){
+    public static function get($filter, string $table_name = null)
+    {
         self::$table = $table_name;
         return parent::get($filter);
     }
@@ -32,7 +34,8 @@ class DBObject extends TableMapper
     /**
      * @inheritdoc
      */
-    public static function getAll(array $filter, string $table_name = null) : array{
+    public static function getAll(array $filter, string $table_name = null): array
+    {
         self::$table = $table_name;
         return static::findAll($filter, static::getTableName());
     }

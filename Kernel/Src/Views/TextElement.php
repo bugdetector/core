@@ -15,17 +15,18 @@ class TextElement extends View
         $this->text = $text;
     }
 
-    public static function create($text) : TextElement
+    public static function create($text): TextElement
     {
         return new TextElement($text);
     }
 
-    public function setIsRaw(bool $raw) : TextElement {
+    public function setIsRaw(bool $raw): TextElement
+    {
         $this->raw = $raw;
         return $this;
     }
 
-    public function setTagName(string $tagName) : TextElement
+    public function setTagName(string $tagName): TextElement
     {
         $this->tagName = $tagName;
         return $this;

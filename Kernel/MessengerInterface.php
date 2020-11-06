@@ -4,10 +4,10 @@ namespace CoreDB\Kernel;
 
 interface MessengerInterface
 {
-    const ERROR = 0;
-    const WARNING = 1;
-    const INFO = 2;
-    const SUCCESS = 3;
+    public const ERROR = 0;
+    public const WARNING = 1;
+    public const INFO = 2;
+    public const SUCCESS = 3;
 
     /**
      * Must be instantiate for only one
@@ -31,10 +31,10 @@ interface MessengerInterface
      * @return array
      *  Messages
      */
-    public function getMessages() : array;
+    public function getMessages(): array;
 
     /**
      * Clear all messages
      */
-    public function clearMessages() : void;
+    public function clearMessages(): void;
 }

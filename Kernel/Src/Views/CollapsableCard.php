@@ -18,7 +18,7 @@ class CollapsableCard extends View
         \CoreDB::controller()->addJsFiles("dist/collapsable_card/collapsable_card.js");
     }
     
-    public static function create($title) : CollapsableCard
+    public static function create($title): CollapsableCard
     {
         return new CollapsableCard($title);
     }

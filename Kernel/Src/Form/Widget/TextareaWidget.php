@@ -1,4 +1,5 @@
 <?php
+
 namespace Src\Form\Widget;
 
 use Src\Theme\View;
@@ -6,7 +7,7 @@ use Src\Theme\View;
 class TextareaWidget extends FormWidget
 {
 
-    public static function create(string $name) : TextareaWidget
+    public static function create(string $name): TextareaWidget
     {
         return new TextareaWidget($name);
     }
@@ -18,7 +19,7 @@ class TextareaWidget extends FormWidget
 
     public function addClass(string $class_name): View
     {
-        if(in_array("summernote", explode(" ", $class_name))){
+        if (in_array("summernote", explode(" ", $class_name))) {
             \CoreDB::controller()->addJsFiles("dist/summernote/summernote.js");
             \CoreDB::controller()->addCssFiles("dist/summernote/summernote.css");
         }

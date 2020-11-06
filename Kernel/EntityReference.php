@@ -12,10 +12,10 @@ use Src\Form\Widget\SelectWidget;
 class EntityReference extends DataTypeAbstract
 {
 
-    const CONNECTION_MANY_TO_MANY = "manyToMany";
-    const CONNECTION_MANY_TO_ONE = "manyToOne";
-    const CONNECTION_ONE_TO_MANY = "oneToMany";
-    const CONNECTION_ONE_TO_ONE = "oneToOne";
+    public const CONNECTION_MANY_TO_MANY = "manyToMany";
+    public const CONNECTION_MANY_TO_ONE = "manyToOne";
+    public const CONNECTION_ONE_TO_MANY = "oneToMany";
+    public const CONNECTION_ONE_TO_ONE = "oneToOne";
 
     public TableMapper $object;
     public string $fieldEntityName;
@@ -23,6 +23,7 @@ class EntityReference extends DataTypeAbstract
     public string $mergeTable;
     public string $selfKey;
     public string $foreignKey;
+    public bool $createIfNotExist = false;
 
     public function __construct(string $fieldEntityName, TableMapper &$object, array $config, string $connectionType)
     {
@@ -33,6 +34,7 @@ class EntityReference extends DataTypeAbstract
             $this->mergeTable = $config["mergeTable"];
             $this->selfKey = $config["selfKey"];
             $this->foreignKey = $config["foreignKey"];
+            $this->createIfNotExist = @$config["createIfNotExist"] ?: false;
             $this->value = $this->getCheckeds();
         }
     }
@@ -40,7 +42,8 @@ class EntityReference extends DataTypeAbstract
     /**
      * @inheritdoc
      */
-    public function setValue($value){
+    public function setValue($value)
+    {
         $this->value = $value;
     }
 
@@ -48,7 +51,10 @@ class EntityReference extends DataTypeAbstract
      * Pseudo function. There is no use.
      * @inheritdoc
      */
-    public static function getText(): string{return "";}
+    public static function getText(): string
+    {
+        return "";
+    }
 
     public function getWidget(): FormWidget
     {
@@ -66,7 +72,7 @@ class EntityReference extends DataTypeAbstract
             $options = [];
             foreach ($allOptions as $anOption) {
                 $object = $referenceClass::get($anOption);
-                if($object){
+                if ($object) {
                     $objectArray = $object->toArray();
                     $text = current($objectArray);
                     $option = new OptionWidget($anOption, $text);
@@ -79,7 +85,9 @@ class EntityReference extends DataTypeAbstract
             $widget = SelectWidget::create("")
             ->setNullElement(null)
             ->addAttribute("multiple", "true")
-            ->setOptions($options);
+            ->setOptions($options)
+            ->setAutoComplete($referenceClass::getTableName(), "role")
+            ->createIfNotExist($this->createIfNotExist);
         }
         return $widget;
     }
@@ -89,26 +97,28 @@ class EntityReference extends DataTypeAbstract
         return $this->getWidget();
     }
 
-    private function getCheckeds() : array{
+    private function getCheckeds(): array
+    {
         return \CoreDB::database()->select($this->mergeTable)
                 ->select("", [$this->foreignKey])
                 ->condition($this->selfKey, $this->object->ID->getValue())
                 ->execute()->fetchAll(PDO::FETCH_COLUMN);
     }
 
-    public function save(){
-        if($this->connectionType = self::CONNECTION_MANY_TO_MANY){
-            if(!$this->value){
+    public function save()
+    {
+        if ($this->connectionType = self::CONNECTION_MANY_TO_MANY) {
+            if (!$this->value) {
                 $this->value = [];
             }
             $checkeds = $this->getCheckeds();
-            foreach($this->value as $index => $value){
-                if(isset($checkeds[$index])){
+            foreach ($this->value as $index => $value) {
+                if (isset($checkeds[$index])) {
                     $object = DBObject::get([
                         $this->selfKey => $this->object->ID->getValue(),
                         $this->foreignKey => $checkeds[$index]
                     ], $this->mergeTable);
-                }else{
+                } else {
                     $object = new DBObject($this->mergeTable);
                 }
                 $object->map([
@@ -117,13 +127,13 @@ class EntityReference extends DataTypeAbstract
                 ]);
                 $object->save();
             }
-            if(isset($index)){
+            if (isset($index)) {
                 $index++;
-            }else{
+            } else {
                 $index = 0;
             }
-            if(isset($checkeds[$index])){
-                for($index; $index < count($checkeds); $index++){
+            if (isset($checkeds[$index])) {
+                for ($index; $index < count($checkeds); $index++) {
                     $object = DBObject::get([
                         $this->selfKey => $this->object->ID->getValue(),
                         $this->foreignKey => $checkeds[$index]

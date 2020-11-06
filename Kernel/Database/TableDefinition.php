@@ -20,10 +20,10 @@ class TableDefinition
         $this->table_name = $table_name;
     }
 
-    public static function getDefinition(string $table_name) : ?TableDefinition
+    public static function getDefinition(string $table_name): ?TableDefinition
     {
         $cache = Cache::getByBundleAndKey("table_definition", $table_name);
-        if($cache){
+        if ($cache) {
             return unserialize(base64_decode($cache->value->getValue()));
         } else {
             $definition = new TableDefinition($table_name);
@@ -79,7 +79,7 @@ class TableDefinition
         }
     }
 
-    public function toArray() : array
+    public function toArray(): array
     {
         $array = [];
         $array["table_name"] = $this->table_name;

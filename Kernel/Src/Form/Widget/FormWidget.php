@@ -36,7 +36,7 @@ abstract class FormWidget extends View
         return $this;
     }
 
-    public function setDescription($description) : self
+    public function setDescription($description): self
     {
         $this->description = $description;
         return $this;
@@ -44,7 +44,7 @@ abstract class FormWidget extends View
 
     public function render()
     {
-        if(!isset($this->attributes["id"])){
+        if (!isset($this->attributes["id"])) {
             $this->addAttribute("id", "input_{$this->name}");
         }
         CoreRenderer::getInstance([])->renderWidget($this);

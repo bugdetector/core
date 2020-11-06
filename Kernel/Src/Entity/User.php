@@ -52,7 +52,7 @@ class User extends TableMapper
         return new UserInsertForm($this);
     }
 
-    public function getResultHeaders(bool $translateLabel = true) : array
+    public function getResultHeaders(bool $translateLabel = true): array
     {
         $headers = [""];
         $fields = [
@@ -84,7 +84,7 @@ class User extends TableMapper
                 "email",
                 "phone"
             ])
-            ->select_with_function(["GROUP_CONCAT(roles.role SEPARATOR '\n') AS roles"])
+            ->selectWithFunction(["GROUP_CONCAT(roles.role SEPARATOR '\n') AS roles"])
             ->select(
                 "u",
                 [
@@ -110,10 +110,9 @@ class User extends TableMapper
     {
         if (!$this->checkUsernameInsertAvailable()) {
             throw new Exception(Translation::getTranslation("username_exist"));
-        } elseif(!filter_var($this->email, FILTER_VALIDATE_EMAIL)){
+        } elseif (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
             throw new Exception(Translation::getTranslation("enter_valid_mail"));
-        }
-         elseif (!$this->checkEmailInsertAvailable()) {
+        } elseif (!$this->checkEmailInsertAvailable()) {
             throw new Exception(Translation::getTranslation("email_not_available"));
         }
         return parent::insert();
@@ -176,10 +175,10 @@ class User extends TableMapper
         return $this->username->getValue() != "guest";
     }
 
-    public function isUserInRole(string $role) : bool
+    public function isUserInRole(string $role): bool
     {
         $roleObj = Role::get(["role" => $role]);
-        if($roleObj){
+        if ($roleObj) {
             return in_array($roleObj->ID->getValue(), $this->roles->getValue());
         }
         return false;
@@ -235,15 +234,16 @@ class User extends TableMapper
         return "{$this->name} {$this->surname}";
     }
 
-    public function getProfilePhotoUrl(){
-        if($this->profile_photo->getValue()){
+    public function getProfilePhotoUrl()
+    {
+        if ($this->profile_photo->getValue()) {
             /**
              * @var \Src\Entity\File $photo
              */
             $photo = \Src\Entity\File::get($this->profile_photo->getValue());
             return $photo->getUrl();
-        }else{
-            return BASE_URL."/assets/default-profile-picture.png";
+        } else {
+            return BASE_URL . "/assets/default-profile-picture.png";
         }
     }
 }

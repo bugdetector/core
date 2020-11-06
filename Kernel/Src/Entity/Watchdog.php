@@ -1,4 +1,5 @@
 <?php
+
 namespace Src\Entity;
 
 use CoreDB\Kernel\Database\DataType\ShortText;

@@ -22,7 +22,12 @@ class InsertForm extends Form
         $this->object = $object;
         $this->setEnctype("multipart/form-data");
         
-        foreach ($this->object->getFormFields($this->object->getTableName(), !($object instanceof DBObject) ) as $column_name => $field) {
+        foreach (
+            $this->object->getFormFields(
+                $this->object->getTableName(),
+                !($object instanceof DBObject)
+            ) as $column_name => $field
+        ) {
             $this->addField($field);
         }
         $this->addField(
@@ -54,23 +59,24 @@ class InsertForm extends Form
         return "table_insert_form";
     }
 
-    protected function restoreValues(){
+    protected function restoreValues()
+    {
         foreach ($this->object->toArray() as $field_name => $field) {
-            $key = $this->object->getTableName()."[{$field_name}]";
-            if(isset($this->fields[$key]) && $this->fields[$key] instanceof FormWidget){
-                $this->fields[$key]->setValue(strval($field)); 
+            $key = $this->object->getTableName() . "[{$field_name}]";
+            if (isset($this->fields[$key]) && $this->fields[$key] instanceof FormWidget) {
+                $this->fields[$key]->setValue(strval($field));
             }
         }
     }
 
-    public function validate() : bool
+    public function validate(): bool
     {
         return true;
     }
 
     public function submit()
     {
-        try{
+        try {
             if (isset($this->request["save"])) {
                 $success_message = $this->object->ID->getValue() ? "update_success" : "insert_success";
                 if (isset($this->request[$this->object->getTableName()])) {
@@ -87,17 +93,18 @@ class InsertForm extends Form
                 $this->setMessage(Translation::getTranslation("record_removed"));
                 $this->deleteSuccess();
             }
-        }catch(Exception $ex){
+        } catch (Exception $ex) {
             $this->setError("", $ex->getMessage());
         }
     }
 
-    protected function submitSuccess(){
+    protected function submitSuccess()
+    {
         \CoreDB::goTo($this->object->editUrl());
     }
 
-    protected function deleteSuccess() :string
+    protected function deleteSuccess(): string
     {
-        \CoreDB::goTo(TableController::getUrl().$this->object->getTableName());
+        \CoreDB::goTo(TableController::getUrl() . $this->object->getTableName());
     }
 }

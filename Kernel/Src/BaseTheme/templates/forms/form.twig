@@ -1,7 +1,9 @@
 {% block messages %}
-	{% for error in form.errors %}
-		{{ error }}
-	{% endfor %}
+	<div class="w-100">
+		{% for error in form.errors %}
+			{{ error }}
+		{% endfor %}
+	</div>
 {% endblock %}
 <form method='{{ form.method }}' enctype='{{ form.enctype }}' class='{{ form.classes|join(" ") }}' {{ form.renderAttributes()|raw }}>
 	{% block fields %}

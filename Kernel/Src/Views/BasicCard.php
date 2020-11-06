@@ -12,7 +12,7 @@ class BasicCard extends View
     public $description;
     public $icon_class;
 
-    public static function create() : BasicCard
+    public static function create(): BasicCard
     {
         return new BasicCard();
     }
@@ -43,7 +43,7 @@ class BasicCard extends View
         return $this;
     }
 
-    public function getTemplateFile() : string
+    public function getTemplateFile(): string
     {
         return "basic_card.twig";
     }

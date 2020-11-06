@@ -1,6 +1,5 @@
 <?php
 
-
 namespace CoreDB\Kernel\Database;
 
 /**
@@ -17,7 +16,7 @@ abstract class DropQueryPreparerAbstract extends QueryPreparerAbstract
         $this->column = $column;
     }
 
-    public function setColumn(string $column) : DropQueryPreparerAbstract
+    public function setColumn(string $column): DropQueryPreparerAbstract
     {
         $this->column = $column;
         return $this;

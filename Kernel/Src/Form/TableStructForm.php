@@ -76,7 +76,11 @@ class TableStructForm extends Form
     public function validate(): bool
     {
         if (@preg_match("/[^a-z1-9_]+/", $this->request["table_name"])) {
-            $this->setError("table_name", Translation::getTranslation("table_name") . ": " . Translation::getTranslation("available_characters", ["a-z, _, 1-9"]));
+            $this->setError(
+                "table_name",
+                Translation::getTranslation("table_name") . ": " .
+                Translation::getTranslation("available_characters", ["a-z, _, 1-9"])
+            );
         }
         if (!isset($this->request["fields"]) || empty($this->request["fields"])) {
             $this->setError("fields", Translation::getTranslation("at_least_one_column"));
@@ -98,7 +102,7 @@ class TableStructForm extends Form
                 $success_message = $this->table_definition->table_exist ? "change_success" : "table_create_success";
                 $this->table_definition->saveDefinition();
                 CoreDB::messenger()->createMessage(Translation::getTranslation($success_message), Messenger::SUCCESS);
-                CoreDB::goTo(\CoreDB::controller()->getUrl()."{$this->table_name}");
+                CoreDB::goTo(\CoreDB::controller()->getUrl() . "{$this->table_name}");
             } catch (Exception $ex) {
                 $this->setError("table_name", $ex->getMessage());
             }
@@ -153,7 +157,7 @@ class TableStructForm extends Form
             $column_definition->setOpened(false);
             $this->columns[] = $column_definition;
         }
-        if(empty($this->columns)){
+        if (empty($this->columns)) {
             $this->columns[] = ColumnDefinition::create("fields[0]")->setSortable(true);
         }
 
