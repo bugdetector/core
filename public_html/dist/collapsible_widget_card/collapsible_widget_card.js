@@ -81,33 +81,33 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 9);
+/******/ 	return __webpack_require__(__webpack_require__.s = 8);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ "./base_theme/src/forms/search_form.js":
-/*!*********************************************!*\
-  !*** ./base_theme/src/forms/search_form.js ***!
-  \*********************************************/
+/***/ "./base_theme/src/components/collapsible_widget_card/collapsible_widget_card.js":
+/*!**************************************************************************************!*\
+  !*** ./base_theme/src/components/collapsible_widget_card/collapsible_widget_card.js ***!
+  \**************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-$(document).on("click",".rowdelete",function(e){e.preventDefault();var button=$(this);var table_name=$(this).data("table");var id=$(this).data("id");alert({message:_t("record_remove_accept"),title:_t("warning"),callback:function callback(){$.ajax({url:"".concat(root,"/admin/ajax/delete"),method:"post",data:{table:table_name,id:id},success:function success(){button.parents("tr").fadeOut(1000);}});}});});$(document).on("click","input[type='reset']",function(e){e.preventDefault();$(this).parents("form").find("input:not([type='submit']):not([type='reset']),textarea").val("");$(this).parents("form").find("select").val("NULL").selectpicker("refresh");$(this).parents("form").find("input[type='checkbox']").prop("checked",false).trigger("change");});
+$(function($){$(document).on("click",".add-new-entity",function(e){e.preventDefault();var button=$(this);var entityName=button.data("entity");var name=button.data("name");var hiddenFields=button.data("hidden-fields");var index=$(".collapsible-widget-group[data-entity='".concat(entityName,"'] > div > div")).length;$.ajax({url:root+"/ajax/getEntityCard",method:"post",data:{entity:entityName,name:name,index:index,hiddenFields:hiddenFields},success:function success(response){$(".collapsible-widget-group[data-entity='".concat(entityName,"']")).append(response);}});}).on("click",".remove-entity",function(e){e.preventDefault();var button=$(this);alert({message:_t("record_remove_accept"),okLabel:_t("yes"),callback:function callback(){button.closest(".card").fadeOut(500).delay(500,function(){$(this).remove();});}});});});
 
 /***/ }),
 
-/***/ 9:
-/*!***************************************************!*\
-  !*** multi ./base_theme/src/forms/search_form.js ***!
-  \***************************************************/
+/***/ 8:
+/*!********************************************************************************************!*\
+  !*** multi ./base_theme/src/components/collapsible_widget_card/collapsible_widget_card.js ***!
+  \********************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! ./base_theme/src/forms/search_form.js */"./base_theme/src/forms/search_form.js");
+module.exports = __webpack_require__(/*! ./base_theme/src/components/collapsible_widget_card/collapsible_widget_card.js */"./base_theme/src/components/collapsible_widget_card/collapsible_widget_card.js");
 
 
 /***/ })
 
 /******/ });
-//# sourceMappingURL=search_form.js.map
+//# sourceMappingURL=collapsible_widget_card.js.map

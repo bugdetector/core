@@ -181,3 +181,4 @@ value: Değer
 variables: 'Yapılandırma değerleri'
 mainpage: 'Ana Sayfa'
 config_file_write_error: 'Yapılandırma dosyası (config/config.php) yazılabilir değil. Lütfen devam etmeden önce yapılandırma dosyasına yazma izni verin ya da elle dosyayı oluşturduktan sonra komut satırını kullanarak yükelemyi tamamlayın.'
+add_new_entity: 'Yeni %s Ekle'

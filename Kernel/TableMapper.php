@@ -3,7 +3,6 @@
 namespace CoreDB\Kernel;
 
 use CoreDB;
-use CoreDB\Kernel\Database\DatabaseInstallationException;
 use CoreDB\Kernel\Database\DataType\DataTypeAbstract;
 use CoreDB\Kernel\Database\DataType\DateTime;
 use CoreDB\Kernel\Database\DataType\Integer;
@@ -56,6 +55,15 @@ abstract class TableMapper implements SearchableInterface
                         $this,
                         $config,
                         EntityReference::CONNECTION_MANY_TO_MANY
+                    );
+                }
+            } elseif (isset($this->entityConfig[EntityReference::CONNECTION_ONE_TO_MANY])) {
+                foreach ($this->entityConfig[EntityReference::CONNECTION_ONE_TO_MANY] as $fieldEntityName => $config) {
+                    $this->{$fieldEntityName} = new EntityReference(
+                        $fieldEntityName,
+                        $this,
+                        $config,
+                        EntityReference::CONNECTION_ONE_TO_MANY
                     );
                 }
             }

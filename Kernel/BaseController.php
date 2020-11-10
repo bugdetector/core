@@ -106,7 +106,7 @@ abstract class BaseController implements ControllerInterface
     public function preprocessPage()
     {
         try {
-            if ($this->method) {
+            if ($this->method && method_exists($this, $this->method)) {
                 $this->{$this->method}();
             }
         } catch (Exception $ex) {
