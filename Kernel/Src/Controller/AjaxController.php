@@ -2,7 +2,12 @@
 
 namespace Src\Controller;
 
+use CoreDB\Kernel\Messenger;
 use CoreDB\Kernel\ServiceController;
+use Src\Entity\Translation;
+use Src\Form\Widget\CollapsableWidgetGroup;
+use Src\Views\CollapsableCard;
+use Src\Views\ViewGroup;
 
 class AjaxController extends ServiceController
 {
@@ -23,5 +28,23 @@ class AjaxController extends ServiceController
                 ->limit(20);
             return $query->execute()->fetchAll(\PDO::FETCH_KEY_PAIR);
         }
+    }
+
+    public function getEntityCard()
+    {
+        $entityName = @$_POST["entity"];
+        $index = @$_POST["index"] + 1;
+        $name = @$_POST["name"];
+        $hiddenFields = @$_POST["hiddenFields"];
+        $referenceClass = \CoreDB::config()->getEntityInfo($entityName)["class"];
+        $object = new $referenceClass();
+
+        $this->response_type = self::RESPONSE_TYPE_RAW;
+        echo CollapsableWidgetGroup::getObjectCard(
+            $object,
+            $name,
+            $index,
+            $hiddenFields
+        );
     }
 }

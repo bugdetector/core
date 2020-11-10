@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 10);
+/******/ 	return __webpack_require__(__webpack_require__.s = 11);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -97,7 +97,7 @@ $(document).on("click",".remove_accept",function(e){e.preventDefault();alert({me
 
 /***/ }),
 
-/***/ 10:
+/***/ 11:
 /*!***************************************************!*\
   !*** multi ./base_theme/src/forms/insert_form.js ***!
   \***************************************************/

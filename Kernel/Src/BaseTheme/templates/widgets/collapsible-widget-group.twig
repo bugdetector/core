@@ -1,0 +1,14 @@
+<div class='{{ widget.classes|join(" ") }}' {{ widget.renderAttributes()|raw }} data-entity="{{ widget.entityName }}">
+{% if widget.label %}
+	<label for="{{ widget.attributes["id"] }}" class="font-weight-bold text-primary">
+		{{ widget.label }}
+	</label>
+{% endif %}
+{{ widget.fieldGroup  }}
+</div>
+<a href="#" class="btn btn-primary add-new-entity" 
+	data-entity="{{ widget.entityName }}" data-name="{{ widget.newFieldName }}"
+	data-hidden-fields="{{ widget.hiddenFields|json_encode }}">
+    <i class="fa fa-plus"></i>
+    {{ t("add_new_entity", [t(widget.entityName)]) }}
+</a>
