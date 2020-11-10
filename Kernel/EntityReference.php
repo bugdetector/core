@@ -112,7 +112,7 @@ class EntityReference extends DataTypeAbstract
         return $this->getWidget();
     }
 
-    private function getCheckeds(): array
+    public function getCheckeds(): array
     {
         if ($this->connectionType == self::CONNECTION_MANY_TO_MANY) {
             return \CoreDB::database()->select($this->mergeTable)
