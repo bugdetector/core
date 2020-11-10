@@ -109,7 +109,10 @@ class EntityReference extends DataTypeAbstract
 
     public function getSearchWidget(): ?FormWidget
     {
-        return $this->getWidget();
+        if($this->connectionType == self::CONNECTION_MANY_TO_MANY){
+            return $this->getWidget();
+        }
+        return null;
     }
 
     public function getCheckeds(): array
