@@ -2,6 +2,7 @@
 
 namespace Src\Form;
 
+use CoreDB\Kernel\EntityReference;
 use CoreDB\Kernel\TableMapper;
 use Exception;
 use Src\Controller\Admin\TableController;
@@ -83,6 +84,22 @@ class InsertForm extends Form
                     $this->object->map($this->request[$this->object->getTableName()]);
                 }
                 $this->object->save();
+                foreach ($this->object as $fieldName => $field) {
+                    if (
+                        ($field instanceof EntityReference) &&
+                        $field->connectionType == EntityReference::CONNECTION_ONE_TO_ONE &&
+                        isset($this->request[$field->fieldEntityName])
+                    ) {
+                        $referenceClass = \CoreDB::config()->getEntityInfo($field->fieldEntityName)["class"];
+                        $object = $referenceClass::get([
+                            $field->foreignKey => $this->object->ID
+                        ]) ?: new $referenceClass();
+                        $referenceClass->{$field->foreignKey} = $this->object->ID;
+                        /** @var EntityReference $field */
+                        $object->map($this->request[$field->fieldEntityName]);
+                        $object->save();
+                    }
+                }
                 if (isset($_FILES[$this->object->getTableName()])) {
                     $this->object->includeFiles($_FILES[$this->object->getTableName()]);
                 }

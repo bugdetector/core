@@ -17,6 +17,7 @@ class CollapsableWidgetGroup extends FormWidget
     public string $newFieldName;
     public string $entityName;
     public array $hiddenFields = [];
+    public bool $showAddButtonAndLabel = true;
     
     public function __construct(string $entityName, string $fieldEntityName)
     {
@@ -40,19 +41,20 @@ class CollapsableWidgetGroup extends FormWidget
         return new static($entityName, $fieldEntityName);
     }
 
-    public function addCollapsibleObject(TableMapper $object, int $index)
+    public function addCollapsibleObject(TableMapper $object, int $index, bool $opened = false)
     {
         $this->fieldGroup->addField(
             self::getObjectCard(
                 $object,
                 $this->name,
                 $index,
-                $this->hiddenFields
-            )
+                $this->hiddenFields,
+                $this->showAddButtonAndLabel
+            )->setOpened($opened)
         );
     }
 
-    public static function getObjectCard(TableMapper $object, $name, $index, array $hiddenFields): CollapsableCard
+    public static function getObjectCard(TableMapper $object, $name, $index, array $hiddenFields, bool $removeButton = true): CollapsableCard
     {
         $content = ViewGroup::create("div", "");
         foreach ($object->getFormFields($name) as $fieldName => $field) {
@@ -62,14 +64,16 @@ class CollapsableWidgetGroup extends FormWidget
             $field->setName("{$name}[{$index}][{$fieldName}]");
             $content->addField($field);
         }
-        $content->addField(
-            Link::create(
-                "#",
-                TextElement::create(
-                    "<i class='fa fa-trash'></i> " . Translation::getTranslation("delete")
-                )->setIsRaw(true)
-            )->addClass("btn btn-danger mt-2 remove-entity")
-        );
+        if ($removeButton) {
+            $content->addField(
+                Link::create(
+                    "#",
+                    TextElement::create(
+                        "<i class='fa fa-trash'></i> " . Translation::getTranslation("delete")
+                    )->setIsRaw(true)
+                )->addClass("btn btn-danger mt-2 remove-entity")
+            );
+        }
         return CollapsableCard::create(
             Translation::getTranslation($object->entityName) . " $index"
         )->setId(

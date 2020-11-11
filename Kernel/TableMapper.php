@@ -57,13 +57,24 @@ abstract class TableMapper implements SearchableInterface
                         EntityReference::CONNECTION_MANY_TO_MANY
                     );
                 }
-            } elseif (isset($this->entityConfig[EntityReference::CONNECTION_ONE_TO_MANY])) {
+            }
+            if (isset($this->entityConfig[EntityReference::CONNECTION_ONE_TO_MANY])) {
                 foreach ($this->entityConfig[EntityReference::CONNECTION_ONE_TO_MANY] as $fieldEntityName => $config) {
                     $this->{$fieldEntityName} = new EntityReference(
                         $fieldEntityName,
                         $this,
                         $config,
                         EntityReference::CONNECTION_ONE_TO_MANY
+                    );
+                }
+            }
+            if (isset($this->entityConfig[EntityReference::CONNECTION_ONE_TO_ONE])) {
+                foreach ($this->entityConfig[EntityReference::CONNECTION_ONE_TO_ONE] as $fieldEntityName => $config) {
+                    $this->{$fieldEntityName} = new EntityReference(
+                        $fieldEntityName,
+                        $this,
+                        $config,
+                        EntityReference::CONNECTION_ONE_TO_ONE
                     );
                 }
             }
