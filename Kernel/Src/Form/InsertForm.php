@@ -72,6 +72,9 @@ class InsertForm extends Form
 
     public function validate(): bool
     {
+        if (isset($this->request[$this->object->getTableName()])) {
+            $this->object->map($this->request[$this->object->getTableName()]);
+        }
         return true;
     }
 
@@ -80,9 +83,6 @@ class InsertForm extends Form
         try {
             if (isset($this->request["save"])) {
                 $success_message = $this->object->ID->getValue() ? "update_success" : "insert_success";
-                if (isset($this->request[$this->object->getTableName()])) {
-                    $this->object->map($this->request[$this->object->getTableName()]);
-                }
                 $this->object->save();
                 foreach ($this->object as $fieldName => $field) {
                     if (
@@ -94,7 +94,7 @@ class InsertForm extends Form
                         $object = $referenceClass::get([
                             $field->foreignKey => $this->object->ID
                         ]) ?: new $referenceClass();
-                        $referenceClass->{$field->foreignKey} = $this->object->ID;
+                        $object->{$field->foreignKey}->setValue($this->object->ID->getValue());
                         /** @var EntityReference $field */
                         $object->map($this->request[$field->fieldEntityName]);
                         $object->save();
