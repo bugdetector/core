@@ -6,6 +6,8 @@ use CoreDB;
 use CoreDB\Kernel\Database\DataType\DataTypeAbstract;
 use PDO;
 use Src\Entity\DBObject;
+use Src\Entity\Translation;
+use Src\Entity\User;
 use Src\Form\Widget\CollapsableWidgetGroup;
 use Src\Form\Widget\FormWidget;
 use Src\Form\Widget\OptionWidget;
@@ -25,7 +27,6 @@ class EntityReference extends DataTypeAbstract
     public string $mergeTable;
     public string $selfKey;
     public string $foreignKey;
-    public string $viewType;
     public bool $createIfNotExist = false;
 
     public function __construct(string $fieldEntityName, TableMapper &$object, array $config, string $connectionType)
@@ -42,7 +43,9 @@ class EntityReference extends DataTypeAbstract
         } elseif ($connectionType == self::CONNECTION_ONE_TO_MANY) {
             $this->foreignKey = $config["foreignKey"];
             $this->createIfNotExist = @$config["createIfNotExist"] ?: false;
-            $this->viewType = @$config["viewType"];
+        } elseif ($connectionType == self::CONNECTION_ONE_TO_ONE) {
+            $this->foreignKey = $config["foreignKey"];
+            $this->createIfNotExist = @$config["createIfNotExist"] ?: false;
         }
     }
 
@@ -95,13 +98,29 @@ class EntityReference extends DataTypeAbstract
             ->setOptions($options)
             ->setAutoComplete($referenceClass::getTableName(), "role")
             ->createIfNotExist($this->createIfNotExist);
-        } elseif ($this->connectionType == self::CONNECTION_ONE_TO_MANY) {
+        } elseif (
+            $this->connectionType == self::CONNECTION_ONE_TO_MANY ||
+            $this->connectionType == self::CONNECTION_ONE_TO_ONE
+        ) {
             $widget = CollapsableWidgetGroup::create($this->object->entityName, $this->fieldEntityName);
-            $widget->setHiddenFields([
-                $this->foreignKey
-            ]);
-            foreach ($this->getCheckeds() as $index => $object) {
-                $widget->addCollapsibleObject($object, $index + 1);
+            if ($this->connectionType == self::CONNECTION_ONE_TO_MANY) {
+                $widget->setHiddenFields([
+                    $this->foreignKey
+                ]);
+                foreach ($this->getCheckeds() as $index => $object) {
+                    $widget->addCollapsibleObject($object, $index + 1);
+                }
+            } else {
+                /** @var TableMapper $referenceClass */
+                $referenceClass = \CoreDB::config()->getEntityInfo($this->fieldEntityName)["class"];
+                $object = $referenceClass::get([
+                    $this->foreignKey => $this->object->ID->getValue()
+                ]) ?: new $referenceClass();
+                $widget->hiddenFields = [$this->foreignKey];
+                $widget->showAddButtonAndLabel = false;
+                $widget->addCollapsibleObject($object, 1, true);
+                $widget->fieldGroup->fields[0]->title = Translation::getTranslation($this->fieldEntityName);
+                $widget->addClass("mt-2");
             }
         }
         return $widget;
@@ -109,7 +128,7 @@ class EntityReference extends DataTypeAbstract
 
     public function getSearchWidget(): ?FormWidget
     {
-        if($this->connectionType == self::CONNECTION_MANY_TO_MANY){
+        if ($this->connectionType == self::CONNECTION_MANY_TO_MANY) {
             return $this->getWidget();
         }
         return null;
@@ -122,7 +141,10 @@ class EntityReference extends DataTypeAbstract
             ->select("", [$this->foreignKey])
             ->condition($this->selfKey, $this->object->ID->getValue())
             ->execute()->fetchAll(PDO::FETCH_COLUMN);
-        } elseif ($this->connectionType == self::CONNECTION_ONE_TO_MANY) {
+        } elseif (
+            $this->connectionType == self::CONNECTION_ONE_TO_MANY ||
+            $this->connectionType == self::CONNECTION_ONE_TO_ONE
+        ) {
             /** @var TableMapper */
             $referenceClass = \CoreDB::config()->getEntityInfo($this->fieldEntityName)["class"];
             return $referenceClass::getAll([
@@ -167,19 +189,24 @@ class EntityReference extends DataTypeAbstract
                     $object->delete();
                 }
             }
-        } elseif ($this->connectionType == self::CONNECTION_ONE_TO_MANY) {
+        } elseif (
+            $this->connectionType == self::CONNECTION_ONE_TO_MANY ||
+            $this->connectionType == self::CONNECTION_ONE_TO_ONE
+        ) {
             $referenceClass = \CoreDB::config()->getEntityInfo($this->fieldEntityName)["class"];
             $existing = $this->getCheckeds();
-            foreach ($this->value as $data) {
-                if (!empty($existing)) {
-                    $object = array_shift($existing);
-                } else {
-                    /** @var TableMapper */
-                    $object = new $referenceClass();
-                    $data[$this->foreignKey] = $this->object->ID->getValue();
+            if ($this->value) {
+                foreach ($this->value as $data) {
+                    if (!empty($existing)) {
+                        $object = array_shift($existing);
+                    } else {
+                        /** @var TableMapper */
+                        $object = new $referenceClass();
+                        $data[$this->foreignKey] = $this->object->ID->getValue();
+                    }
+                    $object->map($data);
+                    $object->save();
                 }
-                $object->map($data);
-                $object->save();
             }
             foreach ($existing as $remaining) {
                 $remaining->delete();
