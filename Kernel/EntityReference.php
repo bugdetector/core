@@ -2,12 +2,10 @@
 
 namespace CoreDB\Kernel;
 
-use CoreDB;
 use CoreDB\Kernel\Database\DataType\DataTypeAbstract;
 use PDO;
 use Src\Entity\DBObject;
 use Src\Entity\Translation;
-use Src\Entity\User;
 use Src\Form\Widget\CollapsableWidgetGroup;
 use Src\Form\Widget\FormWidget;
 use Src\Form\Widget\OptionWidget;
@@ -43,9 +41,17 @@ class EntityReference extends DataTypeAbstract
         } elseif ($connectionType == self::CONNECTION_ONE_TO_MANY) {
             $this->foreignKey = $config["foreignKey"];
             $this->createIfNotExist = @$config["createIfNotExist"] ?: false;
+            $this->value = [];
+            foreach ($this->getCheckeds() as $data) {
+                $this->value[] = $data->toArray();
+            }
         } elseif ($connectionType == self::CONNECTION_ONE_TO_ONE) {
             $this->foreignKey = $config["foreignKey"];
             $this->createIfNotExist = @$config["createIfNotExist"] ?: false;
+            $this->value = [];
+            foreach ($this->getCheckeds() as $data) {
+                $this->value[] = $data->toArray();
+            }
         }
     }
 

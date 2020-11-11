@@ -19,7 +19,7 @@ class UserInsertForm extends InsertForm
         ->addAttribute("autocomplete", "new-password");
         $new_password_input = ViewGroup::create("div", "");
         $current_user = \CoreDB::currentUser();
-        if (!$current_user->isAdmin() || $current_user->ID == $user->ID) {
+        if ($current_user->ID->getValue() == $user->ID->getValue()) {
             $new_password_input->addField((clone $password_input)
             ->setLabel(Translation::getTranslation("current_pass"))
             ->setName("current_pass"));
@@ -31,7 +31,10 @@ class UserInsertForm extends InsertForm
         ->addClassToChildren(true);
         $this->fields[$user->getTableName() . "[password]"] = $new_password_input;
         $this->fields[$user->getTableName() . "[password]"]->addAttribute("disabled", "true");
-        unset($this->fields[$user->getTableName() . "[created_at]"], $this->fields[$user->getTableName() . "[access]"]);
+        unset(
+            $this->fields[$user->getTableName() . "[created_at]"],
+            $this->fields[$user->getTableName() . "[last_access]"]
+        );
     }
 
     public function validate(): bool
@@ -39,7 +42,7 @@ class UserInsertForm extends InsertForm
         $parent_check = parent::validate();
         if ($this->request[$this->object->getTableName()]["password"]) {
             $current_user = \CoreDB::currentUser();
-            if (!$current_user->isAdmin() || $current_user->ID == $this->object->ID) {
+            if ($current_user->ID->getValue() == $this->object->ID->getValue()) {
                 if (!password_verify($this->request["current_pass"], $this->object->password)) {
                     $this->setError(
                         $this->object->getTableName() . "[password]",
@@ -54,7 +57,6 @@ class UserInsertForm extends InsertForm
                 );
             }
             if (
-                !\CoreDB::currentUser()->isAdmin() &&
                 !User::validatePassword($this->request[$this->object->getTableName()]["password"])
             ) {
                 $this->setError(
