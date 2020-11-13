@@ -3,10 +3,6 @@
 namespace Src\Entity;
 
 use CoreDB;
-use CoreDB\Kernel\Database\DataType\Checkbox;
-use CoreDB\Kernel\Database\DataType\DateTime;
-use CoreDB\Kernel\Database\DataType\File;
-use CoreDB\Kernel\Database\DataType\ShortText;
 use CoreDB\Kernel\Database\SelectQueryPreparerAbstract;
 use CoreDB\Kernel\EntityReference;
 use CoreDB\Kernel\TableMapper;
@@ -15,15 +11,6 @@ use Src\Form\UserInsertForm;
 
 class User extends TableMapper
 {
-    public File $profile_photo;
-    public ShortText $username;
-    public ShortText $name;
-    public ShortText $surname;
-    public ShortText $email;
-    public ShortText $phone;
-    protected ShortText $password;
-    public Checkbox $active;
-    public DateTime $last_access;
 
     public EntityReference $roles;
 
