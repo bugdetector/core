@@ -54,8 +54,13 @@ class CollapsableWidgetGroup extends FormWidget
         );
     }
 
-    public static function getObjectCard(TableMapper $object, $name, $index, array $hiddenFields, bool $removeButton = true): CollapsableCard
-    {
+    public static function getObjectCard(
+        TableMapper $object,
+        $name,
+        $index,
+        array $hiddenFields,
+        bool $removeButton = true
+    ): CollapsableCard {
         $content = ViewGroup::create("div", "");
         foreach ($object->getFormFields($name) as $fieldName => $field) {
             if (in_array($fieldName, $hiddenFields)) {

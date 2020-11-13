@@ -52,7 +52,9 @@ class InsertForm extends Form
                 ->addAttribute("hidden", "true")
             );
         }
-        \CoreDB::controller()->addJsFiles("dist/insert_form/insert_form.js");
+        $controller = \CoreDB::controller();
+        $controller->addJsFiles("dist/insert_form/insert_form.js");
+        $controller->addFrontendTranslation("record_remove_accept");
     }
 
     public function getFormId(): string
