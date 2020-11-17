@@ -62,8 +62,8 @@ class ForgetPasswordForm extends Form
         $reset_password = ResetPassword::get(["user" => $user->ID]);
         if (!$reset_password) {
             $reset_password = new ResetPassword();
-            $reset_password->user = $user->ID;
-            $reset_password->key = hash("SHA256", \CoreDB::currentDate() . json_encode($user->ID));
+            $reset_password->user->setValue($user->ID);
+            $reset_password->key->setValue(hash("SHA256", \CoreDB::currentDate() . json_encode($user->ID)));
             $reset_password->save();
         }
         
