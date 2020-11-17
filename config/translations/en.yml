@@ -45,7 +45,7 @@ invalid_operation: 'Invalid operation.'
 table_create_success: 'Table created successfully.'
 table_deleted: '%s table deleted.'
 forgot_password_question: 'Forgot Your Password'
-wrong_username_or_email: 'Wrong username or e-mail.'
+wrong_email: 'Wrong e-mail.'
 reset: Reset
 cancel: Cancel
 ok: OK
