@@ -157,6 +157,7 @@ class ConfigurationManager
                 Yaml::dump($tableData, 4, 2, Yaml::DUMP_OBJECT_AS_MAP)
             );
         }
+        $this->clearCache();
     }
 
     public function clearCache()

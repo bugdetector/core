@@ -1,2 +1,4 @@
 roles: role
 variables: key
+emails: key
+viewable_queries: key
