@@ -1,4 +1,4 @@
 password_reset:
   key: password_reset
-  en: '<p>You can reset your password using the link below.</p><p><a target="_blank">%s</a></p>'
-  tr: '<p>Aşağıdaki bağlantıyı kullanarak şifrenizi sıfırlayabilirsiniz.</p><p><a target="_blank">%s</a></p>'
+  en: '<p>You can reset your password using the link below.</p><p><a target="_blank" href="%s">%s</a></p>'
+  tr: '<p>Aşağıdaki bağlantıyı kullanarak şifrenizi sıfırlayabilirsiniz.</p><p><a target="_blank" href="%s">%s</a></p>'
