@@ -26,7 +26,7 @@ class LoginForm extends Form
         $this->addClass("user");
         $this->addField(
             InputWidget::create("username")
-            ->setLabel(Translation::getTranslation("username"))
+            ->setLabel(Translation::getTranslation("username_or_email"))
             ->addClass("form-control-user")
             ->addAttribute("placeholder", Translation::getTranslation("username"))
             ->addAttribute("required", "true")
@@ -60,7 +60,7 @@ class LoginForm extends Form
             $this->setError("username", Translation::getTranslation("ip_blocked"));
         }
 
-        $this->user = User::getUserByUsername($this->request["username"]);
+        $this->user = User::getUserByUsername($this->request["username"]) ?: User::getUserByEmail($this->request["username"]);
         if ($this->user && !$this->user->active->getValue()) {
             $this->setError("username", Translation::getTranslation("account_blocked"));
         }
