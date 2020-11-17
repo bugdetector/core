@@ -17,20 +17,12 @@ class ForgetPasswordForm extends Form
         parent::__construct();
         $this->addClass("user");
         $this->addField(
-            InputWidget::create("username")
-            ->setLabel(Translation::getTranslation("username"))
-            ->addClass("form-control-user")
-            ->addAttribute("placeholder", Translation::getTranslation("username"))
-            ->addAttribute("required", "true")
-            ->addAttribute("autofocus", "true")
-        );
-        $this->addField(
             InputWidget::create("email")
+            ->setType("email")
             ->setLabel(Translation::getTranslation("email"))
             ->addClass("form-control-user")
             ->addAttribute("placeholder", Translation::getTranslation("email"))
             ->addAttribute("required", "true")
-            ->setType("email")
         );
     }
 
@@ -47,8 +39,8 @@ class ForgetPasswordForm extends Form
     public function validate(): bool
     {
         if (isset($this->request["reset"])) {
-            if (!User::get(["username" => $this->request["username"], "email" => $this->request["email"]])) {
-                $this->setError("username", Translation::getTranslation("wrong_username_or_email"));
+            if (!User::getUserByEmail($this->request["email"])) {
+                $this->setError("username", Translation::getTranslation("wrong_email"));
             }
         }
         return empty($this->errors);
@@ -57,7 +49,7 @@ class ForgetPasswordForm extends Form
     public function submit()
     {
         /** @var User */
-        $user = User::get(["username" => $this->request["username"], "email" => $this->request["email"]]);
+        $user = User::getUserByEmail($this->request["email"]);
         $reset_password = new ResetPassword();
         $reset_password = ResetPassword::get(["user" => $user->ID]);
         if (!$reset_password) {
