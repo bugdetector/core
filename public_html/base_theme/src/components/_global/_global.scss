@@ -34,6 +34,7 @@ html {
   // Main page wrapper
   #wrapper {
     display: flex;
+    min-height: 100vh;
     #content-wrapper {
       background-color: $gray-100;
       width: 100%;

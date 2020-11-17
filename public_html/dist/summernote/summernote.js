@@ -122,7 +122,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var summernote_dist_summernote_bs4__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(summernote_dist_summernote_bs4__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var summernote_dist_summernote_bs4_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! summernote/dist/summernote-bs4.css */ "./node_modules/summernote/dist/summernote-bs4.css");
 /* harmony import */ var summernote_dist_summernote_bs4_css__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(summernote_dist_summernote_bs4_css__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _summernote_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./summernote.scss */ "./base_theme/src/components/summernote/summernote.scss");
+/* harmony import */ var _summernote_scss__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_summernote_scss__WEBPACK_IMPORTED_MODULE_4__);
 Object(_jquery_jquery__WEBPACK_IMPORTED_MODULE_0__["$"])(function($){$('.summernote').summernote();});
+
+/***/ }),
+
+/***/ "./base_theme/src/components/summernote/summernote.scss":
+/*!**************************************************************!*\
+  !*** ./base_theme/src/components/summernote/summernote.scss ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
 
 /***/ }),
 
