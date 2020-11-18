@@ -60,7 +60,8 @@ class LoginForm extends Form
             $this->setError("username", Translation::getTranslation("ip_blocked"));
         }
 
-        $this->user = User::getUserByUsername($this->request["username"]) ?: User::getUserByEmail($this->request["username"]);
+        $this->user = User::getUserByUsername($this->request["username"]) ?:
+                    User::getUserByEmail($this->request["username"]);
         if ($this->user && !$this->user->active->getValue()) {
             $this->setError("username", Translation::getTranslation("account_blocked"));
         }

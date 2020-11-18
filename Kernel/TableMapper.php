@@ -231,7 +231,9 @@ abstract class TableMapper implements SearchableInterface
 
     public function save()
     {
-        $this_save = $this->ID->getValue() ? $this->update() : $this->insert();
+        if (!$this->ID->getValue()) {
+            $this->insert();
+        }
         foreach ($this as $field_name => $field) {
             if ($field instanceof EntityReference) {
                 /** @var EntityReference */
@@ -239,6 +241,7 @@ abstract class TableMapper implements SearchableInterface
                 $field->save();
             }
         }
+        return $this->update();
     }
 
     public function delete(): bool

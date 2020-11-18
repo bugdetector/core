@@ -14,6 +14,7 @@ use Src\Form\Widget\InputWidget;
 class InsertForm extends Form
 {
     public string $method = "POST";
+    public string $formName;
 
     protected TableMapper $object;
 
@@ -22,10 +23,10 @@ class InsertForm extends Form
         parent::__construct();
         $this->object = $object;
         $this->setEnctype("multipart/form-data");
-        
+        $this->formName = $this->object->entityName ?: $this->object->getTableName();
         foreach (
             $this->object->getFormFields(
-                $this->object->getTableName(),
+                $this->formName,
                 !($object instanceof DBObject)
             ) as $column_name => $field
         ) {
@@ -74,8 +75,8 @@ class InsertForm extends Form
 
     public function validate(): bool
     {
-        if (isset($this->request[$this->object->getTableName()])) {
-            $this->object->map($this->request[$this->object->getTableName()]);
+        if (isset($this->request[$this->formName])) {
+            $this->object->map($this->request[$this->formName]);
         }
         return true;
     }
@@ -86,22 +87,6 @@ class InsertForm extends Form
             if (isset($this->request["save"])) {
                 $success_message = $this->object->ID->getValue() ? "update_success" : "insert_success";
                 $this->object->save();
-                foreach ($this->object as $fieldName => $field) {
-                    if (
-                        ($field instanceof EntityReference) &&
-                        $field->connectionType == EntityReference::CONNECTION_ONE_TO_ONE &&
-                        isset($this->request[$field->fieldEntityName])
-                    ) {
-                        $referenceClass = \CoreDB::config()->getEntityInfo($field->fieldEntityName)["class"];
-                        $object = $referenceClass::get([
-                            $field->foreignKey => $this->object->ID
-                        ]) ?: new $referenceClass();
-                        $object->{$field->foreignKey}->setValue($this->object->ID->getValue());
-                        /** @var EntityReference $field */
-                        $object->map($this->request[$field->fieldEntityName]);
-                        $object->save();
-                    }
-                }
                 if (isset($_FILES[$this->object->getTableName()])) {
                     $this->object->includeFiles($_FILES[$this->object->getTableName()]);
                 }
