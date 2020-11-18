@@ -129,6 +129,7 @@ class ConfigurationManager
                 $object->save();
             }
         }
+        $this->clearCache();
     }
 
     public function exportTableConfiguration()
@@ -157,7 +158,6 @@ class ConfigurationManager
                 Yaml::dump($tableData, 4, 2, Yaml::DUMP_OBJECT_AS_MAP)
             );
         }
-        $this->clearCache();
     }
 
     public function clearCache()
