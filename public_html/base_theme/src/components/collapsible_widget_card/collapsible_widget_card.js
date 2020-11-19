@@ -11,7 +11,11 @@ $(function($){
             method: "post",
             data: {entity: entityName, name: name, index: index, hiddenFields: hiddenFields},
             success: function(response){
+                response = $(response);
                 $(`.collapsible-widget-group[data-entity='${entityName}']`).append(response);
+                response.find("select").each(function(i, el){
+                    selectpicker(el);
+                })
             }
         });
     }).on("click", ".remove-entity", function(e){

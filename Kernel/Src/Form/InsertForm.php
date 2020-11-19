@@ -2,7 +2,6 @@
 
 namespace Src\Form;
 
-use CoreDB\Kernel\EntityReference;
 use CoreDB\Kernel\TableMapper;
 use Exception;
 use Src\Controller\Admin\TableController;
