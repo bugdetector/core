@@ -44,13 +44,15 @@ class ColumnDefinition extends CollapsableCard
             ->setNullElement(null)
             ->setOptions($data_type_options)
             ->addAttribute("required", "true")
+            ->addAttribute("data-live-search", "true")
             ->addClass("type-control");
 
         $reference_table_select = SelectWidget::create("{$this->name}[reference_table]");
         $reference_table_select->setLabel(Translation::getTranslation("reference"))
         ->setNullElement(Translation::getTranslation("reference_table"))
         ->setOptions(\CoreDB::database()::getTableList())
-        ->addClass("reference_table");
+        ->addClass("reference_table")
+        ->addAttribute("data-live-search", "true");
 
         $list_values_input = TextareaWidget::create("{$this->name}[list_values]");
         $list_values_input->setLabel(Translation::getTranslation("list_values"))

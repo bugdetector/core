@@ -8,7 +8,7 @@
 	<div class="mx-1 mb-2">
 		<a href="{{ widget.file.getUrl() }}" target="_blank">
 			{% if widget.file.isImage %}
-				<img src='{{ widget.file.getUrl() }}' class="img-thumbnail">
+				<img src='{{ widget.file.getUrl() }}' class="{{ widget.fileClass }}">
 			{% else %}
 				{{ widget.file.file_name }}
 			{% endif %}
