@@ -11,7 +11,7 @@ use Src\Views\TextElement;
 use Src\Views\ViewGroup;
 
 /**
- * Object relation with table blocked_ips
+ * Object relation with table files
  * @author murat
  */
 

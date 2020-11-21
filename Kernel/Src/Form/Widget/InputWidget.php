@@ -11,6 +11,8 @@ class InputWidget extends FormWidget
 
     public ?File $file;
 
+    public $fileClass = "img-thumbnail";
+
     public static function create(string $name): InputWidget
     {
         return new InputWidget($name);
