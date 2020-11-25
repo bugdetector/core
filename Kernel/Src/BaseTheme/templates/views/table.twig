@@ -1,6 +1,7 @@
 <div class="table_wrapper">
 	<table class="{{ view.classes|join(" ") }}" {{ view.renderAttributes() }}>
 		<thead>
+			<tr>
 			{% for key, header in view.headers %}
 				<th>
 					{% if view.orderable and not( key matches '/^\\d+$/') %}
@@ -17,6 +18,7 @@
 					{% endif %}
 				</th>
 			{% endfor %}
+			</tr>
 		</thead>
 		<tbody>
 			{% for row in view.data %}
