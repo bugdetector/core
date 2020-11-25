@@ -20,7 +20,22 @@ class CoreDB
         return date("Y-m-d H:i:s");
     }
 
-    public static function HTMLMail($email, $subject, $message, $username)
+    /**
+     * @var array $attachments
+     *  Contains attachment data.
+     *  [
+     *      type = "content",
+     *      content = $content,
+     *      filename = $filename
+     *  ]
+     *    OR
+     *  [
+     *      type = "path",
+     *      path = $path,
+     *      filename = $filename
+     *  ]
+     */
+    public static function HTMLMail($email, $subject, $message, $username, array $attachments = [])
     {
         $siteMail = Variable::getByKey("email_address")->value->getValue();
         $mail = new \PHPMailer\PHPMailer\PHPMailer();
@@ -38,6 +53,22 @@ class CoreDB
         $mail->AddAddress($email, $username);
         $mail->Subject = $subject;
         $mail->Body = $message;
+        foreach($attachments as $attachment){
+            switch($attachment["type"]){
+                case "content":
+                    $mail->addStringAttachment(
+                        $attachment["content"], 
+                        $attachment["filename"]
+                    );
+                    break;
+                case "file":
+                    $mail->addAttachment(
+                        $attachment["path"],
+                        $attachment["filename"]
+                    );
+                break;
+            }
+        }
         return $mail->Send();
     }
 

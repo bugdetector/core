@@ -27,7 +27,7 @@ abstract class BaseController implements ControllerInterface
 
     public function render()
     {
-        CoreRenderer::getInstance($this::getTemplateDirectories())->renderController($this);
+        echo CoreRenderer::getInstance($this::getTemplateDirectories())->renderController($this);
     }
 
     public function setTitle(string $title): void

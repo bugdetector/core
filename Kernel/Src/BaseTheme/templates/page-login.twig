@@ -19,7 +19,7 @@
 											<h1 class="h4 text-gray-900 mb-4">{{ controller.title }}</h1>
 											 {{ controller.printMessages() }}
 										</div>
-										{{ controller.echoContent() }}
+										{{ controller.echoContent()|raw }}
 									</div>
 								</div>
 							</div>
