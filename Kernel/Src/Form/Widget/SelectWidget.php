@@ -55,7 +55,11 @@ class SelectWidget extends FormWidget
 
     public function render()
     {
-        if (isset($this->value) && isset($this->options[$this->value])) {
+        if (
+            isset($this->value)
+            && isset($this->options[$this->value])
+            && $this->options[$this->value] instanceof OptionWidget
+        ) {
             $this->options[$this->value]->setSelected(true);
         }
         parent::render();
