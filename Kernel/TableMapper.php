@@ -17,6 +17,7 @@ use Src\Entity\File;
 use Src\Entity\Translation;
 use Src\Form\InsertForm;
 use Src\Form\Widget\FormWidget;
+use Src\Form\Widget\InputWidget;
 use Src\Theme\ResultsViewer;
 use Src\Theme\View;
 use Src\Views\Table;
@@ -313,6 +314,14 @@ abstract class TableMapper implements SearchableInterface
                  * @var FormWidget $widget
                  */
                 $widget->setName($inputName);
+                if ($field instanceof \CoreDB\Kernel\Database\DataType\File) {
+                    /** @var InputWidget */
+                    $widget->addFileRemoveKey(
+                        $this->entityName,
+                        $this->ID->getValue(),
+                        $field_name
+                    );
+                }
             }
             $fields[$field_name] = $widget;
         }
