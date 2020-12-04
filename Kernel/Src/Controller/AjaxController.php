@@ -2,8 +2,13 @@
 
 namespace Src\Controller;
 
+use CoreDB\Kernel\Messenger;
 use CoreDB\Kernel\ServiceController;
+use CoreDB\Kernel\TableMapper;
+use Exception;
+use Src\Entity\Translation;
 use Src\Form\Widget\CollapsableWidgetGroup;
+use Src\JWT;
 
 class AjaxController extends ServiceController
 {
@@ -42,5 +47,23 @@ class AjaxController extends ServiceController
             $index,
             $hiddenFields
         )->setOpened(true);
+    }
+
+    public function entityDelete()
+    {
+        $key = @$_POST["key"];
+        try {
+            $jwt = JWT::createFromString($key);
+            $data = $jwt->getPayload();
+            $referenceClass = \CoreDB::config()->getEntityInfo($data->entity)["class"];
+            /** @var TableMapper */
+            $object = $referenceClass::get($data->id);
+            $object->unsetField($data->field);
+            $this->createMessage(
+                Translation::getTranslation("record_removed"),
+                Messenger::SUCCESS
+            );
+        } catch (Exception $ex) {
+        }
     }
 }

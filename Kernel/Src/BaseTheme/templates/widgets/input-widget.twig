@@ -13,9 +13,11 @@
 				{{ widget.file.file_name }}
 			{% endif %}
 		</a>
-		<a class="mr-2 rowdelete" data-table="files" data-id="{{ widget.file.ID }}" href="#">
-    		<i class="fa fa-times text-danger core-control"></i>
-		</a>
+		{% if widget.removeKey %}
+			<a class="mr-2 entitydelete" data-key="{{ widget.removeKey.createToken() }}" href="#">
+				<i class="fa fa-times text-danger core-control"></i>
+			</a>
+		{% endif %}
 	</div>
 {% endif %}
 	<input type='{{ widget.type }}' name='{{ widget.name }}' class='{{ widget.classes|join(" ") }}' {{ widget.renderAttributes()|raw }} value='{{ widget.value }}'/>
