@@ -16,7 +16,14 @@ class LogoutController extends BaseTheme
     public function preprocessPage()
     {
         session_destroy();
-        setcookie("session-token", "", 0, SITE_ROOT, \CoreDB::baseHost(), false);
+        setcookie(
+            "session-token",
+            "",
+            0,
+            SITE_ROOT,
+            \CoreDB::baseHost(),
+            $_SERVER['SERVER_PORT'] == 443
+        );
         \CoreDB::goTo(BASE_URL);
     }
 
