@@ -4,8 +4,6 @@ namespace Src\Form;
 
 use Src\Entity\Translation;
 use Src\Entity\User;
-use Src\Form\Widget\InputWidget;
-use Src\JWT;
 use Src\Views\ViewGroup;
 
 class UserInsertForm extends InsertForm
@@ -36,14 +34,6 @@ class UserInsertForm extends InsertForm
         unset(
             $this->fields[$user->entityName . "[created_at]"],
             $this->fields[$user->entityName . "[last_access]"]
-        );
-
-        /** @var InputWidget */
-        $profilePhotoInput = &$this->fields[$user->entityName . "[profile_photo]"];
-        $profilePhotoInput->addFileRemoveKey(
-            $user->entityName,
-            $user->ID->getValue(),
-            "profile_photo"
         );
     }
 
