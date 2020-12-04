@@ -122,8 +122,7 @@ class LoginForm extends Form
                 strtotime("+1 week"),
                 SITE_ROOT,
                 \CoreDB::baseHost(),
-                false,
-                true
+                false
             );
         }
 
