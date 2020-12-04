@@ -3,6 +3,7 @@
 namespace Src\Form\Widget;
 
 use Src\Entity\File;
+use Src\JWT;
 use Src\Theme\View;
 
 class InputWidget extends FormWidget
@@ -10,6 +11,8 @@ class InputWidget extends FormWidget
     public $type = "text";
 
     public ?File $file;
+
+    public ?JWT $removeKey = null;
 
     public $fileClass = "img-thumbnail";
 
@@ -58,5 +61,16 @@ class InputWidget extends FormWidget
             \CoreDB::controller()->addCssFiles("dist/daterangepicker/daterangepicker.css");
         }
         return parent::addClass($class_name);
+    }
+
+    public function addFileRemoveKey($entityName, $id, $fieldName)
+    {
+        $removeKeyJwt = new JWT();
+        $removeKeyJwt->setPayload([
+            "entity" => $entityName,
+            "id" => $id,
+            "field" => $fieldName
+        ]);
+        $this->removeKey = $removeKeyJwt;
     }
 }

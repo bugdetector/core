@@ -243,4 +243,16 @@ class CoreDB
     {
         return ConfigurationManager::getInstance();
     }
+
+    public static function isImage($path)
+    {
+        $imageInfo = getimagesize($path);
+        $imageType = $imageInfo ? $imageInfo[2] : null;
+        if (in_array($imageType, [
+            IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG
+        ])) {
+            return true;
+        }
+        return false;
+    }
 }

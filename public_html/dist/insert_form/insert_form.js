@@ -93,7 +93,7 @@
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-$(document).on("click",".remove_accept",function(e){e.preventDefault();alert({message:_t("record_remove_accept"),okLabel:_t("yes"),callback:function callback(){$("input[name='delete']").click();}});});
+$(document).on("click",".remove_accept",function(e){e.preventDefault();alert({message:_t("record_remove_accept"),okLabel:_t("yes"),callback:function callback(){$("input[name='delete']").click();}});}).on("click",".entitydelete",function(e){e.preventDefault();var button=$(this);alert({message:_t("record_remove_accept"),okLabel:_t("yes"),callback:function callback(){$.ajax({url:root+"/ajax/entityDelete",method:"post",data:{key:button.data("key")},success:function success(){button.parent().fadeOut();}});}});});
 
 /***/ }),
 

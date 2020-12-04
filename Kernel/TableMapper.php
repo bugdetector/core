@@ -5,6 +5,7 @@ namespace CoreDB\Kernel;
 use CoreDB;
 use CoreDB\Kernel\Database\DataType\DataTypeAbstract;
 use CoreDB\Kernel\Database\DataType\DateTime;
+use CoreDB\Kernel\Database\DataType\File as DataTypeFile;
 use CoreDB\Kernel\Database\DataType\Integer;
 use CoreDB\Kernel\Database\SelectQueryPreparerAbstract;
 use CoreDB\Kernel\Database\TableDefinition;
@@ -467,6 +468,18 @@ abstract class TableMapper implements SearchableInterface
                     \CoreDB::database()->rollback();
                     throw new Exception(Translation::getTranslation("an_error_occured"));
                 }
+            }
+        }
+    }
+
+    public function unsetField($fieldName)
+    {
+        if ($this->$fieldName instanceof DataTypeFile) {
+            $file = File::get($this->$fieldName->getValue());
+            if ($file) {
+                $this->$fieldName->setValue(null);
+                $this->save();
+                $file->delete();
             }
         }
     }

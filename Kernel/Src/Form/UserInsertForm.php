@@ -4,6 +4,8 @@ namespace Src\Form;
 
 use Src\Entity\Translation;
 use Src\Entity\User;
+use Src\Form\Widget\InputWidget;
+use Src\JWT;
 use Src\Views\ViewGroup;
 
 class UserInsertForm extends InsertForm
@@ -35,6 +37,14 @@ class UserInsertForm extends InsertForm
             $this->fields[$user->entityName . "[created_at]"],
             $this->fields[$user->entityName . "[last_access]"]
         );
+
+        /** @var InputWidget */
+        $profilePhotoInput = &$this->fields[$user->entityName . "[profile_photo]"];
+        $profilePhotoInput->addFileRemoveKey(
+            $user->entityName,
+            $user->ID->getValue(),
+            "profile_photo"
+        );
     }
 
     public function validate(): bool
@@ -63,6 +73,17 @@ class UserInsertForm extends InsertForm
                     $this->object->entityName . "[password]",
                     Translation::getTranslation("password_validation_error")
                 );
+            }
+        }
+        $normalizedFiles = \CoreDB::normalizeFiles($_FILES);
+        if (isset($normalizedFiles["users"]["profile_photo"]) && $normalizedFiles["users"]["profile_photo"]["size"]) {
+            if (!\CoreDB::isImage($normalizedFiles["users"]["profile_photo"]["tmp_name"])) {
+                $this->setError("profile_photo", Translation::getTranslation("upload_an_image"));
+            } elseif ($normalizedFiles["users"]["profile_photo"]["size"]) {
+                $contents = file_get_contents($normalizedFiles["users"]["profile_photo"]["tmp_name"]);
+                $image = imagecreatefromstring($contents);
+                $image = imagescale($image, 200, 200);
+                imagejpeg($image, $normalizedFiles["users"]["profile_photo"]["tmp_name"]);
             }
         }
         return $parent_check && empty($this->errors);
