@@ -10,7 +10,7 @@ drop_table: 'Remove Table'
 username: Username
 login: Login
 password: Password
-forgot_password: 'Forget Password'
+forgot_password: 'Forgot Password'
 wrong_credidental: 'Wrong username or password.'
 too_many_login_fails: 'Too many login fails. Please try again 10 minutes later.'
 name: Name
