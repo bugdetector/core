@@ -20,7 +20,7 @@ class LogoutController extends BaseTheme
             "session-token",
             "",
             0,
-            SITE_ROOT,
+            SITE_ROOT ?: "/",
             \CoreDB::baseHost(),
             $_SERVER['SERVER_PORT'] == 443
         );

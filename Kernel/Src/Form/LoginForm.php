@@ -120,7 +120,7 @@ class LoginForm extends Form
                 "session-token",
                 $jwt->createToken(),
                 strtotime("+1 week"),
-                SITE_ROOT,
+                SITE_ROOT ?: "/",
                 \CoreDB::baseHost(),
                 $_SERVER['SERVER_PORT'] == 443
             );
