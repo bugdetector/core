@@ -1,0 +1,30 @@
+{% extends "forms/form.twig" %}
+
+{% block fields %}
+	{{ form.fields["form_id"] }}
+    {{ form.fields["form_build_id"] }}
+    {{ form.fields["form_token"] }}
+	<div class="sortable_list" id="parent-0" data-parent="0">
+    {% for card in form.cards %}
+        {{ card }}
+    {% endfor %}
+	</div>
+	<div class="d-flex">
+            {% if form.newNodeAddUrl %}
+                <a href='{{ form.newNodeAddUrl }}' class="btn btn-primary mr-3">
+                    <i class="fa fa-plus"></i> {{ t("add_new_node") }}
+                </a>
+            {% else %}
+                <a href='#' class="btn btn-primary mr-3 add-new-node" data-parent="0" data-field-name={{ form.treeFieldName }}>
+                    <i class="fa fa-plus"></i> {{ t("add_new_node") }}
+                </a>
+            {% endif %}
+			{{ form.fields["save"] }}
+	</div>
+{% endblock %}
+
+{% block append %}
+    <div id="node_card_template" class="d-none">
+        {{ form.template }}
+    </div>
+{% endblock %}
