@@ -184,3 +184,4 @@ config_file_write_error: 'Config file (config/config.php) is not writable. Pleas
 add_new_entity: 'Add New %s'
 username_or_email: 'Username or email'
 upload_an_image: 'Please upload an image file.'
+originally_send_to: '<p>This message originally send to: %s<br></p>'

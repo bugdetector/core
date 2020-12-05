@@ -13,9 +13,9 @@ define("LANGUAGE", "tr");
 define("TRUSTED_HOSTS", "localhost,127.0.0.1");
 
 /**
- * production -> Twig cache enabled
- *
- * development -> Twig cache disabled
+ * production  -> Twig cache enabled, Mails send to exact location.
+ * staging     -> Twig cache enabled, Mails send to test mail address.
+ * development -> Twig cache disabled, Mails send to test mail address.
  */
 
 define("ENVIROMENT", "development");
