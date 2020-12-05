@@ -208,8 +208,8 @@ class CoreDB
             }
             if (!self::$currentUser) {
                 self::$currentUser = new User();
-                if (isset(self::$currentUser->toUsername)) {
-                    self::$currentUser->toUsername->setValue("guest");
+                if (isset(self::$currentUser->username)) {
+                    self::$currentUser->username->setValue("guest");
                 }
             }
         }
