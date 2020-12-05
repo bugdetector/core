@@ -35,8 +35,15 @@ class CoreDB
      *      filename = $filename
      *  ]
      */
-    public static function HTMLMail($email, $subject, $message, $username, array $attachments = [])
+    public static function HTMLMail($to, $subject, $message, $toUsername, array $attachments = [])
     {
+        if(ENVIROMENT != "production"){
+            $message .= Translation::getTranslation("originally_send_to", [
+                $to
+            ]);
+            $to = Variable::getByKey("test_email_send_address")
+            ->value->getValue();
+        }
         $siteMail = Variable::getByKey("email_address")->value->getValue();
         $mail = new \PHPMailer\PHPMailer\PHPMailer();
         $mail->IsSMTP();
@@ -50,7 +57,7 @@ class CoreDB
         $mail->Username = $siteMail;
         $mail->Password = Variable::getByKey("email_password")->value->getValue();
         $mail->SetFrom($siteMail, Variable::getByKey("email_username")->value->getValue());
-        $mail->AddAddress($email, $username);
+        $mail->AddAddress($to, $toUsername);
         $mail->Subject = $subject;
         $mail->Body = $message;
         foreach($attachments as $attachment){
@@ -201,8 +208,8 @@ class CoreDB
             }
             if (!self::$currentUser) {
                 self::$currentUser = new User();
-                if (isset(self::$currentUser->username)) {
-                    self::$currentUser->username->setValue("guest");
+                if (isset(self::$currentUser->toUsername)) {
+                    self::$currentUser->toUsername->setValue("guest");
                 }
             }
         }

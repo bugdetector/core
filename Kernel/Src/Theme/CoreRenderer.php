@@ -18,7 +18,7 @@ class CoreRenderer
         $loader = new \Twig\Loader\FilesystemLoader($template_directories);
         $twig_options = [];
         $enviroment = defined("ENVIROMENT") ? ENVIROMENT : "development";
-        if ($enviroment == "production") {
+        if (in_array($enviroment, ["production", "staging"])) {
             $twig_options["cache"] = "../cache";
         } else {
             $twig_options["debug"] = true;

@@ -184,3 +184,4 @@ config_file_write_error: 'Yapılandırma dosyası (config/config.php) yazılabil
 add_new_entity: 'Yeni %s Ekle'
 username_or_email: 'Kullanıcı adı ya da e-posta'
 upload_an_image: 'Lütfen bir resim dosyası yükleyin.'
+originally_send_to: '<p>Bu mesaj aslında şu kişiye gönderildi: %s</p>'
