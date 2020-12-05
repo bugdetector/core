@@ -283,7 +283,9 @@ abstract class TableMapper implements SearchableInterface
 
     public function getFileUrlForField($field_name)
     {
-        return BASE_URL . "/files/uploaded/" . $this->getTableName() . "/$field_name/" . $this->$field_name;
+        /** @var File */
+        $file = File::get($this->$field_name);
+        return $file->getUrl();
     }
 
     public function getForm()
@@ -315,7 +317,7 @@ abstract class TableMapper implements SearchableInterface
                  */
                 $widget->setName($inputName);
                 if ($field instanceof \CoreDB\Kernel\Database\DataType\File) {
-                    /** @var InputWidget */
+                    /** @var InputWidget $widget*/
                     $widget->addFileRemoveKey(
                         $this->entityName,
                         $this->ID->getValue(),

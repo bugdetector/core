@@ -24,17 +24,24 @@ class TreeForm extends Form
     public array $cards = [];
     public CollapsableCard $template;
     public $treeFieldName;
+    public $newNodeAddUrl;
+    public bool $showEditUrl = false;
     /**
      * A class name which extends TreeEntityAbstract.
      * @var $className
      */
-    public function __construct(string $className)
+    public function __construct(string $className, $newNodeAddUrl = null)
     {
         parent::__construct();
         $this->className = $className;
         $this->treeFieldName = $className::getTreeFieldName();
+        $this->newNodeAddUrl = $newNodeAddUrl;
     }
 
+    public function setShowEditUrl(bool $show)
+    {
+        $this->showEditUrl = $show;
+    }
     public function getFormId(): string
     {
         return "tree_form";
@@ -170,6 +177,16 @@ class TreeForm extends Form
             ->addAttribute("data-node", $nodeId)
             ->addAttribute("data-service-url", $element->getRemoveServicecUrl())
         );
+        if ($this->showEditUrl) {
+            $content->addField(
+                Link::create(
+                    $element->editUrl($nodeId),
+                    TextElement::create(
+                        '<i class="fa fa-edit"></i> ' . Translation::getTranslation("edit")
+                    )->setIsRaw(true)
+                )->addClass("btn btn-info ml-3")
+            );
+        }
         return $content;
     }
 
