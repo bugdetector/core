@@ -131,7 +131,7 @@ config_export: 'Yapılandırmayı dışa aktar'
 users: Kullanıcılar
 roles: Roller
 key: Anahtar
-en: İnglizce
+en: İngilizce
 tr: Türkçe
 entity_select_info: 'İşlem yapmak için bir varlık seçin.'
 file_name: 'Dosya ismi'
