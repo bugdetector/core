@@ -126,6 +126,7 @@ class SearchForm extends Form
             $this->query->orderBy("`$orderBy` $orderDirection");
         }
 
+        $condition = \CoreDB::database()->condition($this->query);
         foreach ($this->searchableFields as $column_name) {
             if (isset($params[$column_name]) && $params[$column_name] !== "") {
                 if (
@@ -136,15 +137,16 @@ class SearchForm extends Form
                     )
                 ) {
                     $dates = explode("&", $params[$column_name]);
-                    $this->query->condition($column_name, $dates[0] . " 00:00:00", ">=")
+                    $condition->condition($column_name, $dates[0] . " 00:00:00", ">=")
                     ->condition($column_name, $dates[1] . " 23:59:59", "<=");
                 } elseif ($this->object->$column_name instanceof EntityReference) {
-                    $this->query->condition("{$column_name}.ID", $params[$column_name], "IN");
+                    $condition->condition("{$column_name}.ID", $params[$column_name], "IN");
                 } else {
-                    $this->query->condition($column_name, "%{$params[$column_name]}%", "LIKE");
+                    $condition->condition($column_name, "%{$params[$column_name]}%", "LIKE");
                 }
             }
         }
+        $this->query->condition($condition);
     }
 
     public function processForm()

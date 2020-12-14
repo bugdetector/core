@@ -77,6 +77,15 @@ interface DatabaseDriverInterface
     public function select(string $table_name, string $alias = "", bool $quote = true): SelectQueryPreparerAbstract;
 
     /**
+     * Creates a seperate condition group
+     * @param QueryPreparerAbstract $query
+     *  Use quote
+     * @return QueryCondition
+     *  Condition object
+     */
+    public function condition(QueryPreparerAbstract $query): QueryCondition;
+
+    /**
      * Insert new record to a table
      * @param string $table_name
      *  Table name
