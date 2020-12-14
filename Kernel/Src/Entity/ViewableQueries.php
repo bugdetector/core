@@ -294,13 +294,15 @@ class ViewableQueries extends TableMapper
         );
         $usedTables = array_values($usedTables);
         $query = \CoreDB::database()->select($usedTables[0]);
+        $condition = \CoreDB::database()->condition($query);
         foreach ($filters as $filter) {
-            $query->condition(
+            $condition->condition(
                 "{$filter["table"]}.{$filter["column"]}",
                 $filter["compare_value"],
                 $filter["comparation"]
             );
         }
+        $query->condition($condition);
         foreach ($fields as $field) {
             $query->select($field["table"], [$field["column"]]);
         }

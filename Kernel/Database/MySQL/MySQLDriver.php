@@ -28,6 +28,7 @@ use CoreDB\Kernel\Database\UpdateQueryPreparerAbstract;
 use CoreDB\Kernel\Database\DatabaseDriver;
 use CoreDB\Kernel\Database\DataType\Checkbox;
 use CoreDB\Kernel\Database\DatabaseInstallationException;
+use CoreDB\Kernel\Database\QueryCondition;
 use PDO;
 use PDOException;
 use PDOStatement;
@@ -126,6 +127,14 @@ class MySQLDriver extends DatabaseDriver
     public function select(string $table_name, string $alias = "", bool $quote = true): SelectQueryPreparerAbstract
     {
         return new SelectQueryPreparer($table_name, $alias, $quote);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function condition(QueryPreparerAbstract $query): QueryCondition
+    {
+        return new QueryCondition($query);
     }
 
     /**
