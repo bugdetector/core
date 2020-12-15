@@ -124,7 +124,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var summernote_dist_summernote_bs4_css__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(summernote_dist_summernote_bs4_css__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _summernote_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./summernote.scss */ "./base_theme/src/components/summernote/summernote.scss");
 /* harmony import */ var _summernote_scss__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_summernote_scss__WEBPACK_IMPORTED_MODULE_4__);
-Object(_jquery_jquery__WEBPACK_IMPORTED_MODULE_0__["$"])(function($){$('.summernote').summernote();});
+Object(_jquery_jquery__WEBPACK_IMPORTED_MODULE_0__["$"])(function($){$('.summernote').summernote({toolbar:[['style',['style']],['font',['bold','underline','clear',"fontsize","fontname","color"]],['para',['ul','ol','paragraph']],['table',['table']],['insert',['link','picture']],['view',['fullscreen',"undo",'codeview','help']]]});});
 
 /***/ }),
 
