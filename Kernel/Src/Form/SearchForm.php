@@ -130,11 +130,7 @@ class SearchForm extends Form
         foreach ($this->searchableFields as $column_name) {
             if (isset($params[$column_name]) && $params[$column_name] !== "") {
                 if (
-                    isset($this->object->$column_name) &&
-                    in_array(
-                        get_class($this->object->$column_name),
-                        [DateTime::class, Date::class, Time::class]
-                    )
+                    preg_match("/(\d{4}-\d{2}-\d{2}) & (\d{4}-\d{2}-\d{2})/", $params[$column_name])
                 ) {
                     $dates = explode("&", $params[$column_name]);
                     $condition->condition($column_name, $dates[0] . " 00:00:00", ">=")
