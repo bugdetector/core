@@ -31,7 +31,7 @@ abstract class QueryPreparerAbstract
     {
         $placeholder = str_replace(".", "_", $column);
         $index = 0;
-        while (isset($this->params[":$placeholder"])) {
+        while (isset($this->params["$placeholder"])) {
             $placeholder = "{$column}_{$index}";
             $index++;
         }
