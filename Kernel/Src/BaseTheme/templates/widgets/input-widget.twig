@@ -6,15 +6,17 @@
 {% endif %}
 {% if widget.file %}
 	<div class="mx-1 mb-2">
-		<a href="{{ widget.file.getUrl() }}" target="_blank">
 			{% if widget.file.isImage %}
-				<img src='{{ widget.file.getUrl() }}' class="{{ widget.fileClass }}">
+				<a href="{{ widget.file.getUrl() }}" class="image-preview" data-field-name="{{ widget.label }}">
+					<img src='{{ widget.file.getUrl() }}' class="{{ widget.fileClass }}">
+				</a>
 			{% else %}
+			<a href="{{ widget.file.getUrl() }}" data-field-name="{{ widget.label }}" target="_blank">
 				{{ widget.file.file_name }}
+			</a>
 			{% endif %}
-		</a>
 		{% if widget.removeKey %}
-			<a class="mr-2 entitydelete" data-key="{{ widget.removeKey.createToken() }}" href="#">
+			<a class="mr-2 entitydelete" data-key="{{ widget.removeKey.createToken() }}" data-field-name="{{ widget.label }}" href="#">
 				<i class="fa fa-times text-danger core-control"></i>
 			</a>
 		{% endif %}
