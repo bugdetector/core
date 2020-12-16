@@ -55,6 +55,7 @@ class InsertForm extends Form
         $controller = \CoreDB::controller();
         $controller->addJsFiles("dist/insert_form/insert_form.js");
         $controller->addFrontendTranslation("record_remove_accept");
+        $controller->addFrontendTranslation("record_remove_accept_field");
     }
 
     public function getFormId(): string
