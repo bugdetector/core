@@ -107,7 +107,7 @@ abstract class BaseTheme extends BaseController
     {
         $this->sidebar = Sidebar::create(
             "div",
-            "navbar-nav bg-gradient-secondary sidebar sidebar-dark accordion toggled position-sticky"
+            "navbar-nav bg-gradient-secondary sidebar sidebar-dark accordion toggled"
         );
         $currentUser = \CoreDB::currentUser();
         if ($currentUser->isAdmin()) {
