@@ -13,7 +13,7 @@ class QueryCondition
         $this->query = $query;
     }
 
-    public function condition($column, string $value = null, $operator = "=", $conjuction = "AND"): QueryCondition
+    public function condition($column, $value = null, $operator = "=", $conjuction = "AND"): QueryCondition
     {
         if ($column instanceof QueryCondition) {
             if ($column->condition) {
