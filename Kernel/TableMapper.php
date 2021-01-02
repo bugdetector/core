@@ -18,8 +18,10 @@ use Src\Entity\Translation;
 use Src\Form\InsertForm;
 use Src\Form\Widget\FormWidget;
 use Src\Form\Widget\InputWidget;
+use Src\JWT;
 use Src\Theme\ResultsViewer;
 use Src\Theme\View;
+use Src\Views\Link;
 use Src\Views\Table;
 use Src\Views\TextElement;
 use Src\Views\ViewGroup;
@@ -260,8 +262,11 @@ abstract class TableMapper implements SearchableInterface
                 if ($file = File::get($field->getValue())) {
                     $file->unlinkFile();
                 }
+            } elseif ($field instanceof EntityReference) {
+                $this->$field_name->setValue([]);
             }
         }
+        $this->save();
         return boolval(
             CoreDB::database()->delete($this->getTableName())->condition("ID", $this->ID)->execute()
         );
@@ -409,19 +414,31 @@ abstract class TableMapper implements SearchableInterface
         if (!isset($row["edit_actions"])) {
             return;
         }
+        $deleteButton = Link::create(
+            "#",
+            TextElement::create(
+                "<i class='fa fa-times text-danger core-control'></i> 
+                <span class='sr-only'>" . Translation::getTranslation("delete") . "</span>"
+            )->setIsRaw(true)
+        )->addClass("mr-2");
+        if ($this instanceof DBObject) {
+            $deleteButton->addClass("rowdelete")
+            ->addAttribute("data-table", $this->getTableName())
+            ->addAttribute("data-id", $row["edit_actions"]);
+        } else {
+            $removeKeyJwt = new JWT();
+            $removeKeyJwt->setPayload([
+                "entity" => $this->entityName,
+                "id" => $row["edit_actions"]
+            ]);
+            $deleteButton->addClass("entityrowdelete")
+            ->addAttribute("data-entity-name", Translation::getTranslation(
+                $this->entityName
+            ))->addAttribute("data-key", $removeKeyJwt->createToken());
+        }
         $row["edit_actions"] = ViewGroup::create("div", "d-flex")
             ->addField(
-                ViewGroup::create("a", "mr-2 rowdelete")
-                    ->addField(
-                        ViewGroup::create("i", "fa fa-times text-danger core-control")
-                    )->addField(
-                        TextElement::create(
-                            Translation::getTranslation("delete")
-                        )->addClass("sr-only")
-                    )
-                    ->addAttribute("data-table", $this->getTableName())
-                    ->addAttribute("data-id", $row["edit_actions"])
-                    ->addAttribute("href", "#")
+                $deleteButton
             )->addField(
                 ViewGroup::create("a", "ml-2")
                     ->addField(

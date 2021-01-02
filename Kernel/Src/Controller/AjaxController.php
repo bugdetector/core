@@ -58,12 +58,17 @@ class AjaxController extends ServiceController
             $referenceClass = \CoreDB::config()->getEntityInfo($data->entity)["class"];
             /** @var TableMapper */
             $object = $referenceClass::get($data->id);
-            $object->unsetField($data->field);
+            if (@$data->field) {
+                $object->unsetField($data->field);
+            } else {
+                $object->delete();
+            }
             $this->createMessage(
                 Translation::getTranslation("record_removed"),
                 Messenger::SUCCESS
             );
         } catch (Exception $ex) {
+            throw new Exception($ex->getMessage());
         }
     }
 }
