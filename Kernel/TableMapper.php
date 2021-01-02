@@ -431,7 +431,7 @@ abstract class TableMapper implements SearchableInterface
                 "entity" => $this->entityName,
                 "id" => $row["edit_actions"]
             ]);
-            $deleteButton->addClass("entitydelete")
+            $deleteButton->addClass("entityrowdelete")
             ->addAttribute("data-entity-name", Translation::getTranslation(
                 $this->entityName
             ))->addAttribute("data-key", $removeKeyJwt->createToken());

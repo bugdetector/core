@@ -17,7 +17,7 @@ $(document).on("click", ".rowdelete",function (e) {
             })
         }
     })
-}).on("click", ".entitydelete", function(e){
+}).on("click", ".entityrowdelete", function(e){
     e.preventDefault();
     let button = $(this);
     alert({
