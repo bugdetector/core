@@ -17,6 +17,25 @@ $(document).on("click", ".rowdelete",function (e) {
             })
         }
     })
+}).on("click", ".entitydelete", function(e){
+    e.preventDefault();
+    let button = $(this);
+    alert({
+        message: _t("record_remove_accept_entity", [
+            button.data("entity-name")
+        ]),
+        okLabel: _t("yes"),
+        callback: function () {
+            $.ajax({
+                url: root + "/ajax/entityDelete",
+                method: "post",
+                data: {key: button.data("key")},
+                success: function(){
+                    button.parents("tr").fadeOut(1000);
+                }
+            })
+        }
+    });
 })
 
 $(document).on("click", "input[type='reset']", function (e) {

@@ -41,8 +41,10 @@ class SearchForm extends Form
         $this->search_input_group->setId("search_input_group");
         $this->page = isset($_GET["page"]) ? $_GET["page"] : 1;
         $this->pagination = new Pagination($this->page, $this->object->getPaginationLimit());
-        \CoreDB::controller()->addJsFiles("dist/search_form/search_form.js");
-        \CoreDB::controller()->addFrontendTranslation("record_remove_accept");
+        $controller = \CoreDB::controller();
+        $controller->addJsFiles("dist/search_form/search_form.js");
+        $controller->addFrontendTranslation("record_remove_accept");
+        $controller->addFrontendTranslation("record_remove_accept_entity");
 
         $search_input_group = new ViewGroup("div", "row");
         
