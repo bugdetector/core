@@ -9,6 +9,7 @@ use CoreDB\Kernel\SearchableInterface;
 use PDO;
 use Src\Entity\DBObject;
 use Src\Entity\Translation;
+use Src\Form\Widget\FormWidget;
 use Src\Form\Widget\InputWidget;
 use Src\Views\CollapsableCard;
 use Src\Views\Pagination;
@@ -49,12 +50,17 @@ class SearchForm extends Form
         $search_input_group = new ViewGroup("div", "row");
         
         /**
-         * @var DataTypeAbstract $dataType
+         * @var FormWidget $searchWidget
          */
         foreach ($this->object->getSearchFormFields($this->translateLabels) as $field_name => $searchWidget) {
             $this->searchableFields[] = $field_name;
+            if (in_array("daterangeinput", $searchWidget->classes)) {
+                $searchWidgetClass = "col-sm-6 col-lg-3";
+            } else {
+                $searchWidgetClass = "col-sm-3";
+            }
             $search_input_group->addField(
-                ViewGroup::create("div", "col-sm-3")->addField(
+                ViewGroup::create("div", $searchWidgetClass)->addField(
                     $searchWidget
                     ->setValue(isset($this->request[$field_name]) ? $this->request[$field_name] : "")
                     ->addAttribute("autocomplete", "off")
