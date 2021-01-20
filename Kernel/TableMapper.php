@@ -52,34 +52,23 @@ abstract class TableMapper implements SearchableInterface
         if ($entityConfig) {
             $this->entityName = array_key_first($entityConfig);
             $this->entityConfig =  $entityConfig[$this->entityName];
-            if (isset($this->entityConfig[EntityReference::CONNECTION_MANY_TO_MANY])) {
-                foreach ($this->entityConfig[EntityReference::CONNECTION_MANY_TO_MANY] as $fieldEntityName => $config) {
-                    $this->{$fieldEntityName} = new EntityReference(
-                        $fieldEntityName,
-                        $this,
-                        $config,
-                        EntityReference::CONNECTION_MANY_TO_MANY
-                    );
-                }
-            }
-            if (isset($this->entityConfig[EntityReference::CONNECTION_ONE_TO_MANY])) {
-                foreach ($this->entityConfig[EntityReference::CONNECTION_ONE_TO_MANY] as $fieldEntityName => $config) {
-                    $this->{$fieldEntityName} = new EntityReference(
-                        $fieldEntityName,
-                        $this,
-                        $config,
-                        EntityReference::CONNECTION_ONE_TO_MANY
-                    );
-                }
-            }
-            if (isset($this->entityConfig[EntityReference::CONNECTION_ONE_TO_ONE])) {
-                foreach ($this->entityConfig[EntityReference::CONNECTION_ONE_TO_ONE] as $fieldEntityName => $config) {
-                    $this->{$fieldEntityName} = new EntityReference(
-                        $fieldEntityName,
-                        $this,
-                        $config,
-                        EntityReference::CONNECTION_ONE_TO_ONE
-                    );
+            foreach ($this->entityConfig as $connection => $configData) {
+                if (
+                    in_array($connection, [
+                    EntityReference::CONNECTION_MANY_TO_MANY,
+                    EntityReference::CONNECTION_MANY_TO_ONE,
+                    EntityReference::CONNECTION_ONE_TO_MANY,
+                    EntityReference::CONNECTION_ONE_TO_ONE
+                    ])
+                ) {
+                    foreach ($configData as $fieldEntityName => $config) {
+                        $this->{$fieldEntityName} = new EntityReference(
+                            $fieldEntityName,
+                            $this,
+                            $config,
+                            $connection
+                        );
+                    }
                 }
             }
         }
