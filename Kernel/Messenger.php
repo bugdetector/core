@@ -21,7 +21,7 @@ class Messenger implements MessengerInterface
     /**
      * @inheritdoc
      */
-    public function createMessage(string $message, int $type = self::ERROR): void
+    public function createMessage($message, int $type = self::ERROR): void
     {
         if (!isset($_SESSION["messages"])) {
             $_SESSION["messages"] = [];

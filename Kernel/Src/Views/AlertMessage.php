@@ -15,7 +15,7 @@ class AlertMessage extends View
     public $message;
     public $type;
 
-    public static function create(string $message, string $type = self::MESSAGE_TYPE_DANGER): AlertMessage
+    public static function create($message, string $type = self::MESSAGE_TYPE_DANGER): AlertMessage
     {
         $alert_message = new AlertMessage();
         $alert_message->message = $message;
