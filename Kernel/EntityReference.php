@@ -102,7 +102,9 @@ class EntityReference extends DataTypeAbstract
             ->setNullElement(null)
             ->addAttribute("multiple", "true")
             ->setOptions($options)
-            ->setAutoComplete($referenceClass::getTableName(), "role")
+            ->setAutoComplete($referenceClass::getTableName(), array_keys(
+                (new $referenceClass())->toArray()
+            )[0])
             ->createIfNotExist($this->createIfNotExist);
         } elseif (
             $this->connectionType == self::CONNECTION_ONE_TO_MANY ||
@@ -174,6 +176,18 @@ class EntityReference extends DataTypeAbstract
                     ], $this->mergeTable);
                 } else {
                     $object = new DBObject($this->mergeTable);
+                    if (!is_numeric($value)) {
+                        $referenceClass = \CoreDB::config()->getEntityInfo($this->fieldEntityName)["class"];
+                        $referenceFieldName = array_keys(
+                            (new $referenceClass())->toArray()
+                        )[0];
+                        $referenceObject = new $referenceClass();
+                        $referenceObject->map([
+                            $referenceFieldName => $value
+                        ]);
+                        $referenceObject->save();
+                        $value = $referenceObject->ID->getValue();
+                    }
                 }
                 $object->map([
                     $this->selfKey => $this->object->ID->getValue(),
