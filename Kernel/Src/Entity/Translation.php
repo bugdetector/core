@@ -69,25 +69,27 @@ class Translation extends TableMapper
         return self::$instance;
     }
 
-    public static function getTranslation($key, array $arguments = null)
+    public static function getTranslation($key, array $arguments = null, $useLanguage = null)
     {
         if (!isset(self::$cache[$key])) {
             try {
                 $translation = Translation::get(["key" => $key]);
+                $language = $useLanguage ?: Translation::getLanguage();
             } catch (DatabaseInstallationException $ex) {
                 $language = Translation::getLanguage();
                 self::$cache = Yaml::parseFile(Translation::BACKUP_PATH . "/{$language}.yml");
                 return isset(self::$cache[$key]) ? self::$cache[$key] : $key;
             }
-            self::$cache[$key] = $translation ? $translation->{Translation::getLanguage()}->getValue() : $key;
+            self::$cache[$key] = $translation ? $translation->$language->getValue() : $key;
         }
         return !$arguments ? self::$cache[$key] : vsprintf(self::$cache[$key], $arguments);
     }
 
-    public static function getEmailTranslation(string $key, array $arguments = null)
+    public static function getEmailTranslation(string $key, array $arguments = null, $useLanguage = null)
     {
         $mail = Email::get(["key" => $key]);
-        $translation = $mail->{Translation::getLanguage()};
+        $language = $useLanguage ?: Translation::getLanguage();
+        $translation = $mail->$language;
         if ($translation && $arguments) {
             $translation = str_replace("http://%s", "%s", $translation);
             $translation = vsprintf($translation, $arguments);
