@@ -24,7 +24,7 @@ save: Kaydet
 current_pass: 'Geçerli Şifre'
 password_again: 'Şifre (tekrar)'
 username_exist: 'Bu kullanıcı adıyla bir kullanıcı bulunuyor.'
-password_validation_error: 'Şifre en az 8 karakter uzunluğunda olmalı. Büyük harf, küçük harf, noktalama işareti ve rakam bulundurmalı. .'
+password_validation_error: 'Şifre en az 8 karakter uzunluğunda olmalı. Büyük harf, küçük harf, noktalama işareti ve rakam bulundurmalı.'
 created_at: 'Oluşturulma Tarihi'
 role: Rol
 table_select_info: 'İşlem yapmak için bir tablo seçin.'
