@@ -87,8 +87,8 @@ class InsertForm extends Form
             if (isset($this->request["save"])) {
                 $success_message = $this->object->ID->getValue() ? "update_success" : "insert_success";
                 $this->object->save();
-                if (isset($_FILES[$this->object->getTableName()])) {
-                    $this->object->includeFiles($_FILES[$this->object->getTableName()]);
+                if (isset($_FILES[$this->object->entityName ?: $this->object->getTableName()])) {
+                    $this->object->includeFiles($_FILES[$this->object->entityName ?: $this->object->getTableName()]);
                 }
                 $this->setMessage(Translation::getTranslation($success_message));
                 $this->submitSuccess();
