@@ -23,6 +23,7 @@ module.exports = (env, argv) => {
       daterangepicker : ["./base_theme/src/components/daterangepicker/daterangepicker.js"],
       collapsable_card : ["./base_theme/src/components/collapsable_card/collapsable_card.js"],
       collapsible_widget_card : ["./base_theme/src/components/collapsible_widget_card/collapsible_widget_card.js"],
+      file_input : ["./base_theme/src/components/file_input/file_input.js"],
       /**
        * Forms
        */

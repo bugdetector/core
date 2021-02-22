@@ -2,6 +2,8 @@
 
 namespace Src\Form;
 
+use CoreDB\Kernel\Database\DataType\File;
+use Src\Entity\File as EntityFile;
 use Src\Entity\Translation;
 use Src\Entity\User;
 use Src\Views\ViewGroup;
@@ -65,15 +67,17 @@ class UserInsertForm extends InsertForm
                 );
             }
         }
-        $normalizedFiles = \CoreDB::normalizeFiles($_FILES);
-        if (isset($normalizedFiles["users"]["profile_photo"]) && $normalizedFiles["users"]["profile_photo"]["size"]) {
-            if (!\CoreDB::isImage($normalizedFiles["users"]["profile_photo"]["tmp_name"])) {
+        if ($profilePhotoId = @$this->request[$this->object->entityName]["profile_photo"]) {
+            /** @var EntityFile */
+            $profilePhoto = EntityFile::get($profilePhotoId);
+            if (!\CoreDB::isImage($profilePhoto->getFilePath())) {
                 $this->setError("profile_photo", Translation::getTranslation("upload_an_image"));
-            } elseif ($normalizedFiles["users"]["profile_photo"]["size"]) {
-                $contents = file_get_contents($normalizedFiles["users"]["profile_photo"]["tmp_name"]);
+                $profilePhoto->delete();
+            } else {
+                $contents = file_get_contents($profilePhoto->getFilePath());
                 $image = imagecreatefromstring($contents);
                 $image = imagescale($image, 200, 200);
-                imagejpeg($image, $normalizedFiles["users"]["profile_photo"]["tmp_name"]);
+                imagejpeg($image, $profilePhoto->getFilePath());
             }
         }
         return $parent_check && empty($this->errors);

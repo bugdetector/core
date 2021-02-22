@@ -1,4 +1,4 @@
-<div>
+<div class='input_widget'>
 {% if widget.label %}
 	<label for="{{ widget.attributes["id"] }}" class="font-weight-bold text-primary">
 		{{ widget.label }}
@@ -15,14 +15,21 @@
 				{{ widget.file.file_name }}
 			</a>
 			{% endif %}
-		{% if widget.removeKey %}
-			<a class="mr-2 entitydelete" data-key="{{ widget.removeKey.createToken() }}" data-field-name="{{ widget.label }}" href="#">
+		{% if widget.fileKey %}
+			<a class="mr-2 entitydelete" data-key="{{ widget.fileKey.createToken() }}" data-field-name="{{ widget.label }}" href="#">
 				<i class="fa fa-times text-danger core-control"></i>
 			</a>
 		{% endif %}
 	</div>
 {% endif %}
-	<input type='{{ widget.type }}' name='{{ widget.name }}' class='{{ widget.classes|join(" ") }}' {{ widget.renderAttributes()|raw }} value='{{ widget.value }}'/>
+
+	{% if widget.type == "file" %}
+		<input type="hidden" name='{{ widget.name }}' id="file_{{ widget.attributes["id"] }}" data-key="{{ widget.fileKey.createToken() }}" data-label="{{ widget.label }}" value='{{ widget.value }}'>
+		<input type='{{ widget.type }}' class='{{ widget.classes|join(" ") }}' {{ widget.renderAttributes()|raw }} data-file-for="file_{{ widget.attributes["id"] }}"
+		/>
+	{% else %}
+		<input type='{{ widget.type }}' name='{{ widget.name }}' class='{{ widget.classes|join(" ") }}' {{ widget.renderAttributes()|raw }} value='{{ widget.value }}'/>
+	{% endif %}
 {% if widget.description %}
 	<small for="{{ widget.attributes["id"] }}" class="d-block">
 		{{ widget.description }}

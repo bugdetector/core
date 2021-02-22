@@ -3,9 +3,9 @@
 namespace Src\Entity;
 
 use CoreDB;
+use CoreDB\Kernel\Database\DataType\EnumaratedList;
 use CoreDB\Kernel\Database\DataType\ShortText;
 use CoreDB\Kernel\TableMapper;
-use Exception;
 use Src\Form\Widget\InputWidget;
 use Src\Views\TextElement;
 use Src\Views\ViewGroup;
@@ -17,11 +17,27 @@ use Src\Views\ViewGroup;
 
 class File extends TableMapper
 {
+    /**
+    * File uploaded but not saved.
+    * Temporary files must clear via a cronjob frequently.
+    */
+    public const STATUS_TEMPORARY = "temporary";
+    /**
+    * File uploaded and saved.
+    */
+    public const STATUS_PERMANENT = "permanent";
+
     public ShortText $file_name;
     public ShortText $file_path;
     public ShortText $file_size;
     public ShortText $mime_type;
     public ShortText $extension;
+    
+    /**
+    * @var EnumaratedList $status
+    * File is temporary or permanent.
+    */
+    public EnumaratedList $status;
 
     public bool $isImage;
     /**
@@ -40,6 +56,16 @@ class File extends TableMapper
         }
     }
 
+    public function delete(): bool
+    {
+        if (parent::delete()) {
+            $this->unlinkFile();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public static function clear()
     {
         return parent::clearTable(self::getTableName()) && CoreDB::cleanDirectory(getcwd() . "/files/uploaded");
@@ -47,10 +73,15 @@ class File extends TableMapper
 
     public function unlinkFile()
     {
-        $file_url = getcwd() . "/files/uploaded/{$this->file_path}";
+        $file_url = $this->getFilePath();
         if (is_file($file_url)) {
             unlink($file_url);
         }
+    }
+
+    public function getFilePath()
+    {
+        return getcwd() . "/files/uploaded/{$this->file_path}";
     }
 
     public function storeUploadedFile($table, $field_name, $fileInfo): bool
@@ -64,7 +95,7 @@ class File extends TableMapper
         }
 
         $file_url = getcwd() . "/files/uploaded/$table/$field_name/";
-        is_dir($file_url) ?: mkdir($file_url, 0777, true);
+        is_dir($file_url) ?: mkdir($file_url, 0666, true);
         $file_path = "$table/$field_name/" . md5($fileInfo["tmp_name"] . \CoreDB::currentDate());
         $this->file_path->setValue($file_path);
         if (move_uploaded_file($fileInfo["tmp_name"], getcwd() . "/files/uploaded/{$this->file_path}")) {
@@ -108,6 +139,7 @@ class File extends TableMapper
                 TextElement::create($row["file_name"])
             )->addAttribute("href", BASE_URL . "/files/uploaded/{$row["file_path"]}")
             ->addAttribute("target", "_blank");
+        $row["status"] = Translation::getTranslation($row["status"]);
         $row["file_size"] = $this->sizeConvertToString($row["file_size"]);
         unset($row["ID"], $row["file_path"], $row["last_updated"], $row["extension"]);
     }
@@ -130,20 +162,5 @@ class File extends TableMapper
             ->setType("file")
             ->removeClass("form-control")
             ->setValue($this->ID)];
-    }
-
-    public function includeFiles($from = null)
-    {
-        if ($from["size"] != 0) {
-            if ($this->file_path->getValue()) {
-                $this->unlinkFile();
-            }
-            if ($this->storeUploadedFile($this->getTableName(), "files", $from)) {
-                $this->save();
-            } else {
-                \CoreDB::database()->rollback();
-                throw new Exception(Translation::getTranslation("an_error_occured"));
-            }
-        }
     }
 }

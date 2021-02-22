@@ -12,7 +12,7 @@ class InputWidget extends FormWidget
 
     public ?File $file;
 
-    public ?JWT $removeKey = null;
+    public ?JWT $fileKey = null;
 
     public $fileClass = "img-thumbnail";
 
@@ -26,6 +26,8 @@ class InputWidget extends FormWidget
         $this->type = $type;
         if ($type == "checkbox") {
             \CoreDB::controller()->addJsFiles("dist/checkbox/checkbox.js");
+        } elseif ($type == "file") {
+            \CoreDB::controller()->addJsFiles("dist/file_input/file_input.js");
         }
         return $this;
     }
@@ -63,7 +65,7 @@ class InputWidget extends FormWidget
         return parent::addClass($class_name);
     }
 
-    public function addFileRemoveKey($entityName, $id, $fieldName)
+    public function addFileKey($entityName, $id, $fieldName)
     {
         $removeKeyJwt = new JWT();
         $removeKeyJwt->setPayload([
@@ -71,6 +73,6 @@ class InputWidget extends FormWidget
             "id" => $id,
             "field" => $fieldName
         ]);
-        $this->removeKey = $removeKeyJwt;
+        $this->fileKey = $removeKeyJwt;
     }
 }

@@ -30,8 +30,8 @@ class File extends TableReference
         $widget = InputWidget::create("")
         ->setType("file")
         ->setDescription(Translation::getTranslation($this->comment))
-        ->removeClass("form-control")
-        ->setValue($this->value);
+        ->setValue($this->value)
+        ->addClass("p-1");
         if (!$this->isNull) {
             $widget->addAttribute("required", "true");
         }

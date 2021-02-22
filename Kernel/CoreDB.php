@@ -79,32 +79,6 @@ class CoreDB
         return $mail->Send();
     }
 
-    public static function normalizeFiles(array $files = null)
-    {
-        if (!$files) {
-            $files = $_FILES;
-        }
-        $normalized_files = [];
-        if (empty($files) || (isset($files["name"]) && !is_array($files["name"]))) {
-            $normalized_files = $files;
-        } elseif (!isset($files["name"])) {
-            foreach ($files as $key => $file) {
-                $normalized_files[$key] = self::normalizeFiles($file);
-            }
-        } else {
-            foreach ($files["name"] as $key => $name) {
-                $normalized_files[$key] = [
-                    "name" => $name,
-                    "type" => $files["type"][$key],
-                    "tmp_name" => $files["tmp_name"][$key],
-                    "error" => $files["error"][$key],
-                    "size" => $files["size"][$key]
-                ];
-            }
-        }
-        return $normalized_files;
-    }
-
     public static function goTo(string $uri, $params = [])
     {
         if (!empty($params)) {
