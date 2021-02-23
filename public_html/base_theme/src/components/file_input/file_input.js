@@ -1,5 +1,5 @@
 $(function(){
-    $(document).on("change", "input[type='file']", function(e){
+    $(document).on("change", "input[type='file'].asyncronous", function(e){
         var form = $(this).closest("form");
         var fileId = $( document.getElementById($(this).data("file-for")) );
         var formData = new FormData();
