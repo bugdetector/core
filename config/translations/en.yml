@@ -190,3 +190,5 @@ record_remove_accept_entity: '<p>Are you sure want to remove this %s?</p>'
 status: Status
 temporary: Temporary
 permanent: Permanent
+files_deleted: '%d files deleted.'
+clear_temporary_files: 'Clear temporary files'
