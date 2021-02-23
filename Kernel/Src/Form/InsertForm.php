@@ -2,10 +2,12 @@
 
 namespace Src\Form;
 
+use CoreDB\Kernel\Database\DataType\File;
 use CoreDB\Kernel\TableMapper;
 use Exception;
 use Src\Controller\Admin\TableController;
 use Src\Entity\DBObject;
+use Src\Entity\File as EntityFile;
 use Src\Entity\Translation;
 use Src\Form\Widget\FormWidget;
 use Src\Form\Widget\InputWidget;
@@ -21,7 +23,6 @@ class InsertForm extends Form
     {
         parent::__construct();
         $this->object = $object;
-        $this->setEnctype("multipart/form-data");
         $this->formName = $this->object->entityName ?: $this->object->getTableName();
         foreach (
             $this->object->getFormFields(
@@ -87,8 +88,15 @@ class InsertForm extends Form
             if (isset($this->request["save"])) {
                 $success_message = $this->object->ID->getValue() ? "update_success" : "insert_success";
                 $this->object->save();
-                if (isset($_FILES[$this->object->entityName ?: $this->object->getTableName()])) {
-                    $this->object->includeFiles($_FILES[$this->object->entityName ?: $this->object->getTableName()]);
+                foreach ($this->object as $field_name => $field) {
+                    if (
+                        ($this->object->$field_name instanceof File) &&
+                        $this->object->$field_name->getValue()
+                    ) {
+                        \CoreDB::database()->update(EntityFile::getTableName(), [
+                            "status" => EntityFile::STATUS_PERMANENT
+                        ])->execute();
+                    }
                 }
                 $this->setMessage(Translation::getTranslation($success_message));
                 $this->submitSuccess();

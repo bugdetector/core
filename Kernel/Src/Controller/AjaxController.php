@@ -6,8 +6,11 @@ use CoreDB\Kernel\Messenger;
 use CoreDB\Kernel\ServiceController;
 use CoreDB\Kernel\TableMapper;
 use Exception;
+use Src\BaseTheme\BaseTheme;
+use Src\Entity\File;
 use Src\Entity\Translation;
 use Src\Form\Widget\CollapsableWidgetGroup;
+use Src\Form\Widget\InputWidget;
 use Src\JWT;
 
 class AjaxController extends ServiceController
@@ -67,6 +70,35 @@ class AjaxController extends ServiceController
                 Translation::getTranslation("record_removed"),
                 Messenger::SUCCESS
             );
+        } catch (Exception $ex) {
+            throw new Exception($ex->getMessage());
+        }
+    }
+
+    public function saveFile()
+    {
+        $key = @$_POST["key"];
+        try {
+            $jwt = JWT::createFromString($key);
+            $data = $jwt->getPayload();
+            $referenceClass = \CoreDB::config()->getEntityInfo($data->entity)["class"];
+            /** @var TableMapper */
+            $object = $referenceClass::get($data->id);
+            if (@$data->field) {
+                $file = new File();
+                $file->storeUploadedFile($object->getTableName(), $data->field, $_FILES["file"]);
+                $file->status->setValue(File::STATUS_TEMPORARY);
+                $file->save();
+                $fileWidget = InputWidget::create(@$_POST["name"]);
+                $fileWidget->addFileKey($object->entityName, $object->ID->getValue(), $data->field);
+                $fileWidget->setLabel(@$_POST["label"]);
+                $fileWidget->setType("file");
+                $fileWidget->setValue($file->ID->getValue());
+                $this->response_type = self::RESPONSE_TYPE_RAW;
+                echo \Src\Theme\CoreRenderer::getInstance(
+                    BaseTheme::getTemplateDirectories()
+                )->renderWidget($fileWidget);
+            }
         } catch (Exception $ex) {
             throw new Exception($ex->getMessage());
         }

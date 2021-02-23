@@ -187,3 +187,6 @@ upload_an_image: 'Please upload an image file.'
 originally_send_to: '<p>This message originally send to: %s<br></p>'
 record_remove_accept_field: 'Are you sure want to remove %s?'
 record_remove_accept_entity: '<p>Are you sure want to remove this %s?</p>'
+status: Status
+temporary: Temporary
+permanent: Permanent

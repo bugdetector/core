@@ -81,33 +81,33 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 11);
+/******/ 	return __webpack_require__(__webpack_require__.s = 9);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ "./base_theme/src/forms/table_struct_form.js":
-/*!***************************************************!*\
-  !*** ./base_theme/src/forms/table_struct_form.js ***!
-  \***************************************************/
+/***/ "./base_theme/src/components/file_input/file_input.js":
+/*!************************************************************!*\
+  !*** ./base_theme/src/components/file_input/file_input.js ***!
+  \************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-$(function($){$(document).on("click",".newfield",function(){var button=$(this);var index=$(".column_definition").length;$.ajax({url:"".concat(root,"/admin/ajax/getColumnDefinition"),method:"post",data:{index:index},success:function success(data){var row=$(data);button.parents(".row.mt-4.mb-5").prev().append(row);selectpicker(row.find(".selectpicker"));row.find("input[name = 'fields[".concat(index,"][field_name]']")).focus();row.find("input[type='checkbox']").each(function(i,element){loadCheckbox(element);});}});});$(document).on("change","select.type-control",function(){var value=$(this).val();if(value==="short_text"){$(this).parents(".column_definition").find(".field_length").parent().parent().removeClass("d-none");}else{$(this).parents(".column_definition").find(".field_length").parent().parent().addClass("d-none");}if(value==="table_reference"){$(this).parents(".column_definition").find(".reference_table").parent().parent().removeClass("d-none");}else{$(this).parents(".column_definition").find(".reference_table").parent().parent().addClass("d-none");}if(value==="enumarated_list"){$(this).parents(".column_definition").find(".list_values").parent().parent().removeClass("d-none");}else{$(this).parents(".column_definition").find(".list_values").parent().parent().addClass("d-none");}});$(document).on("click",".removefield",function(e){e.preventDefault();$(this).parents(".column_definition").remove();});$(document).on("click",".dropfield",function(e){e.preventDefault();var tablename=$("input[name='table_name']").val();var column=$(this).parents(".column_definition").find(".column_name").val();var row=$(this).parents(".column_definition");alert({message:_t("field_drop_accept",[column]),okLabel:_t("yes"),callback:function callback(){$.ajax({url:"".concat(root,"/admin/ajax/dropfield"),method:"post",dataType:"json",data:{tablename:tablename,column:column},success:function success(data){row.fadeOut(1000);}});}});});$("#new_table").on("submit",function(){if($(".has-error input:enabled").length!==0){alert({message:_t("check_wrong_fields")});return false;}});});
+$(function(){$(document).on("change","input[type='file']",function(e){var form=$(this).closest("form");var fileId=$(document.getElementById($(this).data("file-for")));var formData=new FormData();formData.append('file',this.files[0]);formData.append("form_build_id",form.find("#input_form_build_id").val());formData.append("form_id",form.find("#input_form_id").val());formData.append("key",fileId.data("key"));formData.append("label",fileId.data("label"));formData.append("name",fileId.attr("name"));$.ajax({url:root+"/ajax/saveFile",type:'POST',data:formData,processData:false,contentType:false,success:function success(response){fileId.closest(".input_widget").replaceWith(response);}});});});
 
 /***/ }),
 
-/***/ 11:
-/*!*********************************************************!*\
-  !*** multi ./base_theme/src/forms/table_struct_form.js ***!
-  \*********************************************************/
+/***/ 9:
+/*!******************************************************************!*\
+  !*** multi ./base_theme/src/components/file_input/file_input.js ***!
+  \******************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! ./base_theme/src/forms/table_struct_form.js */"./base_theme/src/forms/table_struct_form.js");
+module.exports = __webpack_require__(/*! ./base_theme/src/components/file_input/file_input.js */"./base_theme/src/components/file_input/file_input.js");
 
 
 /***/ })
 
 /******/ });
-//# sourceMappingURL=table_struct_form.js.map
+//# sourceMappingURL=file_input.js.map

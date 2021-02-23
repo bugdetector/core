@@ -1,3 +1,5 @@
 - Src\Command\ConfigurationExportCommand
 - Src\Command\ConfigurationImportCommand
 - Src\Command\AddAdminUserCommand
+- Src\Command\ClearTemporaryFilesCommand
+- Src\Command\ClearCacheCommand

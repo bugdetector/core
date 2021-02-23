@@ -216,10 +216,21 @@ abstract class TableMapper implements SearchableInterface
 
     protected function update()
     {
-        return CoreDB::database()
+        $result = CoreDB::database()
             ->update($this->getTableName(), $this->toArray())
             ->condition("ID", $this->ID->getValue())
             ->execute();
+        if ($result) {
+            foreach ($this as $fieldName => $field) {
+                if ($field instanceof DataTypeFile && @$this->changed_fields[$fieldName]) {
+                    $file = File::get($this->changed_fields[$fieldName]["old_value"]);
+                    if ($file) {
+                        $file->delete();
+                    }
+                }
+            }
+        }
+        return $result;
     }
 
     public function save()
@@ -249,7 +260,7 @@ abstract class TableMapper implements SearchableInterface
             if ($field instanceof \CoreDB\Kernel\Database\DataType\File) {
                 /** @var File $file */
                 if ($file = File::get($field->getValue())) {
-                    $file->unlinkFile();
+                    $file->delete();
                 }
             } elseif ($field instanceof EntityReference) {
                 $this->$field_name->setValue([]);
@@ -312,7 +323,7 @@ abstract class TableMapper implements SearchableInterface
                 $widget->setName($inputName);
                 if ($field instanceof \CoreDB\Kernel\Database\DataType\File) {
                     /** @var InputWidget $widget*/
-                    $widget->addFileRemoveKey(
+                    $widget->addFileKey(
                         $this->entityName,
                         $this->ID->getValue(),
                         $field_name
@@ -465,28 +476,6 @@ abstract class TableMapper implements SearchableInterface
         return BASE_URL . "/admin/" .
         ($isEntity ? "entity" : "table") . "/insert/" .
         ($isEntity ? $this->entityName : $this->getTableName()) . "/{$value}";
-    }
-
-    public function includeFiles($from = null)
-    {
-        foreach (\CoreDB::normalizeFiles($from) as $file_key => $fileInfo) {
-            if ($fileInfo["size"] != 0) {
-                if ($this->$file_key->getValue()) {
-                    /** @var File  */
-                    $file = File::get($this->$file_key);
-                    $file->unlinkFile();
-                } else {
-                    $file = new File();
-                }
-                if ($file->storeUploadedFile($this->getTableName(), $file_key, $fileInfo)) {
-                    $this->{$file_key}->setValue($file->ID);
-                    $this->save();
-                } else {
-                    \CoreDB::database()->rollback();
-                    throw new Exception(Translation::getTranslation("an_error_occured"));
-                }
-            }
-        }
     }
 
     public function unsetField($fieldName)
