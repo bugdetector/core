@@ -23,7 +23,7 @@
 	</div>
 {% endif %}
 
-	{% if widget.type == "file" %}
+	{% if widget.type == "file" and widget.fileKey %}
 		<input type="hidden" name='{{ widget.name }}' id="file_{{ widget.attributes["id"] }}" data-key="{{ widget.fileKey.createToken() }}" data-label="{{ widget.label }}" value='{{ widget.value }}'>
 		<input type='{{ widget.type }}' class='{{ widget.classes|join(" ") }}' {{ widget.renderAttributes()|raw }} data-file-for="file_{{ widget.attributes["id"] }}"
 		/>
