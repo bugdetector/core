@@ -83,7 +83,7 @@ class AjaxController extends ServiceController
             $data = $jwt->getPayload();
             $referenceClass = \CoreDB::config()->getEntityInfo($data->entity)["class"];
             /** @var TableMapper */
-            $object = $referenceClass::get($data->id);
+            $object = $referenceClass::get($data->id) ?: new $referenceClass();
             if (@$data->field) {
                 $file = new File();
                 $file->storeUploadedFile($object->getTableName(), $data->field, $_FILES["file"]);
