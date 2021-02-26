@@ -9,7 +9,6 @@ use CoreDB\Kernel\Database\DataType\File as DataTypeFile;
 use CoreDB\Kernel\Database\DataType\Integer;
 use CoreDB\Kernel\Database\SelectQueryPreparerAbstract;
 use CoreDB\Kernel\Database\TableDefinition;
-use Exception;
 use PDO;
 use PDOException;
 use Src\Entity\DBObject;
@@ -239,7 +238,16 @@ abstract class TableMapper implements SearchableInterface
             $this->insert();
         }
         foreach ($this as $field_name => $field) {
-            if ($field instanceof EntityReference) {
+            if (
+                ($field instanceof CoreDB\Kernel\Database\DataType\File) &&
+                $field->getValue()
+            ) {
+                \CoreDB::database()->update(File::getTableName(), [
+                    "status" => File::STATUS_PERMANENT
+                ])
+                ->condition("ID", $field->getValue())
+                ->execute();
+            } elseif ($field instanceof EntityReference) {
                 /** @var EntityReference */
                 $field->object = &$this;
                 $field->save();
@@ -254,22 +262,34 @@ abstract class TableMapper implements SearchableInterface
             return false;
         }
         /**
+         * @var File[] $filesWillDelete
+         */
+        $filesWillDelete = [];
+        /**
          * @var DataTypeAbstract $field
          */
         foreach ($this as $field_name => $field) {
             if ($field instanceof \CoreDB\Kernel\Database\DataType\File) {
                 /** @var File $file */
                 if ($file = File::get($field->getValue())) {
-                    $file->delete();
+                    $filesWillDelete[] = $file;
                 }
             } elseif ($field instanceof EntityReference) {
                 $this->$field_name->setValue([]);
             }
         }
         $this->save();
-        return boolval(
+        $deleted = boolval(
             CoreDB::database()->delete($this->getTableName())->condition("ID", $this->ID)->execute()
         );
+        if ($deleted) {
+            foreach ($filesWillDelete as $file) {
+                $file->delete();
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**

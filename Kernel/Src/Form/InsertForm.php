@@ -88,16 +88,6 @@ class InsertForm extends Form
             if (isset($this->request["save"])) {
                 $success_message = $this->object->ID->getValue() ? "update_success" : "insert_success";
                 $this->object->save();
-                foreach ($this->object as $field_name => $field) {
-                    if (
-                        ($this->object->$field_name instanceof File) &&
-                        $this->object->$field_name->getValue()
-                    ) {
-                        \CoreDB::database()->update(EntityFile::getTableName(), [
-                            "status" => EntityFile::STATUS_PERMANENT
-                        ])->execute();
-                    }
-                }
                 $this->setMessage(Translation::getTranslation($success_message));
                 $this->submitSuccess();
             } elseif (isset($this->request["delete"])) {
