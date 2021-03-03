@@ -24,7 +24,7 @@ save: Save
 current_pass: 'Current Password'
 password_again: 'Password (again)'
 username_exist: 'An user with same username exist.'
-password_validation_error: 'The password must be at least 8 characters long and must contain uppercase letter, lowercase letter, punctuation&nbsp;and number. '
+password_validation_error: 'The password must be at least 8 characters long and must contain uppercase letter, lowercase letter, punctuation and number. '
 created_at: 'Created Date'
 role: Role
 table_select_info: 'Select a table to make a transaction.'
