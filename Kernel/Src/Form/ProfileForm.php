@@ -144,7 +144,6 @@ class ProfileForm extends Form
 
     public function submit()
     {
-        unset($this->request["profile"]["password"]);
         $this->user->map(
             $this->request["profile"]
         );
