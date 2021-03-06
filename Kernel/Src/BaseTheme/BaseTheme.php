@@ -8,6 +8,7 @@ use Src\Controller\Admin\TableController;
 use Src\Controller\AdminController;
 use Src\Controller\LoginController;
 use Src\Controller\LogoutController;
+use Src\Controller\ProfileController;
 use Src\Entity\Translation;
 use Src\Views\Image;
 use Src\Views\Navbar;
@@ -53,7 +54,7 @@ abstract class BaseTheme extends BaseController
         $currentUser = \CoreDB::currentUser();
         /**   */
         $userDropdown = NavItem::create(
-            Image::create($currentUser->getProfilePhotoUrl(), $currentUser->getFullName(), true)
+            Image::create($currentUser->getProfilePhotoUrl(), $currentUser->getFullName(), false)
             ->addClass("img-profile rounded-circle"),
             ""
         );
@@ -62,8 +63,8 @@ abstract class BaseTheme extends BaseController
             $userDropdown->addDropdownItem(
                 NavItem::create(
                     "fa fa-user",
-                    Translation::getTranslation("profile"),
-                    $currentUser->editUrl()
+                    $currentUser->getFullName(),
+                    ProfileController::getUrl()
                 )
             )->addDropdownItem(
                 NavItem::create(

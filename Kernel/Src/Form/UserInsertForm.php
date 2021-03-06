@@ -78,6 +78,21 @@ class UserInsertForm extends InsertForm
                 $image = imagecreatefromstring($contents);
                 $image = imagescale($image, 200, 200);
                 imagejpeg($image, $profilePhoto->getFilePath());
+                $exif = exif_read_data($profilePhoto->getFilePath());
+                if (!empty($exif['Orientation'])) {
+                    switch ($exif['Orientation']) {
+                        case 8:
+                            $image = imagerotate($image, 90, 0);
+                            break;
+                        case 3:
+                            $image = imagerotate($image, 180, 0);
+                            break;
+                        case 6:
+                            $image = imagerotate($image, -90, 0);
+                            break;
+                    }
+                }
+                imagejpeg($image, $profilePhoto->getFilePath());
             }
         }
         return $parent_check && empty($this->errors);
