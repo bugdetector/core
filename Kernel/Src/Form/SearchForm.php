@@ -133,17 +133,18 @@ class SearchForm extends Form
 
         $condition = \CoreDB::database()->condition($this->query);
         foreach ($this->searchableFields as $column_name) {
-            if (isset($params[$column_name]) && $params[$column_name] !== "") {
+            $paramField = str_replace(".", "_", $column_name);
+            if (isset($params[$paramField]) && $params[$paramField] !== "") {
                 if (
-                    preg_match("/(\d{4}-\d{2}-\d{2}) & (\d{4}-\d{2}-\d{2})/", $params[$column_name])
+                    preg_match("/(\d{4}-\d{2}-\d{2}) & (\d{4}-\d{2}-\d{2})/", $params[$paramField])
                 ) {
-                    $dates = explode("&", $params[$column_name]);
+                    $dates = explode("&", $params[$paramField]);
                     $condition->condition($column_name, $dates[0] . " 00:00:00", ">=")
                     ->condition($column_name, $dates[1] . " 23:59:59", "<=");
                 } elseif ($this->object->$column_name instanceof EntityReference) {
-                    $condition->condition("{$column_name}.ID", $params[$column_name], "IN");
+                    $condition->condition("{$column_name}.ID", $params[$paramField], "IN");
                 } else {
-                    $condition->condition($column_name, "%{$params[$column_name]}%", "LIKE");
+                    $condition->condition($column_name, "%{$params[$paramField]}%", "LIKE");
                 }
             }
         }
