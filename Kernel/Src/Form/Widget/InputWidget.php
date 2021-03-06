@@ -75,4 +75,12 @@ class InputWidget extends FormWidget
         ]);
         $this->fileKey = $removeKeyJwt;
     }
+
+    public function renderAttributes()
+    {
+        if ($this->type == "file" && $this->value) {
+            $this->removeAttribute("required");
+        }
+        return parent::renderAttributes();
+    }
 }
