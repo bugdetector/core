@@ -16,7 +16,8 @@ class MainpageController extends CustomTheme
 
     public function preprocessPage()
     {
-        $this->setTitle(Translation::getTranslation("welcome"));
+        $titleSuffix = \CoreDB::currentUser()->isLoggedIn() ? ", " . \CoreDB::currentUser()->name : "";
+        $this->setTitle(Translation::getTranslation("welcome") . $titleSuffix);
     }
     public function echoContent()
     {
