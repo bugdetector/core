@@ -30,6 +30,7 @@ module.exports = (env, argv) => {
       search_form : ["./base_theme/src/forms/search_form.js"],
       table_struct_form : ["./base_theme/src/forms/table_struct_form.js"],
       insert_form : ["./base_theme/src/forms/insert_form.js"],
+      tree_form: ["./base_theme/src/forms/tree_form.js"],
       /**
        * Views
        */
