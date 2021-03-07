@@ -81,34 +81,33 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 14);
+/******/ 	return __webpack_require__(__webpack_require__.s = 13);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ "./base_theme/src/views/side_table_list.js":
-/*!*************************************************!*\
-  !*** ./base_theme/src/views/side_table_list.js ***!
-  \*************************************************/
+/***/ "./base_theme/src/forms/tree_form.js":
+/*!*******************************************!*\
+  !*** ./base_theme/src/forms/tree_form.js ***!
+  \*******************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-$(function(){if(window.innerWidth<768){$('#table_list').toggleClass('show');$('a[href=\"#table_list\"]').toggleClass('collapsed');}$("#table_search_field").on("keyup",function(){var value=$(this).val().toLowerCase();$("#table_list .list-group .table_info").filter(function(){$(this).toggle($(this).text().toLowerCase().includes(value));});});$(".tabletruncate").on("click",function(e){e.preventDefault();var tablename=$(this).attr("data-table-name");alert({message:_t("truncate_accept",[tablename]),okLabel:_t("yes"),callback:function callback(){$.ajax({url:"".concat(root,"/admin/ajax/truncate"),type:'POST',dataType:'json',data:{tablename:tablename},success:function success(){setTimeout(function(){//location.reload();
-},1000);}});}});});$(".tabledrop").on("click",function(e){e.preventDefault();var tablename=$(this).attr("data-table-name");alert({message:_t("drop_accept",[tablename]),okLabel:_t("yes"),callback:function callback(){$.ajax({url:"".concat(root,"/admin/ajax/drop"),type:'POST',dataType:'json',data:{tablename:tablename},success:function success(){setTimeout(function(){location.reload();},1000);}});}});});});
+$(function($){$(document).on("click",".add-new-node",function(e){e.preventDefault();var templateCard=$("#node_card_template").children().first().clone();var index=$(".new-node-card").length;var parent=$(this).data("parent");var fieldName=$(this).data("field-name");templateCard.addClass("new-node-card");templateCard.find(".card-header").attr("href","#new-node-card-".concat(index));templateCard.find(".collapse").attr("id","new-node-card-".concat(index));templateCard.find(".field").attr("name","tree[new-".concat(index,"][").concat(fieldName,"]"));templateCard.find(".parent").attr("name","tree[new-".concat(index,"][parent]")).val(parent);templateCard.find(".add-new-node").hide();templateCard.find(".remove-node").attr("data-node","new-".concat(index));templateCard.attr("data-parent","new-".concat(index));$("#parent-"+parent).append(templateCard);var selectpicker=templateCard.find(".bootstrap-select");if(selectpicker.length>0){selectpicker.replaceWith(selectpicker.find("select"));setTimeout(function(){window.selectpicker(templateCard.find("select"));},200);}});$(document).on("dragend",".node-card",function(e){var item=$(e.target);var parent=item.parent().closest(".node-card").data("parent");item.find(".parent").first().val(parent);});$(document).on("click",".remove-node",function(e){e.preventDefault();var nodeId=$(this).data("node");var serviceUrl=$(this).data("service-url");bootbox.confirm(_t("node_remove_warning"),function(result){if(result){$.ajax({url:serviceUrl,method:"post",data:{nodeId:nodeId},success:function success(){$(".node-card[data-parent='".concat(nodeId,"']")).fadeOut(500).delay(500,function(){$(this).remove();});}});}});});});
 
 /***/ }),
 
-/***/ 14:
-/*!*******************************************************!*\
-  !*** multi ./base_theme/src/views/side_table_list.js ***!
-  \*******************************************************/
+/***/ 13:
+/*!*************************************************!*\
+  !*** multi ./base_theme/src/forms/tree_form.js ***!
+  \*************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! ./base_theme/src/views/side_table_list.js */"./base_theme/src/views/side_table_list.js");
+module.exports = __webpack_require__(/*! ./base_theme/src/forms/tree_form.js */"./base_theme/src/forms/tree_form.js");
 
 
 /***/ })
 
 /******/ });
-//# sourceMappingURL=side_table_list.js.map
+//# sourceMappingURL=tree_form.js.map
