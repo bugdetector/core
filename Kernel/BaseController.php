@@ -98,7 +98,7 @@ abstract class BaseController implements ControllerInterface
     /**
      * @inheritdoc
      */
-    public function createMessage(string $message, int $type = Messenger::ERROR): void
+    public function createMessage($message, int $type = Messenger::ERROR): void
     {
         \CoreDB::messenger()->createMessage($message, $type);
     }
