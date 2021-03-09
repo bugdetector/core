@@ -36,7 +36,7 @@ abstract class ServiceController extends BaseController
     /**
      * @inheritdoc
      */
-    public function createMessage(string $message, int $type = Messenger::ERROR): void
+    public function createMessage($message, int $type = Messenger::ERROR): void
     {
         if (!isset($this->messages[$type])) {
             $this->messages[$type] = [];
