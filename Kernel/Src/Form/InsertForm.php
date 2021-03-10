@@ -67,7 +67,10 @@ class InsertForm extends Form
     protected function restoreValues()
     {
         foreach ($this->object->toArray() as $field_name => $field) {
-            $key = $this->object->getTableName() . "[{$field_name}]";
+            $key = (
+                $this->object instanceof DBObject ?
+                $this->object->getTableName() : $this->object->entityName
+            ) . "[{$field_name}]";
             if (isset($this->fields[$key]) && $this->fields[$key] instanceof FormWidget) {
                 $this->fields[$key]->setValue(strval($field));
             }
@@ -97,6 +100,7 @@ class InsertForm extends Form
             }
         } catch (Exception $ex) {
             $this->setError("", $ex->getMessage());
+            $this->restoreValues();
         }
     }
 
