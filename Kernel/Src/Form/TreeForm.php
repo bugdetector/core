@@ -177,7 +177,7 @@ class TreeForm extends Form
             ->addAttribute("data-node", $nodeId)
             ->addAttribute("data-service-url", $element->getRemoveServicecUrl())
         );
-        if ($this->showEditUrl) {
+        if ($this->showEditUrl && $element->ID->getValue()) {
             $content->addField(
                 Link::create(
                     $element->editUrl($nodeId),
