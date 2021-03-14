@@ -192,3 +192,8 @@ temporary: Temporary
 permanent: Permanent
 files_deleted: '%d files deleted.'
 clear_temporary_files: 'Clear temporary files'
+item_name: 'Item Name'
+add_new_node: 'Add New Item'
+add_subitem: 'Add Sub Item<br>'
+new_node: 'New Item'
+node_remove_warning: '<p>This action will remove this item and all sub items.<br></p><p>Please save your changes before continue.<br></p><p>Are you sure want to delete?<br></p>'
