@@ -160,7 +160,8 @@ class File extends TableMapper
     {
         return [InputWidget::create($name)
             ->setType("file")
-            ->removeClass("form-control")
-            ->setValue($this->ID)];
+            ->setValue($this->ID)
+            ->addClass("p-1")
+        ];
     }
 }
