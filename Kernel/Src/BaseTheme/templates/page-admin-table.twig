@@ -24,7 +24,7 @@
         <div class="col-md-8 order-md-first order-last">
             <div class="card p-2">
                 {{ controller.printMessages() }}
-                {{ controller.echoContent() }}
+                {{ controller.echoContent()|raw }}
             </div>
         </div>
         <div class="col-md-4">

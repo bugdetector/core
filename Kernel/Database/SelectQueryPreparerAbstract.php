@@ -6,7 +6,7 @@ abstract class SelectQueryPreparerAbstract extends QueryPreparerAbstract
 {
     public array $tables = [];
     public $fields;
-    protected $condition;
+    protected QueryCondition $condition;
     protected $orderBy;
     protected $groupBy;
     protected $limit;
@@ -22,6 +22,7 @@ abstract class SelectQueryPreparerAbstract extends QueryPreparerAbstract
             "tableName" => $table_name,
             "alias" => $alias
         ];
+        $this->condition = new QueryCondition($this);
     }
 
     /**
@@ -156,6 +157,7 @@ abstract class SelectQueryPreparerAbstract extends QueryPreparerAbstract
     public function having(string $having)
     {
         $this->having = $having;
+        return $this;
     }
     
 
@@ -173,8 +175,8 @@ abstract class SelectQueryPreparerAbstract extends QueryPreparerAbstract
      *  Self
      */
     abstract public function condition(
-        string $column,
-        $value,
+        $column,
+        $value = null,
         string $operator = "=",
         string $connect = "AND"
     ): SelectQueryPreparerAbstract;

@@ -22,12 +22,15 @@ module.exports = (env, argv) => {
       datetimepicker : ["./base_theme/src/components/datetimepicker/datetimepicker.js"],
       daterangepicker : ["./base_theme/src/components/daterangepicker/daterangepicker.js"],
       collapsable_card : ["./base_theme/src/components/collapsable_card/collapsable_card.js"],
+      collapsible_widget_card : ["./base_theme/src/components/collapsible_widget_card/collapsible_widget_card.js"],
+      file_input : ["./base_theme/src/components/file_input/file_input.js"],
       /**
        * Forms
        */
       search_form : ["./base_theme/src/forms/search_form.js"],
       table_struct_form : ["./base_theme/src/forms/table_struct_form.js"],
       insert_form : ["./base_theme/src/forms/insert_form.js"],
+      tree_form: ["./base_theme/src/forms/tree_form.js"],
       /**
        * Views
        */

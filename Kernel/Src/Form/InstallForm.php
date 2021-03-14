@@ -153,15 +153,15 @@ class InstallForm extends Form
         define("DB_PASSWORD", $this->request["db_password"]);
         \CoreDB::config()->importTableConfiguration();
         Translation::importTranslations();
-        $user = new DBObject(User::getTableName(), [
+        \CoreDB::database()->insert(User::getTableName(), [
             "username" => $this->request["username"],
             "name" => $this->request["name"],
             "email" => $this->request["email"],
             "password" => password_hash($this->request["password"], PASSWORD_BCRYPT),
-        ]);
-        $user->save();
+        ])->execute();
+        $userID = \CoreDB::database()->lastInsertId();
         \CoreDB::database()->insert("users_roles", [
-            "user_id" => $user->ID,
+            "user_id" => $userID,
             "role_id" => 1 // Admin role
         ])->execute();
         
@@ -170,7 +170,7 @@ class InstallForm extends Form
             $hashSaltVar->value->setValue($hashSalt);
             $hashSaltVar->save();
         }
-        $_SESSION[BASE_URL . "-UID"] = $user->ID;
+        $_SESSION[BASE_URL . "-UID"] = $userID;
         $this->setMessage(Translation::getTranslation("all_configuration_imported"));
         \CoreDB::goTo(BASE_URL);
     }

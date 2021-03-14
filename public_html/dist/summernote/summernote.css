@@ -689,5 +689,8 @@
   padding: .28rem .65rem;
   font-size: 13px; }
 
+.modal-backdrop.show {
+  display: none; }
+
 
 /*# sourceMappingURL=summernote.css.map*/

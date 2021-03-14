@@ -20,8 +20,30 @@ class CoreDB
         return date("Y-m-d H:i:s");
     }
 
-    public static function HTMLMail($email, $subject, $message, $username)
+    /**
+     * @var array $attachments
+     *  Contains attachment data.
+     *  [
+     *      type = "content",
+     *      content = $content,
+     *      filename = $filename
+     *  ]
+     *    OR
+     *  [
+     *      type = "path",
+     *      path = $path,
+     *      filename = $filename
+     *  ]
+     */
+    public static function HTMLMail($to, $subject, $message, $toUsername, array $attachments = [])
     {
+        if(ENVIROMENT != "production"){
+            $message .= Translation::getTranslation("originally_send_to", [
+                $to
+            ]);
+            $to = Variable::getByKey("test_email_send_address")
+            ->value->getValue();
+        }
         $siteMail = Variable::getByKey("email_address")->value->getValue();
         $mail = new \PHPMailer\PHPMailer\PHPMailer();
         $mail->IsSMTP();
@@ -35,36 +57,26 @@ class CoreDB
         $mail->Username = $siteMail;
         $mail->Password = Variable::getByKey("email_password")->value->getValue();
         $mail->SetFrom($siteMail, Variable::getByKey("email_username")->value->getValue());
-        $mail->AddAddress($email, $username);
+        $mail->AddAddress($to, $toUsername);
         $mail->Subject = $subject;
         $mail->Body = $message;
+        foreach($attachments as $attachment){
+            switch($attachment["type"]){
+                case "content":
+                    $mail->addStringAttachment(
+                        $attachment["content"], 
+                        $attachment["filename"]
+                    );
+                    break;
+                case "file":
+                    $mail->addAttachment(
+                        $attachment["path"],
+                        $attachment["filename"]
+                    );
+                break;
+            }
+        }
         return $mail->Send();
-    }
-
-    public static function normalizeFiles(array $files = null)
-    {
-        if (!$files) {
-            $files = $_FILES;
-        }
-        $normalized_files = [];
-        if (empty($files) || (isset($files["name"]) && !is_array($files["name"]))) {
-            $normalized_files = $files;
-        } elseif (!isset($files["name"])) {
-            foreach ($files as $key => $file) {
-                $normalized_files[$key] = self::normalizeFiles($file);
-            }
-        } else {
-            foreach ($files["name"] as $key => $name) {
-                $normalized_files[$key] = [
-                    "name" => $name,
-                    "type" => $files["type"][$key],
-                    "tmp_name" => $files["tmp_name"][$key],
-                    "error" => $files["error"][$key],
-                    "size" => $files["size"][$key]
-                ];
-            }
-        }
-        return $normalized_files;
     }
 
     public static function goTo(string $uri, $params = [])
@@ -211,5 +223,17 @@ class CoreDB
     public static function config(): ConfigurationManager
     {
         return ConfigurationManager::getInstance();
+    }
+
+    public static function isImage($path)
+    {
+        $imageInfo = getimagesize($path);
+        $imageType = $imageInfo ? $imageInfo[2] : null;
+        if (in_array($imageType, [
+            IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG
+        ])) {
+            return true;
+        }
+        return false;
     }
 }

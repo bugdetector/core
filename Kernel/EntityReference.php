@@ -5,6 +5,8 @@ namespace CoreDB\Kernel;
 use CoreDB\Kernel\Database\DataType\DataTypeAbstract;
 use PDO;
 use Src\Entity\DBObject;
+use Src\Entity\Translation;
+use Src\Form\Widget\CollapsableWidgetGroup;
 use Src\Form\Widget\FormWidget;
 use Src\Form\Widget\OptionWidget;
 use Src\Form\Widget\SelectWidget;
@@ -36,6 +38,20 @@ class EntityReference extends DataTypeAbstract
             $this->foreignKey = $config["foreignKey"];
             $this->createIfNotExist = @$config["createIfNotExist"] ?: false;
             $this->value = $this->getCheckeds();
+        } elseif ($connectionType == self::CONNECTION_ONE_TO_MANY) {
+            $this->foreignKey = $config["foreignKey"];
+            $this->createIfNotExist = @$config["createIfNotExist"] ?: false;
+            $this->value = [];
+            foreach ($this->getCheckeds() as $data) {
+                $this->value[] = $data->toArray();
+            }
+        } elseif ($connectionType == self::CONNECTION_ONE_TO_ONE) {
+            $this->foreignKey = $config["foreignKey"];
+            $this->createIfNotExist = @$config["createIfNotExist"] ?: false;
+            $this->value = [];
+            foreach ($this->getCheckeds() as $data) {
+                $this->value[] = $data->toArray();
+            }
         }
     }
 
@@ -86,28 +102,68 @@ class EntityReference extends DataTypeAbstract
             ->setNullElement(null)
             ->addAttribute("multiple", "true")
             ->setOptions($options)
-            ->setAutoComplete($referenceClass::getTableName(), "role")
+            ->setAutoComplete($referenceClass::getTableName(), array_keys(
+                (new $referenceClass())->toArray()
+            )[0])
             ->createIfNotExist($this->createIfNotExist);
+        } elseif (
+            $this->connectionType == self::CONNECTION_ONE_TO_MANY ||
+            $this->connectionType == self::CONNECTION_ONE_TO_ONE
+        ) {
+            $widget = CollapsableWidgetGroup::create($this->object->entityName, $this->fieldEntityName);
+            if ($this->connectionType == self::CONNECTION_ONE_TO_MANY) {
+                $widget->setHiddenFields([
+                    $this->foreignKey
+                ]);
+                foreach ($this->getCheckeds() as $index => $object) {
+                    $widget->addCollapsibleObject($object, $index + 1);
+                }
+            } else {
+                /** @var TableMapper $referenceClass */
+                $referenceClass = \CoreDB::config()->getEntityInfo($this->fieldEntityName)["class"];
+                $object = $referenceClass::get([
+                    $this->foreignKey => $this->object->ID->getValue()
+                ]) ?: new $referenceClass();
+                $widget->hiddenFields = [$this->foreignKey];
+                $widget->showAddButtonAndLabel = false;
+                $widget->addCollapsibleObject($object, 1, true);
+                $widget->fieldGroup->fields[0]->title = Translation::getTranslation($this->fieldEntityName);
+                $widget->addClass("mt-2");
+            }
         }
         return $widget;
     }
 
     public function getSearchWidget(): ?FormWidget
     {
-        return $this->getWidget();
+        if ($this->connectionType == self::CONNECTION_MANY_TO_MANY) {
+            return $this->getWidget();
+        }
+        return null;
     }
 
-    private function getCheckeds(): array
+    public function getCheckeds(): array
     {
-        return \CoreDB::database()->select($this->mergeTable)
-                ->select("", [$this->foreignKey])
-                ->condition($this->selfKey, $this->object->ID->getValue())
-                ->execute()->fetchAll(PDO::FETCH_COLUMN);
+        if ($this->connectionType == self::CONNECTION_MANY_TO_MANY) {
+            return \CoreDB::database()->select($this->mergeTable)
+            ->select("", [$this->foreignKey])
+            ->condition($this->selfKey, $this->object->ID->getValue())
+            ->execute()->fetchAll(PDO::FETCH_COLUMN);
+        } elseif (
+            $this->connectionType == self::CONNECTION_ONE_TO_MANY ||
+            $this->connectionType == self::CONNECTION_ONE_TO_ONE
+        ) {
+            /** @var TableMapper */
+            $referenceClass = \CoreDB::config()->getEntityInfo($this->fieldEntityName)["class"];
+            return $referenceClass::getAll([
+                $this->foreignKey => $this->object->ID
+            ]);
+        }
     }
 
     public function save()
     {
-        if ($this->connectionType = self::CONNECTION_MANY_TO_MANY) {
+        if ($this->connectionType == self::CONNECTION_MANY_TO_MANY) {
             if (!$this->value) {
                 $this->value = [];
             }
@@ -120,6 +176,18 @@ class EntityReference extends DataTypeAbstract
                     ], $this->mergeTable);
                 } else {
                     $object = new DBObject($this->mergeTable);
+                    if (!is_numeric($value)) {
+                        $referenceClass = \CoreDB::config()->getEntityInfo($this->fieldEntityName)["class"];
+                        $referenceFieldName = array_keys(
+                            (new $referenceClass())->toArray()
+                        )[0];
+                        $referenceObject = new $referenceClass();
+                        $referenceObject->map([
+                            $referenceFieldName => $value
+                        ]);
+                        $referenceObject->save();
+                        $value = $referenceObject->ID->getValue();
+                    }
                 }
                 $object->map([
                     $this->selfKey => $this->object->ID->getValue(),
@@ -140,6 +208,28 @@ class EntityReference extends DataTypeAbstract
                     ], $this->mergeTable);
                     $object->delete();
                 }
+            }
+        } elseif (
+            $this->connectionType == self::CONNECTION_ONE_TO_MANY ||
+            $this->connectionType == self::CONNECTION_ONE_TO_ONE
+        ) {
+            $referenceClass = \CoreDB::config()->getEntityInfo($this->fieldEntityName)["class"];
+            $existing = $this->getCheckeds();
+            if ($this->value) {
+                foreach ($this->value as $data) {
+                    if (!empty($existing)) {
+                        $object = array_shift($existing);
+                    } else {
+                        /** @var TableMapper */
+                        $object = new $referenceClass();
+                        $data[$this->foreignKey] = $this->object->ID->getValue();
+                    }
+                    $object->map($data);
+                    $object->save();
+                }
+            }
+            foreach ($existing as $remaining) {
+                $remaining->delete();
             }
         }
     }

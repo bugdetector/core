@@ -18,7 +18,7 @@ class CoreRenderer
         $loader = new \Twig\Loader\FilesystemLoader($template_directories);
         $twig_options = [];
         $enviroment = defined("ENVIROMENT") ? ENVIROMENT : "development";
-        if ($enviroment == "production") {
+        if (in_array($enviroment, ["production", "staging"])) {
             $twig_options["cache"] = "../cache";
         } else {
             $twig_options["debug"] = true;
@@ -40,28 +40,28 @@ class CoreRenderer
 
     public function renderController(BaseController $controller)
     {
-        echo $this->twig->render($controller->getTemplateFile(), [
+        return $this->twig->render($controller->getTemplateFile(), [
             "controller" => $controller,
         ]);
     }
 
     public function renderView(View $view)
     {
-        echo $this->twig->render("views/" . $view->getTemplateFile(), [
+        return $this->twig->render("views/" . $view->getTemplateFile(), [
             "view" => $view,
         ]);
     }
 
     public function renderForm(Form $form)
     {
-        echo $this->twig->render("forms/" . $form->getTemplateFile(), [
+        return $this->twig->render("forms/" . $form->getTemplateFile(), [
             "form" => $form,
         ]);
     }
 
     public function renderWidget(FormWidget $widget)
     {
-        echo $this->twig->render("widgets/" . $widget->getTemplateFile(), [
+        return $this->twig->render("widgets/" . $widget->getTemplateFile(), [
             "widget" => $widget,
         ]);
     }

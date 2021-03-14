@@ -40,10 +40,4 @@ class InsertController extends TableController
     {
         return $this->insert_form;
     }
-
-    protected function addDefaultTranslations()
-    {
-        parent::addDefaultTranslations();
-        $this->addFrontendTranslation("record_remove_accept");
-    }
 }

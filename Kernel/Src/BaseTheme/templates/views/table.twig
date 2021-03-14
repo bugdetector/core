@@ -1,10 +1,11 @@
 <div class="table_wrapper">
 	<table class="{{ view.classes|join(" ") }}" {{ view.renderAttributes() }}>
 		<thead>
+			<tr>
 			{% for key, header in view.headers %}
 				<th>
 					{% if view.orderable and not( key matches '/^\\d+$/') %}
-						<a href="?{{ view.filter_params|url_encode }}&orderBy={{key}}&orderDirection={{ view.orderBy == key and view.orderDirection == " desc" ? " asc" : " desc" }}">
+						<a href="?{{ view.filter_params|url_encode }}&orderBy={{key}}&orderDirection={{ view.orderBy == key and view.orderDirection == "DESC" ? "ASC" : "DESC" }}">
 							{{ header }}
 							{% if view.orderBy == key and view.orderDirection == "DESC" %}
 								<i class="fa fa-sort-down"></i>
@@ -17,6 +18,7 @@
 					{% endif %}
 				</th>
 			{% endfor %}
+			</tr>
 		</thead>
 		<tbody>
 			{% for row in view.data %}

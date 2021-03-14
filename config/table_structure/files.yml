@@ -51,3 +51,15 @@ fields:
     isUnique: false
     default: null
     comment: 'File extension.'
+  status:
+    type: enumarated_list
+    values:
+      temporary: temporary
+      permanent: permanent
+    column_name: status
+    primary_key: false
+    autoIncrement: false
+    isNull: true
+    isUnique: false
+    default: null
+    comment: 'File is temporary or permanent.'

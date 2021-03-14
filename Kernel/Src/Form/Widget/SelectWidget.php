@@ -55,7 +55,11 @@ class SelectWidget extends FormWidget
 
     public function render()
     {
-        if (isset($this->value) && isset($this->options[$this->value])) {
+        if (
+            isset($this->value)
+            && isset($this->options[$this->value])
+            && $this->options[$this->value] instanceof OptionWidget
+        ) {
             $this->options[$this->value]->setSelected(true);
         }
         parent::render();
@@ -79,7 +83,9 @@ class SelectWidget extends FormWidget
     {
         $this->addClass("autocomplete");
         $autoCompleteJWT = new JWT();
-        $autoCompleteJWT->setPayload("autocomplete-" . $referenceTable . random_int(0, 100));
+        $autoCompleteJWT->setPayload([
+            "autocomplete" => "autocomplete-" . $referenceTable . random_int(0, 100)
+        ]);
         $autoCompleteToken = $autoCompleteJWT->createToken();
         $_SESSION["autocomplete"][$autoCompleteToken] = [
             "referenceTable" => $referenceTable,

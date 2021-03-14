@@ -3,15 +3,13 @@
 namespace Src\Form;
 
 use CoreDB\Kernel\Database\DataType\DataTypeAbstract;
-use CoreDB\Kernel\Database\DataType\Date;
-use CoreDB\Kernel\Database\DataType\DateTime;
-use CoreDB\Kernel\Database\DataType\Time;
 use CoreDB\Kernel\Database\SelectQueryPreparerAbstract;
 use CoreDB\Kernel\EntityReference;
 use CoreDB\Kernel\SearchableInterface;
 use PDO;
 use Src\Entity\DBObject;
 use Src\Entity\Translation;
+use Src\Form\Widget\FormWidget;
 use Src\Form\Widget\InputWidget;
 use Src\Views\CollapsableCard;
 use Src\Views\Pagination;
@@ -44,18 +42,25 @@ class SearchForm extends Form
         $this->search_input_group->setId("search_input_group");
         $this->page = isset($_GET["page"]) ? $_GET["page"] : 1;
         $this->pagination = new Pagination($this->page, $this->object->getPaginationLimit());
-        \CoreDB::controller()->addJsFiles("dist/search_form/search_form.js");
-        \CoreDB::controller()->addFrontendTranslation("record_remove_accept");
+        $controller = \CoreDB::controller();
+        $controller->addJsFiles("dist/search_form/search_form.js");
+        $controller->addFrontendTranslation("record_remove_accept");
+        $controller->addFrontendTranslation("record_remove_accept_entity");
 
         $search_input_group = new ViewGroup("div", "row");
         
         /**
-         * @var DataTypeAbstract $dataType
+         * @var FormWidget $searchWidget
          */
         foreach ($this->object->getSearchFormFields($this->translateLabels) as $field_name => $searchWidget) {
             $this->searchableFields[] = $field_name;
+            if (in_array("daterangeinput", $searchWidget->classes)) {
+                $searchWidgetClass = "col-sm-6 col-lg-3";
+            } else {
+                $searchWidgetClass = "col-sm-3";
+            }
             $search_input_group->addField(
-                ViewGroup::create("div", "col-sm-3")->addField(
+                ViewGroup::create("div", $searchWidgetClass)->addField(
                     $searchWidget
                     ->setValue(isset($this->request[$field_name]) ? $this->request[$field_name] : "")
                     ->addAttribute("autocomplete", "off")
@@ -126,25 +131,24 @@ class SearchForm extends Form
             $this->query->orderBy("`$orderBy` $orderDirection");
         }
 
+        $condition = \CoreDB::database()->condition($this->query);
         foreach ($this->searchableFields as $column_name) {
-            if (isset($params[$column_name]) && $params[$column_name] !== "") {
+            $paramField = str_replace(".", "_", $column_name);
+            if (isset($params[$paramField]) && $params[$paramField] !== "") {
                 if (
-                    isset($this->object->$column_name) &&
-                    in_array(
-                        get_class($this->object->$column_name),
-                        [DateTime::class, Date::class, Time::class]
-                    )
+                    preg_match("/(\d{4}-\d{2}-\d{2}) & (\d{4}-\d{2}-\d{2})/", $params[$paramField])
                 ) {
-                    $dates = explode("&", $params[$column_name]);
-                    $this->query->condition($column_name, $dates[0] . " 00:00:00", ">=")
+                    $dates = explode("&", $params[$paramField]);
+                    $condition->condition($column_name, $dates[0] . " 00:00:00", ">=")
                     ->condition($column_name, $dates[1] . " 23:59:59", "<=");
                 } elseif ($this->object->$column_name instanceof EntityReference) {
-                    $this->query->condition("{$column_name}.ID", $params[$column_name], "IN");
+                    $condition->condition("{$column_name}.ID", $params[$paramField], "IN");
                 } else {
-                    $this->query->condition($column_name, "%{$params[$column_name]}%", "LIKE");
+                    $condition->condition($column_name, "%{$params[$paramField]}%", "LIKE");
                 }
             }
         }
+        $this->query->condition($condition);
     }
 
     public function processForm()

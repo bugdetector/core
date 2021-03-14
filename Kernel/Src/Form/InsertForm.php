@@ -2,10 +2,12 @@
 
 namespace Src\Form;
 
+use CoreDB\Kernel\Database\DataType\File;
 use CoreDB\Kernel\TableMapper;
 use Exception;
 use Src\Controller\Admin\TableController;
 use Src\Entity\DBObject;
+use Src\Entity\File as EntityFile;
 use Src\Entity\Translation;
 use Src\Form\Widget\FormWidget;
 use Src\Form\Widget\InputWidget;
@@ -13,6 +15,7 @@ use Src\Form\Widget\InputWidget;
 class InsertForm extends Form
 {
     public string $method = "POST";
+    public string $formName;
 
     protected TableMapper $object;
 
@@ -20,11 +23,10 @@ class InsertForm extends Form
     {
         parent::__construct();
         $this->object = $object;
-        $this->setEnctype("multipart/form-data");
-        
+        $this->formName = $this->object->entityName ?: $this->object->getTableName();
         foreach (
             $this->object->getFormFields(
-                $this->object->getTableName(),
+                $this->formName,
                 !($object instanceof DBObject)
             ) as $column_name => $field
         ) {
@@ -51,7 +53,10 @@ class InsertForm extends Form
                 ->addAttribute("hidden", "true")
             );
         }
-        \CoreDB::controller()->addJsFiles("dist/insert_form/insert_form.js");
+        $controller = \CoreDB::controller();
+        $controller->addJsFiles("dist/insert_form/insert_form.js");
+        $controller->addFrontendTranslation("record_remove_accept");
+        $controller->addFrontendTranslation("record_remove_accept_field");
     }
 
     public function getFormId(): string
@@ -62,7 +67,10 @@ class InsertForm extends Form
     protected function restoreValues()
     {
         foreach ($this->object->toArray() as $field_name => $field) {
-            $key = $this->object->getTableName() . "[{$field_name}]";
+            $key = (
+                $this->object instanceof DBObject ?
+                $this->object->getTableName() : $this->object->entityName
+            ) . "[{$field_name}]";
             if (isset($this->fields[$key]) && $this->fields[$key] instanceof FormWidget) {
                 $this->fields[$key]->setValue(strval($field));
             }
@@ -71,6 +79,9 @@ class InsertForm extends Form
 
     public function validate(): bool
     {
+        if (isset($this->request[$this->formName])) {
+            $this->object->map($this->request[$this->formName]);
+        }
         return true;
     }
 
@@ -79,13 +90,7 @@ class InsertForm extends Form
         try {
             if (isset($this->request["save"])) {
                 $success_message = $this->object->ID->getValue() ? "update_success" : "insert_success";
-                if (isset($this->request[$this->object->getTableName()])) {
-                    $this->object->map($this->request[$this->object->getTableName()]);
-                }
                 $this->object->save();
-                if (isset($_FILES[$this->object->getTableName()])) {
-                    $this->object->includeFiles($_FILES[$this->object->getTableName()]);
-                }
                 $this->setMessage(Translation::getTranslation($success_message));
                 $this->submitSuccess();
             } elseif (isset($this->request["delete"])) {
@@ -95,6 +100,7 @@ class InsertForm extends Form
             }
         } catch (Exception $ex) {
             $this->setError("", $ex->getMessage());
+            $this->restoreValues();
         }
     }
 

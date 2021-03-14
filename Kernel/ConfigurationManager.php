@@ -129,6 +129,7 @@ class ConfigurationManager
                 $object->save();
             }
         }
+        $this->clearCache();
     }
 
     public function exportTableConfiguration()

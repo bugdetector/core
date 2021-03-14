@@ -30,3 +30,7 @@ email_username:
   key: email_username
   value: CoreDB
   type: text
+test_email_send_address:
+  key: test_email_send_address
+  value: null
+  type: text

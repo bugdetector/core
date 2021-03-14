@@ -3,13 +3,12 @@
 namespace CoreDB\Kernel;
 
 use CoreDB;
-use CoreDB\Kernel\Database\DatabaseInstallationException;
 use CoreDB\Kernel\Database\DataType\DataTypeAbstract;
 use CoreDB\Kernel\Database\DataType\DateTime;
+use CoreDB\Kernel\Database\DataType\File as DataTypeFile;
 use CoreDB\Kernel\Database\DataType\Integer;
 use CoreDB\Kernel\Database\SelectQueryPreparerAbstract;
 use CoreDB\Kernel\Database\TableDefinition;
-use Exception;
 use PDO;
 use PDOException;
 use Src\Entity\DBObject;
@@ -17,8 +16,11 @@ use Src\Entity\File;
 use Src\Entity\Translation;
 use Src\Form\InsertForm;
 use Src\Form\Widget\FormWidget;
+use Src\Form\Widget\InputWidget;
+use Src\JWT;
 use Src\Theme\ResultsViewer;
 use Src\Theme\View;
+use Src\Views\Link;
 use Src\Views\Table;
 use Src\Views\TextElement;
 use Src\Views\ViewGroup;
@@ -49,14 +51,23 @@ abstract class TableMapper implements SearchableInterface
         if ($entityConfig) {
             $this->entityName = array_key_first($entityConfig);
             $this->entityConfig =  $entityConfig[$this->entityName];
-            if (isset($this->entityConfig[EntityReference::CONNECTION_MANY_TO_MANY])) {
-                foreach ($this->entityConfig[EntityReference::CONNECTION_MANY_TO_MANY] as $fieldEntityName => $config) {
-                    $this->{$fieldEntityName} = new EntityReference(
-                        $fieldEntityName,
-                        $this,
-                        $config,
-                        EntityReference::CONNECTION_MANY_TO_MANY
-                    );
+            foreach ($this->entityConfig as $connection => $configData) {
+                if (
+                    in_array($connection, [
+                    EntityReference::CONNECTION_MANY_TO_MANY,
+                    EntityReference::CONNECTION_MANY_TO_ONE,
+                    EntityReference::CONNECTION_ONE_TO_MANY,
+                    EntityReference::CONNECTION_ONE_TO_ONE
+                    ])
+                ) {
+                    foreach ($configData as $fieldEntityName => $config) {
+                        $this->{$fieldEntityName} = new EntityReference(
+                            $fieldEntityName,
+                            $this,
+                            $config,
+                            $connection
+                        );
+                    }
                 }
             }
         }
@@ -204,22 +215,45 @@ abstract class TableMapper implements SearchableInterface
 
     protected function update()
     {
-        return CoreDB::database()
+        $result = CoreDB::database()
             ->update($this->getTableName(), $this->toArray())
             ->condition("ID", $this->ID->getValue())
             ->execute();
+        if ($result) {
+            foreach ($this as $fieldName => $field) {
+                if ($field instanceof DataTypeFile && @$this->changed_fields[$fieldName]) {
+                    $file = File::get($this->changed_fields[$fieldName]["old_value"]);
+                    if ($file) {
+                        $file->delete();
+                    }
+                }
+            }
+        }
+        return $result;
     }
 
     public function save()
     {
-        $this_save = $this->ID->getValue() ? $this->update() : $this->insert();
+        if (!$this->ID->getValue()) {
+            $this->insert();
+        }
         foreach ($this as $field_name => $field) {
-            if ($field instanceof EntityReference) {
+            if (
+                ($field instanceof CoreDB\Kernel\Database\DataType\File) &&
+                $field->getValue()
+            ) {
+                \CoreDB::database()->update(File::getTableName(), [
+                    "status" => File::STATUS_PERMANENT
+                ])
+                ->condition("ID", $field->getValue())
+                ->execute();
+            } elseif ($field instanceof EntityReference) {
                 /** @var EntityReference */
                 $field->object = &$this;
                 $field->save();
             }
         }
+        return $this->update();
     }
 
     public function delete(): bool
@@ -228,19 +262,34 @@ abstract class TableMapper implements SearchableInterface
             return false;
         }
         /**
+         * @var File[] $filesWillDelete
+         */
+        $filesWillDelete = [];
+        /**
          * @var DataTypeAbstract $field
          */
         foreach ($this as $field_name => $field) {
             if ($field instanceof \CoreDB\Kernel\Database\DataType\File) {
                 /** @var File $file */
                 if ($file = File::get($field->getValue())) {
-                    $file->unlinkFile();
+                    $filesWillDelete[] = $file;
                 }
+            } elseif ($field instanceof EntityReference) {
+                $this->$field_name->setValue([]);
             }
         }
-        return boolval(
+        $this->save();
+        $deleted = boolval(
             CoreDB::database()->delete($this->getTableName())->condition("ID", $this->ID)->execute()
         );
+        if ($deleted) {
+            foreach ($filesWillDelete as $file) {
+                $file->delete();
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -259,7 +308,9 @@ abstract class TableMapper implements SearchableInterface
 
     public function getFileUrlForField($field_name)
     {
-        return BASE_URL . "/files/uploaded/" . $this->getTableName() . "/$field_name/" . $this->$field_name;
+        /** @var File */
+        $file = File::get($this->$field_name);
+        return $file->getUrl();
     }
 
     public function getForm()
@@ -290,6 +341,14 @@ abstract class TableMapper implements SearchableInterface
                  * @var FormWidget $widget
                  */
                 $widget->setName($inputName);
+                if ($field instanceof \CoreDB\Kernel\Database\DataType\File) {
+                    /** @var InputWidget $widget*/
+                    $widget->addFileKey(
+                        $this->entityName,
+                        $this->ID->getValue(),
+                        $field_name
+                    );
+                }
             }
             $fields[$field_name] = $widget;
         }
@@ -375,19 +434,31 @@ abstract class TableMapper implements SearchableInterface
         if (!isset($row["edit_actions"])) {
             return;
         }
+        $deleteButton = Link::create(
+            "#",
+            TextElement::create(
+                "<i class='fa fa-times text-danger core-control'></i> 
+                <span class='sr-only'>" . Translation::getTranslation("delete") . "</span>"
+            )->setIsRaw(true)
+        )->addClass("mr-2");
+        if ($this instanceof DBObject) {
+            $deleteButton->addClass("rowdelete")
+            ->addAttribute("data-table", $this->getTableName())
+            ->addAttribute("data-id", $row["edit_actions"]);
+        } else {
+            $removeKeyJwt = new JWT();
+            $removeKeyJwt->setPayload([
+                "entity" => $this->entityName,
+                "id" => $row["edit_actions"]
+            ]);
+            $deleteButton->addClass("entityrowdelete")
+            ->addAttribute("data-entity-name", Translation::getTranslation(
+                $this->entityName
+            ))->addAttribute("data-key", $removeKeyJwt->createToken());
+        }
         $row["edit_actions"] = ViewGroup::create("div", "d-flex")
             ->addField(
-                ViewGroup::create("a", "mr-2 rowdelete")
-                    ->addField(
-                        ViewGroup::create("i", "fa fa-times text-danger core-control")
-                    )->addField(
-                        TextElement::create(
-                            Translation::getTranslation("delete")
-                        )->addClass("sr-only")
-                    )
-                    ->addAttribute("data-table", $this->getTableName())
-                    ->addAttribute("data-id", $row["edit_actions"])
-                    ->addAttribute("href", "#")
+                $deleteButton
             )->addField(
                 ViewGroup::create("a", "ml-2")
                     ->addField(
@@ -427,24 +498,14 @@ abstract class TableMapper implements SearchableInterface
         ($isEntity ? $this->entityName : $this->getTableName()) . "/{$value}";
     }
 
-    public function includeFiles($from = null)
+    public function unsetField($fieldName)
     {
-        foreach (\CoreDB::normalizeFiles($from) as $file_key => $fileInfo) {
-            if ($fileInfo["size"] != 0) {
-                if ($this->$file_key->getValue()) {
-                    /** @var File  */
-                    $file = File::get($this->$file_key);
-                    $file->unlinkFile();
-                } else {
-                    $file = new File();
-                }
-                if ($file->storeUploadedFile($this->getTableName(), $file_key, $fileInfo)) {
-                    $this->{$file_key}->setValue($file->ID);
-                    $this->save();
-                } else {
-                    \CoreDB::database()->rollback();
-                    throw new Exception(Translation::getTranslation("an_error_occured"));
-                }
+        if ($this->$fieldName instanceof DataTypeFile) {
+            $file = File::get($this->$fieldName->getValue());
+            if ($file) {
+                $this->$fieldName->setValue(null);
+                $this->save();
+                $file->delete();
             }
         }
     }

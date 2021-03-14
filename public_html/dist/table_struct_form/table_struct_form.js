@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 9);
+/******/ 	return __webpack_require__(__webpack_require__.s = 11);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -97,7 +97,7 @@ $(function($){$(document).on("click",".newfield",function(){var button=$(this);v
 
 /***/ }),
 
-/***/ 9:
+/***/ 11:
 /*!*********************************************************!*\
   !*** multi ./base_theme/src/forms/table_struct_form.js ***!
   \*********************************************************/

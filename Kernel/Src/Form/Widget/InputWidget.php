@@ -3,6 +3,7 @@
 namespace Src\Form\Widget;
 
 use Src\Entity\File;
+use Src\JWT;
 use Src\Theme\View;
 
 class InputWidget extends FormWidget
@@ -10,6 +11,10 @@ class InputWidget extends FormWidget
     public $type = "text";
 
     public ?File $file;
+
+    public ?JWT $fileKey = null;
+
+    public $fileClass = "img-thumbnail";
 
     public static function create(string $name): InputWidget
     {
@@ -21,6 +26,8 @@ class InputWidget extends FormWidget
         $this->type = $type;
         if ($type == "checkbox") {
             \CoreDB::controller()->addJsFiles("dist/checkbox/checkbox.js");
+        } elseif ($type == "file") {
+            \CoreDB::controller()->addJsFiles("dist/file_input/file_input.js");
         }
         return $this;
     }
@@ -56,5 +63,24 @@ class InputWidget extends FormWidget
             \CoreDB::controller()->addCssFiles("dist/daterangepicker/daterangepicker.css");
         }
         return parent::addClass($class_name);
+    }
+
+    public function addFileKey($entityName, $id, $fieldName)
+    {
+        $removeKeyJwt = new JWT();
+        $removeKeyJwt->setPayload([
+            "entity" => $entityName,
+            "id" => $id,
+            "field" => $fieldName
+        ]);
+        $this->fileKey = $removeKeyJwt;
+    }
+
+    public function renderAttributes()
+    {
+        if ($this->type == "file" && $this->value) {
+            $this->removeAttribute("required");
+        }
+        return parent::renderAttributes();
     }
 }

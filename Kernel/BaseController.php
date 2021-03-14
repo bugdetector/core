@@ -27,7 +27,7 @@ abstract class BaseController implements ControllerInterface
 
     public function render()
     {
-        CoreRenderer::getInstance($this::getTemplateDirectories())->renderController($this);
+        echo CoreRenderer::getInstance($this::getTemplateDirectories())->renderController($this);
     }
 
     public function setTitle(string $title): void
@@ -98,7 +98,7 @@ abstract class BaseController implements ControllerInterface
     /**
      * @inheritdoc
      */
-    public function createMessage(string $message, int $type = Messenger::ERROR): void
+    public function createMessage($message, int $type = Messenger::ERROR): void
     {
         \CoreDB::messenger()->createMessage($message, $type);
     }
@@ -106,7 +106,7 @@ abstract class BaseController implements ControllerInterface
     public function preprocessPage()
     {
         try {
-            if ($this->method) {
+            if ($this->method && method_exists($this, $this->method)) {
                 $this->{$this->method}();
             }
         } catch (Exception $ex) {
