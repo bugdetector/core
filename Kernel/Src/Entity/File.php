@@ -50,9 +50,22 @@ class File extends TableMapper
 
     public function map(array $array, bool $isConstructor = false)
     {
-        parent::map($array);
-        if (strpos($this->mime_type, "image/") !== false) {
-            $this->isImage = true;
+        if (@$array["file"]) {
+            $file = File::get($array["file"]);
+            $this->map($file->toArray());
+            if (!$this->ID->getValue()) {
+                $this->ID->setValue($file->ID->getValue());
+            } else {
+                \CoreDB::database()->delete(static::getTableName())
+                ->condition("ID", $file->ID->getValue())
+                ->execute();
+            }
+            $this->status->setValue(self::STATUS_PERMANENT);
+        } else {
+            parent::map($array);
+            if (strpos($this->mime_type, "image/") !== false) {
+                $this->isImage = true;
+            }
         }
     }
 
@@ -158,10 +171,12 @@ class File extends TableMapper
 
     public function getFormFields($name, bool $translateLabel = true): array
     {
-        return [InputWidget::create($name)
+        return [
+            InputWidget::create("{$name}[file]")
+            ->addFileKey($this->entityName, $this->ID->getValue(), "file")
             ->setType("file")
             ->setValue($this->ID)
-            ->addClass("p-1")
+            ->addClass("p-1 asyncronous")
         ];
     }
 }

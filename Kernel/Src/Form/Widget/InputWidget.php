@@ -28,6 +28,8 @@ class InputWidget extends FormWidget
             \CoreDB::controller()->addJsFiles("dist/checkbox/checkbox.js");
         } elseif ($type == "file") {
             \CoreDB::controller()->addJsFiles("dist/file_input/file_input.js");
+            \CoreDB::controller()->addCssFiles("dist/file_input/file_input.css");
+            \CoreDB::controller()->addFrontendTranslation("close");
         }
         return $this;
     }
@@ -65,7 +67,7 @@ class InputWidget extends FormWidget
         return parent::addClass($class_name);
     }
 
-    public function addFileKey($entityName, $id, $fieldName)
+    public function addFileKey($entityName, $id, $fieldName): InputWidget
     {
         $removeKeyJwt = new JWT();
         $removeKeyJwt->setPayload([
@@ -74,6 +76,7 @@ class InputWidget extends FormWidget
             "field" => $fieldName
         ]);
         $this->fileKey = $removeKeyJwt;
+        return $this;
     }
 
     public function renderAttributes()

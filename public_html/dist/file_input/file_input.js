@@ -90,10 +90,25 @@
 /*!************************************************************!*\
   !*** ./base_theme/src/components/file_input/file_input.js ***!
   \************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _file_input_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./file_input.scss */ "./base_theme/src/components/file_input/file_input.scss");
+/* harmony import */ var _file_input_scss__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_file_input_scss__WEBPACK_IMPORTED_MODULE_0__);
 $(function(){$(document).on("change","input[type='file'].asyncronous",function(e){var form=$(this).closest("form");var fileId=$(document.getElementById($(this).data("file-for")));var formData=new FormData();formData.append('file',this.files[0]);formData.append("form_build_id",form.find("#input_form_build_id").val());formData.append("form_id",form.find("#input_form_id").val());formData.append("key",fileId.data("key"));formData.append("label",fileId.data("label"));formData.append("name",fileId.attr("name"));$.ajax({url:root+"/ajax/saveFile",type:'POST',data:formData,processData:false,contentType:false,success:function success(response){fileId.closest(".input_widget").replaceWith(response);}});});});
+
+/***/ }),
+
+/***/ "./base_theme/src/components/file_input/file_input.scss":
+/*!**************************************************************!*\
+  !*** ./base_theme/src/components/file_input/file_input.scss ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
 
 /***/ }),
 

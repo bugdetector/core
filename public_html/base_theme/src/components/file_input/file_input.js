@@ -1,3 +1,4 @@
+import "./file_input.scss";
 $(function(){
     $(document).on("change", "input[type='file'].asyncronous", function(e){
         var form = $(this).closest("form");
