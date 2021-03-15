@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack:///./base_theme/src/components/file_input/file_input.scss"],"names":[],"mappings":"AAAA;EACI,cAAc","file":"file_input/file_input.css","sourcesContent":[".image-preview img{\n    max-width: 30%;\n}"],"sourceRoot":""}

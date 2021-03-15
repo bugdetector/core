@@ -79,7 +79,7 @@ class SearchForm extends Form
                         ->setValue(Translation::getTranslation("search"))
                         ->addClass("btn btn-primary mr-sm-1")
                 )->addField(
-                    InputWidget::create("search")
+                    InputWidget::create("reset")
                         ->setType("reset")
                         ->setValue(Translation::getTranslation("reset"))
                         ->addClass("btn btn-danger ml-sm-1")
