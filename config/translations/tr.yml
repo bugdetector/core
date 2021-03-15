@@ -197,3 +197,4 @@ add_new_node: 'Yeni Öge Ekle'
 add_subitem: 'Alt Öge Ekle<br>'
 new_node: 'Yeni Öge'
 node_remove_warning: '<p>Bu işlem bu öge ve tüm alt ögelerini siler.</p><p>Lütfen devam etmeden önce değişiklikleriniz kaydedin.<br></p><p>Silmek istediğinize emin misiniz?<br></p>'
+close: Kapat
