@@ -28,8 +28,16 @@ $(document).on("click", ".remove_accept", function (e) {
     });
 }).on("click", ".image-preview", function(e){
     e.preventDefault();
-    alert({
+    bootbox.dialog({
         title: $(this).data("field-name"),
-        message: $(this).children().clone()
+        message: $(this).children().clone(),
+        size: "xl",
+        closeButton: false,
+        buttons: {
+            close : {
+                label: _t("close"),
+                className: "btn-primary"
+            }
+        }
     });
 })

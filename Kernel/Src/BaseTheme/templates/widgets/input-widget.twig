@@ -11,7 +11,7 @@
 					<img src='{{ widget.file.getUrl() }}' class="{{ widget.fileClass }}">
 				</a>
 			{% else %}
-			<a href="{{ widget.file.getUrl() }}" data-field-name="{{ widget.label }}" target="_blank">
+			<a href="{{ widget.file.getUrl() }}" download="{{ widge.file.file_name }}"  data-field-name="{{ widget.label }}" target="_blank">
 				{{ widget.file.file_name }}
 			</a>
 			{% endif %}
