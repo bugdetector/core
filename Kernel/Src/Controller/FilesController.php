@@ -7,6 +7,11 @@ use Src\Entity\File;
 
 class FilesController extends ServiceController
 {
+    public function checkAccess(): bool
+    {
+        return true;
+    }
+    
     public function uploaded()
     {
         $this->response_type = self::RESPONSE_TYPE_RAW;
