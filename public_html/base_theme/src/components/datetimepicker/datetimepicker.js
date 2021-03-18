@@ -19,7 +19,7 @@ $(function ($) {
         let default_value = el.val();
         el.val("");
         el.datetimepicker({
-            format: "YYYY-MM-DD",
+            format: "DD-MM-YYYY",
             locale: language
         });
         el.val(default_value);
@@ -29,7 +29,7 @@ $(function ($) {
         let default_value = el.val();
         el.val("");
         el.datetimepicker({
-            format: "YYYY-MM-DD HH:mm",
+            format: "DD-MM-YYYY HH:mm",
             locale: language
         });
         el.val(default_value);

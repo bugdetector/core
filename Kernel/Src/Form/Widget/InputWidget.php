@@ -79,6 +79,18 @@ class InputWidget extends FormWidget
         return $this;
     }
 
+    public function render()
+    {
+        if ($this->value) {
+            if ($this->hasClass("dateinput")) {
+                $this->value = date("d-m-Y", strtotime($this->value));
+            } elseif ($this->hasClass("datetimeinput")) {
+                $this->value = date("d-m-Y H:i", strtotime($this->value));
+            }
+        }
+        return parent::render();
+    }
+
     public function renderAttributes()
     {
         if ($this->type == "file" && $this->value) {
