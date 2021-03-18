@@ -38,7 +38,11 @@ class Date extends DataTypeAbstract
 
     public function setValue($value)
     {
-        $this->value = date("Y-m-d", strtotime($value));
+        if ($value) {
+            $this->value = date("Y-m-d", strtotime($value));
+        } else {
+            $this->value = null;
+        }
     }
 
     /**
