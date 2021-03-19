@@ -10,7 +10,7 @@ abstract class TreeEntityAbstract extends TableMapper
 {
     public Integer $weight;
 
-    abstract public function getTreeFieldName(): string;
+    abstract public static function getTreeFieldName(): string;
 
     abstract public function getRemoveServicecUrl(): string;
 
