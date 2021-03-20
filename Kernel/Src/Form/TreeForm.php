@@ -175,7 +175,7 @@ class TreeForm extends Form
                 '<i class="fa fa-trash"></i> ' . Translation::getTranslation("delete")
             )->setIsRaw(true))->addClass("btn btn-danger ml-3 remove-node")
             ->addAttribute("data-node", $nodeId)
-            ->addAttribute("data-service-url", $element->getRemoveServicecUrl())
+            ->addAttribute("data-service-url", $element->getRemoveServiceUrl())
         );
         if ($this->showEditUrl && $element->ID->getValue()) {
             $content->addField(
