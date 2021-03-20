@@ -12,7 +12,7 @@ abstract class TreeEntityAbstract extends TableMapper
 
     abstract public static function getTreeFieldName(): string;
 
-    abstract public function getRemoveServicecUrl(): string;
+    abstract public function getRemoveServiceUrl(): string;
 
     public static function getRootElements(): array
     {
