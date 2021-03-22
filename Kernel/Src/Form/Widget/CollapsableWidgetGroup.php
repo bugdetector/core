@@ -3,7 +3,7 @@
 namespace Src\Form\Widget;
 
 use CoreDB;
-use CoreDB\Kernel\TableMapper;
+use CoreDB\Kernel\Model;
 use Src\Entity\Translation;
 use Src\Views\CollapsableCard;
 use Src\Views\Link;
@@ -41,7 +41,7 @@ class CollapsableWidgetGroup extends FormWidget
         return new static($entityName, $fieldEntityName);
     }
 
-    public function addCollapsibleObject(TableMapper $object, int $index, bool $opened = false)
+    public function addCollapsibleObject(Model $object, int $index, bool $opened = false)
     {
         $this->fieldGroup->addField(
             self::getObjectCard(
@@ -55,7 +55,7 @@ class CollapsableWidgetGroup extends FormWidget
     }
 
     public static function getObjectCard(
-        TableMapper $object,
+        Model $object,
         $name,
         $index,
         array $hiddenFields,

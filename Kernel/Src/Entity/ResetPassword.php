@@ -4,14 +4,14 @@ namespace Src\Entity;
 
 use CoreDB\Kernel\Database\DataType\ShortText;
 use CoreDB\Kernel\Database\DataType\TableReference;
-use CoreDB\Kernel\TableMapper;
+use CoreDB\Kernel\Model;
 
 /**
  * Object relation with table reset_password_queue
  * @author murat
  */
 
-class ResetPassword extends TableMapper
+class ResetPassword extends Model
 {
     public TableReference $user;
     public ShortText $key;

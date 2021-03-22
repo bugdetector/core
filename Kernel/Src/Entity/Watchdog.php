@@ -4,9 +4,9 @@ namespace Src\Entity;
 
 use CoreDB\Kernel\Database\DataType\ShortText;
 use CoreDB\Kernel\Database\DataType\Text;
-use CoreDB\Kernel\TableMapper;
+use CoreDB\Kernel\Model;
 
-class Watchdog extends TableMapper
+class Watchdog extends Model
 {
     public ShortText $event;
     public ShortText $value;

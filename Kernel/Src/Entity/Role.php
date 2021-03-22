@@ -4,14 +4,14 @@ namespace Src\Entity;
 
 use CoreDB\Kernel\Database\DataType\ShortText;
 use CoreDB\Kernel\Database\SelectQueryPreparerAbstract;
-use CoreDB\Kernel\TableMapper;
+use CoreDB\Kernel\Model;
 
 /**
  * Object relation with table roles
  * @author murat
  */
 
-class Role extends TableMapper
+class Role extends Model
 {
     public ShortText $role;
 

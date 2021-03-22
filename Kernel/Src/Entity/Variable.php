@@ -7,7 +7,7 @@ use CoreDB\Kernel\Database\DataType\EnumaratedList;
 use CoreDB\Kernel\Database\DataType\LongText;
 use CoreDB\Kernel\Database\DataType\ShortText;
 use CoreDB\Kernel\Database\SelectQueryPreparerAbstract;
-use CoreDB\Kernel\TableMapper;
+use CoreDB\Kernel\Model;
 use Exception;
 use Src\Theme\View;
 
@@ -16,7 +16,7 @@ use Src\Theme\View;
  * @author murat
  */
 
-class Variable extends TableMapper
+class Variable extends Model
 {
     public ShortText $key;
     public LongText $value;

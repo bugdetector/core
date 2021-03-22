@@ -11,7 +11,7 @@ use CoreDB\Kernel\Database\SelectQueryPreparerAbstract;
 use CoreDB\Kernel\Database\TableDefinition;
 use PDO;
 use PDOException;
-use Src\Entity\DBObject;
+use Src\Entity\DynamicModel;
 use Src\Entity\File;
 use Src\Entity\Translation;
 use Src\Form\InsertForm;
@@ -25,7 +25,7 @@ use Src\Views\Table;
 use Src\Views\TextElement;
 use Src\Views\ViewGroup;
 
-abstract class TableMapper implements SearchableInterface
+abstract class Model implements SearchableInterface
 {
     public Integer $ID;
     public DateTime $created_at;
@@ -86,7 +86,7 @@ abstract class TableMapper implements SearchableInterface
 
     /**
      * Get an instance of object with given filter
-     * @return TableMapper
+     * @return Model
      *  Object.
      */
     public static function get($filter)
@@ -102,7 +102,7 @@ abstract class TableMapper implements SearchableInterface
     /**
      * Get all objects matches given filter.
      * @return array
-     *  TableMapper objects.
+     *  Model objects.
      */
     public static function getAll(array $filter): array
     {
@@ -112,10 +112,10 @@ abstract class TableMapper implements SearchableInterface
 
     /**
      * Copy of ::get. Needs table name.
-     * @return TableMapper
+     * @return Model
      *  Object.
      */
-    public static function find(array $filter, string $table, $orderBy = "ID"): ?TableMapper
+    public static function find(array $filter, string $table, $orderBy = "ID"): ?Model
     {
         $query = \CoreDB::database()->select($table);
         foreach ($filter as $key => $value) {
@@ -127,7 +127,7 @@ abstract class TableMapper implements SearchableInterface
         if ($result) {
             $className = get_called_class();
             /**
-             * @var TableMapper
+             * @var Model
              */
             $object = new $className($table, $result);
         } else {
@@ -139,7 +139,7 @@ abstract class TableMapper implements SearchableInterface
     /**
      * Copy of ::getAll. Need table name.
      * @return array
-     *  TableMapper objects.
+     *  Model objects.
      */
     public static function findAll(array $filter, string $table, $orderBy = "ID"): array
     {
@@ -155,7 +155,7 @@ abstract class TableMapper implements SearchableInterface
             $className = get_called_class();
             foreach ($results as $result) {
                 /**
-                 * @var TableMapper
+                 * @var Model
                  */
                 $object = new $className($table, $result);
                 $objects[] = $object;
@@ -441,7 +441,7 @@ abstract class TableMapper implements SearchableInterface
                 <span class='sr-only'>" . Translation::getTranslation("delete") . "</span>"
             )->setIsRaw(true)
         )->addClass("mr-2");
-        if ($this instanceof DBObject) {
+        if ($this instanceof DynamicModel) {
             $deleteButton->addClass("rowdelete")
             ->addAttribute("data-table", $this->getTableName())
             ->addAttribute("data-id", $row["edit_actions"]);
@@ -492,7 +492,7 @@ abstract class TableMapper implements SearchableInterface
         if (!$value) {
             $value = $this->ID->getValue();
         }
-        $isEntity = static::class != DBObject::class;
+        $isEntity = static::class != DynamicModel::class;
         return BASE_URL . "/admin/" .
         ($isEntity ? "entity" : "table") . "/insert/" .
         ($isEntity ? $this->entityName : $this->getTableName()) . "/{$value}";

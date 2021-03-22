@@ -7,7 +7,7 @@ use CoreDB\Kernel\Messenger;
 use CoreDB\Kernel\ServiceController;
 use Exception;
 use Src\Entity\Cache;
-use Src\Entity\DBObject;
+use Src\Entity\DynamicModel;
 use Src\Entity\Translation;
 use Src\Views\ColumnDefinition;
 use Src\Views\TableAndColumnSelector;
@@ -27,7 +27,7 @@ class AjaxController extends ServiceController
         if (in_array($_POST["table"], \CoreDB::database()::getTableList())) {
             $table = $_POST["table"];
             $id = $_POST["id"];
-            $object = DBObject::get($id, $table);
+            $object = DynamicModel::get($id, $table);
             if ($object) {
                 $object->delete();
                 $this->createMessage(Translation::getTranslation("record_removed"), Messenger::SUCCESS);
@@ -112,7 +112,7 @@ class AjaxController extends ServiceController
     {
         $tablename = $_POST["tablename"];
         if (in_array($tablename, \CoreDB::database()::getTableList())) {
-            $object = new DBObject($tablename);
+            $object = new DynamicModel($tablename);
             $object->clear($tablename);
             $this->createMessage(Translation::getTranslation("table_truncated", [$tablename]), Messenger::SUCCESS);
         }

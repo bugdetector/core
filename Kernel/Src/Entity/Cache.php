@@ -6,14 +6,14 @@ use CoreDB\Kernel\Database\DataType\DateTime;
 use CoreDB\Kernel\Database\DataType\Integer;
 use CoreDB\Kernel\Database\DataType\LongText;
 use CoreDB\Kernel\Database\DataType\ShortText;
-use CoreDB\Kernel\TableMapper;
+use CoreDB\Kernel\Model;
 
 /**
  * Object relation with table cache
  * @author murat
  */
 
-class Cache extends TableMapper
+class Cache extends Model
 {
     public ShortText $bundle;
     public ShortText $key;

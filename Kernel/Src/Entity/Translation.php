@@ -8,12 +8,12 @@ use CoreDB\Kernel\Database\DataType\LongText;
 use CoreDB\Kernel\Database\DataType\ShortText;
 use CoreDB\Kernel\Database\SelectQueryPreparerAbstract;
 use CoreDB\Kernel\Database\TableDefinition;
-use CoreDB\Kernel\TableMapper;
+use CoreDB\Kernel\Model;
 use DirectoryIterator;
 use PDO;
 use Symfony\Component\Yaml\Yaml;
 
-class Translation extends TableMapper
+class Translation extends Model
 {
     private static $language;
     private static $cache;

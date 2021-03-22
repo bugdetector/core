@@ -3,7 +3,7 @@
 namespace Src\Controller\Admin;
 
 use CoreDB\Kernel\Messenger;
-use CoreDB\Kernel\TableMapper;
+use CoreDB\Kernel\Model;
 use Src\Controller\AdminController;
 use Src\Entity\Translation;
 use Src\Form\SearchForm;
@@ -12,7 +12,7 @@ use Src\Views\SideEntityList;
 class EntityController extends AdminController
 {
     public $entityName;
-    public ?TableMapper $object = null;
+    public ?Model $object = null;
     public ?SearchForm $search_form = null;
     public SideEntityList $side_entity_list;
     public array $actions = [];

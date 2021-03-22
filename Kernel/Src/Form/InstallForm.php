@@ -4,7 +4,7 @@ namespace Src\Form;
 
 use CoreDB\Kernel\Database\MySQL\MySQLDriver;
 use CoreDB\Kernel\Messenger;
-use Src\Entity\DBObject;
+use Src\Entity\DynamicModel;
 use Src\Entity\Translation;
 use Src\Entity\User;
 use Src\Entity\Variable;

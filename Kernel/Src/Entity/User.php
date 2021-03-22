@@ -5,11 +5,11 @@ namespace Src\Entity;
 use CoreDB;
 use CoreDB\Kernel\Database\SelectQueryPreparerAbstract;
 use CoreDB\Kernel\EntityReference;
-use CoreDB\Kernel\TableMapper;
+use CoreDB\Kernel\Model;
 use Exception;
 use Src\Form\UserInsertForm;
 
-class User extends TableMapper
+class User extends Model
 {
 
     public EntityReference $roles;

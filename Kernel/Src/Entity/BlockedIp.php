@@ -3,14 +3,14 @@
 namespace Src\Entity;
 
 use CoreDB\Kernel\Database\DataType\ShortText;
-use CoreDB\Kernel\TableMapper;
+use CoreDB\Kernel\Model;
 
 /**
  * Object relation with table blocked_ips
  * @author murat
  */
 
-class BlockedIp extends TableMapper
+class BlockedIp extends Model
 {
     public ShortText $ip;
 

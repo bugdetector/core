@@ -3,10 +3,10 @@
 namespace Src\Form;
 
 use CoreDB\Kernel\Database\DataType\File;
-use CoreDB\Kernel\TableMapper;
+use CoreDB\Kernel\Model;
 use Exception;
 use Src\Controller\Admin\TableController;
-use Src\Entity\DBObject;
+use Src\Entity\DynamicModel;
 use Src\Entity\File as EntityFile;
 use Src\Entity\Translation;
 use Src\Form\Widget\FormWidget;
@@ -17,9 +17,9 @@ class InsertForm extends Form
     public string $method = "POST";
     public string $formName;
 
-    protected TableMapper $object;
+    protected Model $object;
 
-    public function __construct(TableMapper $object)
+    public function __construct(Model $object)
     {
         parent::__construct();
         $this->object = $object;
@@ -27,7 +27,7 @@ class InsertForm extends Form
         foreach (
             $this->object->getFormFields(
                 $this->formName,
-                !($object instanceof DBObject)
+                !($object instanceof DynamicModel)
             ) as $column_name => $field
         ) {
             $this->addField($field);
@@ -68,7 +68,7 @@ class InsertForm extends Form
     {
         foreach ($this->object->toArray() as $field_name => $field) {
             $key = (
-                $this->object instanceof DBObject ?
+                $this->object instanceof DynamicModel ?
                 $this->object->getTableName() : $this->object->entityName
             ) . "[{$field_name}]";
             if (isset($this->fields[$key]) && $this->fields[$key] instanceof FormWidget) {

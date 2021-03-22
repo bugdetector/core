@@ -2,7 +2,7 @@
 
 namespace Src\Entity;
 
-use CoreDB\Kernel\TableMapper;
+use CoreDB\Kernel\Model;
 use CoreDB\Kernel\Database\DataType\ShortText;
 use CoreDB\Kernel\Database\DataType\Text;
 use CoreDB\Kernel\Database\DataType\Integer;
@@ -21,7 +21,7 @@ use Src\Views\Table;
  * @author murat
  */
 
-class ViewableQueries extends TableMapper
+class ViewableQueries extends Model
 {
     /**
      * Auto generated query will used.
