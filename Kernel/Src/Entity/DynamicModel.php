@@ -2,9 +2,9 @@
 
 namespace Src\Entity;
 
-use CoreDB\Kernel\TableMapper;
+use CoreDB\Kernel\Model;
 
-class DBObject extends TableMapper
+class DynamicModel extends Model
 {
     public static $table;
     

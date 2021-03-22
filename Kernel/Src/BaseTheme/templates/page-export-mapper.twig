@@ -14,7 +14,7 @@
 
 namespace App\Entity;
 
-use CoreDB\Kernel\TableMapper;
+use CoreDB\Kernel\Model;
 {% for used in controller.usedClasses %}
 use {{ used }};
 {% endfor %}
@@ -24,7 +24,7 @@ use {{ used }};
  * @author {{ controller.author }}
  */
 
-class {{ controller.table_name|title| replace( {"_" : ""} ) }} extends TableMapper
+class {{ controller.table_name|title| replace( {"_" : ""} ) }} extends Model
 {
 {% for constName, const in controller.consts %}
     /**

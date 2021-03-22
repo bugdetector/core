@@ -7,7 +7,7 @@ use CoreDB\Kernel\Database\SelectQueryPreparerAbstract;
 use CoreDB\Kernel\EntityReference;
 use CoreDB\Kernel\SearchableInterface;
 use PDO;
-use Src\Entity\DBObject;
+use Src\Entity\DynamicModel;
 use Src\Entity\Translation;
 use Src\Form\Widget\FormWidget;
 use Src\Form\Widget\InputWidget;
@@ -99,7 +99,7 @@ class SearchForm extends Form
 
     public static function createByTableName($table_name)
     {
-        $search_form = static::createByObject(new DBObject($table_name), false);
+        $search_form = static::createByObject(new DynamicModel($table_name), false);
         return $search_form;
     }
 

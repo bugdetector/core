@@ -13,7 +13,7 @@ use CoreDB\Kernel\Database\TableDefinition;
 use DirectoryIterator;
 use Exception;
 use Src\Entity\Cache;
-use Src\Entity\DBObject;
+use Src\Entity\DynamicModel;
 use Symfony\Component\Yaml\Yaml;
 
 class ConfigurationManager
@@ -124,7 +124,7 @@ class ConfigurationManager
             }
             $tableData = Yaml::parseFile($dataFilePath);
             foreach ($tableData as $parseKey => $data) {
-                $object = DBObject::get([$dumpByColumn => $parseKey], $tableName) ? : new DBObject($tableName) ;
+                $object = DynamicModel::get([$dumpByColumn => $parseKey], $tableName) ? : new DynamicModel($tableName) ;
                 $object->map($data);
                 $object->save();
             }

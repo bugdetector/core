@@ -3,10 +3,10 @@
 namespace Src\Entity;
 
 use CoreDB\Kernel\Database\DataType\Integer;
-use CoreDB\Kernel\TableMapper;
+use CoreDB\Kernel\Model;
 use Exception;
 
-abstract class TreeEntityAbstract extends TableMapper
+abstract class TreeEntityAbstract extends Model
 {
     public Integer $weight;
 

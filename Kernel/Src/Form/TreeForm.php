@@ -6,7 +6,7 @@ use Src\Entity\TreeEntityAbstract;
 use CoreDB;
 use CoreDB\Kernel\Database\DataType\TableReference;
 use CoreDB\Kernel\Messenger;
-use Src\Entity\DBObject;
+use Src\Entity\DynamicModel;
 use Src\Entity\Translation;
 use Src\Form\Form;
 use Src\Form\Widget\FormWidget;
@@ -108,7 +108,7 @@ class TreeForm extends Form
             if (!($element->$treeFieldName instanceof TableReference)) {
                 $cardTitle = $element->$treeFieldName->getValue();
             } else {
-                $referenceObject = DBObject::get(
+                $referenceObject = DynamicModel::get(
                     $element->$treeFieldName->getValue(),
                     $element->$treeFieldName->reference_table
                 );

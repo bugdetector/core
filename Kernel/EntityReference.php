@@ -4,7 +4,7 @@ namespace CoreDB\Kernel;
 
 use CoreDB\Kernel\Database\DataType\DataTypeAbstract;
 use PDO;
-use Src\Entity\DBObject;
+use Src\Entity\DynamicModel;
 use Src\Entity\Translation;
 use Src\Form\Widget\CollapsableWidgetGroup;
 use Src\Form\Widget\FormWidget;
@@ -19,7 +19,7 @@ class EntityReference extends DataTypeAbstract
     public const CONNECTION_ONE_TO_MANY = "oneToMany";
     public const CONNECTION_ONE_TO_ONE = "oneToOne";
 
-    public TableMapper $object;
+    public Model $object;
     public string $fieldEntityName;
     public string $connectionType;
     public string $mergeTable;
@@ -27,7 +27,7 @@ class EntityReference extends DataTypeAbstract
     public string $foreignKey;
     public bool $createIfNotExist = false;
 
-    public function __construct(string $fieldEntityName, TableMapper &$object, array $config, string $connectionType)
+    public function __construct(string $fieldEntityName, Model &$object, array $config, string $connectionType)
     {
         $this->fieldEntityName = $fieldEntityName;
         $this->object = $object;
@@ -119,7 +119,7 @@ class EntityReference extends DataTypeAbstract
                     $widget->addCollapsibleObject($object, $index + 1);
                 }
             } else {
-                /** @var TableMapper $referenceClass */
+                /** @var Model $referenceClass */
                 $referenceClass = \CoreDB::config()->getEntityInfo($this->fieldEntityName)["class"];
                 $object = $referenceClass::get([
                     $this->foreignKey => $this->object->ID->getValue()
@@ -153,7 +153,7 @@ class EntityReference extends DataTypeAbstract
             $this->connectionType == self::CONNECTION_ONE_TO_MANY ||
             $this->connectionType == self::CONNECTION_ONE_TO_ONE
         ) {
-            /** @var TableMapper */
+            /** @var Model */
             $referenceClass = \CoreDB::config()->getEntityInfo($this->fieldEntityName)["class"];
             return $referenceClass::getAll([
                 $this->foreignKey => $this->object->ID
@@ -170,12 +170,12 @@ class EntityReference extends DataTypeAbstract
             $checkeds = $this->getCheckeds();
             foreach ($this->value as $index => $value) {
                 if (isset($checkeds[$index])) {
-                    $object = DBObject::get([
+                    $object = DynamicModel::get([
                         $this->selfKey => $this->object->ID->getValue(),
                         $this->foreignKey => $checkeds[$index]
                     ], $this->mergeTable);
                 } else {
-                    $object = new DBObject($this->mergeTable);
+                    $object = new DynamicModel($this->mergeTable);
                     if (!is_numeric($value)) {
                         $referenceClass = \CoreDB::config()->getEntityInfo($this->fieldEntityName)["class"];
                         $referenceFieldName = array_keys(
@@ -202,7 +202,7 @@ class EntityReference extends DataTypeAbstract
             }
             if (isset($checkeds[$index])) {
                 for ($index; $index < count($checkeds); $index++) {
-                    $object = DBObject::get([
+                    $object = DynamicModel::get([
                         $this->selfKey => $this->object->ID->getValue(),
                         $this->foreignKey => $checkeds[$index]
                     ], $this->mergeTable);
@@ -220,7 +220,7 @@ class EntityReference extends DataTypeAbstract
                     if (!empty($existing)) {
                         $object = array_shift($existing);
                     } else {
-                        /** @var TableMapper */
+                        /** @var Model */
                         $object = new $referenceClass();
                         $data[$this->foreignKey] = $this->object->ID->getValue();
                     }

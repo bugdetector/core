@@ -3,7 +3,7 @@
 namespace Src\Controller\Admin\Entity;
 
 use CoreDB\Kernel\Router;
-use CoreDB\Kernel\TableMapper;
+use CoreDB\Kernel\Model;
 use Src\Controller\Admin\EntityController;
 use Src\Controller\NotFoundController;
 use Src\Entity\Translation;
@@ -11,7 +11,7 @@ use Src\Entity\Translation;
 class InsertController extends EntityController
 {
 
-    public ?TableMapper $object = null;
+    public ?Model $object = null;
     public $insert_form;
 
     public function preprocessPage()

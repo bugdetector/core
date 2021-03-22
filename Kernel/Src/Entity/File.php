@@ -5,7 +5,7 @@ namespace Src\Entity;
 use CoreDB;
 use CoreDB\Kernel\Database\DataType\EnumaratedList;
 use CoreDB\Kernel\Database\DataType\ShortText;
-use CoreDB\Kernel\TableMapper;
+use CoreDB\Kernel\Model;
 use Src\Form\Widget\InputWidget;
 use Src\Views\TextElement;
 use Src\Views\ViewGroup;
@@ -15,7 +15,7 @@ use Src\Views\ViewGroup;
  * @author murat
  */
 
-class File extends TableMapper
+class File extends Model
 {
     /**
     * File uploaded but not saved.

@@ -3,14 +3,14 @@
 namespace Src\Entity;
 
 use CoreDB\Kernel\Database\DataType\ShortText;
-use CoreDB\Kernel\TableMapper;
+use CoreDB\Kernel\Model;
 
 /**
  * Object relation with table logins
  * @author murat
  */
 
-class Logins extends TableMapper
+class Logins extends Model
 {
     public ShortText $ip_address;
     public ShortText $username;

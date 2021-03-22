@@ -4,7 +4,7 @@ namespace Src\Controller;
 
 use CoreDB\Kernel\Messenger;
 use CoreDB\Kernel\ServiceController;
-use CoreDB\Kernel\TableMapper;
+use CoreDB\Kernel\Model;
 use Exception;
 use Src\BaseTheme\BaseTheme;
 use Src\Entity\File;
@@ -59,7 +59,7 @@ class AjaxController extends ServiceController
             $jwt = JWT::createFromString($key);
             $data = $jwt->getPayload();
             $referenceClass = \CoreDB::config()->getEntityInfo($data->entity)["class"];
-            /** @var TableMapper */
+            /** @var Model */
             $object = $referenceClass::get($data->id);
             if (@$data->field) {
                 $object->unsetField($data->field);
@@ -82,7 +82,7 @@ class AjaxController extends ServiceController
             $jwt = JWT::createFromString($key);
             $data = $jwt->getPayload();
             $referenceClass = \CoreDB::config()->getEntityInfo($data->entity)["class"];
-            /** @var TableMapper */
+            /** @var Model */
             $object = $referenceClass::get($data->id) ?: new $referenceClass();
             if (@$data->field) {
                 $file = new File();
