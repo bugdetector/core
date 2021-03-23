@@ -125,7 +125,7 @@ abstract class BaseController implements ControllerInterface
 
     protected function addMetaTag($index, $attributes)
     {
-        $this->metaTags[] = $attributes;
+        $this->metaTags[$index] = $attributes;
     }
 
     public function addJsCode(string $js_code)
