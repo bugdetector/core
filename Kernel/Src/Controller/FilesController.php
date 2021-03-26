@@ -29,7 +29,7 @@ class FilesController extends ServiceController
         header('Content-Type: ' . $file->mime_type);
         header("Content-Disposition: inline; filename={$file->file_name}");
         header('Content-Length: ' . filesize($file->getFilePath()));
-
+        header("Cache-Control: public");
         // Handle caching
         $fileModificationTime = gmdate('D, d M Y H:i:s', strtotime($file->last_updated)) . ' GMT';
         $headers = getallheaders();
