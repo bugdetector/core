@@ -158,13 +158,28 @@ class TreeForm extends Form
         if ($element->hasSubItems()) {
             $content->addField(
                 $this->getSubCards($element)
-            )->addField(
-                Link::create("#", TextElement::create(
-                    '<i class="fa fa-plus"></i> ' . Translation::getTranslation("add_subitem")
-                )->setIsRaw(true))->addClass("btn btn-primary add-new-node")
-                ->addAttribute("data-parent", $nodeId)
-                ->addAttribute("data-field-name", $treeFieldName)
             );
+            if (!$this->newNodeAddUrl) {
+                $content->addField(
+                    Link::create(
+                        "#",
+                        TextElement::create(
+                            '<i class="fa fa-plus"></i> ' . Translation::getTranslation("add_subitem")
+                        )->setIsRaw(true)
+                    )->addClass("btn btn-primary add-new-node")
+                    ->addAttribute("data-parent", $nodeId)
+                    ->addAttribute("data-field-name", $treeFieldName)
+                );
+            } else {
+                $content->addField(
+                    Link::create(
+                        $this->newNodeAddUrl . "?parent={$nodeId}",
+                        TextElement::create(
+                            '<i class="fa fa-plus"></i> ' . Translation::getTranslation("add_subitem")
+                        )->setIsRaw(true)
+                    )->addClass("btn btn-primary")
+                );
+            }
         } else {
             $content->addField(
                 ViewGroup::create("div", "w-100")
