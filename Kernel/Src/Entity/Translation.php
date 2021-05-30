@@ -37,7 +37,7 @@ class Translation extends Model
             Translation::$language = $_SESSION["lang"];
         }
         if (!Translation::$language) {
-            $languages = explode(',', !IS_CLI ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : $_SERVER["LANG"]);
+            $languages = explode(',', !IS_CLI ? @$_SERVER['HTTP_ACCEPT_LANGUAGE'] : $_SERVER["LANG"]);
             foreach ($languages as $language) {
                 $language = preg_replace(!IS_CLI ? "/-.*/" : "/_.*/", "", $language);
                 if (in_array($language, $supportedLangs)) {
