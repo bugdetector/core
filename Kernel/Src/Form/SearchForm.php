@@ -40,7 +40,7 @@ class SearchForm extends Form
         $this->translateLabels = $translateLabels;
         $this->search_input_group = new CollapsableCard(Translation::getTranslation("search"));
         $this->search_input_group->setId("search_input_group");
-        $this->page = isset($_GET["page"]) ? $_GET["page"] : 1;
+        $this->page = isset($_GET["page"]) && $_GET["page"] >= 1 ? $_GET["page"] : 1;
         $this->pagination = new Pagination($this->page, $this->object->getPaginationLimit());
         $controller = \CoreDB::controller();
         $controller->addJsFiles("dist/search_form/search_form.js");
