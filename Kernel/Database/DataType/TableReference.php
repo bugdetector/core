@@ -33,7 +33,7 @@ class TableReference extends DataTypeAbstract
         ->select($this->reference_table, "rt")
         ->select("rt", ["ID", $firstColumnName])
         ->orderBy("ID")
-        ->limit(10);
+        ->limit(20);
         if ($this->value) {
             $entryQuery->condition("rt.ID", $this->value);
         }
