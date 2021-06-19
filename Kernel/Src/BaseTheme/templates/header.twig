@@ -16,9 +16,9 @@
 
 	<script>
 		var root = "{{ constant("BASE_URL") }}";
-var translations = {{ controller.frontend_translations|json_encode()|raw }};
-{{ controller.js_codes|join(";")|raw }}
-var language = '{{ Translation.getLanguage() }}';
+		var translations = {{ controller.frontend_translations|json_encode()|raw }};
+		{{ controller.js_codes|join(";")|raw }}
+		var language = '{{ language() }}';
 	</script>
 	<style>
 		{{controller.css_codes|join(";")|raw}}</style>
