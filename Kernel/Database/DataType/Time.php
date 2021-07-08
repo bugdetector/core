@@ -26,7 +26,7 @@ class Time extends DataTypeAbstract
         $widget = InputWidget::create("")
         ->setValue($this->value)
         ->setDescription(Translation::getTranslation($this->comment))
-        ->addClass("datetimeinput datetimepicker-input")
+        ->addClass("timeinput datetimepicker-input")
         ->addAttribute("id", $rand_id)
         ->addAttribute("data-target", "#" . $rand_id)
         ->addAttribute("data-toggle", "datetimepicker")
@@ -39,7 +39,7 @@ class Time extends DataTypeAbstract
 
     public function setValue($value)
     {
-        $this->value = date("H:i:s", strtotime($value));
+        $this->value = date("H:i", strtotime($value));
     }
 
     /**
