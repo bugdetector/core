@@ -15,7 +15,12 @@ $(function($){
                 $(`.collapsible-widget-group[data-entity='${entityName}']`).append(response);
                 response.find("select").each(function(i, el){
                     selectpicker(el);
-                })
+                });
+                if (typeof window.loadTimeInput === "function") { 
+                    loadTimeInput();
+                    loadDateInput();
+                    loadDateTimeInput();
+                }
             }
         });
     }).on("click", ".remove-entity", function(e){

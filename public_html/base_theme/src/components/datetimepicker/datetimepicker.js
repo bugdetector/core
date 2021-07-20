@@ -4,6 +4,12 @@ require("tempusdominus-bootstrap-4");
 import 'tempusdominus-bootstrap-4/build/css/tempusdominus-bootstrap-4.min.css';
 
 $(function ($) {
+    loadTimeInput();
+    loadDateInput();
+    loadDateTimeInput();
+})
+
+window.loadTimeInput = function(){
     $(".timeinput").each(function (i, el) {
         el = $(el);
         let default_value = el.val();
@@ -14,6 +20,9 @@ $(function ($) {
         });
         el.val(default_value);
     });
+}
+
+window.loadDateInput = function(){
     $(".dateinput").each(function (i, el) {
         el = $(el);
         let default_value = el.val();
@@ -24,6 +33,9 @@ $(function ($) {
         });
         el.val(default_value);
     });
+}
+
+window.loadDateTimeInput = function(){
     $(".datetimeinput").each(function (i, el) {
         el = $(el);
         let default_value = el.val();
@@ -34,4 +46,4 @@ $(function ($) {
         });
         el.val(default_value);
     });
-})
+}
