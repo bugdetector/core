@@ -2,15 +2,14 @@
 
 namespace Src\Form;
 
-use CoreDB\Kernel\Database\DataType\File;
 use CoreDB\Kernel\Model;
 use Exception;
 use Src\Controller\Admin\TableController;
 use Src\Entity\DynamicModel;
-use Src\Entity\File as EntityFile;
 use Src\Entity\Translation;
 use Src\Form\Widget\FormWidget;
 use Src\Form\Widget\InputWidget;
+use Src\Views\ViewGroup;
 
 class InsertForm extends Form
 {
@@ -32,27 +31,31 @@ class InsertForm extends Form
         ) {
             $this->addField($field);
         }
-        $this->addField(
+        $submitSection = ViewGroup::create("div", "d-flex justify-content-end");
+        $submitSection->addField(
             InputWidget::create("save")
             ->setValue(Translation::getTranslation("save"))
             ->setType("submit")
-            ->addClass("btn btn-primary mt-2")
+            ->addClass("btn btn-primary mt-2 mr-2")
+            ->removeClass("form-control")
         );
         if ($this->object->ID->getValue()) {
-            $this->addField(
+            $submitSection->addField(
                 InputWidget::create("")
                 ->setValue(Translation::getTranslation("delete"))
                 ->setType("button")
-                ->addClass("btn btn-danger mt-2")
+                ->addClass("btn btn-danger mt-2 mr-2")
                 ->addClass("remove_accept")
+                ->removeClass("form-control")
             );
-            $this->addField(
+            $submitSection->addField(
                 InputWidget::create("delete")
                 ->setType("submit")
                 ->addClass("btn btn-danger mt-2")
                 ->addAttribute("hidden", "true")
             );
         }
+        $this->addField($submitSection);
         $controller = \CoreDB::controller();
         $controller->addJsFiles("dist/insert_form/insert_form.js");
         $controller->addFrontendTranslation("record_remove_accept");
