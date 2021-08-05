@@ -6,6 +6,6 @@
 		{% for card in controller.cards %}
 			{{ card }}
 		{% endfor %}
-		{{ controller.echoContent() }}
+		{{ controller.echoContent()|raw }}
 	</div>
 {% endblock %}
