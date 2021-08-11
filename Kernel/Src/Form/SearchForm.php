@@ -28,8 +28,8 @@ class SearchForm extends Form
     public $page;
     public string $summary_text;
     
-    private array $searchableFields = [];
-    private SelectQueryPreparerAbstract $query;
+    protected array $searchableFields = [];
+    protected SelectQueryPreparerAbstract $query;
     
     protected function __construct(SearchableInterface $object, $translateLabels = true)
     {
