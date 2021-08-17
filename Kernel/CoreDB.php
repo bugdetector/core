@@ -173,15 +173,16 @@ class CoreDB
         if (self::$currentUser) {
             return self::$currentUser;
         } else {
+            $userClass = ConfigurationManager::getInstance()->getEntityInfo("users")["class"];
             if (isset($_SESSION[BASE_URL . "-UID"])) {
-                self::$currentUser = User::get($_SESSION[BASE_URL . "-UID"]);
+                self::$currentUser = $userClass::get($_SESSION[BASE_URL . "-UID"]);
             } elseif (isset($_COOKIE["session-token"])) {
                 $jwt = JWT::createFromString($_COOKIE["session-token"]);
-                self::$currentUser = User::get($jwt->getPayload()->ID);
+                self::$currentUser = $userClass::get($jwt->getPayload()->ID);
                 $_SESSION[BASE_URL . "-UID"] = self::$currentUser->ID;
             }
             if (!self::$currentUser) {
-                self::$currentUser = new User();
+                self::$currentUser = new $userClass();
                 if (isset(self::$currentUser->username)) {
                     self::$currentUser->username->setValue("guest");
                 }
