@@ -30,6 +30,7 @@ class QueryCondition
                     $condition .= ($condition != "(" ? "," : "") . ":{$placeholder}";
                 }
                 $condition .= ")";
+                $operator = "IN";
             } elseif ($value === null) {
                 $operator = "IS";
                 $condition = "NULL";
