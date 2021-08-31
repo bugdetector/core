@@ -61,7 +61,7 @@ class ProfileForm extends Form
         $userFields["password"]->addAttribute("disabled", "true");
 
         foreach ($userFields as $fieldName => $field) {
-            if (in_array($fieldName, self::VALID_KEYS)) {
+            if (in_array($fieldName, static::VALID_KEYS)) {
                 $this->addField($field);
             }
         }
@@ -85,7 +85,7 @@ class ProfileForm extends Form
         if (
             !empty(array_diff(
                 array_keys($this->request["profile"]),
-                self::VALID_KEYS
+                static::VALID_KEYS
             ))
         ) {
             $this->setError("form_id", Translation::getTranslation("invalid_operation"));
