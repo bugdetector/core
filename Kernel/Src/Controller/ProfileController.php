@@ -21,7 +21,7 @@ class ProfileController extends BaseTheme
         $this->setTitle(
             Translation::getTranslation("profile")
         );
-        $formClass = class_exists("App\Form\ProfileForm") ? " \App\Form\ProfileForm" : "\Src\Form\ProfileForm";
+        $formClass = class_exists("App\Form\ProfileForm") ? "\App\Form\ProfileForm" : "\Src\Form\ProfileForm";
         $this->profileForm = new $formClass();
         $this->profileForm->processForm();
         $this->profileForm->addClass("p-3");
