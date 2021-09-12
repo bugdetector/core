@@ -4,6 +4,7 @@ namespace Src\Form;
 
 use Src\Controller\ProfileController;
 use CoreDB;
+use CoreDB\Kernel\ConfigurationManager;
 use Src\Entity\File;
 use Src\Entity\Translation;
 use Src\Entity\User;
@@ -33,7 +34,8 @@ class ProfileForm extends Form
         $controller->addFrontendTranslation("record_remove_accept");
         $controller->addFrontendTranslation("record_remove_accept_field");
 
-        $this->user = User::get(\CoreDB::currentUser()->ID->getValue());
+        $userClass = ConfigurationManager::getInstance()->getEntityInfo("users")["class"];
+        $this->user = $userClass::get(\CoreDB::currentUser()->ID->getValue());
         $userFields = $this->user->getFormFields("profile");
         $userFields["password"]
             ->setValue("")

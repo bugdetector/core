@@ -3,6 +3,7 @@
 namespace Src\Form;
 
 use CoreDB;
+use CoreDB\Kernel\ConfigurationManager;
 use Src\Controller\AdminController;
 use Src\Entity\Logins;
 use Src\Entity\Translation;
@@ -59,9 +60,9 @@ class LoginForm extends Form
         if (User::isIpAddressBlocked()) {
             $this->setError("username", Translation::getTranslation("ip_blocked"));
         }
-
-        $this->user = User::getUserByUsername($this->request["username"]) ?:
-                    User::getUserByEmail($this->request["username"]);
+        $userClass = ConfigurationManager::getInstance()->getEntityInfo("users")["class"];
+        $this->user = $userClass::getUserByUsername($this->request["username"]) ?:
+                    $userClass::getUserByEmail($this->request["username"]);
         if ($this->user && !$this->user->active->getValue()) {
             $this->setError("username", Translation::getTranslation("account_blocked"));
         }

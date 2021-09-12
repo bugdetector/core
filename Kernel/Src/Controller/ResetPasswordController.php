@@ -2,6 +2,7 @@
 
 namespace Src\Controller;
 
+use CoreDB\Kernel\ConfigurationManager;
 use CoreDB\Kernel\Messenger;
 use Src\Entity\ResetPassword;
 use Src\Entity\Translation;
@@ -39,7 +40,8 @@ class ResetPasswordController extends BaseTheme
             if (!$reset_password_queue) {
                 $this->createMessage(Translation::getTranslation("link_used"), Messenger::ERROR);
             } else {
-                $user = User::get($_GET["USER"]);
+                $userClass = ConfigurationManager::getInstance()->getEntityInfo("users")["class"];
+                $user = $userClass::get($_GET["USER"]);
                 $this->form = new ResetPasswordForm($user);
                 $this->form->processForm();
             }

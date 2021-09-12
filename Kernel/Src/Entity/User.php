@@ -85,12 +85,12 @@ class User extends Model
 
     public static function getUserByUsername(string $username)
     {
-        return User::get(["username" => $username]);
+        return static::get(["username" => $username]);
     }
 
     public static function getUserByEmail(string $email)
     {
-        return User::get(["email" => $email]);
+        return static::get(["email" => $email]);
     }
 
     protected function insert()
