@@ -2,8 +2,10 @@
 
 namespace Src\Controller\Admin;
 
+use CoreDB\Kernel\ConfigurationManager;
 use CoreDB\Kernel\Router;
 use Src\Controller\AdminController;
+use Src\Controller\NotFoundController;
 use Src\Entity\Translation;
 use Src\Entity\User;
 use Src\Form\UserInsertForm;
@@ -20,9 +22,10 @@ class UserController extends AdminController
     public function preprocessPage()
     {
         if (isset($this->arguments[0])) {
-            $this->user = User::getUserByUsername($this->arguments[0]);
+            $userClass = ConfigurationManager::getInstance()->getEntityInfo("users")["class"];
+            $this->user = $userClass::getUserByUsername($this->arguments[0]);
             if (!$this->user) {
-                Router::getInstance()->route(Router::NOT_FOUND);
+                Router::getInstance()->route(NotFoundController::getUrl());
             }
             $this->setTitle(Translation::getTranslation("edit_user") . " | " . $this->user->username);
         } elseif (isset($_GET["q"]) && $_GET["q"] == "insert") {

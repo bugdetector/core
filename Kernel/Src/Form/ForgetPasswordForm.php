@@ -2,6 +2,7 @@
 
 namespace Src\Form;
 
+use CoreDB\Kernel\ConfigurationManager;
 use CoreDB\Kernel\Messenger;
 use Src\Entity\ResetPassword;
 use Src\Entity\Translation;
@@ -38,8 +39,9 @@ class ForgetPasswordForm extends Form
 
     public function validate(): bool
     {
+        $userClass = ConfigurationManager::getInstance()->getEntityInfo("users")["class"];
         if (isset($this->request["reset"])) {
-            if (!User::getUserByEmail($this->request["email"])) {
+            if (!$userClass::getUserByEmail($this->request["email"])) {
                 $this->setError("username", Translation::getTranslation("wrong_email"));
             }
         }
@@ -48,8 +50,9 @@ class ForgetPasswordForm extends Form
 
     public function submit()
     {
+        $userClass = ConfigurationManager::getInstance()->getEntityInfo("users")["class"];
         /** @var User */
-        $user = User::getUserByEmail($this->request["email"]);
+        $user = $userClass::getUserByEmail($this->request["email"]);
         $reset_password = new ResetPassword();
         $reset_password = ResetPassword::get(["user" => $user->ID]);
         if (!$reset_password) {

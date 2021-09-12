@@ -2,6 +2,7 @@
 
 namespace Src\Form;
 
+use CoreDB\Kernel\ConfigurationManager;
 use CoreDB\Kernel\Database\DataType\File;
 use Src\Entity\File as EntityFile;
 use Src\Entity\Translation;
@@ -58,8 +59,9 @@ class UserInsertForm extends InsertForm
                     Translation::getTranslation("password_match_error")
                 );
             }
+            $userClass = ConfigurationManager::getInstance()->getEntityInfo("users")["class"];
             if (
-                !User::validatePassword($this->request[$this->object->entityName]["password"])
+                !$userClass::validatePassword($this->request[$this->object->entityName]["password"])
             ) {
                 $this->setError(
                     $this->object->entityName . "[password]",

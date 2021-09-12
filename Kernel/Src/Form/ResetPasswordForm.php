@@ -2,6 +2,7 @@
 
 namespace Src\Form;
 
+use CoreDB\Kernel\ConfigurationManager;
 use Src\Entity\Logins;
 use Src\Entity\ResetPassword;
 use Src\Entity\Translation;
@@ -54,7 +55,8 @@ class ResetPasswordForm extends Form
             if ($this->request["password"] != $this->request["password2"]) {
                 $this->setError("password", Translation::getTranslation("password_match_error"));
             }
-            if (!User::validatePassword($_POST["password"])) {
+            $userClass = ConfigurationManager::getInstance()->getEntityInfo("users")["class"];
+            if (!$userClass::validatePassword($_POST["password"])) {
                 $this->setError("password", Translation::getTranslation("password_validation_error"));
             }
         }
