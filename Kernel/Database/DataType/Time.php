@@ -40,7 +40,7 @@ class Time extends DataTypeAbstract
     public function setValue($value)
     {
         if ($value) {
-            $this->value = date("Y-m-d", strtotime($value));
+            $this->value = date("H:i", strtotime($value));
         } else {
             $this->value = null;
         }
