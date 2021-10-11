@@ -2,6 +2,8 @@
 
 namespace CoreDB\Kernel\Database;
 
+use CoreDB\Kernel\Database\MySQL\SelectQueryPreparer;
+
 class QueryCondition
 {
     public QueryPreparerAbstract $query;
@@ -31,6 +33,11 @@ class QueryCondition
                 }
                 $condition .= ")";
                 $operator = "IN";
+            } elseif ($value instanceof SelectQueryPreparer) {
+                foreach ($value->getParams() as $paramKey => $param) {
+                    $this->query->addParameter($paramKey, $param);
+                }
+                $condition = "(" . $value->getQuery() . ")";
             } elseif ($value === null) {
                 $operator = "IS";
                 $condition = "NULL";
