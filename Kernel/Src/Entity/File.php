@@ -108,7 +108,7 @@ class File extends Model
         }
 
         $file_url = getcwd() . "/files/uploaded/$table/$field_name/";
-        is_dir($file_url) ?: mkdir($file_url, 0776, true);
+        is_dir($file_url) ?: mkdir($file_url, 0777, true);
         $file_path = "$table/$field_name/" . md5($fileInfo["tmp_name"] . \CoreDB::currentDate());
         $this->file_path->setValue($file_path);
         if (move_uploaded_file($fileInfo["tmp_name"], getcwd() . "/files/uploaded/{$this->file_path}")) {
