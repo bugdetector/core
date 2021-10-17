@@ -7,7 +7,10 @@ use CoreDB\Kernel\Database\SelectQueryPreparerAbstract;
 use CoreDB\Kernel\EntityReference;
 use CoreDB\Kernel\Model;
 use Exception;
+use Src\Controller\LoginController;
 use Src\Form\UserInsertForm;
+use Src\Views\Link;
+use Src\Views\TextElement;
 
 class User extends Model
 {
@@ -81,6 +84,21 @@ class User extends Model
             )->leftjoin("users_roles", "ur", "ur.user_id = u.ID")
             ->leftjoin(Role::getTableName(), "roles", "ur.role_id = roles.ID")
             ->groupBy("u.ID");
+    }
+
+    public function postProcessRow(&$row): void
+    {
+        parent::postProcessRow($row);
+        $row["edit_actions"]->addField(
+            // Log in as user
+            Link::create(
+                LoginController::getUrl() . "?login_as_user={$row["ID"]}",
+                TextElement::create(
+                    "<i class='fa fa-sign-in-alt'></i> "
+                )->setIsRaw(true)
+            )->addClass("ml-2")
+            ->addAttribute("title", Translation::getTranslation("login_as_user"))
+        );
     }
 
     public static function getUserByUsername(string $username)

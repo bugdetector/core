@@ -2,20 +2,27 @@
 
 namespace Src\Controller;
 
+use CoreDB\Kernel\ConfigurationManager;
 use Src\Entity\Translation;
 use Src\Form\LoginForm;
 use Src\BaseTheme\BaseTheme;
+use Src\Entity\User;
 
 class LoginController extends BaseTheme
 {
     
     public $form;
+    public ?User $loginAsUser = null;
     
     public function __construct($arguments)
     {
         parent::__construct($arguments);
         $this->body_classes = ["bg-gradient-info"];
         $this->setTitle(Translation::getTranslation("welcome") . "!");
+        if (isset($_GET["login_as_user"])) {
+            $userClass = ConfigurationManager::getInstance()->getEntityInfo("users")["class"];
+            $this->loginAsUser = $userClass::get($_GET["login_as_user"]);
+        }
     }
     public function getTemplateFile(): string
     {
@@ -24,16 +31,26 @@ class LoginController extends BaseTheme
 
     public function checkAccess(): bool
     {
-        return true;
+        if (!$this->loginAsUser) {
+            return true;
+        } else {
+            return \CoreDB::currentUser()->isAdmin();
+        }
     }
 
     public function preprocessPage()
     {
-        if (\CoreDB::currentUser()->isLoggedIn()) {
+        if ($this->loginAsUser) {
+            $_SESSION[BASE_URL . "-BACKUP-UID"] = \CoreDB::currentUser()->ID;
+            $_SESSION[BASE_URL . "-UID"] = $this->loginAsUser->ID;
             \CoreDB::goTo(BASE_URL);
+        } else {
+            if (\CoreDB::currentUser()->isLoggedIn()) {
+                \CoreDB::goTo(BASE_URL);
+            }
+            $this->form = new LoginForm();
+            $this->form->processForm();
         }
-        $this->form = new LoginForm();
-        $this->form->processForm();
     }
 
     protected function addDefaultJsFiles()
