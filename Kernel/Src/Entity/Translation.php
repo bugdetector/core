@@ -11,6 +11,9 @@ use CoreDB\Kernel\Database\TableDefinition;
 use CoreDB\Kernel\Model;
 use DirectoryIterator;
 use PDO;
+use Src\Form\Widget\InputWidget;
+use Src\Theme\View;
+use Src\Views\TextElement;
 use Symfony\Component\Yaml\Yaml;
 
 class Translation extends Model
@@ -182,5 +185,51 @@ class Translation extends Model
         $fields = array_merge(["ID AS edit_actions", "key"], $this->getAvailableLanguageList());
         return \CoreDB::database()->select($this->getTableName(), "t")
         ->select("t", $fields);
+    }
+
+    public function getForm()
+    {
+        \CoreDB::controller()->addJsCode(
+            "$(function(){
+                $(document).on('click', '.html_toggle, .raw_toggle', function(e){
+                    e.preventDefault();
+                    if($(this).hasClass('html_toggle')){
+                        $(this).text('RAW');
+                        $(this).closest('div').find('textarea').summernote({
+                            toolbar: [
+                                ['style', ['style']],
+                                ['font', ['bold', 'underline', 'clear', 'fontsize', 'fontname', 'color']],
+                                ['para', ['ul', 'ol', 'paragraph']],
+                                ['table', ['table']],
+                                ['insert', ['link', 'picture']],
+                                ['view', ['fullscreen', 'undo', 'codeview', 'help']],
+                            ],
+                        });
+                    }else{
+                        $(this).text('HTML');
+                        $(this).closest('div').find('textarea').summernote('destroy');
+                    }
+                    $(this).toggleClass('html_toggle raw_toggle');
+                });
+            })"
+        );
+        return parent::getForm();
+    }
+
+    protected function getFieldWidget(string $field_name, bool $translateLabel): ?View
+    {
+        /** @var InputWidget */
+        $widget = parent::getFieldWidget($field_name, $translateLabel);
+        if ($field_name != "key") {
+            $widget->removeClass("summernote");
+            $widget->setDescription(
+                TextElement::create(
+                    "<button class='btn btn-sm btn-primary mt-2 html_toggle'>
+                    HTML
+                    </button> <br>" . $widget->description
+                )->setIsRaw(true)
+            );
+        }
+        return $widget;
     }
 }
