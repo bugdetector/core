@@ -13,7 +13,7 @@
 	{% for css_file  in controller.css_files %}
 		<link rel="stylesheet" href="{{ ("http" not in css_file) ? (constant("BASE_URL") ~ "/" ~ css_file) ~ "?" ~ getHashedFilemTime(css_file) : css_file }}"/>
 	{% endfor %}
-	{% if constant("PWA_ENABLED") %}
+	{% if constant("PWA_ENABLED") is defined and constant("PWA_ENABLED") %}
 		<link rel="manifest" href="{{ constant("BASE_URL") ~ "/manifest.json" }}"/>
 		<script language="javascript">
 			$(function(){

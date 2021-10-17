@@ -22,6 +22,6 @@ class ManifestJsonController extends ServiceController
     public function getManifestFile()
     {
         $this->response_type = self::RESPONSE_TYPE_RAW;
-        return json_encode(PWA_MANIFEST);
+        return defined("PWA_MANIFEST") ? json_encode(PWA_MANIFEST) : "";
     }
 }
