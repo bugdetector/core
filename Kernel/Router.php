@@ -65,7 +65,7 @@ class Router
         $appControllerName = null;
         $appControllerFound = true;
         foreach ($currentArguments as $page) {
-            $page = str_replace("_", "", mb_convert_case($page, MB_CASE_TITLE));
+            $page = str_replace(["_", " "], "", mb_convert_case(str_replace(".", " ", $page), MB_CASE_TITLE));
             $tempSrcControllerName = "{$namespaceSrc}{$page}Controller";
             $tempAppControllerName = "{$namespaceApp}{$page}Controller";
 

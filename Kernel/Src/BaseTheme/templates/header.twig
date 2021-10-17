@@ -13,6 +13,24 @@
 	{% for css_file  in controller.css_files %}
 		<link rel="stylesheet" href="{{ ("http" not in css_file) ? (constant("BASE_URL") ~ "/" ~ css_file) ~ "?" ~ getHashedFilemTime(css_file) : css_file }}"/>
 	{% endfor %}
+	{% if constant("PWA_ENABLED") %}
+		<link rel="manifest" href="{{ constant("BASE_URL") ~ "/manifest.json" }}"/>
+		<script language="javascript">
+			$(function(){
+				registerServiceWorker();
+			})
+			async function registerServiceWorker(){
+				if('serviceWorker' in navigator){
+					try{
+						await navigator.serviceWorker.register(root + "/pwa_service_worker.js");
+					}catch(e){
+						console.log("Service Worker registration failed");
+					}
+				}
+			}
+		</script>
+	{% endif %}
+	
 
 	<script>
 		var root = "{{ constant("BASE_URL") }}";
