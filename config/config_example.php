@@ -22,29 +22,30 @@ define("ENVIROMENT", "development");
 
 
 // To configure PWA feature use the section below.
-
-define("PWA_ENABLED", true);
-define(
-    "PWA_MANIFEST",
-    [
-        "name" => "Core DB",
-        "short_name" => "C DB",
-        "description" => "Best practice web development tool.",
-        "start_url" => ".",
-        "display" => "standalone",
-        "theme_color" => "#fff",
-        "background_color" => "#fff",
-        "icons" => [
-            [
-                "src" => SITE_ROOT ."/assets/square_logo.png",
-                "sizes" => "120x120",
-                "type" => "image/png"
-            ],
-            [
-                "src" => SITE_ROOT ."/assets/square_logo-512x512.png",
-                "sizes" => "512x512",
-                "type" => "image/png"
+if (!IS_CLI) {
+    define("PWA_ENABLED", true);
+    define(
+        "PWA_MANIFEST",
+        [
+            "name" => "Core DB",
+            "short_name" => "C DB",
+            "description" => "Best practice web development tool.",
+            "start_url" => ".",
+            "display" => "standalone",
+            "theme_color" => "#fff",
+            "background_color" => "#fff",
+            "icons" => [
+                [
+                    "src" => SITE_ROOT . "/assets/square_logo.png",
+                    "sizes" => "120x120",
+                    "type" => "image/png"
+                ],
+                [
+                    "src" => SITE_ROOT . "/assets/square_logo-512x512.png",
+                    "sizes" => "512x512",
+                    "type" => "image/png"
+                ]
             ]
         ]
-    ]
-);
+    );
+}
