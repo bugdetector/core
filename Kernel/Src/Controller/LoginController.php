@@ -42,7 +42,9 @@ class LoginController extends BaseTheme
     {
         if ($this->loginAsUser) {
             if ($this->loginAsUser->isAdmin()) {
-                $this->createMessage("cannot_login_as_another_admin_user");
+                $this->createMessage(
+                    Translation::getTranslation("cannot_login_as_another_admin_user")
+                );
                 \CoreDB::goTo(
                     @$_SERVER["HTTP_REFERER"] ?: BASE_URL
                 );
