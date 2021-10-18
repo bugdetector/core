@@ -88,17 +88,20 @@ class User extends Model
 
     public function postProcessRow(&$row): void
     {
+        $id = @$row["edit_actions"];
         parent::postProcessRow($row);
-        $row["edit_actions"]->addField(
-            // Log in as user
-            Link::create(
-                LoginController::getUrl() . "?login_as_user={$row["ID"]}",
-                TextElement::create(
-                    "<i class='fa fa-sign-in-alt'></i> "
-                )->setIsRaw(true)
-            )->addClass("ml-2")
-            ->addAttribute("title", Translation::getTranslation("login_as_user"))
-        );
+        if ($id && \CoreDB::currentUser()->isAdmin()) {
+            $row["edit_actions"]->addField(
+                // Log in as user
+                Link::create(
+                    LoginController::getUrl() . "?login_as_user={$id}",
+                    TextElement::create(
+                        "<i class='fa fa-sign-in-alt'></i> "
+                    )->setIsRaw(true)
+                )->addClass("ml-2")
+                ->addAttribute("title", Translation::getTranslation("login_as_user"))
+            );
+        }
     }
 
     public static function getUserByUsername(string $username)

@@ -199,3 +199,4 @@ new_node: 'New Item'
 node_remove_warning: '<p>This action will remove this item and all sub items.<br></p><p>Please save your changes before continue.<br></p><p>Are you sure want to delete?<br></p>'
 close: Close
 login_as_user: 'Login as user'
+cannot_login_as_another_admin_user: 'Cannot login as another admin user.'
