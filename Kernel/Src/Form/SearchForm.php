@@ -2,7 +2,6 @@
 
 namespace Src\Form;
 
-use CoreDB\Kernel\Database\DataType\DataTypeAbstract;
 use CoreDB\Kernel\Database\SelectQueryPreparerAbstract;
 use CoreDB\Kernel\EntityReference;
 use CoreDB\Kernel\SearchableInterface;
@@ -136,6 +135,7 @@ class SearchForm extends Form
             $paramField = str_replace(".", "_", $column_name);
             if (isset($params[$paramField]) && $params[$paramField] !== "") {
                 if (
+                    !is_array($params[$paramField]) &&
                     preg_match("/(\d{4}-\d{2}-\d{2}) & (\d{4}-\d{2}-\d{2})/", $params[$paramField])
                 ) {
                     $dates = explode("&", $params[$paramField]);

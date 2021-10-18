@@ -41,6 +41,12 @@ class LoginController extends BaseTheme
     public function preprocessPage()
     {
         if ($this->loginAsUser) {
+            if ($this->loginAsUser->isAdmin()) {
+                $this->createMessage("cannot_login_as_another_admin_user");
+                \CoreDB::goTo(
+                    @$_SERVER["HTTP_REFERER"] ?: BASE_URL
+                );
+            }
             $_SESSION[BASE_URL . "-BACKUP-UID"] = \CoreDB::currentUser()->ID;
             $_SESSION[BASE_URL . "-UID"] = $this->loginAsUser->ID;
             \CoreDB::goTo(BASE_URL);
