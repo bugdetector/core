@@ -26,6 +26,7 @@ class SitemapXmlController extends ServiceController
     public function generateSitemapXml()
     {
         $this->response_type = self::RESPONSE_TYPE_RAW;
+        header("Content-Type: application/xml");
         $xmlEntityClasses = Yaml::parseFile(__DIR__ . "/../../../config/xmlsitemap_config.yml");
         $xml = new SimpleXMLElement(
             "<?xml version='1.0' encoding='utf-8'?>" .
