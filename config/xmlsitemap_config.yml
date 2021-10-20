@@ -1,0 +1,4 @@
+# Please write classes that implements CoreDB\Kernel\XMLSitemapEntityInterface
+# Example
+# - App\Entity\Blog
+# - App\Entity\Page
