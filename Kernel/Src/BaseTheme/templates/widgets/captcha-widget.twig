@@ -6,7 +6,7 @@
 	{% endif %}
     <div class="input-group mb-3">
         <div class="input-group-prepend">
-            <img src='{{ constant('BASE_URL') }}/ajax/generateCaptchaImage' class="rounded-left captcha-image">
+            <img src='{{ constant('BASE_URL') }}/captcha/generateCaptchaImage' class="rounded-left captcha-image">
         </div>
         <input type='{{ widget.type }}' name='{{ widget.name }}' class='{{ widget.classes|join(" ") }}' {{ widget.renderAttributes()|raw }}/>
         <div class="input-group-append">
