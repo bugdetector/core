@@ -1,0 +1,21 @@
+<div class='input_widget'>
+	{% if widget.label %}
+		<label for="{{ widget.attributes["id"] }}" class="font-weight-bold text-primary">
+			{{ widget.label }}
+		</label>
+	{% endif %}
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <img src='{{ constant('BASE_URL') }}/ajax/generateCaptchaImage' class="rounded-left captcha-image">
+        </div>
+        <input type='{{ widget.type }}' name='{{ widget.name }}' class='{{ widget.classes|join(" ") }}' {{ widget.renderAttributes()|raw }}/>
+        <div class="input-group-append">
+            <button class="btn btn-info captcha-refresh" type="button"><i class='fa fa-sync'></i></button>
+        </div>
+    </div>
+    {% if widget.description %}
+		<small for="{{ widget.attributes["id"] }}" class="d-block">
+			{{ widget.description }}
+		</small>
+	{% endif %}
+</div>
