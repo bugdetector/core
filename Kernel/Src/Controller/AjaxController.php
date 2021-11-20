@@ -12,7 +12,6 @@ use Src\Entity\Translation;
 use Src\Form\Widget\CollapsableWidgetGroup;
 use Src\Form\Widget\InputWidget;
 use Src\JWT;
-use Src\Lib\CaptchaService;
 
 class AjaxController extends ServiceController
 {
@@ -103,15 +102,5 @@ class AjaxController extends ServiceController
         } catch (Exception $ex) {
             throw new Exception($ex->getMessage());
         }
-    }
-
-    public function generateCaptchaImage()
-    {
-        $this->response_type = self::RESPONSE_TYPE_RAW;
-        $captchaService = new CaptchaService();
-        $image = $captchaService->generateCaptchaImage();
-        header('Content-type: image/png');
-        imagepng($image);
-        imagedestroy($image);
     }
 }
