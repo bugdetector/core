@@ -233,6 +233,10 @@ class ViewableQueries extends Model
                     Translation::getTranslation("result_fields")
                 ])
             );
+        } else {
+            $this->result_fields->setValue(array_values(
+                json_decode($this->result_fields->getValue(), true)
+            ));
         }
         if (
             isset($this->changed_fields["paging_limit"]) &&
