@@ -200,3 +200,4 @@ node_remove_warning: '<p>This action will remove this item and all sub items.<br
 close: Close
 login_as_user: 'Login as user'
 cannot_login_as_another_admin_user: 'Cannot login as another admin user.'
+choose: Choose

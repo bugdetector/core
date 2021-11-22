@@ -1,0 +1,19 @@
+<div class='input_widget'>
+	{% if widget.label %}
+		<label for="{{ widget.attributes["id"] }}" class="font-weight-bold text-primary">
+			{{ widget.label }}
+		</label>
+	{% endif %}
+    <div class="input-group mb-3 entity-finder">
+        <input type='hidden' name='{{ widget.name }}' class="{{ widget.classes|join(" ") }}" value={{ widget.value }}/>
+        <input type='text' class='form-control entity-finder-display-text' name='{{ widget.name }}' disabled value='{{ widget.getText() }}'/>
+        <div class="input-group-append">
+            <button class="btn btn-info find" type="button" {{ widget.renderAttributes()|raw }} data-class="{{ widget.getFinderClassEncoded() }}"><i class='fa fa-search'></i></button>
+        </div>
+    </div>
+    {% if widget.description %}
+		<small for="{{ widget.attributes["id"] }}" class="d-block">
+			{{ widget.description }}
+		</small>
+	{% endif %}
+</div>

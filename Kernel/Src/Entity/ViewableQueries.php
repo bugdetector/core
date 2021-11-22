@@ -9,6 +9,7 @@ use CoreDB\Kernel\Database\DataType\Integer;
 use CoreDB\Kernel\Database\DataType\EnumaratedList;
 use CoreDB\Kernel\Database\SelectQueryPreparerAbstract;
 use CoreDB\Kernel\Database\TableDefinition;
+use CoreDB\Kernel\FilterableInterface;
 use InvalidArgumentException;
 use PDO;
 use Src\Theme\ResultsViewer;
@@ -21,7 +22,7 @@ use Src\Views\Table;
  * @author murat
  */
 
-class ViewableQueries extends Model
+class ViewableQueries extends Model implements FilterableInterface
 {
     /**
      * Auto generated query will used.
@@ -94,6 +95,10 @@ class ViewableQueries extends Model
         return "viewable_queries";
     }
 
+    public static function getInstance()
+    {
+        return new static();
+    }
     /**
      * Returns an object by provided key.
      * @return ViewableQueries

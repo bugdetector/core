@@ -25,6 +25,7 @@ module.exports = (env, argv) => {
       collapsible_widget_card : ["./base_theme/src/components/collapsible_widget_card/collapsible_widget_card.js"],
       file_input : ["./base_theme/src/components/file_input/file_input.js"],
       captcha : ["./base_theme/src/components/captcha/captcha.js"],
+      finder_widget : ["./base_theme/src/components/finder_widget/finder_widget.js"],
       /**
        * Forms
        */
