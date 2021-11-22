@@ -36,12 +36,12 @@ $(function($){
                     });
                     dialog.find(".finder-select").on("click", function(e){
                         e.preventDefault();
-                        finderArea.find(".finder-input").val(this.value);
+                        finderArea.find(".finder-input").val(this.value).trigger("change");
                         let row = $(this).parents("tr");
                         finderArea.find(".entity-finder-display-text").val(
                             row.find("td:eq(1)").text().trim() + " - " +
                             row.find("td:eq(2)").text().trim()
-                        );
+                        ).trigger("change");
                         bootbox.hideAll();
                     })
                 }
