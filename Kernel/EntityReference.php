@@ -111,16 +111,27 @@ class EntityReference extends DataTypeAbstract
             $this->connectionType == self::CONNECTION_ONE_TO_ONE
         ) {
             $widget = CollapsableWidgetGroup::create($this->object->entityName, $this->fieldEntityName);
+            /** @var Model $referenceClass */
+            $referenceClass = \CoreDB::config()->getEntityInfo($this->fieldEntityName)["class"];
             if ($this->connectionType == self::CONNECTION_ONE_TO_MANY) {
                 $widget->setHiddenFields([
                     $this->foreignKey
                 ]);
-                foreach ($this->getCheckeds() as $index => $object) {
-                    $widget->addCollapsibleObject($object, $index + 1);
+                $checkeds = $this->getCheckeds();
+                if ($checkeds) {
+                    foreach ($checkeds as $index => $object) {
+                        $widget->addCollapsibleObject($object, $index + 1);
+                    }
+                } else {
+                    /**
+                     * This action is only done for adding depended js codes.
+                     * @var Model $object
+                     */
+                    $object = new $referenceClass();
+                    $object->getForm();
                 }
             } else {
-                /** @var Model $referenceClass */
-                $referenceClass = \CoreDB::config()->getEntityInfo($this->fieldEntityName)["class"];
+                /** @var Model $object */
                 $object = $referenceClass::get([
                     $this->foreignKey => $this->object->ID->getValue()
                 ]) ?: new $referenceClass();
