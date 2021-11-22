@@ -1,4 +1,4 @@
-$(function($){
+$(function(){
     $(document).on("click", ".entity-finder .find", function(){
         let button = $(this);
         let finderArea = $(this).parents(".entity-finder");
