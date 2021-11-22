@@ -200,3 +200,4 @@ node_remove_warning: '<p>Bu işlem bu öge ve tüm alt ögelerini siler.</p><p>L
 close: Kapat
 login_as_user: 'Kullanıcı olarak oturum aç'
 cannot_login_as_another_admin_user: 'Başka bir yönetici olarak oturum açılamaz.'
+choose: Seç
