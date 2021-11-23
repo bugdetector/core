@@ -143,6 +143,8 @@ class SearchForm extends Form
                     ->condition($column_name, $dates[1] . " 23:59:59", "<=");
                 } elseif ($this->object->$column_name instanceof EntityReference) {
                     $condition->condition("{$column_name}.ID", $params[$paramField], "IN");
+                } elseif (is_array($params[$paramField])) {
+                    $condition->condition($column_name, $params[$paramField]);
                 } else {
                     $condition->condition($column_name, "%{$params[$paramField]}%", "LIKE");
                 }
