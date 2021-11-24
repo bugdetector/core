@@ -195,16 +195,7 @@ class Translation extends Model
                     e.preventDefault();
                     if($(this).hasClass('html_toggle')){
                         $(this).text('RAW');
-                        $(this).closest('div').find('textarea').summernote({
-                            toolbar: [
-                                ['style', ['style']],
-                                ['font', ['bold', 'underline', 'clear', 'fontsize', 'fontname', 'color']],
-                                ['para', ['ul', 'ol', 'paragraph']],
-                                ['table', ['table']],
-                                ['insert', ['link', 'picture']],
-                                ['view', ['fullscreen', 'undo', 'codeview', 'help']],
-                            ],
-                        });
+                        summernote($(this).closest('div').find('textarea'));
                     }else{
                         $(this).text('HTML');
                         $(this).closest('div').find('textarea').summernote('destroy');

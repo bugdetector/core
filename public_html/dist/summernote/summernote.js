@@ -124,7 +124,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var summernote_dist_summernote_bs4_css__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(summernote_dist_summernote_bs4_css__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _summernote_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./summernote.scss */ "./base_theme/src/components/summernote/summernote.scss");
 /* harmony import */ var _summernote_scss__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_summernote_scss__WEBPACK_IMPORTED_MODULE_4__);
-Object(_jquery_jquery__WEBPACK_IMPORTED_MODULE_0__["$"])(function($){$('.summernote').summernote({toolbar:[['style',['style']],['font',['bold','underline','clear',"fontsize","fontname","color"]],['para',['ul','ol','paragraph']],['table',['table']],['insert',['link','picture']],['view',['fullscreen',"undo",'codeview','help']]]});});
+Object(_jquery_jquery__WEBPACK_IMPORTED_MODULE_0__["$"])(function(){window.summernote=function(element){Object(_jquery_jquery__WEBPACK_IMPORTED_MODULE_0__["$"])(element).summernote({toolbar:[['style',['style']],['font',['bold','underline','strikethrough','clear',"fontsize","fontname","color"]],['para',['ul','ol','paragraph']],['table',['table']],['insert',['link','picture','video','hr']],['view',['fullscreen',"undo",'redo','codeview','help']]],fontSizes:['8','9','10','11','12','14','16','18','24','36']});};summernote(Object(_jquery_jquery__WEBPACK_IMPORTED_MODULE_0__["$"])('.summernote'));});
 
 /***/ }),
 
