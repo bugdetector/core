@@ -692,5 +692,9 @@
 .modal-backdrop.show {
   display: none; }
 
+.note-editor.note-frame.fullscreen {
+  width: 92% !important;
+  left: 8%; }
+
 
 /*# sourceMappingURL=summernote.css.map*/
