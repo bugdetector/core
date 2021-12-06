@@ -3,6 +3,7 @@
 namespace Src\Controller;
 
 use Src\BaseTheme\BaseTheme;
+use Src\Entity\Session;
 
 class LogoutController extends BaseTheme
 {
@@ -19,6 +20,10 @@ class LogoutController extends BaseTheme
             $_SESSION[BASE_URL . "-UID"] = $_SESSION[BASE_URL . "-BACKUP-UID"];
             unset($_SESSION[BASE_URL . "-BACKUP-UID"]);
         } else {
+            $session = Session::get(["session_key" => session_id()]);
+            if ($session) {
+                $session->delete();
+            }
             session_destroy();
             setcookie(
                 "session-token",
