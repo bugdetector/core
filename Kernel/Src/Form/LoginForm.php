@@ -6,6 +6,7 @@ use CoreDB;
 use CoreDB\Kernel\ConfigurationManager;
 use Src\Controller\AdminController;
 use Src\Entity\Logins;
+use Src\Entity\Session;
 use Src\Entity\Translation;
 use Src\Entity\User;
 use Src\Entity\Watchdog;
@@ -109,24 +110,38 @@ class LoginForm extends Form
     public function submit()
     {
         //login successful
+        
+        Session::checkLoginPolicy($this->user);
+
         $this->user->last_access->setValue(\CoreDB::currentDate());
         $this->user->save();
         $_SESSION[BASE_URL . "-UID"] = $this->user->ID;
+        $session = new Session();
+        $session->map([
+            "session_key" => session_id(),
+            "ip_address" => User::getUserIp(),
+            "user" => $this->user->ID->getValue()
+        ]);
         if (isset($_POST["remember-me"]) && $_POST["remember-me"]) {
             $jwt = new JWT();
             $payload = new stdClass();
             $payload->ID = $this->user->ID->getValue();
             $jwt->setPayload($payload);
+            $token = $jwt->createToken();
+            $session->map([
+                "remember_me_token" => $token
+            ]);
             setcookie(
                 "session-token",
-                $jwt->createToken(),
+                $token,
                 strtotime("+1 week"),
                 SITE_ROOT ?: "/",
                 \CoreDB::baseHost(),
                 $_SERVER['SERVER_PORT'] == 443
             );
         }
-
+        $session->save();
+        
         Watchdog::log("login", $this->user->username);
 
         unset($_SESSION[self::PASSWORD_FALSE_COUNT]);

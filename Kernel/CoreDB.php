@@ -6,6 +6,7 @@ use CoreDB\Kernel\Database\MySQL\MySQLDriver;
 use CoreDB\Kernel\Database\DatabaseDriver;
 use CoreDB\Kernel\Messenger;
 use CoreDB\Kernel\Router;
+use Src\Entity\Session;
 use Src\Entity\Translation;
 use Src\Entity\User;
 use Src\Entity\Variable;
@@ -175,11 +176,23 @@ class CoreDB
         } else {
             $userClass = ConfigurationManager::getInstance()->getEntityInfo("users")["class"];
             if (isset($_SESSION[BASE_URL . "-UID"])) {
-                self::$currentUser = $userClass::get($_SESSION[BASE_URL . "-UID"]);
+                $session = Session::get(["session_key" => session_id()]);
+                if($session){
+                    self::$currentUser = $userClass::get($_SESSION[BASE_URL . "-UID"]);
+                }
             } elseif (isset($_COOKIE["session-token"])) {
                 $jwt = JWT::createFromString($_COOKIE["session-token"]);
-                self::$currentUser = $userClass::get($jwt->getPayload()->ID);
-                $_SESSION[BASE_URL . "-UID"] = self::$currentUser->ID;
+                /** @var Session */
+                $session = Session::get([
+                    "user" => $jwt->getPayload()->ID,
+                    "remember_me_token" => $_COOKIE["session-token"]
+                ]);
+                if($session){
+                    $session->session_key->setValue(session_id());
+                    $session->save();
+                    self::$currentUser = $userClass::get($session->user->getValue());
+                    $_SESSION[BASE_URL . "-UID"] = self::$currentUser->ID;
+                }
             }
             if (!self::$currentUser) {
                 self::$currentUser = new $userClass();

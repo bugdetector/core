@@ -8,6 +8,7 @@ abstract class DeleteQueryPreparerAbstract extends QueryPreparerAbstract
     public function __construct($table)
     {
         $this->table = $table;
+        $this->condition = new QueryCondition($this);
     }
     
      /**

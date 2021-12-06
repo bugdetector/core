@@ -20,6 +20,20 @@ define("TRUSTED_HOSTS", "localhost,127.0.0.1");
 
 define("ENVIROMENT", "development");
 
+/**
+ * full_one_device_login  -> All users can login by one device. Other devices sessions will thrown when another device used.
+ * role_based_one_device_login -> Defined roles using LOGIN_POLICY_ROLES will be able to login using only one device.
+ * no_restrictions -> No restrictions available.
+ */
+
+define("LOGIN_POLICY", "no_restrictions");
+
+/**
+ * Give roles definitions in an array if LOGIN_POLICY role_based_one_device_login used.
+ * Ex: ['Admin', 'User']
+ */
+define("LOGIN_POLICY_ROLES", []);
+
 
 // To configure PWA feature use the section below.
 if (!IS_CLI) {
