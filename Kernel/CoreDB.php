@@ -189,9 +189,9 @@ class CoreDB
                     "remember_me_token" => $_COOKIE["session-token"]
                 ]);
                 if($session){
+                    self::$currentUser = $userClass::get($session->user->getValue());
                     $session->session_key->setValue(session_id());
                     $session->save();
-                    self::$currentUser = $userClass::get($session->user->getValue());
                     $_SESSION[BASE_URL . "-UID"] = self::$currentUser->ID;
                 }
             }
