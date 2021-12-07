@@ -50,7 +50,7 @@ class LoginController extends BaseTheme
                 );
             }
             $_SESSION[BASE_URL . "-BACKUP-UID"] = \CoreDB::currentUser()->ID;
-            $_SESSION[BASE_URL . "-UID"] = $this->loginAsUser->ID;
+            \CoreDB::userLogin($this->loginAsUser);
             \CoreDB::goTo(BASE_URL);
         } else {
             if (\CoreDB::currentUser()->isLoggedIn()) {
