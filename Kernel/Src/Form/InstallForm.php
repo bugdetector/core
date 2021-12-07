@@ -5,6 +5,7 @@ namespace Src\Form;
 use CoreDB\Kernel\Database\MySQL\MySQLDriver;
 use CoreDB\Kernel\Messenger;
 use Src\Entity\DynamicModel;
+use Src\Entity\Session;
 use Src\Entity\Translation;
 use Src\Entity\User;
 use Src\Entity\Variable;
@@ -172,6 +173,13 @@ class InstallForm extends Form
             $hashSaltVar->save();
         }
         $_SESSION[BASE_URL . "-UID"] = $userID;
+        $session = new Session();
+        $session->map([
+            "session_key" => session_id(),
+            "ip_address" => User::getUserIp(),
+            "user" => $userID
+        ]);
+        $session->save();
         $this->setMessage(Translation::getTranslation("all_configuration_imported"));
         \CoreDB::goTo(BASE_URL);
     }

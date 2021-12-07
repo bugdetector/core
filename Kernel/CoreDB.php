@@ -10,6 +10,7 @@ use Src\Entity\Session;
 use Src\Entity\Translation;
 use Src\Entity\User;
 use Src\Entity\Variable;
+use Src\Entity\Watchdog;
 use Src\JWT;
 
 class CoreDB
@@ -202,6 +203,61 @@ class CoreDB
             }
         }
         return self::$currentUser;
+    }
+
+    public static function userLogin(User $user, bool $rememberMe = false){
+        Session::checkLoginPolicy($user);
+        $user->last_access->setValue(\CoreDB::currentDate());
+        $user->save();
+        $_SESSION[BASE_URL . "-UID"] = $user->ID;
+        $session = new Session();
+        $session->map([
+            "session_key" => session_id(),
+            "ip_address" => User::getUserIp(),
+            "user" => $user->ID->getValue()
+        ]);
+        if (isset($_POST["remember-me"]) && $_POST["remember-me"]) {
+            $jwt = new JWT();
+            $payload = new stdClass();
+            $payload->ID = $user->ID->getValue();
+            $jwt->setPayload($payload);
+            $token = $jwt->createToken();
+            $session->map([
+                "remember_me_token" => $token
+            ]);
+            setcookie(
+                "session-token",
+                $token,
+                strtotime("+1 week"),
+                SITE_ROOT ?: "/",
+                \CoreDB::baseHost(),
+                $_SERVER['SERVER_PORT'] == 443
+            );
+        }
+        $session->save();        
+        Watchdog::log("login", $user->username);
+    }
+
+    public static function userLogout(){
+        if (isset($_SESSION[BASE_URL . "-BACKUP-UID"])) {
+            $user = User::get($_SESSION[BASE_URL . "-BACKUP-UID"]);
+            unset($_SESSION[BASE_URL . "-BACKUP-UID"]);
+            \CoreDB::userLogin($user);
+        }else{
+            $session = Session::get(["session_key" => session_id()]);
+            if ($session) {
+                $session->delete();
+            }
+            session_destroy();
+            setcookie(
+                "session-token",
+                "",
+                0,
+                SITE_ROOT ?: "/",
+                \CoreDB::baseHost(),
+                $_SERVER['SERVER_PORT'] == 443
+            );
+        }
     }
 
     public static function database(): DatabaseDriver
