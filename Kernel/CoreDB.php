@@ -210,7 +210,7 @@ class CoreDB
         $user->last_access->setValue(\CoreDB::currentDate());
         $user->save();
         $_SESSION[BASE_URL . "-UID"] = $user->ID;
-        $session = new Session();
+        $session = Session::get(["session_key" => session_id()]) ?: new Session();
         $session->map([
             "session_key" => session_id(),
             "ip_address" => User::getUserIp(),
