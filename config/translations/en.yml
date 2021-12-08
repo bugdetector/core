@@ -201,3 +201,5 @@ close: Close
 login_as_user: 'Login as user'
 cannot_login_as_another_admin_user: 'Cannot login as another admin user.'
 choose: Choose
+compress_all_image_files: 'Compress all image files'
+_files_compressed: '%d files compressed.'
