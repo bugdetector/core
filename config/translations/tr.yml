@@ -201,3 +201,5 @@ close: Kapat
 login_as_user: 'Kullanıcı olarak oturum aç'
 cannot_login_as_another_admin_user: 'Başka bir yönetici olarak oturum açılamaz.'
 choose: Seç
+compress_all_image_files: 'Tüm resim dosyalarını sıkıştır'
+_files_compressed: '%d dosya sıkıştırıldı.'

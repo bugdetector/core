@@ -3,3 +3,4 @@
 - Src\Command\AddAdminUserCommand
 - Src\Command\ClearTemporaryFilesCommand
 - Src\Command\ClearCacheCommand
+- Src\Command\CompressImageFilesCommand
