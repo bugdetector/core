@@ -31,34 +31,43 @@ class CaptchaService
         $image = imagecreatetruecolor(200, 50);
         imageantialias($image, true);
         $colors = [];
-        $red = rand(125, 175);
-        $green = rand(125, 175);
-        $blue = rand(125, 175);
+        $red = random_int(200, 255);
+        $green = random_int(200, 255);
+        $blue = random_int(200, 255);
         for ($i = 0; $i < 5; $i++) {
             $colors[] = imagecolorallocate(
                 $image,
-                $red - 20 * $i,
-                $green - 20 * $i,
-                $blue - 20 * $i
+                ($red - 20 * $i) % 255,
+                ($green - 20 * $i) % 255,
+                ($blue - 20 * $i) % 255
             );
         }
-        imagefill($image, 0, 0, $colors[0]);
+        imagefill($image, 0, 0, $colors[random_int(0, 4)]);
         for ($i = 0; $i < 10; $i++) {
-            imagesetthickness($image, rand(2, 10));
-            $rect_color = $colors[rand(1, 4)];
+            imagesetthickness($image, random_int(1, 2));
+            $rect_color = $colors[random_int(0, 4)];
             imagerectangle(
                 $image,
-                rand(-10, 190),
-                rand(-10, 10),
-                rand(-10, 190),
-                rand(40, 60),
+                random_int(0, 200),
+                random_int(0, 50),
+                random_int(-10, 190),
+                random_int(40, 60),
                 $rect_color
             );
         }
-        $black = imagecolorallocate($image, 0, 0, 0);
-        $white = imagecolorallocate($image, 255, 255, 255);
-        $textcolors = [$black, $white];
-        
+        for ($i = 0; $i < 10; $i++) {
+            imagesetthickness($image, random_int(1, 2));
+            $rect_color = $colors[random_int(0, 4)];
+            imageellipse(
+                $image,
+                random_int(0, 200),
+                random_int(0, 50),
+                random_int(-10, 190),
+                random_int(40, 60),
+                $rect_color
+            );
+        }
+        $black = imagecolorallocate($image, 20, 20, 20);
         $captchaString = $this->generateCaptchaString($this->lenght);
         $initial = 15;
         $letterSpace = 170 / $this->lenght;
@@ -67,9 +76,9 @@ class CaptchaService
                 $image,
                 20,
                 $initial + $i * $letterSpace,
-                rand(10, 30),
+                random_int(5, 35),
                 $captchaString[$i],
-                $textcolors[rand(0, 1)]
+                $black
             );
         }
         return $image;
