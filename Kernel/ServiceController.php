@@ -47,14 +47,19 @@ abstract class ServiceController extends BaseController
     public function processPage()
     {
         $response_data = ["data" => ""];
-        try {
-            $response = $this->{$this->method}();
-            if ($response) {
-                $response_data["data"] = $response;
+        if ($this->method) {
+            try {
+                $response = $this->{$this->method}();
+                if ($response) {
+                    $response_data["data"] = $response;
+                }
+            } catch (Exception $ex) {
+                http_response_code(400);
+                $this->createMessage($ex->getMessage());
             }
-        } catch (Exception $ex) {
-            http_response_code(400);
-            $this->createMessage($ex->getMessage());
+        } else {
+            header('HTTP/1.0 404 Not Found');
+            return;
         }
         if ($this->messages) {
             $response_data["messages"] = $this->messages;
