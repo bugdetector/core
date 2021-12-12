@@ -3,6 +3,7 @@
 namespace Src\Theme;
 
 use Src\Entity\Translation;
+use Src\Entity\Variable;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -15,6 +16,7 @@ class CoreTwigExtension extends AbstractExtension
             new TwigFunction('t', [Translation::class, 'getTranslation']),
             new TwigFunction("language", [Translation::class, "getLanguage"]),
             new TwigFunction("user", [\CoreDB::class, "currentUser"]),
+            new TwigFunction("variable", [Variable::class, "getByKey"])
         ];
     }
 
