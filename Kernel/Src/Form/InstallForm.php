@@ -174,7 +174,7 @@ class InstallForm extends Form
         }
         $_SESSION[BASE_URL . "-UID"] = $userID;
         $session = new Session();
-        $session->map([
+        $session = new DynamicModel(Session::getTableName(), [
             "session_key" => session_id(),
             "ip_address" => User::getUserIp(),
             "user" => $userID
