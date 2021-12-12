@@ -173,7 +173,6 @@ class InstallForm extends Form
             $hashSaltVar->save();
         }
         $_SESSION[BASE_URL . "-UID"] = $userID;
-        $session = new Session();
         $session = new DynamicModel(Session::getTableName(), [
             "session_key" => session_id(),
             "ip_address" => User::getUserIp(),
