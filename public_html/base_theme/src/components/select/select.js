@@ -1,11 +1,8 @@
-import {$} from "../jquery/jquery";
-import "bootstrap-select-v4";
 import "./select.scss";
-import { map } from "jquery";
 
 
 window.selectpicker = function (element, func = $) {
-    $(element).selectpicker(func);
+    //$(element).selectpicker(func);
 }
 
 $(document).on("keyup", ".bootstrap-select.autocomplete .bs-searchbox input", autocompleteFilter);
@@ -55,7 +52,7 @@ function autocompleteFilter(event){
                             $(selectField).append("<option value='"+text+"'>"+text+"</option>");
                         }
                     }
-                    selectField.selectpicker("refresh");
+                    //selectField.selectpicker("refresh");
                 }
             });
         }

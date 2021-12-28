@@ -14,7 +14,7 @@ $(function($){
                 response = $(response);
                 $(`.collapsible-widget-group[data-entity='${entityName}']`).append(response);
                 response.find("select").each(function(i, el){
-                    selectpicker(el);
+                    //selectpicker(el);
                 });
                 if (typeof window.loadTimeInput === "function") { 
                     loadTimeInput();

@@ -49,12 +49,12 @@ class NavItem extends ViewGroup
         if (!$this->hasClass("dropdown")) {
             $this->addClass("dropdown no-arrow");
             $this->fields[0]->addClass("dropdown-toggle")
-            ->addAttribute("data-toggle", "dropdown")
+            ->addAttribute("data-bs-toggle", "dropdown")
             ->addAttribute("id", $this->collapse_id);
         }
         if (!isset($this->fields[1])) {
             $this->addField(
-                ViewGroup::create("div", "dropdown-menu dropdown-menu-right shadow animated--grow-in")
+                ViewGroup::create("div", "dropdown-menu dropdown-menu-end shadow animated--grow-in")
             );
         }
         if ($dropdown_header) {
@@ -76,7 +76,7 @@ class NavItem extends ViewGroup
     {
         if (!$this->hasClass("collapsed")) {
             $this->fields[0]->addClass("collapsed")
-            ->addAttribute("data-toggle", "collapse")
+            ->addAttribute("data-bs-toggle", "collapse")
             ->addAttribute("data-target", "#{$this->collapse_id}")
             ->addAttribute("aria-expanded", "true")
             ->addAttribute("aria-controls", $this->collapse_id);

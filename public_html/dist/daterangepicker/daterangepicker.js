@@ -3164,6 +3164,725 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
 
 /***/ }),
 
+/***/ "./node_modules/bootstrap/js/src/base-component.js":
+/*!*********************************************************!*\
+  !*** ./node_modules/bootstrap/js/src/base-component.js ***!
+  \*********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _dom_data__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./dom/data */ "./node_modules/bootstrap/js/src/dom/data.js");
+/* harmony import */ var _util_index__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./util/index */ "./node_modules/bootstrap/js/src/util/index.js");
+/* harmony import */ var _dom_event_handler__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./dom/event-handler */ "./node_modules/bootstrap/js/src/dom/event-handler.js");
+/**
+ * --------------------------------------------------------------------------
+ * Bootstrap (v5.1.3): base-component.js
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+ * --------------------------------------------------------------------------
+ */
+
+
+
+
+
+/**
+ * ------------------------------------------------------------------------
+ * Constants
+ * ------------------------------------------------------------------------
+ */
+
+const VERSION = '5.1.3'
+
+class BaseComponent {
+  constructor(element) {
+    element = Object(_util_index__WEBPACK_IMPORTED_MODULE_1__["getElement"])(element)
+
+    if (!element) {
+      return
+    }
+
+    this._element = element
+    _dom_data__WEBPACK_IMPORTED_MODULE_0__["default"].set(this._element, this.constructor.DATA_KEY, this)
+  }
+
+  dispose() {
+    _dom_data__WEBPACK_IMPORTED_MODULE_0__["default"].remove(this._element, this.constructor.DATA_KEY)
+    _dom_event_handler__WEBPACK_IMPORTED_MODULE_2__["default"].off(this._element, this.constructor.EVENT_KEY)
+
+    Object.getOwnPropertyNames(this).forEach(propertyName => {
+      this[propertyName] = null
+    })
+  }
+
+  _queueCallback(callback, element, isAnimated = true) {
+    Object(_util_index__WEBPACK_IMPORTED_MODULE_1__["executeAfterTransition"])(callback, element, isAnimated)
+  }
+
+  /** Static */
+
+  static getInstance(element) {
+    return _dom_data__WEBPACK_IMPORTED_MODULE_0__["default"].get(Object(_util_index__WEBPACK_IMPORTED_MODULE_1__["getElement"])(element), this.DATA_KEY)
+  }
+
+  static getOrCreateInstance(element, config = {}) {
+    return this.getInstance(element) || new this(element, typeof config === 'object' ? config : null)
+  }
+
+  static get VERSION() {
+    return VERSION
+  }
+
+  static get NAME() {
+    throw new Error('You have to implement the static method "NAME", for each component!')
+  }
+
+  static get DATA_KEY() {
+    return `bs.${this.NAME}`
+  }
+
+  static get EVENT_KEY() {
+    return `.${this.DATA_KEY}`
+  }
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (BaseComponent);
+
+
+/***/ }),
+
+/***/ "./node_modules/bootstrap/js/src/dom/data.js":
+/*!***************************************************!*\
+  !*** ./node_modules/bootstrap/js/src/dom/data.js ***!
+  \***************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/**
+ * --------------------------------------------------------------------------
+ * Bootstrap (v5.1.3): dom/data.js
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+ * --------------------------------------------------------------------------
+ */
+
+/**
+ * ------------------------------------------------------------------------
+ * Constants
+ * ------------------------------------------------------------------------
+ */
+
+const elementMap = new Map()
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  set(element, key, instance) {
+    if (!elementMap.has(element)) {
+      elementMap.set(element, new Map())
+    }
+
+    const instanceMap = elementMap.get(element)
+
+    // make it clear we only want one instance per element
+    // can be removed later when multiple key/instances are fine to be used
+    if (!instanceMap.has(key) && instanceMap.size !== 0) {
+      // eslint-disable-next-line no-console
+      console.error(`Bootstrap doesn't allow more than one instance per element. Bound instance: ${Array.from(instanceMap.keys())[0]}.`)
+      return
+    }
+
+    instanceMap.set(key, instance)
+  },
+
+  get(element, key) {
+    if (elementMap.has(element)) {
+      return elementMap.get(element).get(key) || null
+    }
+
+    return null
+  },
+
+  remove(element, key) {
+    if (!elementMap.has(element)) {
+      return
+    }
+
+    const instanceMap = elementMap.get(element)
+
+    instanceMap.delete(key)
+
+    // free up element references if there are no instances left for an element
+    if (instanceMap.size === 0) {
+      elementMap.delete(element)
+    }
+  }
+});
+
+
+/***/ }),
+
+/***/ "./node_modules/bootstrap/js/src/dom/event-handler.js":
+/*!************************************************************!*\
+  !*** ./node_modules/bootstrap/js/src/dom/event-handler.js ***!
+  \************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _util_index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util/index */ "./node_modules/bootstrap/js/src/util/index.js");
+/**
+ * --------------------------------------------------------------------------
+ * Bootstrap (v5.1.3): dom/event-handler.js
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+ * --------------------------------------------------------------------------
+ */
+
+
+
+/**
+ * ------------------------------------------------------------------------
+ * Constants
+ * ------------------------------------------------------------------------
+ */
+
+const namespaceRegex = /[^.]*(?=\..*)\.|.*/
+const stripNameRegex = /\..*/
+const stripUidRegex = /::\d+$/
+const eventRegistry = {} // Events storage
+let uidEvent = 1
+const customEvents = {
+  mouseenter: 'mouseover',
+  mouseleave: 'mouseout'
+}
+const customEventsRegex = /^(mouseenter|mouseleave)/i
+const nativeEvents = new Set([
+  'click',
+  'dblclick',
+  'mouseup',
+  'mousedown',
+  'contextmenu',
+  'mousewheel',
+  'DOMMouseScroll',
+  'mouseover',
+  'mouseout',
+  'mousemove',
+  'selectstart',
+  'selectend',
+  'keydown',
+  'keypress',
+  'keyup',
+  'orientationchange',
+  'touchstart',
+  'touchmove',
+  'touchend',
+  'touchcancel',
+  'pointerdown',
+  'pointermove',
+  'pointerup',
+  'pointerleave',
+  'pointercancel',
+  'gesturestart',
+  'gesturechange',
+  'gestureend',
+  'focus',
+  'blur',
+  'change',
+  'reset',
+  'select',
+  'submit',
+  'focusin',
+  'focusout',
+  'load',
+  'unload',
+  'beforeunload',
+  'resize',
+  'move',
+  'DOMContentLoaded',
+  'readystatechange',
+  'error',
+  'abort',
+  'scroll'
+])
+
+/**
+ * ------------------------------------------------------------------------
+ * Private methods
+ * ------------------------------------------------------------------------
+ */
+
+function getUidEvent(element, uid) {
+  return (uid && `${uid}::${uidEvent++}`) || element.uidEvent || uidEvent++
+}
+
+function getEvent(element) {
+  const uid = getUidEvent(element)
+
+  element.uidEvent = uid
+  eventRegistry[uid] = eventRegistry[uid] || {}
+
+  return eventRegistry[uid]
+}
+
+function bootstrapHandler(element, fn) {
+  return function handler(event) {
+    event.delegateTarget = element
+
+    if (handler.oneOff) {
+      EventHandler.off(element, event.type, fn)
+    }
+
+    return fn.apply(element, [event])
+  }
+}
+
+function bootstrapDelegationHandler(element, selector, fn) {
+  return function handler(event) {
+    const domElements = element.querySelectorAll(selector)
+
+    for (let { target } = event; target && target !== this; target = target.parentNode) {
+      for (let i = domElements.length; i--;) {
+        if (domElements[i] === target) {
+          event.delegateTarget = target
+
+          if (handler.oneOff) {
+            EventHandler.off(element, event.type, selector, fn)
+          }
+
+          return fn.apply(target, [event])
+        }
+      }
+    }
+
+    // To please ESLint
+    return null
+  }
+}
+
+function findHandler(events, handler, delegationSelector = null) {
+  const uidEventList = Object.keys(events)
+
+  for (let i = 0, len = uidEventList.length; i < len; i++) {
+    const event = events[uidEventList[i]]
+
+    if (event.originalHandler === handler && event.delegationSelector === delegationSelector) {
+      return event
+    }
+  }
+
+  return null
+}
+
+function normalizeParams(originalTypeEvent, handler, delegationFn) {
+  const delegation = typeof handler === 'string'
+  const originalHandler = delegation ? delegationFn : handler
+
+  let typeEvent = getTypeEvent(originalTypeEvent)
+  const isNative = nativeEvents.has(typeEvent)
+
+  if (!isNative) {
+    typeEvent = originalTypeEvent
+  }
+
+  return [delegation, originalHandler, typeEvent]
+}
+
+function addHandler(element, originalTypeEvent, handler, delegationFn, oneOff) {
+  if (typeof originalTypeEvent !== 'string' || !element) {
+    return
+  }
+
+  if (!handler) {
+    handler = delegationFn
+    delegationFn = null
+  }
+
+  // in case of mouseenter or mouseleave wrap the handler within a function that checks for its DOM position
+  // this prevents the handler from being dispatched the same way as mouseover or mouseout does
+  if (customEventsRegex.test(originalTypeEvent)) {
+    const wrapFn = fn => {
+      return function (event) {
+        if (!event.relatedTarget || (event.relatedTarget !== event.delegateTarget && !event.delegateTarget.contains(event.relatedTarget))) {
+          return fn.call(this, event)
+        }
+      }
+    }
+
+    if (delegationFn) {
+      delegationFn = wrapFn(delegationFn)
+    } else {
+      handler = wrapFn(handler)
+    }
+  }
+
+  const [delegation, originalHandler, typeEvent] = normalizeParams(originalTypeEvent, handler, delegationFn)
+  const events = getEvent(element)
+  const handlers = events[typeEvent] || (events[typeEvent] = {})
+  const previousFn = findHandler(handlers, originalHandler, delegation ? handler : null)
+
+  if (previousFn) {
+    previousFn.oneOff = previousFn.oneOff && oneOff
+
+    return
+  }
+
+  const uid = getUidEvent(originalHandler, originalTypeEvent.replace(namespaceRegex, ''))
+  const fn = delegation ?
+    bootstrapDelegationHandler(element, handler, delegationFn) :
+    bootstrapHandler(element, handler)
+
+  fn.delegationSelector = delegation ? handler : null
+  fn.originalHandler = originalHandler
+  fn.oneOff = oneOff
+  fn.uidEvent = uid
+  handlers[uid] = fn
+
+  element.addEventListener(typeEvent, fn, delegation)
+}
+
+function removeHandler(element, events, typeEvent, handler, delegationSelector) {
+  const fn = findHandler(events[typeEvent], handler, delegationSelector)
+
+  if (!fn) {
+    return
+  }
+
+  element.removeEventListener(typeEvent, fn, Boolean(delegationSelector))
+  delete events[typeEvent][fn.uidEvent]
+}
+
+function removeNamespacedHandlers(element, events, typeEvent, namespace) {
+  const storeElementEvent = events[typeEvent] || {}
+
+  Object.keys(storeElementEvent).forEach(handlerKey => {
+    if (handlerKey.includes(namespace)) {
+      const event = storeElementEvent[handlerKey]
+
+      removeHandler(element, events, typeEvent, event.originalHandler, event.delegationSelector)
+    }
+  })
+}
+
+function getTypeEvent(event) {
+  // allow to get the native events from namespaced events ('click.bs.button' --> 'click')
+  event = event.replace(stripNameRegex, '')
+  return customEvents[event] || event
+}
+
+const EventHandler = {
+  on(element, event, handler, delegationFn) {
+    addHandler(element, event, handler, delegationFn, false)
+  },
+
+  one(element, event, handler, delegationFn) {
+    addHandler(element, event, handler, delegationFn, true)
+  },
+
+  off(element, originalTypeEvent, handler, delegationFn) {
+    if (typeof originalTypeEvent !== 'string' || !element) {
+      return
+    }
+
+    const [delegation, originalHandler, typeEvent] = normalizeParams(originalTypeEvent, handler, delegationFn)
+    const inNamespace = typeEvent !== originalTypeEvent
+    const events = getEvent(element)
+    const isNamespace = originalTypeEvent.startsWith('.')
+
+    if (typeof originalHandler !== 'undefined') {
+      // Simplest case: handler is passed, remove that listener ONLY.
+      if (!events || !events[typeEvent]) {
+        return
+      }
+
+      removeHandler(element, events, typeEvent, originalHandler, delegation ? handler : null)
+      return
+    }
+
+    if (isNamespace) {
+      Object.keys(events).forEach(elementEvent => {
+        removeNamespacedHandlers(element, events, elementEvent, originalTypeEvent.slice(1))
+      })
+    }
+
+    const storeElementEvent = events[typeEvent] || {}
+    Object.keys(storeElementEvent).forEach(keyHandlers => {
+      const handlerKey = keyHandlers.replace(stripUidRegex, '')
+
+      if (!inNamespace || originalTypeEvent.includes(handlerKey)) {
+        const event = storeElementEvent[keyHandlers]
+
+        removeHandler(element, events, typeEvent, event.originalHandler, event.delegationSelector)
+      }
+    })
+  },
+
+  trigger(element, event, args) {
+    if (typeof event !== 'string' || !element) {
+      return null
+    }
+
+    const $ = Object(_util_index__WEBPACK_IMPORTED_MODULE_0__["getjQuery"])()
+    const typeEvent = getTypeEvent(event)
+    const inNamespace = event !== typeEvent
+    const isNative = nativeEvents.has(typeEvent)
+
+    let jQueryEvent
+    let bubbles = true
+    let nativeDispatch = true
+    let defaultPrevented = false
+    let evt = null
+
+    if (inNamespace && $) {
+      jQueryEvent = $.Event(event, args)
+
+      $(element).trigger(jQueryEvent)
+      bubbles = !jQueryEvent.isPropagationStopped()
+      nativeDispatch = !jQueryEvent.isImmediatePropagationStopped()
+      defaultPrevented = jQueryEvent.isDefaultPrevented()
+    }
+
+    if (isNative) {
+      evt = document.createEvent('HTMLEvents')
+      evt.initEvent(typeEvent, bubbles, true)
+    } else {
+      evt = new CustomEvent(event, {
+        bubbles,
+        cancelable: true
+      })
+    }
+
+    // merge custom information in our event
+    if (typeof args !== 'undefined') {
+      Object.keys(args).forEach(key => {
+        Object.defineProperty(evt, key, {
+          get() {
+            return args[key]
+          }
+        })
+      })
+    }
+
+    if (defaultPrevented) {
+      evt.preventDefault()
+    }
+
+    if (nativeDispatch) {
+      element.dispatchEvent(evt)
+    }
+
+    if (evt.defaultPrevented && typeof jQueryEvent !== 'undefined') {
+      jQueryEvent.preventDefault()
+    }
+
+    return evt
+  }
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (EventHandler);
+
+
+/***/ }),
+
+/***/ "./node_modules/bootstrap/js/src/dom/manipulator.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/bootstrap/js/src/dom/manipulator.js ***!
+  \**********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/**
+ * --------------------------------------------------------------------------
+ * Bootstrap (v5.1.3): dom/manipulator.js
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+ * --------------------------------------------------------------------------
+ */
+
+function normalizeData(val) {
+  if (val === 'true') {
+    return true
+  }
+
+  if (val === 'false') {
+    return false
+  }
+
+  if (val === Number(val).toString()) {
+    return Number(val)
+  }
+
+  if (val === '' || val === 'null') {
+    return null
+  }
+
+  return val
+}
+
+function normalizeDataKey(key) {
+  return key.replace(/[A-Z]/g, chr => `-${chr.toLowerCase()}`)
+}
+
+const Manipulator = {
+  setDataAttribute(element, key, value) {
+    element.setAttribute(`data-bs-${normalizeDataKey(key)}`, value)
+  },
+
+  removeDataAttribute(element, key) {
+    element.removeAttribute(`data-bs-${normalizeDataKey(key)}`)
+  },
+
+  getDataAttributes(element) {
+    if (!element) {
+      return {}
+    }
+
+    const attributes = {}
+
+    Object.keys(element.dataset)
+      .filter(key => key.startsWith('bs'))
+      .forEach(key => {
+        let pureKey = key.replace(/^bs/, '')
+        pureKey = pureKey.charAt(0).toLowerCase() + pureKey.slice(1, pureKey.length)
+        attributes[pureKey] = normalizeData(element.dataset[key])
+      })
+
+    return attributes
+  },
+
+  getDataAttribute(element, key) {
+    return normalizeData(element.getAttribute(`data-bs-${normalizeDataKey(key)}`))
+  },
+
+  offset(element) {
+    const rect = element.getBoundingClientRect()
+
+    return {
+      top: rect.top + window.pageYOffset,
+      left: rect.left + window.pageXOffset
+    }
+  },
+
+  position(element) {
+    return {
+      top: element.offsetTop,
+      left: element.offsetLeft
+    }
+  }
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (Manipulator);
+
+
+/***/ }),
+
+/***/ "./node_modules/bootstrap/js/src/dom/selector-engine.js":
+/*!**************************************************************!*\
+  !*** ./node_modules/bootstrap/js/src/dom/selector-engine.js ***!
+  \**************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _util_index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util/index */ "./node_modules/bootstrap/js/src/util/index.js");
+/**
+ * --------------------------------------------------------------------------
+ * Bootstrap (v5.1.3): dom/selector-engine.js
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+ * --------------------------------------------------------------------------
+ */
+
+/**
+ * ------------------------------------------------------------------------
+ * Constants
+ * ------------------------------------------------------------------------
+ */
+
+
+
+const NODE_TEXT = 3
+
+const SelectorEngine = {
+  find(selector, element = document.documentElement) {
+    return [].concat(...Element.prototype.querySelectorAll.call(element, selector))
+  },
+
+  findOne(selector, element = document.documentElement) {
+    return Element.prototype.querySelector.call(element, selector)
+  },
+
+  children(element, selector) {
+    return [].concat(...element.children)
+      .filter(child => child.matches(selector))
+  },
+
+  parents(element, selector) {
+    const parents = []
+
+    let ancestor = element.parentNode
+
+    while (ancestor && ancestor.nodeType === Node.ELEMENT_NODE && ancestor.nodeType !== NODE_TEXT) {
+      if (ancestor.matches(selector)) {
+        parents.push(ancestor)
+      }
+
+      ancestor = ancestor.parentNode
+    }
+
+    return parents
+  },
+
+  prev(element, selector) {
+    let previous = element.previousElementSibling
+
+    while (previous) {
+      if (previous.matches(selector)) {
+        return [previous]
+      }
+
+      previous = previous.previousElementSibling
+    }
+
+    return []
+  },
+
+  next(element, selector) {
+    let next = element.nextElementSibling
+
+    while (next) {
+      if (next.matches(selector)) {
+        return [next]
+      }
+
+      next = next.nextElementSibling
+    }
+
+    return []
+  },
+
+  focusableChildren(element) {
+    const focusables = [
+      'a',
+      'button',
+      'input',
+      'textarea',
+      'select',
+      'details',
+      '[tabindex]',
+      '[contenteditable="true"]'
+    ].map(selector => `${selector}:not([tabindex^="-"])`).join(', ')
+
+    return this.find(focusables, element).filter(el => !Object(_util_index__WEBPACK_IMPORTED_MODULE_0__["isDisabled"])(el) && Object(_util_index__WEBPACK_IMPORTED_MODULE_0__["isVisible"])(el))
+  }
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (SelectorEngine);
+
+
+/***/ }),
+
 /***/ "./node_modules/bootstrap/js/src/modal.js":
 /*!************************************************!*\
   !*** ./node_modules/bootstrap/js/src/modal.js ***!
@@ -3173,15 +3892,28 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./util */ "./node_modules/bootstrap/js/src/util.js");
+/* harmony import */ var _util_index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./util/index */ "./node_modules/bootstrap/js/src/util/index.js");
+/* harmony import */ var _dom_event_handler__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./dom/event-handler */ "./node_modules/bootstrap/js/src/dom/event-handler.js");
+/* harmony import */ var _dom_manipulator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./dom/manipulator */ "./node_modules/bootstrap/js/src/dom/manipulator.js");
+/* harmony import */ var _dom_selector_engine__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./dom/selector-engine */ "./node_modules/bootstrap/js/src/dom/selector-engine.js");
+/* harmony import */ var _util_scrollbar__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./util/scrollbar */ "./node_modules/bootstrap/js/src/util/scrollbar.js");
+/* harmony import */ var _base_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./base-component */ "./node_modules/bootstrap/js/src/base-component.js");
+/* harmony import */ var _util_backdrop__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./util/backdrop */ "./node_modules/bootstrap/js/src/util/backdrop.js");
+/* harmony import */ var _util_focustrap__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./util/focustrap */ "./node_modules/bootstrap/js/src/util/focustrap.js");
+/* harmony import */ var _util_component_functions__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./util/component-functions */ "./node_modules/bootstrap/js/src/util/component-functions.js");
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.6.0): modal.js
+ * Bootstrap (v5.1.3): modal.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  * --------------------------------------------------------------------------
  */
+
+
+
+
+
+
+
 
 
 
@@ -3193,25 +3925,21 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 const NAME = 'modal'
-const VERSION = '4.6.0'
 const DATA_KEY = 'bs.modal'
 const EVENT_KEY = `.${DATA_KEY}`
 const DATA_API_KEY = '.data-api'
-const JQUERY_NO_CONFLICT = jquery__WEBPACK_IMPORTED_MODULE_0___default.a.fn[NAME]
-const ESCAPE_KEYCODE = 27 // KeyboardEvent.which value for Escape (Esc) key
+const ESCAPE_KEY = 'Escape'
 
 const Default = {
   backdrop: true,
   keyboard: true,
-  focus: true,
-  show: true
+  focus: true
 }
 
 const DefaultType = {
   backdrop: '(boolean|string)',
   keyboard: 'boolean',
-  focus: 'boolean',
-  show: 'boolean'
+  focus: 'boolean'
 }
 
 const EVENT_HIDE = `hide${EVENT_KEY}`
@@ -3219,7 +3947,6 @@ const EVENT_HIDE_PREVENTED = `hidePrevented${EVENT_KEY}`
 const EVENT_HIDDEN = `hidden${EVENT_KEY}`
 const EVENT_SHOW = `show${EVENT_KEY}`
 const EVENT_SHOWN = `shown${EVENT_KEY}`
-const EVENT_FOCUSIN = `focusin${EVENT_KEY}`
 const EVENT_RESIZE = `resize${EVENT_KEY}`
 const EVENT_CLICK_DISMISS = `click.dismiss${EVENT_KEY}`
 const EVENT_KEYDOWN_DISMISS = `keydown.dismiss${EVENT_KEY}`
@@ -3227,20 +3954,15 @@ const EVENT_MOUSEUP_DISMISS = `mouseup.dismiss${EVENT_KEY}`
 const EVENT_MOUSEDOWN_DISMISS = `mousedown.dismiss${EVENT_KEY}`
 const EVENT_CLICK_DATA_API = `click${EVENT_KEY}${DATA_API_KEY}`
 
-const CLASS_NAME_SCROLLABLE = 'modal-dialog-scrollable'
-const CLASS_NAME_SCROLLBAR_MEASURER = 'modal-scrollbar-measure'
-const CLASS_NAME_BACKDROP = 'modal-backdrop'
 const CLASS_NAME_OPEN = 'modal-open'
 const CLASS_NAME_FADE = 'fade'
 const CLASS_NAME_SHOW = 'show'
 const CLASS_NAME_STATIC = 'modal-static'
 
+const OPEN_SELECTOR = '.modal.show'
 const SELECTOR_DIALOG = '.modal-dialog'
 const SELECTOR_MODAL_BODY = '.modal-body'
-const SELECTOR_DATA_TOGGLE = '[data-toggle="modal"]'
-const SELECTOR_DATA_DISMISS = '[data-dismiss="modal"]'
-const SELECTOR_FIXED_CONTENT = '.fixed-top, .fixed-bottom, .is-fixed, .sticky-top'
-const SELECTOR_STICKY_CONTENT = '.sticky-top'
+const SELECTOR_DATA_TOGGLE = '[data-bs-toggle="modal"]'
 
 /**
  * ------------------------------------------------------------------------
@@ -3248,27 +3970,28 @@ const SELECTOR_STICKY_CONTENT = '.sticky-top'
  * ------------------------------------------------------------------------
  */
 
-class Modal {
+class Modal extends _base_component__WEBPACK_IMPORTED_MODULE_5__["default"] {
   constructor(element, config) {
+    super(element)
+
     this._config = this._getConfig(config)
-    this._element = element
-    this._dialog = element.querySelector(SELECTOR_DIALOG)
-    this._backdrop = null
+    this._dialog = _dom_selector_engine__WEBPACK_IMPORTED_MODULE_3__["default"].findOne(SELECTOR_DIALOG, this._element)
+    this._backdrop = this._initializeBackDrop()
+    this._focustrap = this._initializeFocusTrap()
     this._isShown = false
-    this._isBodyOverflowing = false
     this._ignoreBackdropClick = false
     this._isTransitioning = false
-    this._scrollbarWidth = 0
+    this._scrollBar = new _util_scrollbar__WEBPACK_IMPORTED_MODULE_4__["default"]()
   }
 
   // Getters
 
-  static get VERSION() {
-    return VERSION
-  }
-
   static get Default() {
     return Default
+  }
+
+  static get NAME() {
+    return NAME
   }
 
   // Public
@@ -3282,39 +4005,32 @@ class Modal {
       return
     }
 
-    if (jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).hasClass(CLASS_NAME_FADE)) {
-      this._isTransitioning = true
-    }
-
-    const showEvent = jquery__WEBPACK_IMPORTED_MODULE_0___default.a.Event(EVENT_SHOW, {
+    const showEvent = _dom_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"].trigger(this._element, EVENT_SHOW, {
       relatedTarget
     })
 
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).trigger(showEvent)
-
-    if (this._isShown || showEvent.isDefaultPrevented()) {
+    if (showEvent.defaultPrevented) {
       return
     }
 
     this._isShown = true
 
-    this._checkScrollbar()
-    this._setScrollbar()
+    if (this._isAnimated()) {
+      this._isTransitioning = true
+    }
+
+    this._scrollBar.hide()
+
+    document.body.classList.add(CLASS_NAME_OPEN)
 
     this._adjustDialog()
 
     this._setEscapeEvent()
     this._setResizeEvent()
 
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).on(
-      EVENT_CLICK_DISMISS,
-      SELECTOR_DATA_DISMISS,
-      event => this.hide(event)
-    )
-
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._dialog).on(EVENT_MOUSEDOWN_DISMISS, () => {
-      jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).one(EVENT_MOUSEUP_DISMISS, event => {
-        if (jquery__WEBPACK_IMPORTED_MODULE_0___default()(event.target).is(this._element)) {
+    _dom_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"].on(this._dialog, EVENT_MOUSEDOWN_DISMISS, () => {
+      _dom_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"].one(this._element, EVENT_MOUSEUP_DISMISS, event => {
+        if (event.target === this._element) {
           this._ignoreBackdropClick = true
         }
       })
@@ -3323,73 +4039,44 @@ class Modal {
     this._showBackdrop(() => this._showElement(relatedTarget))
   }
 
-  hide(event) {
-    if (event) {
-      event.preventDefault()
-    }
-
+  hide() {
     if (!this._isShown || this._isTransitioning) {
       return
     }
 
-    const hideEvent = jquery__WEBPACK_IMPORTED_MODULE_0___default.a.Event(EVENT_HIDE)
+    const hideEvent = _dom_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"].trigger(this._element, EVENT_HIDE)
 
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).trigger(hideEvent)
-
-    if (!this._isShown || hideEvent.isDefaultPrevented()) {
+    if (hideEvent.defaultPrevented) {
       return
     }
 
     this._isShown = false
-    const transition = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).hasClass(CLASS_NAME_FADE)
+    const isAnimated = this._isAnimated()
 
-    if (transition) {
+    if (isAnimated) {
       this._isTransitioning = true
     }
 
     this._setEscapeEvent()
     this._setResizeEvent()
 
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).off(EVENT_FOCUSIN)
+    this._focustrap.deactivate()
 
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).removeClass(CLASS_NAME_SHOW)
+    this._element.classList.remove(CLASS_NAME_SHOW)
 
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).off(EVENT_CLICK_DISMISS)
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._dialog).off(EVENT_MOUSEDOWN_DISMISS)
+    _dom_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"].off(this._element, EVENT_CLICK_DISMISS)
+    _dom_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"].off(this._dialog, EVENT_MOUSEDOWN_DISMISS)
 
-    if (transition) {
-      const transitionDuration = _util__WEBPACK_IMPORTED_MODULE_1__["default"].getTransitionDurationFromElement(this._element)
-
-      jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element)
-        .one(_util__WEBPACK_IMPORTED_MODULE_1__["default"].TRANSITION_END, event => this._hideModal(event))
-        .emulateTransitionEnd(transitionDuration)
-    } else {
-      this._hideModal()
-    }
+    this._queueCallback(() => this._hideModal(), this._element, isAnimated)
   }
 
   dispose() {
-    [window, this._element, this._dialog]
-      .forEach(htmlElement => jquery__WEBPACK_IMPORTED_MODULE_0___default()(htmlElement).off(EVENT_KEY))
+    [window, this._dialog]
+      .forEach(htmlElement => _dom_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"].off(htmlElement, EVENT_KEY))
 
-    /**
-     * `document` has 2 events `EVENT_FOCUSIN` and `EVENT_CLICK_DATA_API`
-     * Do not move `document` in `htmlElements` array
-     * It will remove `EVENT_CLICK_DATA_API` event that should remain
-     */
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).off(EVENT_FOCUSIN)
-
-    jquery__WEBPACK_IMPORTED_MODULE_0___default.a.removeData(this._element, DATA_KEY)
-
-    this._config = null
-    this._element = null
-    this._dialog = null
-    this._backdrop = null
-    this._isShown = null
-    this._isBodyOverflowing = null
-    this._ignoreBackdropClick = null
-    this._isTransitioning = null
-    this._scrollbarWidth = null
+    this._backdrop.dispose()
+    this._focustrap.deactivate()
+    super.dispose()
   }
 
   handleUpdate() {
@@ -3398,134 +4085,88 @@ class Modal {
 
   // Private
 
+  _initializeBackDrop() {
+    return new _util_backdrop__WEBPACK_IMPORTED_MODULE_6__["default"]({
+      isVisible: Boolean(this._config.backdrop), // 'static' option will be translated to true, and booleans will keep their value
+      isAnimated: this._isAnimated()
+    })
+  }
+
+  _initializeFocusTrap() {
+    return new _util_focustrap__WEBPACK_IMPORTED_MODULE_7__["default"]({
+      trapElement: this._element
+    })
+  }
+
   _getConfig(config) {
     config = {
       ...Default,
-      ...config
+      ..._dom_manipulator__WEBPACK_IMPORTED_MODULE_2__["default"].getDataAttributes(this._element),
+      ...(typeof config === 'object' ? config : {})
     }
-    _util__WEBPACK_IMPORTED_MODULE_1__["default"].typeCheckConfig(NAME, config, DefaultType)
+    Object(_util_index__WEBPACK_IMPORTED_MODULE_0__["typeCheckConfig"])(NAME, config, DefaultType)
     return config
   }
 
-  _triggerBackdropTransition() {
-    const hideEventPrevented = jquery__WEBPACK_IMPORTED_MODULE_0___default.a.Event(EVENT_HIDE_PREVENTED)
-
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).trigger(hideEventPrevented)
-    if (hideEventPrevented.isDefaultPrevented()) {
-      return
-    }
-
-    const isModalOverflowing = this._element.scrollHeight > document.documentElement.clientHeight
-
-    if (!isModalOverflowing) {
-      this._element.style.overflowY = 'hidden'
-    }
-
-    this._element.classList.add(CLASS_NAME_STATIC)
-
-    const modalTransitionDuration = _util__WEBPACK_IMPORTED_MODULE_1__["default"].getTransitionDurationFromElement(this._dialog)
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).off(_util__WEBPACK_IMPORTED_MODULE_1__["default"].TRANSITION_END)
-
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).one(_util__WEBPACK_IMPORTED_MODULE_1__["default"].TRANSITION_END, () => {
-      this._element.classList.remove(CLASS_NAME_STATIC)
-      if (!isModalOverflowing) {
-        jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).one(_util__WEBPACK_IMPORTED_MODULE_1__["default"].TRANSITION_END, () => {
-          this._element.style.overflowY = ''
-        })
-          .emulateTransitionEnd(this._element, modalTransitionDuration)
-      }
-    })
-      .emulateTransitionEnd(modalTransitionDuration)
-    this._element.focus()
-  }
-
   _showElement(relatedTarget) {
-    const transition = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).hasClass(CLASS_NAME_FADE)
-    const modalBody = this._dialog ? this._dialog.querySelector(SELECTOR_MODAL_BODY) : null
+    const isAnimated = this._isAnimated()
+    const modalBody = _dom_selector_engine__WEBPACK_IMPORTED_MODULE_3__["default"].findOne(SELECTOR_MODAL_BODY, this._dialog)
 
-    if (!this._element.parentNode ||
-        this._element.parentNode.nodeType !== Node.ELEMENT_NODE) {
+    if (!this._element.parentNode || this._element.parentNode.nodeType !== Node.ELEMENT_NODE) {
       // Don't move modal's DOM position
-      document.body.appendChild(this._element)
+      document.body.append(this._element)
     }
 
     this._element.style.display = 'block'
     this._element.removeAttribute('aria-hidden')
     this._element.setAttribute('aria-modal', true)
     this._element.setAttribute('role', 'dialog')
+    this._element.scrollTop = 0
 
-    if (jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._dialog).hasClass(CLASS_NAME_SCROLLABLE) && modalBody) {
+    if (modalBody) {
       modalBody.scrollTop = 0
-    } else {
-      this._element.scrollTop = 0
     }
 
-    if (transition) {
-      _util__WEBPACK_IMPORTED_MODULE_1__["default"].reflow(this._element)
+    if (isAnimated) {
+      Object(_util_index__WEBPACK_IMPORTED_MODULE_0__["reflow"])(this._element)
     }
 
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).addClass(CLASS_NAME_SHOW)
-
-    if (this._config.focus) {
-      this._enforceFocus()
-    }
-
-    const shownEvent = jquery__WEBPACK_IMPORTED_MODULE_0___default.a.Event(EVENT_SHOWN, {
-      relatedTarget
-    })
+    this._element.classList.add(CLASS_NAME_SHOW)
 
     const transitionComplete = () => {
       if (this._config.focus) {
-        this._element.focus()
+        this._focustrap.activate()
       }
 
       this._isTransitioning = false
-      jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).trigger(shownEvent)
-    }
-
-    if (transition) {
-      const transitionDuration = _util__WEBPACK_IMPORTED_MODULE_1__["default"].getTransitionDurationFromElement(this._dialog)
-
-      jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._dialog)
-        .one(_util__WEBPACK_IMPORTED_MODULE_1__["default"].TRANSITION_END, transitionComplete)
-        .emulateTransitionEnd(transitionDuration)
-    } else {
-      transitionComplete()
-    }
-  }
-
-  _enforceFocus() {
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(document)
-      .off(EVENT_FOCUSIN) // Guard against infinite focus loop
-      .on(EVENT_FOCUSIN, event => {
-        if (document !== event.target &&
-            this._element !== event.target &&
-            jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).has(event.target).length === 0) {
-          this._element.focus()
-        }
+      _dom_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"].trigger(this._element, EVENT_SHOWN, {
+        relatedTarget
       })
+    }
+
+    this._queueCallback(transitionComplete, this._dialog, isAnimated)
   }
 
   _setEscapeEvent() {
     if (this._isShown) {
-      jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).on(EVENT_KEYDOWN_DISMISS, event => {
-        if (this._config.keyboard && event.which === ESCAPE_KEYCODE) {
+      _dom_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"].on(this._element, EVENT_KEYDOWN_DISMISS, event => {
+        if (this._config.keyboard && event.key === ESCAPE_KEY) {
           event.preventDefault()
           this.hide()
-        } else if (!this._config.keyboard && event.which === ESCAPE_KEYCODE) {
+        } else if (!this._config.keyboard && event.key === ESCAPE_KEY) {
           this._triggerBackdropTransition()
         }
       })
-    } else if (!this._isShown) {
-      jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).off(EVENT_KEYDOWN_DISMISS)
+    } else {
+      _dom_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"].off(this._element, EVENT_KEYDOWN_DISMISS)
     }
   }
 
   _setResizeEvent() {
     if (this._isShown) {
-      jquery__WEBPACK_IMPORTED_MODULE_0___default()(window).on(EVENT_RESIZE, event => this.handleUpdate(event))
+      _dom_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"].on(window, EVENT_RESIZE, () => this._adjustDialog())
     } else {
-      jquery__WEBPACK_IMPORTED_MODULE_0___default()(window).off(EVENT_RESIZE)
+      _dom_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"].off(window, EVENT_RESIZE)
     }
   }
 
@@ -3535,110 +4176,85 @@ class Modal {
     this._element.removeAttribute('aria-modal')
     this._element.removeAttribute('role')
     this._isTransitioning = false
-    this._showBackdrop(() => {
-      jquery__WEBPACK_IMPORTED_MODULE_0___default()(document.body).removeClass(CLASS_NAME_OPEN)
+    this._backdrop.hide(() => {
+      document.body.classList.remove(CLASS_NAME_OPEN)
       this._resetAdjustments()
-      this._resetScrollbar()
-      jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).trigger(EVENT_HIDDEN)
+      this._scrollBar.reset()
+      _dom_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"].trigger(this._element, EVENT_HIDDEN)
     })
   }
 
-  _removeBackdrop() {
-    if (this._backdrop) {
-      jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._backdrop).remove()
-      this._backdrop = null
-    }
+  _showBackdrop(callback) {
+    _dom_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"].on(this._element, EVENT_CLICK_DISMISS, event => {
+      if (this._ignoreBackdropClick) {
+        this._ignoreBackdropClick = false
+        return
+      }
+
+      if (event.target !== event.currentTarget) {
+        return
+      }
+
+      if (this._config.backdrop === true) {
+        this.hide()
+      } else if (this._config.backdrop === 'static') {
+        this._triggerBackdropTransition()
+      }
+    })
+
+    this._backdrop.show(callback)
   }
 
-  _showBackdrop(callback) {
-    const animate = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).hasClass(CLASS_NAME_FADE) ?
-      CLASS_NAME_FADE : ''
+  _isAnimated() {
+    return this._element.classList.contains(CLASS_NAME_FADE)
+  }
 
-    if (this._isShown && this._config.backdrop) {
-      this._backdrop = document.createElement('div')
-      this._backdrop.className = CLASS_NAME_BACKDROP
-
-      if (animate) {
-        this._backdrop.classList.add(animate)
-      }
-
-      jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._backdrop).appendTo(document.body)
-
-      jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).on(EVENT_CLICK_DISMISS, event => {
-        if (this._ignoreBackdropClick) {
-          this._ignoreBackdropClick = false
-          return
-        }
-
-        if (event.target !== event.currentTarget) {
-          return
-        }
-
-        if (this._config.backdrop === 'static') {
-          this._triggerBackdropTransition()
-        } else {
-          this.hide()
-        }
-      })
-
-      if (animate) {
-        _util__WEBPACK_IMPORTED_MODULE_1__["default"].reflow(this._backdrop)
-      }
-
-      jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._backdrop).addClass(CLASS_NAME_SHOW)
-
-      if (!callback) {
-        return
-      }
-
-      if (!animate) {
-        callback()
-        return
-      }
-
-      const backdropTransitionDuration = _util__WEBPACK_IMPORTED_MODULE_1__["default"].getTransitionDurationFromElement(this._backdrop)
-
-      jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._backdrop)
-        .one(_util__WEBPACK_IMPORTED_MODULE_1__["default"].TRANSITION_END, callback)
-        .emulateTransitionEnd(backdropTransitionDuration)
-    } else if (!this._isShown && this._backdrop) {
-      jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._backdrop).removeClass(CLASS_NAME_SHOW)
-
-      const callbackRemove = () => {
-        this._removeBackdrop()
-        if (callback) {
-          callback()
-        }
-      }
-
-      if (jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._element).hasClass(CLASS_NAME_FADE)) {
-        const backdropTransitionDuration = _util__WEBPACK_IMPORTED_MODULE_1__["default"].getTransitionDurationFromElement(this._backdrop)
-
-        jquery__WEBPACK_IMPORTED_MODULE_0___default()(this._backdrop)
-          .one(_util__WEBPACK_IMPORTED_MODULE_1__["default"].TRANSITION_END, callbackRemove)
-          .emulateTransitionEnd(backdropTransitionDuration)
-      } else {
-        callbackRemove()
-      }
-    } else if (callback) {
-      callback()
+  _triggerBackdropTransition() {
+    const hideEvent = _dom_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"].trigger(this._element, EVENT_HIDE_PREVENTED)
+    if (hideEvent.defaultPrevented) {
+      return
     }
+
+    const { classList, scrollHeight, style } = this._element
+    const isModalOverflowing = scrollHeight > document.documentElement.clientHeight
+
+    // return if the following background transition hasn't yet completed
+    if ((!isModalOverflowing && style.overflowY === 'hidden') || classList.contains(CLASS_NAME_STATIC)) {
+      return
+    }
+
+    if (!isModalOverflowing) {
+      style.overflowY = 'hidden'
+    }
+
+    classList.add(CLASS_NAME_STATIC)
+    this._queueCallback(() => {
+      classList.remove(CLASS_NAME_STATIC)
+      if (!isModalOverflowing) {
+        this._queueCallback(() => {
+          style.overflowY = ''
+        }, this._dialog)
+      }
+    }, this._dialog)
+
+    this._element.focus()
   }
 
   // ----------------------------------------------------------------------
   // the following methods are used to handle overflowing modals
-  // todo (fat): these should probably be refactored out of modal.js
   // ----------------------------------------------------------------------
 
   _adjustDialog() {
     const isModalOverflowing = this._element.scrollHeight > document.documentElement.clientHeight
+    const scrollbarWidth = this._scrollBar.getWidth()
+    const isBodyOverflowing = scrollbarWidth > 0
 
-    if (!this._isBodyOverflowing && isModalOverflowing) {
-      this._element.style.paddingLeft = `${this._scrollbarWidth}px`
+    if ((!isBodyOverflowing && isModalOverflowing && !Object(_util_index__WEBPACK_IMPORTED_MODULE_0__["isRTL"])()) || (isBodyOverflowing && !isModalOverflowing && Object(_util_index__WEBPACK_IMPORTED_MODULE_0__["isRTL"])())) {
+      this._element.style.paddingLeft = `${scrollbarWidth}px`
     }
 
-    if (this._isBodyOverflowing && !isModalOverflowing) {
-      this._element.style.paddingRight = `${this._scrollbarWidth}px`
+    if ((isBodyOverflowing && !isModalOverflowing && !Object(_util_index__WEBPACK_IMPORTED_MODULE_0__["isRTL"])()) || (!isBodyOverflowing && isModalOverflowing && Object(_util_index__WEBPACK_IMPORTED_MODULE_0__["isRTL"])())) {
+      this._element.style.paddingRight = `${scrollbarWidth}px`
     }
   }
 
@@ -3647,106 +4263,21 @@ class Modal {
     this._element.style.paddingRight = ''
   }
 
-  _checkScrollbar() {
-    const rect = document.body.getBoundingClientRect()
-    this._isBodyOverflowing = Math.round(rect.left + rect.right) < window.innerWidth
-    this._scrollbarWidth = this._getScrollbarWidth()
-  }
-
-  _setScrollbar() {
-    if (this._isBodyOverflowing) {
-      // Note: DOMNode.style.paddingRight returns the actual value or '' if not set
-      //   while $(DOMNode).css('padding-right') returns the calculated value or 0 if not set
-      const fixedContent = [].slice.call(document.querySelectorAll(SELECTOR_FIXED_CONTENT))
-      const stickyContent = [].slice.call(document.querySelectorAll(SELECTOR_STICKY_CONTENT))
-
-      // Adjust fixed content padding
-      jquery__WEBPACK_IMPORTED_MODULE_0___default()(fixedContent).each((index, element) => {
-        const actualPadding = element.style.paddingRight
-        const calculatedPadding = jquery__WEBPACK_IMPORTED_MODULE_0___default()(element).css('padding-right')
-        jquery__WEBPACK_IMPORTED_MODULE_0___default()(element)
-          .data('padding-right', actualPadding)
-          .css('padding-right', `${parseFloat(calculatedPadding) + this._scrollbarWidth}px`)
-      })
-
-      // Adjust sticky content margin
-      jquery__WEBPACK_IMPORTED_MODULE_0___default()(stickyContent).each((index, element) => {
-        const actualMargin = element.style.marginRight
-        const calculatedMargin = jquery__WEBPACK_IMPORTED_MODULE_0___default()(element).css('margin-right')
-        jquery__WEBPACK_IMPORTED_MODULE_0___default()(element)
-          .data('margin-right', actualMargin)
-          .css('margin-right', `${parseFloat(calculatedMargin) - this._scrollbarWidth}px`)
-      })
-
-      // Adjust body padding
-      const actualPadding = document.body.style.paddingRight
-      const calculatedPadding = jquery__WEBPACK_IMPORTED_MODULE_0___default()(document.body).css('padding-right')
-      jquery__WEBPACK_IMPORTED_MODULE_0___default()(document.body)
-        .data('padding-right', actualPadding)
-        .css('padding-right', `${parseFloat(calculatedPadding) + this._scrollbarWidth}px`)
-    }
-
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(document.body).addClass(CLASS_NAME_OPEN)
-  }
-
-  _resetScrollbar() {
-    // Restore fixed content padding
-    const fixedContent = [].slice.call(document.querySelectorAll(SELECTOR_FIXED_CONTENT))
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(fixedContent).each((index, element) => {
-      const padding = jquery__WEBPACK_IMPORTED_MODULE_0___default()(element).data('padding-right')
-      jquery__WEBPACK_IMPORTED_MODULE_0___default()(element).removeData('padding-right')
-      element.style.paddingRight = padding ? padding : ''
-    })
-
-    // Restore sticky content
-    const elements = [].slice.call(document.querySelectorAll(`${SELECTOR_STICKY_CONTENT}`))
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(elements).each((index, element) => {
-      const margin = jquery__WEBPACK_IMPORTED_MODULE_0___default()(element).data('margin-right')
-      if (typeof margin !== 'undefined') {
-        jquery__WEBPACK_IMPORTED_MODULE_0___default()(element).css('margin-right', margin).removeData('margin-right')
-      }
-    })
-
-    // Restore body padding
-    const padding = jquery__WEBPACK_IMPORTED_MODULE_0___default()(document.body).data('padding-right')
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(document.body).removeData('padding-right')
-    document.body.style.paddingRight = padding ? padding : ''
-  }
-
-  _getScrollbarWidth() { // thx d.walsh
-    const scrollDiv = document.createElement('div')
-    scrollDiv.className = CLASS_NAME_SCROLLBAR_MEASURER
-    document.body.appendChild(scrollDiv)
-    const scrollbarWidth = scrollDiv.getBoundingClientRect().width - scrollDiv.clientWidth
-    document.body.removeChild(scrollDiv)
-    return scrollbarWidth
-  }
-
   // Static
 
-  static _jQueryInterface(config, relatedTarget) {
+  static jQueryInterface(config, relatedTarget) {
     return this.each(function () {
-      let data = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data(DATA_KEY)
-      const _config = {
-        ...Default,
-        ...jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data(),
-        ...(typeof config === 'object' && config ? config : {})
+      const data = Modal.getOrCreateInstance(this, config)
+
+      if (typeof config !== 'string') {
+        return
       }
 
-      if (!data) {
-        data = new Modal(this, _config)
-        jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data(DATA_KEY, data)
+      if (typeof data[config] === 'undefined') {
+        throw new TypeError(`No method named "${config}"`)
       }
 
-      if (typeof config === 'string') {
-        if (typeof data[config] === 'undefined') {
-          throw new TypeError(`No method named "${config}"`)
-        }
-
-        data[config](relatedTarget)
-      } else if (_config.show) {
-        data.show(relatedTarget)
-      }
+      data[config](relatedTarget)
     })
   }
 }
@@ -3757,130 +4288,414 @@ class Modal {
  * ------------------------------------------------------------------------
  */
 
-jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).on(EVENT_CLICK_DATA_API, SELECTOR_DATA_TOGGLE, function (event) {
-  let target
-  const selector = _util__WEBPACK_IMPORTED_MODULE_1__["default"].getSelectorFromElement(this)
+_dom_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"].on(document, EVENT_CLICK_DATA_API, SELECTOR_DATA_TOGGLE, function (event) {
+  const target = Object(_util_index__WEBPACK_IMPORTED_MODULE_0__["getElementFromSelector"])(this)
 
-  if (selector) {
-    target = document.querySelector(selector)
-  }
-
-  const config = jquery__WEBPACK_IMPORTED_MODULE_0___default()(target).data(DATA_KEY) ?
-    'toggle' : {
-      ...jquery__WEBPACK_IMPORTED_MODULE_0___default()(target).data(),
-      ...jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data()
-    }
-
-  if (this.tagName === 'A' || this.tagName === 'AREA') {
+  if (['A', 'AREA'].includes(this.tagName)) {
     event.preventDefault()
   }
 
-  const $target = jquery__WEBPACK_IMPORTED_MODULE_0___default()(target).one(EVENT_SHOW, showEvent => {
-    if (showEvent.isDefaultPrevented()) {
-      // Only register focus restorer if modal will actually get shown
+  _dom_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"].one(target, EVENT_SHOW, showEvent => {
+    if (showEvent.defaultPrevented) {
+      // only register focus restorer if modal will actually get shown
       return
     }
 
-    $target.one(EVENT_HIDDEN, () => {
-      if (jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).is(':visible')) {
+    _dom_event_handler__WEBPACK_IMPORTED_MODULE_1__["default"].one(target, EVENT_HIDDEN, () => {
+      if (Object(_util_index__WEBPACK_IMPORTED_MODULE_0__["isVisible"])(this)) {
         this.focus()
       }
     })
   })
 
-  Modal._jQueryInterface.call(jquery__WEBPACK_IMPORTED_MODULE_0___default()(target), config, this)
+  // avoid conflict when clicking moddal toggler while another one is open
+  const allReadyOpen = _dom_selector_engine__WEBPACK_IMPORTED_MODULE_3__["default"].findOne(OPEN_SELECTOR)
+  if (allReadyOpen) {
+    Modal.getInstance(allReadyOpen).hide()
+  }
+
+  const data = Modal.getOrCreateInstance(target)
+
+  data.toggle(this)
 })
+
+Object(_util_component_functions__WEBPACK_IMPORTED_MODULE_8__["enableDismissTrigger"])(Modal)
 
 /**
  * ------------------------------------------------------------------------
  * jQuery
  * ------------------------------------------------------------------------
+ * add .Modal to jQuery only if jQuery is present
  */
 
-jquery__WEBPACK_IMPORTED_MODULE_0___default.a.fn[NAME] = Modal._jQueryInterface
-jquery__WEBPACK_IMPORTED_MODULE_0___default.a.fn[NAME].Constructor = Modal
-jquery__WEBPACK_IMPORTED_MODULE_0___default.a.fn[NAME].noConflict = () => {
-  jquery__WEBPACK_IMPORTED_MODULE_0___default.a.fn[NAME] = JQUERY_NO_CONFLICT
-  return Modal._jQueryInterface
-}
+Object(_util_index__WEBPACK_IMPORTED_MODULE_0__["defineJQueryPlugin"])(Modal)
 
 /* harmony default export */ __webpack_exports__["default"] = (Modal);
 
 
 /***/ }),
 
-/***/ "./node_modules/bootstrap/js/src/util.js":
-/*!***********************************************!*\
-  !*** ./node_modules/bootstrap/js/src/util.js ***!
-  \***********************************************/
+/***/ "./node_modules/bootstrap/js/src/util/backdrop.js":
+/*!********************************************************!*\
+  !*** ./node_modules/bootstrap/js/src/util/backdrop.js ***!
+  \********************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
-/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _dom_event_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../dom/event-handler */ "./node_modules/bootstrap/js/src/dom/event-handler.js");
+/* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./index */ "./node_modules/bootstrap/js/src/util/index.js");
 /**
  * --------------------------------------------------------------------------
- * Bootstrap (v4.6.0): util.js
+ * Bootstrap (v5.1.3): util/backdrop.js
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  * --------------------------------------------------------------------------
  */
 
 
 
+
+const Default = {
+  className: 'modal-backdrop',
+  isVisible: true, // if false, we use the backdrop helper without adding any element to the dom
+  isAnimated: false,
+  rootElement: 'body', // give the choice to place backdrop under different elements
+  clickCallback: null
+}
+
+const DefaultType = {
+  className: 'string',
+  isVisible: 'boolean',
+  isAnimated: 'boolean',
+  rootElement: '(element|string)',
+  clickCallback: '(function|null)'
+}
+const NAME = 'backdrop'
+const CLASS_NAME_FADE = 'fade'
+const CLASS_NAME_SHOW = 'show'
+
+const EVENT_MOUSEDOWN = `mousedown.bs.${NAME}`
+
+class Backdrop {
+  constructor(config) {
+    this._config = this._getConfig(config)
+    this._isAppended = false
+    this._element = null
+  }
+
+  show(callback) {
+    if (!this._config.isVisible) {
+      Object(_index__WEBPACK_IMPORTED_MODULE_1__["execute"])(callback)
+      return
+    }
+
+    this._append()
+
+    if (this._config.isAnimated) {
+      Object(_index__WEBPACK_IMPORTED_MODULE_1__["reflow"])(this._getElement())
+    }
+
+    this._getElement().classList.add(CLASS_NAME_SHOW)
+
+    this._emulateAnimation(() => {
+      Object(_index__WEBPACK_IMPORTED_MODULE_1__["execute"])(callback)
+    })
+  }
+
+  hide(callback) {
+    if (!this._config.isVisible) {
+      Object(_index__WEBPACK_IMPORTED_MODULE_1__["execute"])(callback)
+      return
+    }
+
+    this._getElement().classList.remove(CLASS_NAME_SHOW)
+
+    this._emulateAnimation(() => {
+      this.dispose()
+      Object(_index__WEBPACK_IMPORTED_MODULE_1__["execute"])(callback)
+    })
+  }
+
+  // Private
+
+  _getElement() {
+    if (!this._element) {
+      const backdrop = document.createElement('div')
+      backdrop.className = this._config.className
+      if (this._config.isAnimated) {
+        backdrop.classList.add(CLASS_NAME_FADE)
+      }
+
+      this._element = backdrop
+    }
+
+    return this._element
+  }
+
+  _getConfig(config) {
+    config = {
+      ...Default,
+      ...(typeof config === 'object' ? config : {})
+    }
+
+    // use getElement() with the default "body" to get a fresh Element on each instantiation
+    config.rootElement = Object(_index__WEBPACK_IMPORTED_MODULE_1__["getElement"])(config.rootElement)
+    Object(_index__WEBPACK_IMPORTED_MODULE_1__["typeCheckConfig"])(NAME, config, DefaultType)
+    return config
+  }
+
+  _append() {
+    if (this._isAppended) {
+      return
+    }
+
+    this._config.rootElement.append(this._getElement())
+
+    _dom_event_handler__WEBPACK_IMPORTED_MODULE_0__["default"].on(this._getElement(), EVENT_MOUSEDOWN, () => {
+      Object(_index__WEBPACK_IMPORTED_MODULE_1__["execute"])(this._config.clickCallback)
+    })
+
+    this._isAppended = true
+  }
+
+  dispose() {
+    if (!this._isAppended) {
+      return
+    }
+
+    _dom_event_handler__WEBPACK_IMPORTED_MODULE_0__["default"].off(this._element, EVENT_MOUSEDOWN)
+
+    this._element.remove()
+    this._isAppended = false
+  }
+
+  _emulateAnimation(callback) {
+    Object(_index__WEBPACK_IMPORTED_MODULE_1__["executeAfterTransition"])(callback, this._getElement(), this._config.isAnimated)
+  }
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (Backdrop);
+
+
+/***/ }),
+
+/***/ "./node_modules/bootstrap/js/src/util/component-functions.js":
+/*!*******************************************************************!*\
+  !*** ./node_modules/bootstrap/js/src/util/component-functions.js ***!
+  \*******************************************************************/
+/*! exports provided: enableDismissTrigger */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "enableDismissTrigger", function() { return enableDismissTrigger; });
+/* harmony import */ var _dom_event_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../dom/event-handler */ "./node_modules/bootstrap/js/src/dom/event-handler.js");
+/* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./index */ "./node_modules/bootstrap/js/src/util/index.js");
 /**
- * ------------------------------------------------------------------------
- * Private TransitionEnd Helpers
- * ------------------------------------------------------------------------
+ * --------------------------------------------------------------------------
+ * Bootstrap (v5.1.3): util/component-functions.js
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+ * --------------------------------------------------------------------------
  */
 
-const TRANSITION_END = 'transitionend'
+
+
+
+const enableDismissTrigger = (component, method = 'hide') => {
+  const clickEvent = `click.dismiss${component.EVENT_KEY}`
+  const name = component.NAME
+
+  _dom_event_handler__WEBPACK_IMPORTED_MODULE_0__["default"].on(document, clickEvent, `[data-bs-dismiss="${name}"]`, function (event) {
+    if (['A', 'AREA'].includes(this.tagName)) {
+      event.preventDefault()
+    }
+
+    if (Object(_index__WEBPACK_IMPORTED_MODULE_1__["isDisabled"])(this)) {
+      return
+    }
+
+    const target = Object(_index__WEBPACK_IMPORTED_MODULE_1__["getElementFromSelector"])(this) || this.closest(`.${name}`)
+    const instance = component.getOrCreateInstance(target)
+
+    // Method argument is left, for Alert and only, as it doesn't implement the 'hide' method
+    instance[method]()
+  })
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/bootstrap/js/src/util/focustrap.js":
+/*!*********************************************************!*\
+  !*** ./node_modules/bootstrap/js/src/util/focustrap.js ***!
+  \*********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _dom_event_handler__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../dom/event-handler */ "./node_modules/bootstrap/js/src/dom/event-handler.js");
+/* harmony import */ var _dom_selector_engine__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../dom/selector-engine */ "./node_modules/bootstrap/js/src/dom/selector-engine.js");
+/* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./index */ "./node_modules/bootstrap/js/src/util/index.js");
+/**
+ * --------------------------------------------------------------------------
+ * Bootstrap (v5.1.3): util/focustrap.js
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+ * --------------------------------------------------------------------------
+ */
+
+
+
+
+
+const Default = {
+  trapElement: null, // The element to trap focus inside of
+  autofocus: true
+}
+
+const DefaultType = {
+  trapElement: 'element',
+  autofocus: 'boolean'
+}
+
+const NAME = 'focustrap'
+const DATA_KEY = 'bs.focustrap'
+const EVENT_KEY = `.${DATA_KEY}`
+const EVENT_FOCUSIN = `focusin${EVENT_KEY}`
+const EVENT_KEYDOWN_TAB = `keydown.tab${EVENT_KEY}`
+
+const TAB_KEY = 'Tab'
+const TAB_NAV_FORWARD = 'forward'
+const TAB_NAV_BACKWARD = 'backward'
+
+class FocusTrap {
+  constructor(config) {
+    this._config = this._getConfig(config)
+    this._isActive = false
+    this._lastTabNavDirection = null
+  }
+
+  activate() {
+    const { trapElement, autofocus } = this._config
+
+    if (this._isActive) {
+      return
+    }
+
+    if (autofocus) {
+      trapElement.focus()
+    }
+
+    _dom_event_handler__WEBPACK_IMPORTED_MODULE_0__["default"].off(document, EVENT_KEY) // guard against infinite focus loop
+    _dom_event_handler__WEBPACK_IMPORTED_MODULE_0__["default"].on(document, EVENT_FOCUSIN, event => this._handleFocusin(event))
+    _dom_event_handler__WEBPACK_IMPORTED_MODULE_0__["default"].on(document, EVENT_KEYDOWN_TAB, event => this._handleKeydown(event))
+
+    this._isActive = true
+  }
+
+  deactivate() {
+    if (!this._isActive) {
+      return
+    }
+
+    this._isActive = false
+    _dom_event_handler__WEBPACK_IMPORTED_MODULE_0__["default"].off(document, EVENT_KEY)
+  }
+
+  // Private
+
+  _handleFocusin(event) {
+    const { target } = event
+    const { trapElement } = this._config
+
+    if (target === document || target === trapElement || trapElement.contains(target)) {
+      return
+    }
+
+    const elements = _dom_selector_engine__WEBPACK_IMPORTED_MODULE_1__["default"].focusableChildren(trapElement)
+
+    if (elements.length === 0) {
+      trapElement.focus()
+    } else if (this._lastTabNavDirection === TAB_NAV_BACKWARD) {
+      elements[elements.length - 1].focus()
+    } else {
+      elements[0].focus()
+    }
+  }
+
+  _handleKeydown(event) {
+    if (event.key !== TAB_KEY) {
+      return
+    }
+
+    this._lastTabNavDirection = event.shiftKey ? TAB_NAV_BACKWARD : TAB_NAV_FORWARD
+  }
+
+  _getConfig(config) {
+    config = {
+      ...Default,
+      ...(typeof config === 'object' ? config : {})
+    }
+    Object(_index__WEBPACK_IMPORTED_MODULE_2__["typeCheckConfig"])(NAME, config, DefaultType)
+    return config
+  }
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (FocusTrap);
+
+
+/***/ }),
+
+/***/ "./node_modules/bootstrap/js/src/util/index.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/bootstrap/js/src/util/index.js ***!
+  \*****************************************************/
+/*! exports provided: getElement, getUID, getSelectorFromElement, getElementFromSelector, getTransitionDurationFromElement, triggerTransitionEnd, isElement, typeCheckConfig, isVisible, isDisabled, findShadowRoot, noop, getNextActiveElement, reflow, getjQuery, onDOMContentLoaded, isRTL, defineJQueryPlugin, execute, executeAfterTransition */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getElement", function() { return getElement; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getUID", function() { return getUID; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getSelectorFromElement", function() { return getSelectorFromElement; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getElementFromSelector", function() { return getElementFromSelector; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getTransitionDurationFromElement", function() { return getTransitionDurationFromElement; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "triggerTransitionEnd", function() { return triggerTransitionEnd; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isElement", function() { return isElement; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "typeCheckConfig", function() { return typeCheckConfig; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isVisible", function() { return isVisible; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isDisabled", function() { return isDisabled; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "findShadowRoot", function() { return findShadowRoot; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "noop", function() { return noop; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getNextActiveElement", function() { return getNextActiveElement; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "reflow", function() { return reflow; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getjQuery", function() { return getjQuery; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "onDOMContentLoaded", function() { return onDOMContentLoaded; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isRTL", function() { return isRTL; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "defineJQueryPlugin", function() { return defineJQueryPlugin; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "execute", function() { return execute; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "executeAfterTransition", function() { return executeAfterTransition; });
+/**
+ * --------------------------------------------------------------------------
+ * Bootstrap (v5.1.3): util/index.js
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+ * --------------------------------------------------------------------------
+ */
+
 const MAX_UID = 1000000
 const MILLISECONDS_MULTIPLIER = 1000
+const TRANSITION_END = 'transitionend'
 
 // Shoutout AngusCroll (https://goo.gl/pxwQGp)
-function toType(obj) {
-  if (obj === null || typeof obj === 'undefined') {
+const toType = obj => {
+  if (obj === null || obj === undefined) {
     return `${obj}`
   }
 
   return {}.toString.call(obj).match(/\s([a-z]+)/i)[1].toLowerCase()
-}
-
-function getSpecialTransitionEndEvent() {
-  return {
-    bindType: TRANSITION_END,
-    delegateType: TRANSITION_END,
-    handle(event) {
-      if (jquery__WEBPACK_IMPORTED_MODULE_0___default()(event.target).is(this)) {
-        return event.handleObj.handler.apply(this, arguments) // eslint-disable-line prefer-rest-params
-      }
-
-      return undefined
-    }
-  }
-}
-
-function transitionEndEmulator(duration) {
-  let called = false
-
-  jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).one(Util.TRANSITION_END, () => {
-    called = true
-  })
-
-  setTimeout(() => {
-    if (!called) {
-      Util.triggerTransitionEnd(this)
-    }
-  }, duration)
-
-  return this
-}
-
-function setTransitionEndSupport() {
-  jquery__WEBPACK_IMPORTED_MODULE_0___default.a.fn.emulateTransitionEnd = transitionEndEmulator
-  jquery__WEBPACK_IMPORTED_MODULE_0___default.a.event.special[Util.TRANSITION_END] = getSpecialTransitionEndEvent()
 }
 
 /**
@@ -3889,135 +4704,405 @@ function setTransitionEndSupport() {
  * --------------------------------------------------------------------------
  */
 
-const Util = {
-  TRANSITION_END: 'bsTransitionEnd',
+const getUID = prefix => {
+  do {
+    prefix += Math.floor(Math.random() * MAX_UID)
+  } while (document.getElementById(prefix))
 
-  getUID(prefix) {
-    do {
-      prefix += ~~(Math.random() * MAX_UID) // "~~" acts like a faster Math.floor() here
-    } while (document.getElementById(prefix))
+  return prefix
+}
 
-    return prefix
-  },
+const getSelector = element => {
+  let selector = element.getAttribute('data-bs-target')
 
-  getSelectorFromElement(element) {
-    let selector = element.getAttribute('data-target')
+  if (!selector || selector === '#') {
+    let hrefAttr = element.getAttribute('href')
 
-    if (!selector || selector === '#') {
-      const hrefAttr = element.getAttribute('href')
-      selector = hrefAttr && hrefAttr !== '#' ? hrefAttr.trim() : ''
-    }
-
-    try {
-      return document.querySelector(selector) ? selector : null
-    } catch (_) {
-      return null
-    }
-  },
-
-  getTransitionDurationFromElement(element) {
-    if (!element) {
-      return 0
-    }
-
-    // Get transition-duration of the element
-    let transitionDuration = jquery__WEBPACK_IMPORTED_MODULE_0___default()(element).css('transition-duration')
-    let transitionDelay = jquery__WEBPACK_IMPORTED_MODULE_0___default()(element).css('transition-delay')
-
-    const floatTransitionDuration = parseFloat(transitionDuration)
-    const floatTransitionDelay = parseFloat(transitionDelay)
-
-    // Return 0 if element or transition duration is not found
-    if (!floatTransitionDuration && !floatTransitionDelay) {
-      return 0
-    }
-
-    // If multiple durations are defined, take the first
-    transitionDuration = transitionDuration.split(',')[0]
-    transitionDelay = transitionDelay.split(',')[0]
-
-    return (parseFloat(transitionDuration) + parseFloat(transitionDelay)) * MILLISECONDS_MULTIPLIER
-  },
-
-  reflow(element) {
-    return element.offsetHeight
-  },
-
-  triggerTransitionEnd(element) {
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()(element).trigger(TRANSITION_END)
-  },
-
-  supportsTransitionEnd() {
-    return Boolean(TRANSITION_END)
-  },
-
-  isElement(obj) {
-    return (obj[0] || obj).nodeType
-  },
-
-  typeCheckConfig(componentName, config, configTypes) {
-    for (const property in configTypes) {
-      if (Object.prototype.hasOwnProperty.call(configTypes, property)) {
-        const expectedTypes = configTypes[property]
-        const value = config[property]
-        const valueType = value && Util.isElement(value) ?
-          'element' : toType(value)
-
-        if (!new RegExp(expectedTypes).test(valueType)) {
-          throw new Error(
-            `${componentName.toUpperCase()}: ` +
-            `Option "${property}" provided type "${valueType}" ` +
-            `but expected type "${expectedTypes}".`)
-        }
-      }
-    }
-  },
-
-  findShadowRoot(element) {
-    if (!document.documentElement.attachShadow) {
+    // The only valid content that could double as a selector are IDs or classes,
+    // so everything starting with `#` or `.`. If a "real" URL is used as the selector,
+    // `document.querySelector` will rightfully complain it is invalid.
+    // See https://github.com/twbs/bootstrap/issues/32273
+    if (!hrefAttr || (!hrefAttr.includes('#') && !hrefAttr.startsWith('.'))) {
       return null
     }
 
-    // Can find the shadow root otherwise it'll return the document
-    if (typeof element.getRootNode === 'function') {
-      const root = element.getRootNode()
-      return root instanceof ShadowRoot ? root : null
+    // Just in case some CMS puts out a full URL with the anchor appended
+    if (hrefAttr.includes('#') && !hrefAttr.startsWith('#')) {
+      hrefAttr = `#${hrefAttr.split('#')[1]}`
     }
 
-    if (element instanceof ShadowRoot) {
-      return element
+    selector = hrefAttr && hrefAttr !== '#' ? hrefAttr.trim() : null
+  }
+
+  return selector
+}
+
+const getSelectorFromElement = element => {
+  const selector = getSelector(element)
+
+  if (selector) {
+    return document.querySelector(selector) ? selector : null
+  }
+
+  return null
+}
+
+const getElementFromSelector = element => {
+  const selector = getSelector(element)
+
+  return selector ? document.querySelector(selector) : null
+}
+
+const getTransitionDurationFromElement = element => {
+  if (!element) {
+    return 0
+  }
+
+  // Get transition-duration of the element
+  let { transitionDuration, transitionDelay } = window.getComputedStyle(element)
+
+  const floatTransitionDuration = Number.parseFloat(transitionDuration)
+  const floatTransitionDelay = Number.parseFloat(transitionDelay)
+
+  // Return 0 if element or transition duration is not found
+  if (!floatTransitionDuration && !floatTransitionDelay) {
+    return 0
+  }
+
+  // If multiple durations are defined, take the first
+  transitionDuration = transitionDuration.split(',')[0]
+  transitionDelay = transitionDelay.split(',')[0]
+
+  return (Number.parseFloat(transitionDuration) + Number.parseFloat(transitionDelay)) * MILLISECONDS_MULTIPLIER
+}
+
+const triggerTransitionEnd = element => {
+  element.dispatchEvent(new Event(TRANSITION_END))
+}
+
+const isElement = obj => {
+  if (!obj || typeof obj !== 'object') {
+    return false
+  }
+
+  if (typeof obj.jquery !== 'undefined') {
+    obj = obj[0]
+  }
+
+  return typeof obj.nodeType !== 'undefined'
+}
+
+const getElement = obj => {
+  if (isElement(obj)) { // it's a jQuery object or a node element
+    return obj.jquery ? obj[0] : obj
+  }
+
+  if (typeof obj === 'string' && obj.length > 0) {
+    return document.querySelector(obj)
+  }
+
+  return null
+}
+
+const typeCheckConfig = (componentName, config, configTypes) => {
+  Object.keys(configTypes).forEach(property => {
+    const expectedTypes = configTypes[property]
+    const value = config[property]
+    const valueType = value && isElement(value) ? 'element' : toType(value)
+
+    if (!new RegExp(expectedTypes).test(valueType)) {
+      throw new TypeError(
+        `${componentName.toUpperCase()}: Option "${property}" provided type "${valueType}" but expected type "${expectedTypes}".`
+      )
+    }
+  })
+}
+
+const isVisible = element => {
+  if (!isElement(element) || element.getClientRects().length === 0) {
+    return false
+  }
+
+  return getComputedStyle(element).getPropertyValue('visibility') === 'visible'
+}
+
+const isDisabled = element => {
+  if (!element || element.nodeType !== Node.ELEMENT_NODE) {
+    return true
+  }
+
+  if (element.classList.contains('disabled')) {
+    return true
+  }
+
+  if (typeof element.disabled !== 'undefined') {
+    return element.disabled
+  }
+
+  return element.hasAttribute('disabled') && element.getAttribute('disabled') !== 'false'
+}
+
+const findShadowRoot = element => {
+  if (!document.documentElement.attachShadow) {
+    return null
+  }
+
+  // Can find the shadow root otherwise it'll return the document
+  if (typeof element.getRootNode === 'function') {
+    const root = element.getRootNode()
+    return root instanceof ShadowRoot ? root : null
+  }
+
+  if (element instanceof ShadowRoot) {
+    return element
+  }
+
+  // when we don't find a shadow root
+  if (!element.parentNode) {
+    return null
+  }
+
+  return findShadowRoot(element.parentNode)
+}
+
+const noop = () => {}
+
+/**
+ * Trick to restart an element's animation
+ *
+ * @param {HTMLElement} element
+ * @return void
+ *
+ * @see https://www.charistheo.io/blog/2021/02/restart-a-css-animation-with-javascript/#restarting-a-css-animation
+ */
+const reflow = element => {
+  // eslint-disable-next-line no-unused-expressions
+  element.offsetHeight
+}
+
+const getjQuery = () => {
+  const { jQuery } = window
+
+  if (jQuery && !document.body.hasAttribute('data-bs-no-jquery')) {
+    return jQuery
+  }
+
+  return null
+}
+
+const DOMContentLoadedCallbacks = []
+
+const onDOMContentLoaded = callback => {
+  if (document.readyState === 'loading') {
+    // add listener on the first call when the document is in loading state
+    if (!DOMContentLoadedCallbacks.length) {
+      document.addEventListener('DOMContentLoaded', () => {
+        DOMContentLoadedCallbacks.forEach(callback => callback())
+      })
     }
 
-    // when we don't find a shadow root
-    if (!element.parentNode) {
-      return null
-    }
-
-    return Util.findShadowRoot(element.parentNode)
-  },
-
-  jQueryDetection() {
-    if (typeof jquery__WEBPACK_IMPORTED_MODULE_0___default.a === 'undefined') {
-      throw new TypeError('Bootstrap\'s JavaScript requires jQuery. jQuery must be included before Bootstrap\'s JavaScript.')
-    }
-
-    const version = jquery__WEBPACK_IMPORTED_MODULE_0___default.a.fn.jquery.split(' ')[0].split('.')
-    const minMajor = 1
-    const ltMajor = 2
-    const minMinor = 9
-    const minPatch = 1
-    const maxMajor = 4
-
-    if (version[0] < ltMajor && version[1] < minMinor || version[0] === minMajor && version[1] === minMinor && version[2] < minPatch || version[0] >= maxMajor) {
-      throw new Error('Bootstrap\'s JavaScript requires at least jQuery v1.9.1 but less than v4.0.0')
-    }
+    DOMContentLoadedCallbacks.push(callback)
+  } else {
+    callback()
   }
 }
 
-Util.jQueryDetection()
-setTransitionEndSupport()
+const isRTL = () => document.documentElement.dir === 'rtl'
 
-/* harmony default export */ __webpack_exports__["default"] = (Util);
+const defineJQueryPlugin = plugin => {
+  onDOMContentLoaded(() => {
+    const $ = getjQuery()
+    /* istanbul ignore if */
+    if ($) {
+      const name = plugin.NAME
+      const JQUERY_NO_CONFLICT = $.fn[name]
+      $.fn[name] = plugin.jQueryInterface
+      $.fn[name].Constructor = plugin
+      $.fn[name].noConflict = () => {
+        $.fn[name] = JQUERY_NO_CONFLICT
+        return plugin.jQueryInterface
+      }
+    }
+  })
+}
+
+const execute = callback => {
+  if (typeof callback === 'function') {
+    callback()
+  }
+}
+
+const executeAfterTransition = (callback, transitionElement, waitForTransition = true) => {
+  if (!waitForTransition) {
+    execute(callback)
+    return
+  }
+
+  const durationPadding = 5
+  const emulatedDuration = getTransitionDurationFromElement(transitionElement) + durationPadding
+
+  let called = false
+
+  const handler = ({ target }) => {
+    if (target !== transitionElement) {
+      return
+    }
+
+    called = true
+    transitionElement.removeEventListener(TRANSITION_END, handler)
+    execute(callback)
+  }
+
+  transitionElement.addEventListener(TRANSITION_END, handler)
+  setTimeout(() => {
+    if (!called) {
+      triggerTransitionEnd(transitionElement)
+    }
+  }, emulatedDuration)
+}
+
+/**
+ * Return the previous/next element of a list.
+ *
+ * @param {array} list    The list of elements
+ * @param activeElement   The active element
+ * @param shouldGetNext   Choose to get next or previous element
+ * @param isCycleAllowed
+ * @return {Element|elem} The proper element
+ */
+const getNextActiveElement = (list, activeElement, shouldGetNext, isCycleAllowed) => {
+  let index = list.indexOf(activeElement)
+
+  // if the element does not exist in the list return an element depending on the direction and if cycle is allowed
+  if (index === -1) {
+    return list[!shouldGetNext && isCycleAllowed ? list.length - 1 : 0]
+  }
+
+  const listLength = list.length
+
+  index += shouldGetNext ? 1 : -1
+
+  if (isCycleAllowed) {
+    index = (index + listLength) % listLength
+  }
+
+  return list[Math.max(0, Math.min(index, listLength - 1))]
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/bootstrap/js/src/util/scrollbar.js":
+/*!*********************************************************!*\
+  !*** ./node_modules/bootstrap/js/src/util/scrollbar.js ***!
+  \*********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _dom_selector_engine__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../dom/selector-engine */ "./node_modules/bootstrap/js/src/dom/selector-engine.js");
+/* harmony import */ var _dom_manipulator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../dom/manipulator */ "./node_modules/bootstrap/js/src/dom/manipulator.js");
+/* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./index */ "./node_modules/bootstrap/js/src/util/index.js");
+/**
+ * --------------------------------------------------------------------------
+ * Bootstrap (v5.1.3): util/scrollBar.js
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+ * --------------------------------------------------------------------------
+ */
+
+
+
+
+
+const SELECTOR_FIXED_CONTENT = '.fixed-top, .fixed-bottom, .is-fixed, .sticky-top'
+const SELECTOR_STICKY_CONTENT = '.sticky-top'
+
+class ScrollBarHelper {
+  constructor() {
+    this._element = document.body
+  }
+
+  getWidth() {
+    // https://developer.mozilla.org/en-US/docs/Web/API/Window/innerWidth#usage_notes
+    const documentWidth = document.documentElement.clientWidth
+    return Math.abs(window.innerWidth - documentWidth)
+  }
+
+  hide() {
+    const width = this.getWidth()
+    this._disableOverFlow()
+    // give padding to element to balance the hidden scrollbar width
+    this._setElementAttributes(this._element, 'paddingRight', calculatedValue => calculatedValue + width)
+    // trick: We adjust positive paddingRight and negative marginRight to sticky-top elements to keep showing fullwidth
+    this._setElementAttributes(SELECTOR_FIXED_CONTENT, 'paddingRight', calculatedValue => calculatedValue + width)
+    this._setElementAttributes(SELECTOR_STICKY_CONTENT, 'marginRight', calculatedValue => calculatedValue - width)
+  }
+
+  _disableOverFlow() {
+    this._saveInitialAttribute(this._element, 'overflow')
+    this._element.style.overflow = 'hidden'
+  }
+
+  _setElementAttributes(selector, styleProp, callback) {
+    const scrollbarWidth = this.getWidth()
+    const manipulationCallBack = element => {
+      if (element !== this._element && window.innerWidth > element.clientWidth + scrollbarWidth) {
+        return
+      }
+
+      this._saveInitialAttribute(element, styleProp)
+      const calculatedValue = window.getComputedStyle(element)[styleProp]
+      element.style[styleProp] = `${callback(Number.parseFloat(calculatedValue))}px`
+    }
+
+    this._applyManipulationCallback(selector, manipulationCallBack)
+  }
+
+  reset() {
+    this._resetElementAttributes(this._element, 'overflow')
+    this._resetElementAttributes(this._element, 'paddingRight')
+    this._resetElementAttributes(SELECTOR_FIXED_CONTENT, 'paddingRight')
+    this._resetElementAttributes(SELECTOR_STICKY_CONTENT, 'marginRight')
+  }
+
+  _saveInitialAttribute(element, styleProp) {
+    const actualValue = element.style[styleProp]
+    if (actualValue) {
+      _dom_manipulator__WEBPACK_IMPORTED_MODULE_1__["default"].setDataAttribute(element, styleProp, actualValue)
+    }
+  }
+
+  _resetElementAttributes(selector, styleProp) {
+    const manipulationCallBack = element => {
+      const value = _dom_manipulator__WEBPACK_IMPORTED_MODULE_1__["default"].getDataAttribute(element, styleProp)
+      if (typeof value === 'undefined') {
+        element.style.removeProperty(styleProp)
+      } else {
+        _dom_manipulator__WEBPACK_IMPORTED_MODULE_1__["default"].removeDataAttribute(element, styleProp)
+        element.style[styleProp] = value
+      }
+    }
+
+    this._applyManipulationCallback(selector, manipulationCallBack)
+  }
+
+  _applyManipulationCallback(selector, callBack) {
+    if (Object(_index__WEBPACK_IMPORTED_MODULE_2__["isElement"])(selector)) {
+      callBack(selector)
+    } else {
+      _dom_selector_engine__WEBPACK_IMPORTED_MODULE_0__["default"].find(selector, this._element).forEach(callBack)
+    }
+  }
+
+  isOverflowing() {
+    return this.getWidth() > 0
+  }
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (ScrollBarHelper);
 
 
 /***/ }),

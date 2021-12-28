@@ -188,7 +188,7 @@ class TreeForm extends Form
         $content->addField(
             Link::create("#", TextElement::create(
                 '<i class="fa fa-trash"></i> ' . Translation::getTranslation("delete")
-            )->setIsRaw(true))->addClass("btn btn-danger ml-3 remove-node")
+            )->setIsRaw(true))->addClass("btn btn-danger ms-3 remove-node")
             ->addAttribute("data-node", $nodeId)
             ->addAttribute("data-service-url", $element->getRemoveServiceUrl())
         );
@@ -199,7 +199,7 @@ class TreeForm extends Form
                     TextElement::create(
                         '<i class="fa fa-edit"></i> ' . Translation::getTranslation("edit")
                     )->setIsRaw(true)
-                )->addClass("btn btn-info ml-3")
+                )->addClass("btn btn-info ms-3")
             );
         }
         return $content;

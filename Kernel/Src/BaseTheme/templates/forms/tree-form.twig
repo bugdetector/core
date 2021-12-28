@@ -11,11 +11,11 @@
 	</div>
 	<div class="d-flex">
             {% if form.newNodeAddUrl %}
-                <a href='{{ form.newNodeAddUrl }}' class="btn btn-primary mr-3">
+                <a href='{{ form.newNodeAddUrl }}' class="btn btn-primary me-3">
                     <i class="fa fa-plus"></i> {{ t("add_new_node") }}
                 </a>
             {% else %}
-                <a href='#' class="btn btn-primary mr-3 add-new-node" data-parent="0" data-field-name={{ form.treeFieldName }}>
+                <a href='#' class="btn btn-primary me-3 add-new-node" data-parent="0" data-field-name={{ form.treeFieldName }}>
                     <i class="fa fa-plus"></i> {{ t("add_new_node") }}
                 </a>
             {% endif %}

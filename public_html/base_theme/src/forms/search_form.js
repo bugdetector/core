@@ -41,6 +41,6 @@ $(document).on("click", ".rowdelete",function (e) {
 $(document).on("click", "input[type='reset']", function (e) {
     e.preventDefault();
     $(this).parents("form").find("input:not([type='submit']):not([type='reset']),textarea").val("");
-    $(this).parents("form").find("select").val("NULL").selectpicker("refresh");
+    //$(this).parents("form").find("select").val("NULL").selectpicker("refresh");
     $(this).parents("form").find("input[type='checkbox']").prop("checked", false).trigger("change");
 });
