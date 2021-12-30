@@ -13,7 +13,7 @@ class SelectWidget extends FormWidget
     public function __construct(string $name)
     {
         parent::__construct($name);
-        $this->addClass("selectpicker");
+        $this->addClass("select2");
         $this->addAttribute("data-container", "container");
         $this->null_element = new OptionWidget("", Translation::getTranslation("none"));
         \CoreDB::controller()->addJsFiles("dist/select/select.js");

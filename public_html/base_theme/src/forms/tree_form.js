@@ -14,11 +14,11 @@ $(function($){
         templateCard.find(".remove-node").attr("data-node", `new-${index}`);
         templateCard.attr("data-parent", `new-${index}`);
         $("#parent-"+parent).append(templateCard);
-        let selectpicker = templateCard.find(".bootstrap-select");
-        if(selectpicker.length>0){
-            selectpicker.replaceWith(selectpicker.find("select"));
+        let select = templateCard.find(".bootstrap-select");
+        if(select.length>0){
+            select.replaceWith(select.find("select"));
             setTimeout(function(){
-                window.selectpicker(templateCard.find("select"));
+                loadSelect2(templateCard.find("select"));
             }, 200);
         }
     })

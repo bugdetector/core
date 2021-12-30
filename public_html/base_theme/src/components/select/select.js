@@ -1,9 +1,17 @@
 import "./select.scss";
+$(function(){
+    loadSelect2($(".select2"));
+})
 
-
-window.selectpicker = function (element, func = $) {
-    //$(element).selectpicker(func);
+window.loadSelect2 = function(element, defaults = {}){
+    defaults = {
+        language: language,
+        width: "100%",
+        ...defaults
+    };
+    $(element).select2(defaults);
 }
+
 
 $(document).on("keyup", ".bootstrap-select.autocomplete .bs-searchbox input", autocompleteFilter);
 
@@ -52,7 +60,7 @@ function autocompleteFilter(event){
                             $(selectField).append("<option value='"+text+"'>"+text+"</option>");
                         }
                     }
-                    //selectField.selectpicker("refresh");
+                    loadSelect2(selectField);
                 }
             });
         }

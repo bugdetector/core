@@ -1,5 +1,6 @@
 import "bootstrap/js/src/modal";
 import jQuery from "jquery";
+import "select2";
 import bootbox from "bootbox";
 window.$ = window.jQuery = $ = jQuery;
 window.bootbox = bootbox;
