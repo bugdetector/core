@@ -1,7 +1,6 @@
 import {$} from "../jquery/jquery";
-import "bootstrap/js/src/tooltip";
-import 'summernote/dist/summernote-bs4';
-import 'summernote/dist/summernote-bs4.css';
+import 'summernote/dist/summernote-lite';
+import 'summernote/dist/summernote-lite.css';
 import "./summernote.scss";
 $(function () {
     window.summernote = function(element){

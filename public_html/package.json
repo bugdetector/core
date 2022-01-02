@@ -12,12 +12,13 @@
     "start:dev": "webpack --watch --mode development"
   },
   "dependencies": {
+    "@popperjs/core": "^2.11.0",
     "bootbox": "^5.5.1",
-    "bootstrap": "^4.5.3",
+    "bootstrap": "^5.0.2",
     "bootstrap-daterangepicker": "^3.1.0",
-    "bootstrap-select-v4": "^1.12.4",
     "jquery": "^3.5.1",
-    "popper.js": "^1.16.1",
+    "select2": "^4.1.0-rc.0",
+    "select2-bootstrap-5-theme": "^1.2.0",
     "sortablejs": "^1.12.0",
     "summernote": "^0.8.18",
     "tempusdominus-bootstrap-4": "^5.1.2"

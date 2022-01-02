@@ -79,6 +79,7 @@ html {
   
 
 .navbar-brand {
+    display: block;
     background: url('../../../../assets/logo.png');
     background-position: center;
     background-repeat: no-repeat;
@@ -186,5 +187,19 @@ th {
     &:after{
       display: none;
     }
+  }
+}
+.btn-danger, .btn-primary, .btn-info{
+  color: white;
+  &:hover, &:focus{
+    color: white;
+  }
+}
+.bootbox.modal{  
+  .bootbox-close-button{
+    float: right;
+    border: none;
+    font-size: 1.5rem;
+    line-height: 1rem;
   }
 }

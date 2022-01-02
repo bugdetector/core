@@ -5,3 +5,4 @@ config/config.php
 vendor/
 public_html/node_modules/
 cache/
+public_html/package-lock.json

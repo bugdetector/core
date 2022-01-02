@@ -2,16 +2,16 @@
 <{{view.tag_name}} class='{{ view.classes|join(" ") }}' {{ view.renderAttributes()|raw }}>
 
 	<!-- Navbar -->
-	<nav class="navbar-nav ml-auto d-flex w-100">
+	<nav class="navbar-nav ms-auto d-flex w-100">
 		<div
 			class="nav-item">
 			<!-- Sidebar Toggle (Topbar) -->
-			<button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3 mt-3">
+			<button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle me-3 mt-3">
 				<span class="sr-only">{{ t("toggle") }}</span>
 				<i class="fa fa-bars"></i>
 			</button>
 		</div>
-		<div class="nav-item ml-auto">
+		<div class="nav-item ms-auto">
 			<a class="navbar-brand" href="{{ constant("BASE_URL") }}">
 			<span class="sr-only">{{ t("mainpage") }}</span>
 			</a>

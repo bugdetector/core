@@ -98,7 +98,7 @@ class User extends Model
                     TextElement::create(
                         "<i class='fa fa-sign-in-alt'></i> "
                     )->setIsRaw(true)
-                )->addClass("ml-2")
+                )->addClass("ms-2")
                 ->addAttribute("title", Translation::getTranslation("login_as_user"))
             );
         }

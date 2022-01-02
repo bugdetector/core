@@ -81,7 +81,7 @@ class ColumnDefinition extends CollapsableCard
         $column_comment->addAttribute("placeholder", Translation::getTranslation("column_comment"))
         ->addClass("my-2");
 
-        $remove_button = ViewGroup::create("a", "btn btn-danger removefield")
+        $remove_button = ViewGroup::create("a", "btn btn-danger removefield text-white")
         ->addAttribute("href", "#")
         ->addField(
             ViewGroup::create("i", "fa fa-trash")
