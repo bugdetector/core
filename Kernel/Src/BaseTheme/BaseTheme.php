@@ -58,7 +58,7 @@ abstract class BaseTheme extends BaseController
             ->addClass("img-profile rounded-circle"),
             ""
         );
-        $userDropdown->addClass("ml-auto");
+        $userDropdown->addClass("ms-auto");
         if ($currentUser->isLoggedIn()) {
             $userDropdown->addDropdownItem(
                 NavItem::create(

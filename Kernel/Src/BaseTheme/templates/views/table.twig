@@ -5,7 +5,8 @@
 			{% for key, header in view.headers %}
 				<th>
 					{% if view.orderable and not( key matches '/^\\d+$/') %}
-						<a href="?{{ view.filter_params|url_encode }}&orderBy={{key}}&orderDirection={{ view.orderBy == key and view.orderDirection == "DESC" ? "ASC" : "DESC" }}">
+						<a href="?{{ view.filter_params|url_encode }}&orderBy={{key}}&orderDirection={{ view.orderBy == key and view.orderDirection == "DESC" ? "ASC" : "DESC" }}"
+							class="text-decoration-none">
 							{{ header }}
 							{% if view.orderBy == key and view.orderDirection == "DESC" %}
 								<i class="fa fa-sort-down"></i>

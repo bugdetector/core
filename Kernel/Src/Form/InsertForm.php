@@ -36,7 +36,7 @@ class InsertForm extends Form
             InputWidget::create("save")
             ->setValue(Translation::getTranslation("save"))
             ->setType("submit")
-            ->addClass("btn btn-primary mt-2 mr-2")
+            ->addClass("btn btn-primary mt-2 me-2")
             ->removeClass("form-control")
         );
         if ($this->object->ID->getValue()) {
@@ -44,7 +44,7 @@ class InsertForm extends Form
                 InputWidget::create("")
                 ->setValue(Translation::getTranslation("delete"))
                 ->setType("button")
-                ->addClass("btn btn-danger mt-2 mr-2")
+                ->addClass("btn btn-danger mt-2 me-2")
                 ->addClass("remove_accept")
                 ->removeClass("form-control")
             );

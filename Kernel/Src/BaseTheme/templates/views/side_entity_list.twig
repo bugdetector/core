@@ -1,8 +1,8 @@
 <div
 	class="card shadow mb-4">
 	<!-- Card Header - Accordion -->
-	<a href="#entity_list" class="d-block card-header py-3" data-toggle="collapse" role="button" aria-expanded="true">
-		<div class="m-0 font-weight-bold text-primary">{{ t("entities") }}</div>
+	<a href="#entity_list" class="d-block card-header py-3 text-decoration-none" data-bs-toggle="collapse" role="button" aria-expanded="true">
+		<div class="m-0 fw-bold text-primary">{{ t("entities") }}</div>
 	</a>
 	<!-- Card Content - Collapse -->
 	<div class="collapse show" id="entity_list">
@@ -19,11 +19,11 @@
 			<div class="list-group">
 				{% for entity_name in view.entityList %}
 					<div class="btn-group mb-1 entity_info">
-						<a href="{{ constant("BASE_URL") ~ "/admin/entity/" ~ entity_name }}" class="btn btn-outline-dark text-left {{ view.activeEntity == entity_name ? " active" : " " }}">
+						<a href="{{ constant("BASE_URL") ~ "/admin/entity/" ~ entity_name }}" class="btn btn-outline-dark text-start {{ view.activeEntity == entity_name ? " active" : " " }}">
 							<span class="fa fa-cube"></span>
 							{{ t(entity_name) }}
 						</a>
-						<button type="button" class="btn btn-info dropdown-toggle dropdown-toggle-split" style="max-width: min-content;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<button type="button" class="btn btn-info dropdown-toggle dropdown-toggle-split" style="max-width: min-content;" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							<span class="sr-only">{{ t("toggle") }}</span>
 						</button>
 						<div class="dropdown-menu bg-gradient-info">

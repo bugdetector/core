@@ -1,5 +1,5 @@
 $(function () {
-    $(document).on("change", ".table_select", function () {
+    $(document).on("select2:select", ".table_select", function () {
         var select = $(this);
         if (!select.val()) {
             return;
@@ -18,7 +18,7 @@ $(function () {
                     option.val(column).text(response.data[column]);
                     column_select.append(option);
                 }
-                selectpicker(column_select, "refresh");
+                loadSelect2(column_select);
             }
         })
     })
@@ -45,7 +45,7 @@ $(function () {
             success : function (response) {
                 let row = $(response);
                 button.before(row);
-                selectpicker(row.find(".selectpicker"));
+                loadSelect2(row.find(".select2"))
             }
         })
     })

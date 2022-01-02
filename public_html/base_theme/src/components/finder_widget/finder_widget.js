@@ -32,7 +32,7 @@ $(function(){
                         loadData([], $(this).attr("href"));
                     })
                     dialog.find("select").each(function(i, el){
-                        selectpicker(el);
+                        loadSelect2(el);
                     });
                     dialog.find(".finder-select").on("click", function(e){
                         e.preventDefault();

@@ -1,6 +1,6 @@
 <div class='input_widget'>
 {% if widget.label %}
-	<label for="{{ widget.attributes["id"] }}" class="font-weight-bold text-primary">
+	<label for="{{ widget.attributes["id"] }}" class="fw-bold text-primary">
 		{{ widget.label }}
 	</label>
 {% endif %}
@@ -16,7 +16,7 @@
 			</a>
 			{% endif %}
 		{% if widget.fileKey %}
-			<a class="mr-2 entitydelete" data-key="{{ widget.fileKey.createToken() }}" data-field-name="{{ widget.label }}" href="#">
+			<a class="me-2 entitydelete" data-key="{{ widget.fileKey.createToken() }}" data-field-name="{{ widget.label }}" href="#">
 				<i class="fa fa-times text-danger core-control"></i>
 			</a>
 		{% endif %}

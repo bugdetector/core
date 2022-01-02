@@ -1,6 +1,6 @@
 <div>
 {% if widget.label %}
-	<label for="{{ widget.attributes["id"] }}" class="font-weight-bold text-primary">{{ widget.label }}</label>
+	<label for="{{ widget.attributes["id"] }}" class="fw-bold text-primary">{{ widget.label }}</label>
 {% endif %}
 <select name='{{ widget.name }}' class='{{ widget.classes|join(" ") }}' {{ widget.renderAttributes()|raw }}>
 

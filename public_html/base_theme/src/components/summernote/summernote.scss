@@ -1,9 +1,23 @@
-.modal-backdrop.show{
-    display: none;
+.note-modal-backdrop{
+    display: none !important;
 }
-.note-editor.note-frame.fullscreen{
-    width: calc(100% - 6.5rem) !important;
-    left: 6.5rem;
+.note-editor.note-frame{
+    &.fullscreen{
+        width: calc(100% - 6.5rem) !important;
+        left: 6.5rem;
+    }
+    .dropdown-toggle::after{
+        display: none;
+    }
+    .note-color.open{
+        .note-dropdown-menu{
+            display: flex;
+            margin-left: -237px;
+        }
+    }
+    .note-editable{
+        background: white;
+    }
 }
 
 @media screen and (max-width: 768px) {
@@ -12,3 +26,9 @@
         left: 0%;
     }
 }
+
+.note-modal{  
+    .note-modal-footer{
+        margin-bottom: 10px;
+    }
+  }
