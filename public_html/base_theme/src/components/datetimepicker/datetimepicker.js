@@ -42,7 +42,10 @@ window.loadDateTimeInput = function(){
         el.val("");
         el.datetimepicker({
             format: "DD-MM-YYYY HH:mm",
-            locale: language
+            locale: language,
+            icons: {
+                time: "fa fa-clock"
+            }
         });
         el.val(default_value);
     });

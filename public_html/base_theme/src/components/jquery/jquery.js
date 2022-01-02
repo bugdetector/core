@@ -50,7 +50,7 @@ $(document).ajaxComplete(function () {
 
 $(document).ajaxError(function (evt, request, settings) {
     var data = request.responseText;
-    if (data.length > 0) {
+    if (data && data.length > 0) {
         try {
             var resp = JSON.parse(data);
             if (resp.messages[0]) {

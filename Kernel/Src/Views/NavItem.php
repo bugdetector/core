@@ -77,8 +77,8 @@ class NavItem extends ViewGroup
         if (!$this->hasClass("collapsed")) {
             $this->fields[0]->addClass("collapsed")
             ->addAttribute("data-bs-toggle", "collapse")
-            ->addAttribute("data-target", "#{$this->collapse_id}")
-            ->addAttribute("aria-expanded", "true")
+            ->addAttribute("href", "#{$this->collapse_id}")
+            ->addAttribute("aria-expanded", "false")
             ->addAttribute("aria-controls", $this->collapse_id);
         }
         if (!isset($this->fields[1])) {

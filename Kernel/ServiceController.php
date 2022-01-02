@@ -46,7 +46,7 @@ abstract class ServiceController extends BaseController
 
     public function processPage()
     {
-        $response_data = ["data" => ""];
+        $response_data = ["data" => null];
         if ($this->method && method_exists($this, $this->method)) {
             try {
                 $response = $this->{$this->method}();

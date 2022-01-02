@@ -91,7 +91,6 @@ class SelectWidget extends FormWidget
             "referenceTable" => $referenceTable,
             "referenceColumn" => $referenceColumn
         ];
-        $this->addAttribute("data-live-search", "true");
         $this->addAttribute("data-autocomplete-token", $autoCompleteToken);
         return $this;
     }
@@ -99,9 +98,9 @@ class SelectWidget extends FormWidget
     public function createIfNotExist(bool $create_if_not_exist): SelectWidget
     {
         if ($create_if_not_exist) {
-            $this->addClass("create-if-not-exist");
+            $this->addAttribute("data-tags", "true");
         } else {
-            $this->removeClass("create-if-not-exist");
+            $this->removeAttribute("data-tags");
         }
         return $this;
     }
