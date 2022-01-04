@@ -57,7 +57,12 @@ class InputWidget extends FormWidget
     public function addClass(string $class_name): View
     {
         $classesToAdd = explode(" ", $class_name);
-        if (in_array("dateinput", $classesToAdd) || in_array("datetimeinput", $classesToAdd)) {
+        if (
+            !empty(array_merge(
+                ["dateinput", "datetimeinput", "timeinput"],
+                $classesToAdd
+            ))
+        ) {
             \CoreDB::controller()->addJsFiles("dist/datetimepicker/datetimepicker.js");
             \CoreDB::controller()->addCssFiles("dist/datetimepicker/datetimepicker.css");
         } elseif (in_array("daterangeinput", $classesToAdd)) {
