@@ -4,10 +4,10 @@
 	{{ form.fields["form_id"] }}
     {{ form.fields["form_build_id"] }}
     {{ form.fields["form_token"] }}
-	<div class="row ml-1">
+	<div class="row ms-1">
 		{% if form.exportEntityButtonShow %}
 			<div class="col-sm-12">
-				<a href="{{ constant("BASE_URL") }}/admin/table/ExportMapper/{{ form.table_name }}" class="btn btn-success btn-icon-split">
+				<a href="{{ constant("BASE_URL") }}/admin/table/ExportMapper/{{ form.table_name }}" class="btn btn-success btn-icon-split text-white">
 					<span class="text">{{ t("export_as_class") }}</span>
 					<span class="icon text-white-100">
 						<i class="fa fa-file-export"></i>
@@ -15,10 +15,10 @@
 				</a>
 			</div>
 		{% endif %}
-		<div class="col-md-3 col-sm-6 col-xs-12 form-group text-left font-weight-bold">
+		<div class="col-md-3 col-sm-6 col-xs-12 form-group text-start fw-bold">
 			{{ form.fields["table_name"] }}
 		</div>
-		<div class="col-md-9 col-sm-12 form-group text-left font-weight-bold">
+		<div class="col-md-9 col-sm-12 form-group text-start fw-bold">
 			{{ form.fields["table_comment"] }}
 		</div>
 	</div>
