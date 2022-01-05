@@ -9,9 +9,7 @@
             <img src='{{ constant('BASE_URL') }}/captcha/generateCaptchaImage' class="rounded-left captcha-image">
         </div>
         <input type='{{ widget.type }}' name='{{ widget.name }}' class='{{ widget.classes|join(" ") }}' {{ widget.renderAttributes()|raw }}/>
-        <div class="input-group-append">
-            <button class="btn btn-info captcha-refresh" type="button"><i class='fa fa-sync'></i></button>
-        </div>
+        <button class="btn btn-info captcha-refresh" type="button"><i class='fa fa-sync'></i></button>
     </div>
     {% if widget.description %}
 		<small for="{{ widget.attributes["id"] }}" class="d-block">
