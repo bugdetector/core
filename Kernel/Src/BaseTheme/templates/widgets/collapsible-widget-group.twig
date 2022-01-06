@@ -1,3 +1,4 @@
+<input type="hidden" name="{{ widget.newFieldName }}" value="">
 <div class='{{ widget.classes|join(" ") }}' {{ widget.renderAttributes()|raw }} data-entity="{{ widget.entityName }}">
 {% if widget.label and widget.showAddButtonAndLabel %}
 	<label for="{{ widget.attributes["id"] }}" class="fw-bold text-primary">
