@@ -346,7 +346,8 @@ abstract class Model implements SearchableInterface
                     $widget->addFileKey(
                         $this->entityName,
                         $this->ID->getValue(),
-                        $field_name
+                        $field_name,
+                        $field->isNull
                     );
                 }
             }
