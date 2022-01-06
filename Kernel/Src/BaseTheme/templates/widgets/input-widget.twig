@@ -15,7 +15,7 @@
 				{{ widget.file.file_name }}
 			</a>
 			{% endif %}
-		{% if widget.fileKey %}
+		{% if widget.fileKey and widget.isNull %}
 			<a class="me-2 entitydelete" data-key="{{ widget.fileKey.createToken() }}" data-field-name="{{ widget.label }}" href="#">
 				<i class="fa fa-times text-danger core-control"></i>
 			</a>
