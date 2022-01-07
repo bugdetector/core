@@ -60,7 +60,7 @@ class InputWidget extends FormWidget
     {
         $classesToAdd = explode(" ", $class_name);
         if (
-            !empty(array_merge(
+            !empty(array_intersect(
                 ["dateinput", "datetimeinput", "timeinput"],
                 $classesToAdd
             ))
