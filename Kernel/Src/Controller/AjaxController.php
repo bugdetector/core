@@ -92,7 +92,12 @@ class AjaxController extends ServiceController
                 $file->status->setValue(File::STATUS_TEMPORARY);
                 $file->save();
                 $fileWidget = InputWidget::create(@$_POST["name"]);
-                $fileWidget->addFileKey($object->entityName, $object->ID->getValue(), $data->field);
+                $fileWidget->addFileKey(
+                    $object->entityName,
+                    $object->ID->getValue(),
+                    $data->field,
+                    $object->{$data->field}->isNull
+                );
                 $fileWidget->setLabel(@$_POST["label"]);
                 $fileWidget->setType("file");
                 $fileWidget->setValue($file->ID->getValue());
