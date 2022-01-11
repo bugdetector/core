@@ -33,12 +33,15 @@ class EnumaratedList extends DataTypeAbstract
         foreach ($this->values as $key => $value) {
             $options[$key] = Translation::getTranslation($value);
         }
+        /** @var SelectWidget */
         $widget = SelectWidget::create("")
             ->setValue($this->value)
             ->setOptions($options)
             ->setDescription(Translation::getTranslation($this->comment));
         if (!$this->isNull) {
-            $widget->addAttribute("required", "true");
+            $widget
+            ->setNullElement(null)
+            ->addAttribute("required", "true");
         }
         return $widget;
     }
