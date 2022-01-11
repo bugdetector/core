@@ -71,15 +71,19 @@ fields:
     isUnique: false
     default: null
     comment: 'Hashed user password'
-  active:
-    type: checkbox
-    column_name: active
+  status:
+    type: enumarated_list
+    values:
+      active: active
+      blocked: blocked
+      banned: banned
+    column_name: status
     primary_key: false
     autoIncrement: false
     isNull: true
     isUnique: false
     default: null
-    comment: 'User is active or blocked.'
+    comment: "Active is user can login and use the site.\r\nBlocked is user has been blocked due to too many untrested actions. Need reset password.\r\nBanned is user is not able to login to site."
   last_access:
     type: datetime
     column_name: last_access

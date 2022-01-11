@@ -51,14 +51,12 @@ class ResetPasswordForm extends Form
 
     public function validate(): bool
     {
-        if (isset($this->request["reset"])) {
-            if ($this->request["password"] != $this->request["password2"]) {
-                $this->setError("password", Translation::getTranslation("password_match_error"));
-            }
-            $userClass = ConfigurationManager::getInstance()->getEntityInfo("users")["class"];
-            if (!$userClass::validatePassword($_POST["password"])) {
-                $this->setError("password", Translation::getTranslation("password_validation_error"));
-            }
+        if ($this->request["password"] != $this->request["password2"]) {
+            $this->setError("password", Translation::getTranslation("password_match_error"));
+        }
+        $userClass = ConfigurationManager::getInstance()->getEntityInfo("users")["class"];
+        if (!$userClass::validatePassword($_POST["password"])) {
+            $this->setError("password", Translation::getTranslation("password_validation_error"));
         }
         return empty($this->errors);
     }
@@ -67,7 +65,7 @@ class ResetPasswordForm extends Form
     {
         $this->user->map([
             "password" => $this->request["password"],
-            "active" => 1
+            "status" => User::STATUS_ACTIVE
         ]);
         $this->user->save();
 

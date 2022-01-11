@@ -60,8 +60,15 @@ class LoginForm extends Form
         $userClass = ConfigurationManager::getInstance()->getEntityInfo("users")["class"];
         $this->user = $userClass::getUserByUsername($this->request["username"]) ?:
                     $userClass::getUserByEmail($this->request["username"]);
-        if ($this->user && !$this->user->active->getValue()) {
-            $this->setError("username", Translation::getTranslation("account_blocked"));
+        if ($this->user && $this->user->status->getValue() != User::STATUS_ACTIVE) {
+            switch ($this->user->status->getValue()) {
+                case User::STATUS_BLOCKED:
+                    $this->setError("username", Translation::getTranslation("account_blocked"));
+                    break;
+                case User::STATUS_BANNED:
+                    $this->setError("username", Translation::getTranslation("account_banned"));
+                    break;
+            }
         }
 
         //if login fails for more than 10 times block this ip
@@ -71,7 +78,9 @@ class LoginForm extends Form
             }
             if (User::getLoginTryCountOfUser($this->request["username"]) > 10) {
                 //blocking user
-                $this->user->active = 0;
+                $this->user->map([
+                    "status" => User::STATUS_BLOCKED
+                ]);
                 $this->user->save();
             }
             $this->setError("username", Translation::getTranslation("ip_blocked"));

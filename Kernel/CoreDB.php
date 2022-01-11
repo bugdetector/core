@@ -179,7 +179,10 @@ class CoreDB
             if (isset($_SESSION[BASE_URL . "-UID"])) {
                 $session = Session::get(["session_key" => session_id()]);
                 if($session){
-                    self::$currentUser = $userClass::get($_SESSION[BASE_URL . "-UID"]);
+                    self::$currentUser = $userClass::get([
+                        "ID" => $_SESSION[BASE_URL . "-UID"],
+                        "status" => User::STATUS_ACTIVE
+                    ]);
                     $session->map([
                         "last_access" => \CoreDB::currentDate()
                     ]);
@@ -193,7 +196,10 @@ class CoreDB
                     "remember_me_token" => $_COOKIE["session-token"]
                 ]);
                 if($session){
-                    self::$currentUser = $userClass::get($session->user->getValue());
+                    self::$currentUser = $userClass::get([
+                        "ID" => $session->user->getValue(),
+                        "status" => User::STATUS_ACTIVE
+                    ]);
                     $session->session_key->setValue(session_id());
                     $session->save();
                     $_SESSION[BASE_URL . "-UID"] = self::$currentUser->ID;

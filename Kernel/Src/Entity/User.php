@@ -3,6 +3,10 @@
 namespace Src\Entity;
 
 use CoreDB;
+use CoreDB\Kernel\Database\DataType\DateTime;
+use CoreDB\Kernel\Database\DataType\EnumaratedList;
+use CoreDB\Kernel\Database\DataType\File;
+use CoreDB\Kernel\Database\DataType\ShortText;
 use CoreDB\Kernel\Database\SelectQueryPreparerAbstract;
 use CoreDB\Kernel\EntityReference;
 use CoreDB\Kernel\Model;
@@ -17,7 +21,69 @@ class User extends Model
 
     public const DEFAULT_REMEMBER_ME_TIMEOUT = "1 week";
 
+    /**
+    * STATUS_ACTIVE description.
+    */
+    public const STATUS_ACTIVE = "active";
+    /**
+    * STATUS_BLOCKED description.
+    */
+    public const STATUS_BLOCKED = "blocked";
+    /**
+    * STATUS_BANNED description.
+    */
+    public const STATUS_BANNED = "banned";
+
+    /**
+    * @var ShortText $username
+    * Username
+    */
+    public ShortText $username;
+
     public EntityReference $roles;
+    
+    /**
+    * @var ShortText $name
+    * Name
+    */
+    public ShortText $name;
+    /**
+    * @var ShortText $surname
+    * Surname
+    */
+    public ShortText $surname;
+    /**
+    * @var File $profile_photo
+    * User profile photo.
+    */
+    public File $profile_photo;
+    /**
+    * @var ShortText $email
+    * Email
+    */
+    public ShortText $email;
+    /**
+    * @var ShortText $phone
+    *
+    */
+    public ShortText $phone;
+    /**
+    * @var ShortText $password
+    * Hashed user password
+    */
+    public ShortText $password;
+    /**
+    * @var EnumaratedList $status
+    * Active is user can login and use the site.
+    * Blocked is user has been blocked due to too many untrested actions. Need reset password.
+    * Banned is user is not able to login to site.
+    */
+    public EnumaratedList $status;
+    /**
+    * @var DateTime $last_access
+    *
+    */
+    public DateTime $last_access;
 
     /**
      * @inheritdoc
@@ -149,6 +215,7 @@ class User extends Model
     public function delete(): bool
     {
         return CoreDB::database()->delete("users_roles")->condition("user_id", $this->ID)->execute() &&
+            CoreDB::database()->delete(Session::getTableName())->condition("user", $this->ID)->execute() &&
             CoreDB::database()->delete(Logins::getTableName())->condition("username", $this->username)->execute() &&
             CoreDB::database()->delete(ResetPassword::getTableName())->condition("user", $this->ID)->execute()
             && parent::delete();
