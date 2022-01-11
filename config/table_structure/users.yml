@@ -80,7 +80,7 @@ fields:
     column_name: status
     primary_key: false
     autoIncrement: false
-    isNull: true
+    isNull: false
     isUnique: false
     default: null
     comment: "Active is user can login and use the site.\r\nBlocked is user has been blocked due to too many untrested actions. Need reset password.\r\nBanned is user is not able to login to site."
