@@ -149,6 +149,7 @@ class User extends Model
     public function delete(): bool
     {
         return CoreDB::database()->delete("users_roles")->condition("user_id", $this->ID)->execute() &&
+            CoreDB::database()->delete(Session::getTableName())->condition("user", $this->ID)->execute() &&
             CoreDB::database()->delete(Logins::getTableName())->condition("username", $this->username)->execute() &&
             CoreDB::database()->delete(ResetPassword::getTableName())->condition("user", $this->ID)->execute()
             && parent::delete();
