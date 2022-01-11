@@ -33,7 +33,7 @@ class AddAdminUserCommand extends Command
             "name" => $input->getArgument("name"),
             "email" => $input->getArgument("email"),
             "password" => $input->getArgument("password"),
-            "active" => 1,
+            "status" => User::STATUS_ACTIVE,
             "roles" => [1]
         ]);
         try {

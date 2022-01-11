@@ -13,6 +13,7 @@ class ForgetPasswordForm extends Form
 {
     public string $method = "POST";
 
+    private ?User $user = null;
     public function __construct()
     {
         parent::__construct();
@@ -40,9 +41,12 @@ class ForgetPasswordForm extends Form
     public function validate(): bool
     {
         $userClass = ConfigurationManager::getInstance()->getEntityInfo("users")["class"];
-        if (isset($this->request["reset"])) {
-            if (!$userClass::getUserByEmail($this->request["email"])) {
-                $this->setError("username", Translation::getTranslation("wrong_email"));
+        if (!$userClass::getUserByEmail($this->request["email"])) {
+            $this->setError("username", Translation::getTranslation("wrong_email"));
+        } else {
+            $this->user = $userClass::getUserByEmail($this->request["email"]);
+            if ($this->user->status->getValue() == User::STATUS_BANNED) {
+                $this->setError("username", Translation::getTranslation("account_banned"));
             }
         }
         return empty($this->errors);
@@ -50,23 +54,20 @@ class ForgetPasswordForm extends Form
 
     public function submit()
     {
-        $userClass = ConfigurationManager::getInstance()->getEntityInfo("users")["class"];
-        /** @var User */
-        $user = $userClass::getUserByEmail($this->request["email"]);
         $reset_password = new ResetPassword();
-        $reset_password = ResetPassword::get(["user" => $user->ID]);
+        $reset_password = ResetPassword::get(["user" => $this->user->ID]);
         if (!$reset_password) {
             $reset_password = new ResetPassword();
-            $reset_password->user->setValue($user->ID);
-            $reset_password->key->setValue(hash("SHA256", \CoreDB::currentDate() . json_encode($user->ID)));
+            $reset_password->user->setValue($this->user->ID);
+            $reset_password->key->setValue(hash("SHA256", \CoreDB::currentDate() . json_encode($this->user->ID)));
             $reset_password->save();
         }
         
-        $reset_link = BASE_URL . "/reset_password/?USER=" . $user->ID . "&KEY=" . $reset_password->key;
+        $reset_link = BASE_URL . "/reset_password/?USER=" . $this->user->ID . "&KEY=" . $reset_password->key;
         $message = Translation::getEmailTranslation("password_reset", [$reset_link, $reset_link]);
-        $username = $user->getFullName();
+        $username = $this->user->getFullName();
         
-        \CoreDB::HTMLMail($user->email, Translation::getTranslation("reset_password"), $message, $username);
+        \CoreDB::HTMLMail($this->user->email, Translation::getTranslation("reset_password"), $message, $username);
         
         \CoreDB::messenger()
         ->createMessage(

@@ -159,7 +159,7 @@ class InstallForm extends Form
             "name" => $this->request["name"],
             "email" => $this->request["email"],
             "password" => password_hash($this->request["password"], PASSWORD_BCRYPT),
-            "active" => 1
+            "status" => User::STATUS_ACTIVE
         ])->execute();
         $userID = \CoreDB::database()->lastInsertId();
         \CoreDB::database()->insert("users_roles", [

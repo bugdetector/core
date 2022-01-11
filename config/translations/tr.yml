@@ -207,3 +207,6 @@ sessions: Oturumlar
 current_session: 'Şu anki oturum'
 session_logout_success: 'Oturum başarıyla sonlandırıldı.'
 user_sessions_notify: '%d başka oturumunuz mevcut. <a href="%s">Profil</a> sayfasından oturumlarınızı yönetebilirsiniz.'
+blocked: Bloklanmış
+banned: Engellenmiş
+account_banned: 'Bu hesap engellenmiş. Bu hesabı kullanarak oturum açamazsınız.'
