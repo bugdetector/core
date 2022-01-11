@@ -10,6 +10,12 @@ class ProfileController extends BaseTheme
 {
     public ProfileForm $profileForm;
 
+    public $activeTab = "profile";
+
+    public function getTemplateFile(): string
+    {
+        return "page-profile.twig";
+    }
 
     public function checkAccess(): bool
     {

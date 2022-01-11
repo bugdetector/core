@@ -2,9 +2,14 @@
 
 namespace Src\Entity;
 
+use CoreDB\Kernel\ConfigurationManager;
+use CoreDB\Kernel\Database\DataType\DateTime;
 use CoreDB\Kernel\Model;
 use CoreDB\Kernel\Database\DataType\ShortText;
 use CoreDB\Kernel\Database\DataType\TableReference;
+use CoreDB\Kernel\Messenger;
+use Src\Controller\Profile\SessionsController;
+use Src\Views\TextElement;
 
 /**
  * Object relation with table sessions
@@ -14,9 +19,9 @@ use CoreDB\Kernel\Database\DataType\TableReference;
 class Session extends Model
 {
 
-    public const POLICY_FULL_ONE_DEVICE_LOGIN = "full_one_device_login";
-    public const POLICY_ROLE_BASED_ONE_DEVICE_LOGIN = "role_based_one_device_login";
-    public const POLICY_NO_RESTRICTIONS = "no_restrictions";
+    public const POLICY_NOTIFY_ALL_USERS = "notify_all_users";
+    public const POLICY_ROLE_BASED_NOTIFY = "role_based_notify";
+    public const POLICY_NOT_NOTIFY = "not_notify";
 
     /**
     * @var ShortText $session_key
@@ -38,6 +43,11 @@ class Session extends Model
     * Remember me token for session.
     */
     public ShortText $remember_me_token;
+     /**
+    * @var DateTime $last_access
+    * Last used time of this session.
+    */
+    public DateTime $last_access;
 
     /**
      * @inheritdoc
@@ -47,38 +57,46 @@ class Session extends Model
         return "sessions";
     }
 
-    public function save()
+    public function insert()
     {
-        self::checkLoginPolicy(\CoreDB::currentUser());
-        return parent::save();
+        $userClass = ConfigurationManager::getInstance()->getEntityInfo("users")["class"];
+        self::checkLoginPolicy($userClass::get($this->user->getValue()));
+        return parent::insert();
     }
 
     public static function checkLoginPolicy(User $user)
     {
-        if (defined("LOGIN_POLICY") && LOGIN_POLICY != self::POLICY_NO_RESTRICTIONS) {
+        if (defined("LOGIN_POLICY") && LOGIN_POLICY != self::POLICY_NOT_NOTIFY) {
+            $notify = false;
             switch (LOGIN_POLICY) {
-                case self::POLICY_FULL_ONE_DEVICE_LOGIN:
-                    self::clearUserSessions($user);
+                case self::POLICY_NOTIFY_ALL_USERS:
+                    $notify = true;
                     break;
-                case self::POLICY_ROLE_BASED_ONE_DEVICE_LOGIN:
+                case self::POLICY_ROLE_BASED_NOTIFY:
                     if (!empty($user->roles->getValue())) {
                         foreach (LOGIN_POLICY_ROLES as $role) {
                             if ($user->isUserInRole($role)) {
-                                self::clearUserSessions($user);
+                                $notify = true;
                                 break;
                             }
                         }
                     }
                     break;
             }
-        }
-    }
 
-    private static function clearUserSessions(User $user)
-    {
-        \CoreDB::database()->delete(Session::getTableName())
-        ->condition("user", $user->ID->getValue())
-        ->condition("ip_address", User::getUserIp(), "=", "OR")
-        ->execute();
+            if ($notify) {
+                $userSessions = $user->getUserSessions();
+                \CoreDB::messenger()->createMessage(
+                    TextElement::create(Translation::getTranslation(
+                        "user_sessions_notify",
+                        [
+                            count($userSessions),
+                            SessionsController::getUrl()
+                        ]
+                    ))->setIsRaw(true),
+                    Messenger::WARNING
+                );
+            }
+        }
     }
 }

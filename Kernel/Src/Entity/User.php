@@ -15,6 +15,8 @@ use Src\Views\TextElement;
 class User extends Model
 {
 
+    public const DEFAULT_REMEMBER_ME_TIMEOUT = "1 week";
+
     public EntityReference $roles;
 
     /**
@@ -253,5 +255,34 @@ class User extends Model
         } else {
             return BASE_URL . "/assets/default-profile-picture.png";
         }
+    }
+
+    /**
+     * @return Session[]
+     */
+    public function getUserSessions(): array
+    {
+        self::deleteExpiredSessions();
+        return Session::getAll(["user" => $this->ID->getValue()]);
+    }
+
+    public static function deleteExpiredSessions()
+    {
+        \CoreDB::database()->delete(Session::getTableName(), "s")
+            ->condition("last_access", date("Y-m-d H:i:s", strtotime(
+                "-" . ini_get("session.gc_maxlifetime") . " seconds"
+            )), "<")
+            ->condition("remember_me_token", null)
+            ->execute();
+        
+        \CoreDB::database()->delete(Session::getTableName(), "s")
+            ->condition("last_access", date("Y-m-d H:i:s", strtotime(
+                "-" . ini_get("session.gc_maxlifetime") . " seconds"
+            )), "<")
+            ->condition("created_at", date("Y-m-d H:i:s", strtotime(
+                defined("REMEMBER_ME_TIMEOUT") ? REMEMBER_ME_TIMEOUT : "-" . self::DEFAULT_REMEMBER_ME_TIMEOUT
+            )), "<")
+            ->condition("remember_me_token", null)
+            ->execute();
     }
 }
