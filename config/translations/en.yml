@@ -203,3 +203,7 @@ cannot_login_as_another_admin_user: 'Cannot login as another admin user.'
 choose: Choose
 compress_all_image_files: 'Compress all image files'
 _files_compressed: '%d files compressed.'
+sessions: Sessions
+current_session: 'Current session'
+session_logout_success: 'Session has been ended successfully. '
+user_sessions_notify: 'You have %d other sessions. You can manage your sessions on <a href="%s">Profile</a> page.'

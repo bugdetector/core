@@ -24,7 +24,7 @@ interface MessengerInterface
      * @param int $type
      * Message Type
      */
-    public function createMessage(string $message, int $type = self::ERROR): void;
+    public function createMessage($message, int $type = self::ERROR): void;
 
     /**
      * Returns messages

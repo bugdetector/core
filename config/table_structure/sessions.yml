@@ -41,3 +41,12 @@ fields:
     isUnique: false
     default: null
     comment: 'Remember me token for session.'
+  last_access:
+    type: datetime
+    column_name: last_access
+    primary_key: false
+    autoIncrement: false
+    isNull: true
+    isUnique: false
+    default: null
+    comment: 'Last used time of this session.'
