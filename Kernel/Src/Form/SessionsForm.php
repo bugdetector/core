@@ -36,7 +36,8 @@ class SessionsForm extends Form
             ->addClass("btn btn-sm ms-4");
             if (session_id() == $session->session_key->getValue()) {
                 $widget->setValue(Translation::getTranslation("current_session"))
-                ->addClass("btn-success");
+                ->addClass("btn-success")
+                ->addAttribute("disabled", "true");
                 unset($session);
             } else {
                 $widget->setValue(Translation::getTranslation("logout"))
@@ -57,7 +58,12 @@ class SessionsForm extends Form
             return $session->ID->getValue();
         }, $this->userSessions);
         $sessionIdToLogout = current(array_keys($this->request["session"]));
-        if (!in_array($sessionIdToLogout, $sessionIds)) {
+        /** @var Session */
+        $session = Session::get($sessionIdToLogout);
+        if (
+            !in_array($sessionIdToLogout, $sessionIds) ||
+            $session->session_key->getValue() == session_id()
+        ) {
             $this->setError("", Translation::getTranslation("invalid_operation"));
         }
         return empty($this->errors);
