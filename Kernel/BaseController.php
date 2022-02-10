@@ -3,9 +3,10 @@
 namespace CoreDB\Kernel;
 
 use Exception;
+use Src\BaseTheme\BaseTheme;
 use Src\Entity\Translation;
 use Src\Entity\Variable;
-use Src\Theme\CoreRenderer;
+use Src\Theme\ThemeInteface;
 use Src\Views\AlertMessage;
 use Src\Views\ViewGroup;
 
@@ -23,11 +24,20 @@ abstract class BaseController implements ControllerInterface
     public $css_codes = [];
     public $frontend_translations = [];
 
-    abstract public static function getTemplateDirectories(): array;
+    public function getTheme(): ThemeInteface
+    {
+        return new BaseTheme();
+    }
+
+    public function processPage()
+    {
+        $this->preprocessPage();
+        $this->render();
+    }
 
     public function render()
     {
-        echo CoreRenderer::getInstance($this::getTemplateDirectories())->renderController($this);
+        $this->getTheme()->render($this);
     }
 
     public function setTitle(string $title): void
@@ -123,7 +133,7 @@ abstract class BaseController implements ControllerInterface
         }
     }
 
-    protected function addMetaTag($index, $attributes)
+    public function addMetaTag($index, $attributes)
     {
         $this->metaTags[$index] = $attributes;
     }

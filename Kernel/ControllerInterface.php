@@ -42,4 +42,10 @@ interface ControllerInterface
      *  URL
      */
     public static function getUrl(): string;
+
+    public function addJsFiles($js_file_path);
+    public function addMetaTag($index, $attributes);
+    public function addJsCode(string $js_code);
+    public function addCssFiles($css_file_path);
+    public function addFrontendTranslation($translation_key);
 }

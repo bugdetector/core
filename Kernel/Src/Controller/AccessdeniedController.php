@@ -2,10 +2,10 @@
 
 namespace Src\Controller;
 
+use CoreDB\Kernel\BaseController;
 use Src\Entity\Translation;
-use Src\BaseTheme\BaseTheme;
 
-class AccessdeniedController extends BaseTheme
+class AccessdeniedController extends BaseController
 {
 
     public $error_code = 403;

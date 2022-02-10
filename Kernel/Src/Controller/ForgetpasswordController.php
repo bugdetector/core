@@ -2,11 +2,11 @@
 
 namespace Src\Controller;
 
+use CoreDB\Kernel\BaseController;
 use Src\Entity\Translation;
 use Src\Form\ForgetPasswordForm;
-use Src\BaseTheme\BaseTheme;
 
-class ForgetpasswordController extends BaseTheme
+class ForgetpasswordController extends BaseController
 {
 
     public $form;

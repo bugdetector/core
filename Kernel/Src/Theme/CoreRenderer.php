@@ -4,6 +4,7 @@ namespace Src\Theme;
 
 use Src\Theme\CoreTwigExtension;
 use CoreDB\Kernel\BaseController;
+use CoreDB\Kernel\ControllerInterface;
 use Src\Theme\View;
 use Src\Form\Form;
 use Src\Form\Widget\FormWidget;
@@ -41,10 +42,11 @@ class CoreRenderer
         return self::$instance;
     }
 
-    public function renderController(BaseController $controller)
+    public function renderController(ThemeInteface $theme, ControllerInterface $controller)
     {
         return $this->twig->render($controller->getTemplateFile(), [
-            "controller" => $controller,
+            "theme" => $theme,
+            "controller" => $controller
         ]);
     }
 

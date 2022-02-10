@@ -3,13 +3,13 @@
 namespace Src\Controller;
 
 use CoreDB;
-use Src\BaseTheme\BaseTheme;
+use CoreDB\Kernel\BaseController;
 use Src\Entity\Translation;
 use Src\Entity\User;
 use Src\Entity\Variable;
 use Src\Views\BasicCard;
 
-class AdminController extends BaseTheme
+class AdminController extends BaseController
 {
 
     public $number_of_members;

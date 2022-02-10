@@ -2,46 +2,44 @@
 
 namespace Src\BaseTheme;
 
-use CoreDB\Kernel\BaseController;
+use CoreDB\Kernel\ControllerInterface;
 use Src\Controller\LoginController;
 use Src\Controller\LogoutController;
 use Src\Controller\ProfileController;
 use Src\Entity\Translation;
+use Src\Theme\CoreRenderer;
+use Src\Theme\ThemeInteface;
 use Src\Views\Image;
 use Src\Views\Navbar;
 use Src\Views\NavItem;
 use Src\Views\Sidebar;
 use Src\Views\TextElement;
 
-abstract class BaseTheme extends BaseController
+class BaseTheme implements ThemeInteface
 {
 
     public Navbar $navbar;
     public Sidebar $sidebar;
     public $body_classes = [];
 
-    public function checkAccess(): bool
-    {
-        return true;
-    }
-
     public static function getTemplateDirectories(): array
     {
         return [__DIR__ . "/templates"];
     }
 
-    public function processPage()
+    public function render(ControllerInterface $controller)
     {
         $this->buildNavbar();
         $this->buildSidebar();
-        $this->addDefaultMetaTags();
-        $this->addDefaultJsFiles();
-        $this->addDefaultCssFiles();
-        $this->addDefaultTranslations();
-        $this->preprocessPage();
-        $this->render();
+        $this->addDefaultMetaTags($controller);
+        $this->addDefaultJsFiles($controller);
+        $this->addDefaultCssFiles($controller);
+        $this->addDefaultTranslations($controller);
+        echo CoreRenderer::getInstance(
+            $this::getTemplateDirectories()
+        )->renderController($this, $controller);
     }
-    
+
     public function buildNavbar()
     {
         $this->navbar = Navbar::create(
@@ -110,38 +108,38 @@ abstract class BaseTheme extends BaseController
     {
     }
 
-    protected function addDefaultMetaTags()
+    protected function addDefaultMetaTags(ControllerInterface $controller)
     {
-        $this->addMetaTag("charset", [
+        $controller->addMetaTag("charset", [
             "charset" => "utf-8"
         ]);
-        $this->addMetaTag("viewport", [
+        $controller->addMetaTag("viewport", [
             "name" => "viewport",
             "content" => "width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes"
         ]);
     }
     
-    protected function addDefaultJsFiles()
+    protected function addDefaultJsFiles(ControllerInterface $controller)
     {
-        $this->addJsFiles("dist/_global/_global.js");
+        $controller->addJsFiles("dist/_global/_global.js");
     }
     
-    protected function addDefaultCssFiles()
+    protected function addDefaultCssFiles(ControllerInterface $controller)
     {
-        $this->addCssFiles([
+        $controller->addCssFiles([
             "dist/_global/_global.css",
             "dist/icons/icons.css"
         ]);
     }
     
-    protected function addDefaultTranslations()
+    protected function addDefaultTranslations(ControllerInterface $controller)
     {
-        $this->addFrontendTranslation("yes");
-        $this->addFrontendTranslation("no");
-        $this->addFrontendTranslation("cancel");
-        $this->addFrontendTranslation("warning");
-        $this->addFrontendTranslation("error");
-        $this->addFrontendTranslation("info");
-        $this->addFrontendTranslation("ok");
+        $controller->addFrontendTranslation("yes");
+        $controller->addFrontendTranslation("no");
+        $controller->addFrontendTranslation("cancel");
+        $controller->addFrontendTranslation("warning");
+        $controller->addFrontendTranslation("error");
+        $controller->addFrontendTranslation("info");
+        $controller->addFrontendTranslation("ok");
     }
 }

@@ -3,14 +3,14 @@
 	{% include 'header.twig' %}
 	<body>
 		<div id="wrapper">
-			{{ controller.sidebar }}
+			{{ theme.sidebar }}
 			<div id="content-wrapper" class="d-flex flex-column">
 				{% block to_top %}
 					<a class='scroll-to-top rounded' href='#'>
 						<i class='fas fa-angle-up'></i>
 					</a>
 				{% endblock %}
-				{{ controller.navbar }}
+				{{ theme.navbar }}
 				<div class='container-fluid'>
 					{% block title %}
 						<div class="d-sm-flex align-items-center justify-content-between mb-4">
