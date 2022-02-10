@@ -2,23 +2,22 @@
 
 namespace Src\Views;
 
-class Sidebar extends ViewGroup
-{
+use Src\Entity\Sidebar as EntitySidebar;
+use Src\Theme\View;
 
-    public function __construct(string $tag_name, string $wrapper_class)
+class Sidebar extends View
+{
+    /** @var EntitySidebar */
+    public array $items = [];
+
+    public function __construct()
     {
-        parent::__construct($tag_name, $wrapper_class);
+        $this->items = EntitySidebar::getSidebarElements();
     }
     
-    public static function create(string $tag_name, string $wrapper_class): Sidebar
+    public static function create(): Sidebar
     {
-        return new Sidebar($tag_name, $wrapper_class);
-    }
-
-    public function addNavItem(NavItem $item)
-    {
-        $this->addField($item);
-        return $this;
+        return new Sidebar();
     }
 
     public function getTemplateFile(): string

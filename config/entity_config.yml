@@ -16,3 +16,11 @@ viewable_queries:
   class: Src\Entity\ViewableQueries
 variables:
   class: Src\Entity\Variable
+sidebar:
+  class: Src\Entity\Sidebar
+  manyToMany:
+    roles:
+      mergeTable: "sidebar_roles"
+      selfKey: "sidebar_id"
+      foreignKey: "role_id"
+      createIfNotExist: false

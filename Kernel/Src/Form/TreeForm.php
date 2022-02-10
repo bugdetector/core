@@ -177,7 +177,7 @@ class TreeForm extends Form
                         TextElement::create(
                             '<i class="fa fa-plus"></i> ' . Translation::getTranslation("add_subitem")
                         )->setIsRaw(true)
-                    )->addClass("btn btn-primary")
+                    )->addClass("btn btn-primary w-auto")
                 );
             }
         } else {

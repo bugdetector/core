@@ -3,7 +3,6 @@ table_comment: 'Contains uploaded files data.'
 fields:
   file_name:
     type: short_text
-    length: '255'
     column_name: file_name
     primary_key: false
     autoIncrement: false
@@ -11,9 +10,9 @@ fields:
     isUnique: false
     default: null
     comment: 'File original name.'
+    length: '255'
   file_path:
     type: short_text
-    length: '255'
     column_name: file_path
     primary_key: false
     autoIncrement: false
@@ -21,9 +20,9 @@ fields:
     isUnique: true
     default: null
     comment: 'Uploaded path.'
+    length: '255'
   file_size:
     type: short_text
-    length: '255'
     column_name: file_size
     primary_key: false
     autoIncrement: false
@@ -31,9 +30,9 @@ fields:
     isUnique: false
     default: null
     comment: 'File size.'
+    length: '255'
   mime_type:
     type: short_text
-    length: '255'
     column_name: mime_type
     primary_key: false
     autoIncrement: false
@@ -41,9 +40,9 @@ fields:
     isUnique: false
     default: null
     comment: 'File mime type.'
+    length: '255'
   extension:
     type: short_text
-    length: '255'
     column_name: extension
     primary_key: false
     autoIncrement: false
@@ -51,11 +50,9 @@ fields:
     isUnique: false
     default: null
     comment: 'File extension.'
+    length: '255'
   status:
     type: enumarated_list
-    values:
-      temporary: temporary
-      permanent: permanent
     column_name: status
     primary_key: false
     autoIncrement: false
@@ -63,3 +60,6 @@ fields:
     isUnique: false
     default: null
     comment: 'File is temporary or permanent.'
+    values:
+      temporary: temporary
+      permanent: permanent

@@ -1,5 +1,6 @@
 <!-- Sidebar -->
-<{{ view.tag_name }} class='{{ view.classes|join(" ") }}' {{ view.renderAttributes()|raw }}>
+<nav
+	class='navbar-nav bg-gradient-secondary sidebar sidebar-dark accordion toggled {{ view.classes|join(" ") }}' {{ view.renderAttributes()|raw }}>
 	<!-- Sidebar - Brand -->
 	<a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ constant("BASE_URL") }}">
 		<span class="sr-only">{{ t("mainpage") }}</span>
@@ -10,6 +11,16 @@
 	</a>
 	<!-- Divider -->
 	<hr class="sidebar-divider my-0"/>
+	{% for item in view.items %}
+		<div class="nav-item">
+			<a class="nav-link {{ item.link_class }}" href="{{ constant("BASE_URL") ~ item.url }}">
+				<i class="{{ item.icon_class }}"></i>
+				<span>
+					{{ t(item.title.value) }}
+				</span>
+			</a>
+		</div>
+	{% endfor %}
 	{% for field in view.fields %}
 		{{ field }}
 	{% endfor %}
@@ -23,5 +34,5 @@
 			<span class="sr-only">{{ t("toggle") }}</span>
 		</button>
 	</div>
-</{{ view.tag_name }}>
+</nav>
 <!-- End of Sidebar -->

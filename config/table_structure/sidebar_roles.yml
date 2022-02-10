@@ -1,23 +1,23 @@
-table_name: users_roles
-table_comment: 'Constains User''s roles. Look at User::roles'
+table_name: sidebar_roles
+table_comment: 'Sidebar item role restriction.'
 fields:
-  user_id:
+  sidebar_id:
     type: table_reference
-    column_name: user_id
+    column_name: sidebar_id
     primary_key: false
     autoIncrement: false
-    isNull: false
+    isNull: true
     isUnique: false
     default: null
-    comment: 'User Id.'
-    reference_table: users
+    comment: 'Sidebar item reference.'
+    reference_table: sidebar
   role_id:
     type: table_reference
     column_name: role_id
     primary_key: false
     autoIncrement: false
-    isNull: false
+    isNull: true
     isUnique: false
     default: null
-    comment: 'Role Id.'
+    comment: 'Role reference.'
     reference_table: roles

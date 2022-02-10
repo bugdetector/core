@@ -1,0 +1,40 @@
+1:
+  title: dashboard
+  icon_class: 'fa fa-tachometer-alt'
+  link_class: null
+  url: /admin
+  available_for: logged_in
+  weight: 0
+  parent: null
+2:
+  title: sidebar
+  icon_class: 'fa fa-stream'
+  link_class: null
+  url: /admin/sidebar
+  available_for: logged_in
+  weight: 1
+  parent: null
+3:
+  title: entities
+  icon_class: 'fa fa-cube'
+  link_class: null
+  url: /admin/entity
+  available_for: logged_in
+  weight: 2
+  parent: null
+4:
+  title: tables
+  icon_class: 'fa fa-table'
+  link_class: null
+  url: /admin/table
+  available_for: logged_in
+  weight: 3
+  parent: null
+5:
+  title: clear_cache
+  icon_class: 'fa fa-broom'
+  link_class: clear-cache
+  url: '#'
+  available_for: logged_in
+  weight: 4
+  parent: null

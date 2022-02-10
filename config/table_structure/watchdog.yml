@@ -3,7 +3,6 @@ table_comment: 'Importtant log of actions.'
 fields:
   event:
     type: short_text
-    length: '255'
     column_name: event
     primary_key: false
     autoIncrement: false
@@ -11,9 +10,9 @@ fields:
     isUnique: false
     default: null
     comment: 'Event name.'
+    length: '255'
   value:
     type: short_text
-    length: '255'
     column_name: value
     primary_key: false
     autoIncrement: false
@@ -21,9 +20,9 @@ fields:
     isUnique: false
     default: null
     comment: 'Watchdog value.'
+    length: '255'
   ip:
     type: short_text
-    length: '16'
     column_name: ip
     primary_key: false
     autoIncrement: false
@@ -31,3 +30,4 @@ fields:
     isUnique: false
     default: null
     comment: 'Ip adress.'
+    length: '16'

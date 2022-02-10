@@ -3,7 +3,6 @@ table_comment: 'Contains e-mail template in many languages. You can add new one.
 fields:
   key:
     type: short_text
-    length: '255'
     column_name: key
     primary_key: false
     autoIncrement: false
@@ -11,6 +10,7 @@ fields:
     isUnique: true
     default: null
     comment: 'Email key.'
+    length: '255'
   en:
     type: long_text
     column_name: en

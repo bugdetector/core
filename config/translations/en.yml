@@ -210,3 +210,14 @@ user_sessions_notify: 'You have %d other sessions. You can manage your sessions 
 blocked: Blocked
 banned: Banned
 account_banned: 'This account has been banned. You are not able to login with this account.'
+icon_class: 'Icon class'
+url: Url
+sidebar_roles_description: 'Select roles for restriction. Leave empty if there is no restriction.'
+sidebar: Sİdebar
+available_for: 'Available for'
+both: Both
+logged_in: 'Logged in'
+non_logged_in: 'Non logged in'
+link_class: 'Link class'
+weight: Weight
+parent: Parent

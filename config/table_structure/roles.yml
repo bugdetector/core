@@ -3,7 +3,6 @@ table_comment: 'Contains roles. You can add new one.'
 fields:
   role:
     type: short_text
-    length: '255'
     column_name: role
     primary_key: false
     autoIncrement: false
@@ -11,3 +10,4 @@ fields:
     isUnique: true
     default: null
     comment: 'Role name.'
+    length: '255'

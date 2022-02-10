@@ -210,3 +210,14 @@ user_sessions_notify: '%d başka oturumunuz mevcut. <a href="%s">Profil</a> sayf
 blocked: Bloklanmış
 banned: Engellenmiş
 account_banned: 'Bu hesap engellenmiş. Bu hesabı kullanarak oturum açamazsınız.'
+icon_class: 'İkon sınıfı'
+url: Url
+sidebar_roles_description: 'Kısıtlama için rolleri seçiniz. Hiçbir kısıtlama yoksa boş bırakınız.'
+sidebar: 'Yan panel'
+available_for: Görünürlük
+both: İkiside
+logged_in: 'Oturum açmış'
+non_logged_in: 'Oturum açmamış'
+link_class: 'Link sınıfı'
+weight: Ağırlık
+parent: 'Üst Öge'

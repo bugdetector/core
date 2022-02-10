@@ -3,9 +3,6 @@
 namespace Src\BaseTheme;
 
 use CoreDB\Kernel\BaseController;
-use Src\Controller\Admin\EntityController;
-use Src\Controller\Admin\TableController;
-use Src\Controller\AdminController;
 use Src\Controller\LoginController;
 use Src\Controller\LogoutController;
 use Src\Controller\ProfileController;
@@ -106,41 +103,7 @@ abstract class BaseTheme extends BaseController
 
     public function buildSidebar()
     {
-        $this->sidebar = Sidebar::create(
-            "div",
-            "navbar-nav bg-gradient-secondary sidebar sidebar-dark accordion toggled"
-        );
-        $currentUser = \CoreDB::currentUser();
-        if ($currentUser->isAdmin()) {
-            $this->sidebar->addNavItem(
-                NavItem::create(
-                    "fa fa-tachometer-alt",
-                    Translation::getTranslation("dashboard"),
-                    BASE_URL . "/admin",
-                    static::class == AdminController::class
-                )
-            )->addNavItem(
-                NavItem::create(
-                    "fa fa-cube",
-                    Translation::getTranslation("entities"),
-                    BASE_URL . "/admin/entity",
-                    $this instanceof EntityController
-                )
-            )->addNavItem(
-                NavItem::create(
-                    "fa fa-chart-area",
-                    Translation::getTranslation("tables"),
-                    BASE_URL . "/admin/table",
-                    $this instanceof TableController
-                )
-            )->addNavItem(
-                NavItem::create(
-                    "fa fa-broom",
-                    Translation::getTranslation("clear_cache"),
-                    "#"
-                )->addClass("clear-cache")
-            );
-        }
+        $this->sidebar = Sidebar::create();
     }
 
     public function echoContent()
