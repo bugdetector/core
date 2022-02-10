@@ -9,6 +9,7 @@ use CoreDB\Kernel\Database\DataType\Integer;
 use CoreDB\Kernel\Database\DataType\TableReference;
 use CoreDB\Kernel\EntityReference;
 use PDO;
+use Src\Controller\Admin\AjaxController;
 use Src\Form\Widget\SelectWidget;
 use Src\Theme\View;
 
@@ -87,7 +88,7 @@ class Sidebar extends TreeEntityAbstract
 
     public function getRemoveServiceUrl(): string
     {
-        return "";
+        return AjaxController::getUrl() . "removeSidebarItem";
     }
 
     protected function getFieldWidget(string $field_name, bool $translateLabel): ?View

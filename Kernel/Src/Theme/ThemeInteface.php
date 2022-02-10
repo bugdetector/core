@@ -7,8 +7,11 @@ use CoreDB\Kernel\ControllerInterface;
 interface ThemeInteface
 {
     /**
-     * Process page, for example use argument. Do your own operation
-     * Or define theme page build actions and fields.
+     * Set default theme values before preprocess.
+     */
+    public function setDefaults(ControllerInterface $controller);
+    /**
+     * Simply render page using controller.
      */
     public function render(ControllerInterface $controller);
 

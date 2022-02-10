@@ -31,13 +31,10 @@ abstract class BaseController implements ControllerInterface
 
     public function processPage()
     {
+        $theme = $this->getTheme();
+        $theme->setDefaults($this);
         $this->preprocessPage();
-        $this->render();
-    }
-
-    public function render()
-    {
-        $this->getTheme()->render($this);
+        $theme->render($this);
     }
 
     public function setTitle(string $title): void

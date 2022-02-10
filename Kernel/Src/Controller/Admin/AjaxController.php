@@ -8,6 +8,7 @@ use CoreDB\Kernel\ServiceController;
 use Exception;
 use Src\Entity\Cache;
 use Src\Entity\DynamicModel;
+use Src\Entity\Sidebar;
 use Src\Entity\Translation;
 use Src\Views\ColumnDefinition;
 use Src\Views\TableAndColumnSelector;
@@ -125,5 +126,14 @@ class AjaxController extends ServiceController
     {
         CoreDB::config()->clearCache();
         $this->createMessage(Translation::getTranslation("cache_cleared"), Messenger::SUCCESS);
+    }
+
+    public function removeSidebarItem()
+    {
+        $sidebar = Sidebar::get(@$_POST["nodeId"]);
+        if ($sidebar) {
+            $sidebar->delete();
+            $this->createMessage(Translation::getTranslation("record_removed"), Messenger::SUCCESS);
+        }
     }
 }

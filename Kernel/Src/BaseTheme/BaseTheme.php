@@ -27,7 +27,7 @@ class BaseTheme implements ThemeInteface
         return [__DIR__ . "/templates"];
     }
 
-    public function render(ControllerInterface $controller)
+    public function setDefaults(ControllerInterface $controller)
     {
         $this->buildNavbar();
         $this->buildSidebar();
@@ -35,6 +35,10 @@ class BaseTheme implements ThemeInteface
         $this->addDefaultJsFiles($controller);
         $this->addDefaultCssFiles($controller);
         $this->addDefaultTranslations($controller);
+    }
+
+    public function render(ControllerInterface $controller)
+    {
         echo CoreRenderer::getInstance(
             $this::getTemplateDirectories()
         )->renderController($this, $controller);
