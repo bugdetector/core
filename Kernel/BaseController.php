@@ -26,7 +26,8 @@ abstract class BaseController implements ControllerInterface
 
     public function getTheme(): ThemeInteface
     {
-        return new BaseTheme();
+        $themeClass = defined("THEME") ? THEME : BaseTheme::class;
+        return new $themeClass();
     }
 
     public function processPage()

@@ -2,22 +2,15 @@
 
 namespace Src\Controller;
 
-use App\Theme\CustomTheme;
 use CoreDB\Kernel\BaseController;
 use Src\Entity\Translation;
 use Src\Form\ProfileForm;
-use Src\Theme\ThemeInteface;
 
 class ProfileController extends BaseController
 {
     public ProfileForm $profileForm;
 
     public $activeTab = "profile";
-
-    public function getTheme(): ThemeInteface
-    {
-        return new CustomTheme();
-    }
 
     public function getTemplateFile(): string
     {

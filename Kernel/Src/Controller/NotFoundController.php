@@ -2,21 +2,14 @@
 
 namespace Src\Controller;
 
-use App\Theme\CustomTheme;
 use CoreDB\Kernel\BaseController;
 use Src\Entity\Translation;
-use Src\Theme\ThemeInteface;
 
 class NotFoundController extends BaseController
 {
 
     public $error_code = 404;
     public $message;
-
-    public function getTheme(): ThemeInteface
-    {
-        return new CustomTheme();
-    }
     
     public function checkAccess(): bool
     {

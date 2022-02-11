@@ -2,24 +2,17 @@
 
 namespace Src\Controller;
 
-use App\Theme\CustomTheme;
 use CoreDB\Kernel\BaseController;
 use CoreDB\Kernel\ConfigurationManager;
 use CoreDB\Kernel\Messenger;
 use Src\Entity\ResetPassword;
 use Src\Entity\Translation;
 use Src\Form\ResetPasswordForm;
-use Src\Theme\ThemeInteface;
 
 class ResetPasswordController extends BaseController
 {
     
     public $form;
-
-    public function getTheme(): ThemeInteface
-    {
-        return new CustomTheme();
-    }
     
     public function __construct($arguments)
     {
