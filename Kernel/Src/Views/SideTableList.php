@@ -12,7 +12,7 @@ class SideTableList extends View
     {
         $this->active_table = $active_table;
         $this->information_scheme = \CoreDB::database()::getTableList();
-        \CoreDB::controller()->addJsFiles("dist/side_table_list/side_table_list.js");
+        \CoreDB::controller()->addJsFiles("assets/js/views/side_table_list.js");
     }
 
     public function getTemplateFile(): string

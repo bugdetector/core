@@ -28,7 +28,7 @@ class TableStructForm extends Form
     public function __construct(string $table_name, string $table_comment)
     {
         parent::__construct();
-        \CoreDB::controller()->addJsFiles("dist/table_struct_form/table_struct_form.js");
+        \CoreDB::controller()->addJsFiles("assets/js/forms/table_struct_form.js");
         if (!empty($this->request)) {
             $this->table_name =  preg_replace("/[^a-z1-9_]+/", "", $this->request["table_name"]);
             $this->table_comment = htmlspecialchars($this->request["table_comment"]);

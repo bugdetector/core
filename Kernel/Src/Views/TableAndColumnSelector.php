@@ -54,7 +54,7 @@ class TableAndColumnSelector extends CollapsableCard
             $this->subCardTitle = Translation::getTranslation("new_field");
             $this->addClass("fields");
         }
-        \CoreDB::controller()->addJsFiles("dist/table_and_column_selector/table_and_column_selector.js");
+        \CoreDB::controller()->addJsFiles("assets/js/views/table_and_column_selector.js");
     }
 
     public function setValue($value)

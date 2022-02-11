@@ -27,10 +27,10 @@ class InputWidget extends FormWidget
     {
         $this->type = $type;
         if ($type == "checkbox") {
-            \CoreDB::controller()->addJsFiles("dist/checkbox/checkbox.js");
+            \CoreDB::controller()->addJsFiles("assets/js/components/checkbox.js");
         } elseif ($type == "file") {
-            \CoreDB::controller()->addJsFiles("dist/file_input/file_input.js");
-            \CoreDB::controller()->addCssFiles("dist/file_input/file_input.css");
+            \CoreDB::controller()->addJsFiles("assets/js/components/file_input.js");
+            \CoreDB::controller()->addCssFiles("assets/css/components/file_input.css");
             \CoreDB::controller()->addFrontendTranslation("close");
         }
         return $this;

@@ -57,7 +57,7 @@ class InsertForm extends Form
         }
         $this->addField($submitSection);
         $controller = \CoreDB::controller();
-        $controller->addJsFiles("dist/insert_form/insert_form.js");
+        $controller->addJsFiles("assets/js/forms/insert_form.js");
         $controller->addFrontendTranslation("record_remove_accept");
         $controller->addFrontendTranslation("record_remove_accept_field");
     }

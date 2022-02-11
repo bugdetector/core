@@ -66,6 +66,7 @@ class BaseTheme implements ThemeInteface
     {
         $controller->addJsFiles("base_theme/assets/js/scripts.bundle.js");
         $controller->addJsFiles("base_theme/assets/plugins/global/plugins.bundle.js");
+        $controller->addJsFiles("assets/js/coredb.js");
     }
 
     protected function addDefaultCssFiles(ControllerInterface $controller)

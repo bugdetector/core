@@ -9,6 +9,7 @@ use CoreDB\Kernel\Database\DataType\EnumaratedList;
 use CoreDB\Kernel\Database\DataType\Integer;
 use CoreDB\Kernel\Database\DataType\TableReference;
 use PDO;
+use Src\Controller\Admin\AjaxController;
 use Src\Theme\View;
 
 /**
@@ -75,7 +76,7 @@ class Navbar extends TreeEntityAbstract
 
     public function getRemoveServiceUrl(): string
     {
-        return "";
+        return AjaxController::getUrl() . "removeNavbarItem";
     }
 
     /**

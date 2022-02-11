@@ -56,7 +56,7 @@ class TreeForm extends Form
     {
         parent::processForm();
         $controller = CoreDB::controller();
-        $controller->addJsFiles("dist/tree_form/tree_form.js");
+        $controller->addJsFiles("assets/js/forms/tree_form.js");
         $controller->addFrontendTranslation("node_remove_warning");
         $className = $this->className;
         $this->addField(

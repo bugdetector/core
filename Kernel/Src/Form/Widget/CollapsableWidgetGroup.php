@@ -26,7 +26,7 @@ class CollapsableWidgetGroup extends FormWidget
         $this->entityName = $fieldEntityName;
         $this->fieldGroup = ViewGroup::create("div", "");
         $controller = CoreDB::controller();
-        $controller->addJsFiles("dist/collapsible_widget_card/collapsible_widget_card.js");
+        $controller->addJsFiles("assets/js/components/collapsible_widget_card.js");
         $this->addClass("collapsible-widget-group")
         ->removeClass("form-control");
     }
