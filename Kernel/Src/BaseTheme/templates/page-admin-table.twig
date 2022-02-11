@@ -1,34 +1,42 @@
 {% extends "page.twig" %}
 
 {% block title %}
-	<div class="d-sm-flex align-items-center justify-content-between mb-4">
-		<h1 class="h3 mb-0 text-gray-800">{{ controller.title }}</h1>
-		<div class="text-gray-600 ms-3">
-			{{ controller.table_comment }}
+	<div
+		class="toolbar" id="kt_toolbar">
+		<!--begin::Container-->
+		<div
+			id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+			<!--begin::Page title-->
+			<div
+				data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+				<!--begin::Title-->
+				<h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">{{ controller.title }}</h1>
+                <div class="text-muted ms-3">{{ controller.table_comment }}</div>
+				<!--end::Title-->
+			</div>
+			<!--end::Page title-->
+			<!--begin::Actions-->
+			<div class="d-flex align-items-center gap-2 gap-lg-3">
+				{% for action in controller.actions %}
+					{{ action }}
+				{% endfor %}
+			</div>
+			<!--end::Actions-->
 		</div>
-        {% if controller.table_name %}
-            <a class="btn btn-sm btn-primary me-1 text-white ms-auto" href="{{ constant("BASE_URL") ~ "/admin/table/insert/" ~ controller.table_name }}">
-                <i class="fas fa-plus text-white-50"></i>
-                {{ t("add") }}
-            </a>
-        {% endif %}
-		<a class="btn btn-sm btn-primary me-1 text-white" href="{{ constant("BASE_URL") ~ "/admin/table/struct" }}">
-			<i class="fas fa-plus text-white-50"></i>
-			{{ t("new_table") }}
-		</a>
+		<!--end::Container-->
 	</div>
 {% endblock %}
 
 {% block content %}
 	<div class="row">
-        <div class="col-md-8 order-md-first order-last">
-            <div class="card p-2">
-                {{ controller.printMessages() }}
-                {{ controller.echoContent()|raw }}
-            </div>
-        </div>
-        <div class="col-md-4">
-            {{ controller.side_table_list }}
-        </div>
+		<div class="col-md-8 order-md-first order-last">
+			<div class="card p-2">
+				{{ controller.printMessages() }}
+				{{ controller.echoContent()|raw }}
+			</div>
+		</div>
+		<div class="col-md-4">
+			{{ controller.side_table_list }}
+		</div>
 	</div>
 {% endblock %}

@@ -46,61 +46,7 @@ class BaseTheme implements ThemeInteface
 
     public function buildNavbar()
     {
-        $this->navbar = Navbar::create(
-            "nav",
-            "navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"
-        );
-        $currentUser = \CoreDB::currentUser();
-        /**   */
-        $userDropdown = NavItem::create(
-            Image::create($currentUser->getProfilePhotoUrl(), $currentUser->getFullName(), false)
-            ->addClass("img-profile rounded-circle"),
-            ""
-        );
-        $userDropdown->addClass("ms-auto");
-        if ($currentUser->isLoggedIn()) {
-            $userDropdown->addDropdownItem(
-                NavItem::create(
-                    "fa fa-user",
-                    $currentUser->getFullName(),
-                    ProfileController::getUrl()
-                )
-            )->addDropdownItem(
-                NavItem::create(
-                    "fa fa-sign-out-alt",
-                    Translation::getTranslation("logout"),
-                    LogoutController::getUrl()
-                )
-            );
-        } else {
-            $userDropdown->addDropdownItem(
-                NavItem::create(
-                    "fa fa-sign-in-alt",
-                    Translation::getTranslation("login"),
-                    LoginController::getUrl()
-                )
-            );
-        }
-        $userDropdown->addDropdownItem(
-            NavItem::create("", "", "")
-            ->addClass("dropdown-divider")
-        );
-        $translateIcons = Translation::get(["key" => "language_icon"]);
-        foreach (Translation::getAvailableLanguageList() as $language) {
-            $userDropdown->addDropdownItem(
-                NavItem::create(
-                    TextElement::create($translateIcons->$language->getValue())
-                    ->setTagName("div")
-                    ->setIsRaw(true)
-                    ->addClass("d-inline-block"),
-                    Translation::getTranslation($language),
-                    "?lang={$language}"
-                )
-            );
-        }
-        $this->navbar->addNavItem(
-            $userDropdown
-        );
+        $this->navbar = Navbar::create();
     }
 
     public function buildSidebar()
@@ -125,15 +71,14 @@ class BaseTheme implements ThemeInteface
     
     protected function addDefaultJsFiles(ControllerInterface $controller)
     {
-        $controller->addJsFiles("dist/_global/_global.js");
+        $controller->addJsFiles("base_theme/assets/js/scripts.bundle.js");
+        $controller->addJsFiles("base_theme/assets/plugins/global/plugins.bundle.js");
     }
-    
+
     protected function addDefaultCssFiles(ControllerInterface $controller)
     {
-        $controller->addCssFiles([
-            "dist/_global/_global.css",
-            "dist/icons/icons.css"
-        ]);
+        $controller->addCssFiles("base_theme/assets/css/style.bundle.css");
+        $controller->addCssFiles("base_theme/assets/plugins/global/plugins.bundle.css");
     }
     
     protected function addDefaultTranslations(ControllerInterface $controller)

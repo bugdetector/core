@@ -14,6 +14,7 @@ abstract class BaseController implements ControllerInterface
 {
 
     public $arguments = [];
+    public $actions = [];
     public $method;
     
     public string $title = "";

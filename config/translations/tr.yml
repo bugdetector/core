@@ -221,3 +221,4 @@ non_logged_in: 'Oturum açmamış'
 link_class: 'Link sınıfı'
 weight: Ağırlık
 parent: 'Üst Öge'
+language: Dil
