@@ -11,7 +11,7 @@ class Table extends ResultsViewer
     public array $filter_params;
     public function __construct()
     {
-        $this->classes = ["table", "table-bordered", "text-gray-900"];
+        $this->classes = ["table"];
     }
 
     public function setOrderable(bool $orderable)

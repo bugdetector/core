@@ -3,17 +3,10 @@
 namespace Src\BaseTheme;
 
 use CoreDB\Kernel\ControllerInterface;
-use Src\Controller\LoginController;
-use Src\Controller\LogoutController;
-use Src\Controller\ProfileController;
-use Src\Entity\Translation;
 use Src\Theme\CoreRenderer;
 use Src\Theme\ThemeInteface;
-use Src\Views\Image;
 use Src\Views\Navbar;
-use Src\Views\NavItem;
 use Src\Views\Sidebar;
-use Src\Views\TextElement;
 
 class BaseTheme implements ThemeInteface
 {

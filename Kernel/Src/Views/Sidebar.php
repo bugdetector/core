@@ -24,13 +24,4 @@ class Sidebar extends View
     {
         return "sidebar.twig";
     }
-
-    public function setIsOpened(bool $isOpened)
-    {
-        if ($isOpened) {
-            $this->removeClass("toggled");
-        } else {
-            $this->addClass("toggled");
-        }
-    }
 }

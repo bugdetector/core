@@ -166,7 +166,7 @@ class TreeForm extends Form
                         TextElement::create(
                             '<i class="fa fa-plus"></i> ' . Translation::getTranslation("add_subitem")
                         )->setIsRaw(true)
-                    )->addClass("btn btn-primary add-new-node")
+                    )->addClass("btn btn-primary btn-sm add-new-node")
                     ->addAttribute("data-parent", $nodeId)
                     ->addAttribute("data-field-name", $treeFieldName)
                 );
@@ -177,7 +177,7 @@ class TreeForm extends Form
                         TextElement::create(
                             '<i class="fa fa-plus"></i> ' . Translation::getTranslation("add_subitem")
                         )->setIsRaw(true)
-                    )->addClass("btn btn-primary w-auto")
+                    )->addClass("btn btn-primary btn-sm w-auto")
                 );
             }
         } else {
@@ -188,7 +188,7 @@ class TreeForm extends Form
         $content->addField(
             Link::create("#", TextElement::create(
                 '<i class="fa fa-trash"></i> ' . Translation::getTranslation("delete")
-            )->setIsRaw(true))->addClass("btn btn-danger ms-3 remove-node w-auto")
+            )->setIsRaw(true))->addClass("btn btn-danger btn-sm ms-3 remove-node w-auto")
             ->addAttribute("data-node", $nodeId)
             ->addAttribute("data-service-url", $element->getRemoveServiceUrl())
         );
@@ -199,7 +199,7 @@ class TreeForm extends Form
                     TextElement::create(
                         '<i class="fa fa-edit"></i> ' . Translation::getTranslation("edit")
                     )->setIsRaw(true)
-                )->addClass("btn btn-info ms-3 w-auto")
+                )->addClass("btn btn-info btn-sm ms-3 w-auto")
             );
         }
         return $content;

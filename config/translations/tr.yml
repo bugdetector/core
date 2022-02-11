@@ -222,3 +222,4 @@ link_class: 'Link sınıfı'
 weight: Ağırlık
 parent: 'Üst Öge'
 language: Dil
+navbar: 'Başlık menüsü'

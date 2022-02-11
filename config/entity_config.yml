@@ -24,3 +24,11 @@ sidebar:
       selfKey: "sidebar_id"
       foreignKey: "role_id"
       createIfNotExist: false
+navbar:
+  class: Src\Entity\Navbar
+  manyToMany:
+    roles:
+      mergeTable: "navbar_roles"
+      selfKey: "navbar_id"
+      foreignKey: "role_id"
+      createIfNotExist: false

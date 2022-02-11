@@ -222,3 +222,4 @@ link_class: 'Link class'
 weight: Weight
 parent: Parent
 language: Language
+navbar: 'Header menu'

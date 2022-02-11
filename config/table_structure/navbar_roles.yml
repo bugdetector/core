@@ -1,0 +1,23 @@
+table_name: navbar_roles
+table_comment: 'Navbar item role restriction.'
+fields:
+  navbar_id:
+    type: table_reference
+    column_name: navbar_id
+    primary_key: false
+    autoIncrement: false
+    isNull: true
+    isUnique: false
+    default: null
+    comment: 'Navbar item reference.'
+    reference_table: sidebar
+  role_id:
+    type: table_reference
+    column_name: role_id
+    primary_key: false
+    autoIncrement: false
+    isNull: true
+    isUnique: false
+    default: null
+    comment: 'Role reference.'
+    reference_table: roles

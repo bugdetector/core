@@ -2,12 +2,21 @@
 
 namespace Src\Views;
 
+use Src\Entity\Navbar as EntityNavbar;
 use Src\Entity\Translation;
 use Src\Theme\View;
 
 class Navbar extends View
 {
+    /** @var EntityNavbar */
+    public array $items = [];
     public array $fields = [];
+
+    public function __construct()
+    {
+        $this->items = EntityNavbar::getNavbarElements();
+    }
+
     public static function create(): Navbar
     {
         return new static();
