@@ -15,7 +15,9 @@ class CollapsableCard extends View
     public function __construct($title)
     {
         $this->title = $title;
-        \CoreDB::controller()->addJsFiles("dist/collapsable_card/collapsable_card.js");
+        $controller = \CoreDB::controller();
+        $controller->addJsFiles("base_theme/assets/plugins/custom/draggable/draggable.bundle.js");
+        $controller->addJsFiles("assets/js/components/collapsable_card.js");
     }
     
     public static function create($title): CollapsableCard

@@ -23,19 +23,14 @@ class StructController extends TableController
         } else {
             \CoreDB::goTo($this->getUrl());
         }
+        $this->addFrontendTranslation("length");
+        $this->addFrontendTranslation("reference_table");
+        $this->addFrontendTranslation("field_drop_accept");
+        $this->addFrontendTranslation("check_wrong_fields");
     }
 
     public function echoContent()
     {
         return $this->form;
-    }
-
-    protected function addDefaultTranslations()
-    {
-        parent::addDefaultTranslations();
-        $this->addFrontendTranslation("length");
-        $this->addFrontendTranslation("reference_table");
-        $this->addFrontendTranslation("field_drop_accept");
-        $this->addFrontendTranslation("check_wrong_fields");
     }
 }

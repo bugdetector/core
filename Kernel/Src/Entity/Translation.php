@@ -190,15 +190,18 @@ class Translation extends Model
     public function getForm()
     {
         \CoreDB::controller()->addJsCode(
-            "$(function(){
+            "let editor = null;
+            $(function(){
                 $(document).on('click', '.html_toggle, .raw_toggle', function(e){
                     e.preventDefault();
                     if($(this).hasClass('html_toggle')){
                         $(this).text('RAW');
-                        summernote($(this).closest('div').find('textarea'));
+                        editor = loadHtmlEditor($(this).closest('div').find('textarea')[0]);
                     }else{
                         $(this).text('HTML');
-                        $(this).closest('div').find('textarea').summernote('destroy');
+                        let container = $(this).closest('div');
+                        container.find('textarea').show();
+                        container.find('.ql-toolbar, .quill-editor').remove();
                     }
                     $(this).toggleClass('html_toggle raw_toggle');
                 });
@@ -212,7 +215,7 @@ class Translation extends Model
         /** @var InputWidget */
         $widget = parent::getFieldWidget($field_name, $translateLabel);
         if ($field_name != "key") {
-            $widget->removeClass("summernote");
+            $widget->removeClass("html-editor");
             $widget->setDescription(
                 TextElement::create(
                     "<button class='btn btn-sm btn-primary mt-2 html_toggle'>

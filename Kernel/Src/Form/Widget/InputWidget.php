@@ -65,11 +65,9 @@ class InputWidget extends FormWidget
                 $classesToAdd
             ))
         ) {
-            \CoreDB::controller()->addJsFiles("dist/datetimepicker/datetimepicker.js");
-            \CoreDB::controller()->addCssFiles("dist/datetimepicker/datetimepicker.css");
+            \CoreDB::controller()->addJsFiles("assets/js/components/datetimepicker.js");
         } elseif (in_array("daterangeinput", $classesToAdd)) {
-            \CoreDB::controller()->addJsFiles("dist/daterangepicker/daterangepicker.js");
-            \CoreDB::controller()->addCssFiles("dist/daterangepicker/daterangepicker.css");
+            \CoreDB::controller()->addJsFiles("assets/js/components/daterangepicker.js");
         }
         return parent::addClass($class_name);
     }

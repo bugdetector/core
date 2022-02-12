@@ -64,15 +64,15 @@ class BaseTheme implements ThemeInteface
     
     protected function addDefaultJsFiles(ControllerInterface $controller)
     {
-        $controller->addJsFiles("base_theme/assets/js/scripts.bundle.js");
         $controller->addJsFiles("base_theme/assets/plugins/global/plugins.bundle.js");
+        $controller->addJsFiles("base_theme/assets/js/scripts.bundle.js");
         $controller->addJsFiles("assets/js/coredb.js");
     }
 
     protected function addDefaultCssFiles(ControllerInterface $controller)
     {
-        $controller->addCssFiles("base_theme/assets/css/style.bundle.css");
         $controller->addCssFiles("base_theme/assets/plugins/global/plugins.bundle.css");
+        $controller->addCssFiles("base_theme/assets/css/style.bundle.css");
     }
     
     protected function addDefaultTranslations(ControllerInterface $controller)
