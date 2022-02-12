@@ -14,7 +14,6 @@ class ForgetpasswordController extends BaseController
     public function __construct($arguments)
     {
         parent::__construct($arguments);
-        $this->body_classes = ["bg-gradient-info"];
         $this->setTitle(Translation::getTranslation("forgot_password_question") . "?");
     }
     public function getTemplateFile(): string

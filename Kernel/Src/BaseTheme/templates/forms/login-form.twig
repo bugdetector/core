@@ -1,25 +1,36 @@
 {% extends "forms/form.twig" %}
-
+{% block messages %}
+	<h1 class="text-dark mb-3 text-center">{{ t("login") }}</h1>
+	<div class="w-100">
+		{% for error in form.errors %}
+			{{ error }}
+		{% endfor %}
+	</div>
+{% endblock %}
 {% block fields %}
     {{ form.fields["form_id"] }}
     {{ form.fields["form_build_id"] }}
     {{ form.fields["form_token"] }}
-	<div class="form-group">
+	<div class="mb-3">
 		{{ form.fields["username"] }}
 	</div>
-	<div class="form-group">
+	<div class="mb-3">
 		{{ form.fields["password"] }}
 	</div>
-	<div class="form-group">
-		<div class="custom-control custom-checkbox small">
-			<input type="checkbox" class="custom-control-input" id="remember-me" value="remember-me" name="remember-me"/>
-			<label class="custom-control-label" for="remember-me">{{ t("remember_me") }}</label>
+	<div class="mb-3">
+		<div class="form-check form-check-custom form-check-solid form-check-inline">
+			<input class="form-check-input" id="remember-me" type="checkbox" name="remember-me" value="remember-me">
+			<label class="form-check-label fw-bold text-gray-700 fs-6" for="remember-me">{{ t("remember_me") }}</label>
 		</div>
-		<input type="submit" class="btn btn-primary btn-user btn-block form-control" value="{{ t("login") }}" name="login">
+	</div>
+	<div class="mb-3">
+		<button type="submit" class="btn btn-primary btn-lg w-100" name="login">
+			<span class="fw-bolder">{{ t("login") }}</span>
+		</button>
 	</div>
 	<hr/>
 	<div class="text-center">
-		<a class="small" href="{{ constant("BASE_URL") ~ "/forgetpassword" }}">
+		<a class="link-primary fs-6 fw-bolder" href="{{ constant("BASE_URL") ~ "/forgetpassword" }}">
 			{{ t("forgot_password") }}</a>
 	</div>
 {% endblock %}

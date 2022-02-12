@@ -32,18 +32,9 @@ class InstallController extends BaseController
         }
     }
 
-    public function processPage()
-    {
-        $this->addDefaultJsFiles();
-        $this->addDefaultCssFiles();
-        $this->preprocessPage();
-        $this->render();
-    }
-
 
     public function preprocessPage()
     {
-        $this->body_classes[] = "bg-gradient-info";
         $this->setTitle(Translation::getTranslation("install_welcome"));
         if (!@fopen("../config/config.php", "w+")) {
             $this->createMessage(Translation::getTranslation("config_file_write_error"));

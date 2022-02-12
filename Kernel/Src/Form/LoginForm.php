@@ -25,7 +25,7 @@ class LoginForm extends Form
         $this->addField(
             InputWidget::create("username")
             ->setLabel(Translation::getTranslation("username_or_email"))
-            ->addClass("form-control-user")
+            ->addClass("form-control-solid")
             ->addAttribute("placeholder", Translation::getTranslation("username"))
             ->addAttribute("required", "true")
             ->addAttribute("autofocus", "true")
@@ -34,7 +34,7 @@ class LoginForm extends Form
             InputWidget::create("password")
             ->setLabel(Translation::getTranslation("password"))
             ->setType("password")
-            ->addClass("form-control-user")
+            ->addClass("form-control-solid")
             ->addAttribute("placeholder", Translation::getTranslation("password"))
             ->addAttribute("required", "true")
             ->addAttribute("autofocus", "true")

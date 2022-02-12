@@ -13,7 +13,6 @@ class BaseTheme implements ThemeInteface
 
     public Navbar $navbar;
     public Sidebar $sidebar;
-    public $body_classes = [];
 
     public static function getTemplateDirectories(): array
     {

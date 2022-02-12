@@ -1,33 +1,57 @@
 <!DOCTYPE html>
 <html lang="{{ language() }}">
 	{% include 'header.twig' %}
-	<body class="{{ controller.body_classes|join(' ') }}">
-		<div
-			class="container">
-			<!-- Outer Row -->
-			<div class="row justify-content-center">
-				<div class="col-xl-10 col-lg-12 col-md-9">
-					<div class="card o-hidden border-0 shadow-lg my-5">
+	<body class="">
+		<!--begin::Main-->
+		<!--begin::Root-->
+			<div
+			class="d-flex flex-column flex-root"> <!--begin::Authentication - Sign-in -->
+			<div
+				class="d-flex flex-column flex-lg-row flex-column-fluid">
+				<!--begin::Aside-->
+				<div
+					class="d-flex flex-column flex-lg-row-auto w-xl-600px positon-xl-relative bg-dark">
+					<!--begin::Wrapper-->
+					<div
+						class="d-flex flex-column position-xl-fixed top-0 bottom-0 w-xl-600px scroll-y">
+						<!--begin::Content-->
 						<div
-							class="card-body p-0">
-							<!-- Nested Row within Card Body -->
-							<div class="row">
-								<div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
-								<div class="col-lg-6">
-									<div class="p-5">
-										<div class="text-center">
-											<h1 class="h4 text-gray-900 mb-4">{{ controller.title }}</h1>
-											 {{ controller.printMessages() }}
-										</div>
-										{{ controller.echoContent()|raw }}
-									</div>
-								</div>
-							</div>
+							class="d-flex flex-row-fluid flex-column text-center p-10 pt-lg-20">
+							<!--begin::Logo-->
+							<a href="{{ constant("BASE_URL") }}" class="py-9 mb-5">
+								<img alt="{{ variable("site_name").value }}" src="{{ constant("BASE_URL") ~ "/assets/logo.png" }}" class="h-60px">
+							</a>
+							<!--end::Logo-->
+							<!--begin::Title-->
+							<h1 class="fw-bolder fs-2qx pb-5 pb-md-10 text-primary">{{ t("welcome") }}</h1>
+							<!--end::Title-->
 						</div>
+						<!--end::Content-->
 					</div>
+					<!--end::Wrapper-->
 				</div>
+				<!--end::Aside-->
+				<!--begin::Body-->
+				<div
+					class="d-flex flex-column flex-lg-row-fluid py-10 bg-white">
+					<!--begin::Content-->
+					<div
+						class="d-flex flex-center flex-column flex-column-fluid">
+						<!--begin::Wrapper-->
+						<div
+							class="w-lg-500px p-10 p-lg-15 mx-auto">
+							{{ controller.printMessages() }}
+							{{ controller.echoContent()|raw }}
+						</div>
+						<!--end::Wrapper-->
+					</div>
+					<!--end::Content-->
+				</div>
+				<!--end::Body-->
 			</div>
+			<!--end::Authentication - Sign-in-->
 		</div>
-
+		<!--end::Root-->
+		<!--end::Main-->
 	</body>
 </html>

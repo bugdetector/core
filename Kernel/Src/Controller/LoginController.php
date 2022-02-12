@@ -17,8 +17,7 @@ class LoginController extends BaseController
     public function __construct($arguments)
     {
         parent::__construct($arguments);
-        $this->body_classes = ["bg-gradient-info"];
-        $this->setTitle(Translation::getTranslation("welcome") . "!");
+        $this->setTitle(Translation::getTranslation("login"));
         if (isset($_GET["login_as_user"])) {
             $userClass = ConfigurationManager::getInstance()->getEntityInfo("users")["class"];
             $this->loginAsUser = $userClass::get($_GET["login_as_user"]);

@@ -17,7 +17,6 @@ class ResetPasswordController extends BaseController
     public function __construct($arguments)
     {
         parent::__construct($arguments);
-        $this->body_classes = ["bg-gradient-info"];
         $this->setTitle(Translation::getTranslation("reset_password"));
     }
     public function getTemplateFile(): string
