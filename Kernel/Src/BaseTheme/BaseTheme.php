@@ -13,6 +13,7 @@ class BaseTheme implements ThemeInteface
 
     public Navbar $navbar;
     public Sidebar $sidebar;
+    public bool $darkTheme = false;
 
     public static function getTemplateDirectories(): array
     {
@@ -63,15 +64,22 @@ class BaseTheme implements ThemeInteface
     
     protected function addDefaultJsFiles(ControllerInterface $controller)
     {
-        $controller->addJsFiles("base_theme/assets/plugins/global/plugins.bundle.js");
         $controller->addJsFiles("base_theme/assets/js/scripts.bundle.js");
+        $controller->addJsFiles("base_theme/assets/plugins/global/plugins.bundle.js");
         $controller->addJsFiles("assets/js/coredb.js");
     }
 
     protected function addDefaultCssFiles(ControllerInterface $controller)
     {
-        $controller->addCssFiles("base_theme/assets/plugins/global/plugins.bundle.css");
-        $controller->addCssFiles("base_theme/assets/css/style.bundle.css");
+        if (isset($_COOKIE["dark-mode"]) && filter_var($_COOKIE["dark-mode"], FILTER_VALIDATE_BOOL)) {
+            $controller->addCssFiles("base_theme/assets/plugins/global/plugins.dark.bundle.css");
+            $controller->addCssFiles("base_theme/assets/css/style.dark.bundle.css");
+            $this->darkTheme = true;
+        } else {
+            $controller->addCssFiles("base_theme/assets/plugins/global/plugins.bundle.css");
+            $controller->addCssFiles("base_theme/assets/css/style.bundle.css");
+        }
+        $controller->addJsCode("var darkMode = " . var_export($this->darkTheme, true) . ";");
     }
     
     protected function addDefaultTranslations(ControllerInterface $controller)

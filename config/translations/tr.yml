@@ -170,7 +170,7 @@ db_user: 'Veritabanı kullanıcı adı'
 db_password: 'Veritabanı bağlantı şifresi'
 cant_connect_to_database: 'Veritabanına bağlanılamadı.'
 all_configuration_imported: 'Tüm yapılandırma başarıyla oluşturuldu.'
-mainpage_welcome_message: "<div class=\"text-center\">\r\n    <h2 class=\"text-primary\">CoreDB'ye Hoşgeldiniz</h2>\r\n    <blockquote class=\"blockquote\">Bu sayfayı görüntülüyorsunuz çünkü henüz kendi temanızda sayfanın yapısını değiştirmediniz.</blockquote><p><font color=\"#000000\">CoreDB geliştiriciler için bütün sisteme kuş gözü bakılmasına imkan sağlayan bir içerik yönetim sistemidir. </font></p>\r\n    <p><font color=\"#000000\">Kendi temanızda sistemde bulunan bütün görünümleri değiştirebilirsiniz.</font></p>\r\n    <p><font color=\"#000000\">Yeni varlık tipleri oluşturabilirsiniz.</font></p>\r\n    <p><font color=\"#000000\">CoreDB de her sınıf bir modüldür.</font></p>\r\n    <p><font color=\"#000000\">CoreDB yüksek seviyede okunabilir ve yönetilebilir kod ortamı sağlamak için tasarlanmıştır.</font></p>\r\n    <p><font color=\"#000000\">Dökümantasyon yakında sağlanacaktır.</font></p>\r\n</div>"
+mainpage_welcome_message: "<div class=\"text-center\">\r\n    <h2 class=\"text-primary\">CoreDB'ye Hoşgeldiniz</h2>\r\n    <blockquote class=\"blockquote\">Bu sayfayı görüntülüyorsunuz çünkü henüz kendi temanızda sayfanın yapısını değiştirmediniz.</blockquote><p>CoreDB geliştiriciler için bütün sisteme kuş gözü bakılmasına imkan sağlayan bir içerik yönetim sistemidir.</p>\r\n    <p>Kendi temanızda sistemde bulunan bütün görünümleri değiştirebilirsiniz.</p>\r\n    <p>Yeni varlık tipleri oluşturabilirsiniz.</p>\r\n    <p>CoreDB de her sınıf bir modüldür.</p>\r\n    <p>CoreDB yüksek seviyede okunabilir ve yönetilebilir kod ortamı sağlamak için tasarlanmıştır</p>\r\n    <p>Dökümantasyon yakında sağlanacaktır.</p>\r\n</div>"
 add_admin: 'Bir yönetici kullanıcı oluşturun.'
 enter_valid_mail: 'Lütfen geçerli bir e-posta adresi giriniz.'
 'on': Aktif
@@ -223,3 +223,4 @@ weight: Ağırlık
 parent: 'Üst Öge'
 language: Dil
 navbar: 'Başlık menüsü'
+dark-mode: 'Karanlık Mod'

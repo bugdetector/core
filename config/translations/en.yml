@@ -170,7 +170,7 @@ db_user: 'Database username'
 db_password: 'Database password'
 cant_connect_to_database: 'Can''t connect to database.'
 all_configuration_imported: 'All configuration created successfully.'
-mainpage_welcome_message: "<div class=\"text-center\">\r\n    <h2 class=\"text-primary\">Welcome to CoreDB</h2>\r\n    <blockquote class=\"blockquote\">You see this page because you didn't override main page in your custom theme yet.</blockquote><p><font color=\"#000000\">CoreDB is functional CMS that allows developers to look the system birds eye view.</font></p>\r\n    <p><font color=\"#000000\">You can override every view you want in your custom theme.</font></p>\r\n    <p><font color=\"#000000\">You can create your own entity types.</font></p>\r\n    <p><font color=\"#000000\">In CoreDB every class is a module.</font></p>\r\n    <p><font color=\"#000000\">CoreDB designed to provide a highly readable and easy manageable code.</font></p>\r\n    <p><font color=\"#000000\">Documentation will provided soon.</font></p>\r\n</div>"
+mainpage_welcome_message: "<div class=\"text-center\">\r\n    <h2 class=\"text-primary\">Welcome to CoreDB</h2>\r\n    <blockquote class=\"blockquote\">You see this page because you didn't override main page in your custom theme yet.</blockquote><p>CoreDB is functional CMS that allows developers to look the system birds eye view.</p>\r\n    <p>You can override every view you want in your custom theme.</p>\r\n    <p>You can create your own entity types.</p>\r\n    <p>In CoreDB every class is a module.</p>\r\n    <p>CoreDB designed to provide a highly readable and easy manageable code.</p>\r\n    <p>Documentation will provided soon.</p>\r\n</div>"
 add_admin: 'Create an administrator user.'
 enter_valid_mail: 'Please enter a valid email address.'
 'on': Active
@@ -223,3 +223,4 @@ weight: Weight
 parent: Parent
 language: Language
 navbar: 'Header menu'
+dark-mode: 'Dark Mode'

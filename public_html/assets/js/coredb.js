@@ -1,7 +1,15 @@
 $(document).on("click", ".clear-cache", function (e) {
     e.preventDefault();
     $.ajax(`${root}/admin/ajax/clearCache`);
+}).on("click", "#dark-mode-switch", function(){
+    KTCookie.set("dark-mode", this.checked);
+    location.reload();
 });
+$(function(){
+    if(darkMode){
+        $("#dark-mode-switch").prop("checked", true);
+    }
+})
 window._t = function (key, args) {
     if (args) {
         return translations[key].format(args);
@@ -75,6 +83,9 @@ $(document).ajaxSuccess(function (evt, request, settings) {
                     timerProgressBar: true,
                     position: 'top-end',
                     showConfirmButton: false,
+                    customClass: {
+                        popup: "bg-light-info"
+                    }
                 });
             }
         } catch (ex) {

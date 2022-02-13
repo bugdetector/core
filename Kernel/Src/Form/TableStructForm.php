@@ -133,19 +133,19 @@ class TableStructForm extends Form
             InputWidget::create("new_field")
                 ->setValue(Translation::getTranslation("new_field"))
                 ->setType("button")
-                ->addClass("btn btn-info mt-2 newfield text-white")
+                ->addClass("btn btn-info btn-sm mt-2 newfield text-white")
         );
         $this->addField(
             InputWidget::create("save")
                 ->setValue(Translation::getTranslation("save"))
                 ->setType("submit")
-                ->addClass("btn btn-primary mt-2 text-white")
+                ->addClass("btn btn-primary btn-sm mt-2 text-white")
         );
         $this->addField(
             InputWidget::create("drop")
                 ->setValue(Translation::getTranslation("drop_table"))
                 ->setType("submit")
-                ->addClass("btn btn-danger mt-2 tabledrop text-white")
+                ->addClass("btn btn-danger btn-sm mt-2 tabledrop text-white")
                 ->addAttribute("data-table-name", $this->table_name)
         );
 

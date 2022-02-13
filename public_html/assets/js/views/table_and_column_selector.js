@@ -45,7 +45,7 @@ $(function () {
             success : function (response) {
                 let row = $(response);
                 button.before(row);
-                loadSelect2(row.find(".select2"))
+                loadSelect2(row.find(".form-select"));
             }
         })
     })

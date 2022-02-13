@@ -9,7 +9,7 @@ $(function ($) {
             success: function (data) {
                 let row = $(data);
                 button.parents(".row.mt-4.mb-5").prev().append(row);
-                loadSelect2(row.find(".select2"));
+                loadSelect2(row.find(".form-select"));
                 row.find(`input[name = 'fields[${index}][field_name]']`).focus();
                 row.find("input[type='checkbox']").each(function (i, element) {
                     loadCheckbox(element);

@@ -6,7 +6,7 @@ use Src\Theme\View;
 
 class BasicCard extends View
 {
-    public $border_class;
+    public $background_class;
     public $href;
     public $title;
     public $description;
@@ -17,9 +17,9 @@ class BasicCard extends View
         return new BasicCard();
     }
 
-    public function setBorderClass(string $class_name): BasicCard
+    public function setBackgroundClass(string $background_class): BasicCard
     {
-        $this->border_class = $class_name;
+        $this->background_class = $background_class;
         return $this;
     }
     public function setHref(string $href): BasicCard
