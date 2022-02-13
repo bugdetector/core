@@ -28,9 +28,11 @@ $(document).on("click", ".remove_accept", function (e) {
     });
 }).on("click", ".image-preview", function(e){
     e.preventDefault();
+    let img = $(this).children("img");
     swal.fire({
         title: $(this).data("field-name"),
-        html: $(this).children().clone(),
+        imageUrl: img.attr("src"),
+        imageAlt: img.attr("alt"),
         confirmButtonText: _t("close")
     });
 })

@@ -1,15 +1,20 @@
 <div
-	class='card shadow mb-2 p-3 pt-5 {{ view.classes|join(" ") }}' {{ view.renderAttributes()|raw }}>
+	class='card mb-2 {{ view.classes|join(" ") }}' {{ view.renderAttributes()|raw }}>
 	<!-- Card Header - Accordion -->
-	<div href="#{{view.id}}" class="{{ view.opened ? : " collapsed" }}" data-bs-toggle="collapse" role="button" aria-expanded="true">
-		<h3 class="card-title align-items-start flex-column">
-			<span class="card-label fw-bolder text-dark">
-				{% if view.sortable %}
-					<span class="fa fa-arrows-alt text-info move_icon"></span>
-				{% endif %}	
-				{{ view.title }}
-			</span>
-		</h3>
+	<div class="card-header">
+		<div class="card-title" href="#{{view.id}}" class="btn btn-icon btn-circle btn-sm btn-light-primary me-1 {{ view.opened ? : " collapsed" }}" data-bs-toggle="collapse" role='button'>
+			<h3 class="card-label fw-bolder">{{ view.title }}</h3>
+		</div>
+		<div class="card-toolbar">
+			<a href="#{{view.id}}" class="btn btn-icon btn-circle btn-sm btn-light-primary me-1 {{ view.opened ? : " collapsed" }}" data-bs-toggle="collapse">
+				<i class="bi bi-arrow-down"></i>
+			</a>
+			{% if view.sortable %}
+			<a href="#" class="btn btn-icon btn-circle btn-sm btn-light-info me-1 move_icon">
+				<i class="bi bi-arrows-move"></i>
+			</a>
+			{% endif %}
+		</div>
 	</div>
 	<!-- Card Content - Collapse -->
 	<div class="collapse {{ view.opened ? " show" : " " }}" id="{{view.id}}">

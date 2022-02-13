@@ -1,16 +1,18 @@
 <div
-	class="card shadow mb-2 p-3 pt-5">
-	<!-- Card Header - Accordion -->
-	<div href="#entity_list" class="{{ view.opened ? : " collapsed" }}" data-bs-toggle="collapse" role="button" aria-expanded="true">
-		<h3 class="card-title align-items-start flex-column">
-			<span class="card-label fw-bolder text-dark">
-				{{ t("entities") }}
-			</span>
-		</h3>
+	class="card mb-2">
+	<div class="card-header" data-bs-toggle="collapse">
+		<div class="card-title" href="#entity_list" class="btn btn-icon btn-circle btn-sm btn-light-primary me-1" data-bs-toggle="collapse" role='button'>
+			<h3 class="card-label fw-bolder">{{ t("entities") }}</h3>
+		</div>
+		<div class="card-toolbar">
+			<a href="#entity_list" class="btn btn-icon btn-circle btn-sm btn-light-primary me-1" data-bs-toggle="collapse">
+				<i class="bi bi-arrow-down"></i>
+			</a>
+		</div>
 	</div>
 	<!-- Card Content - Collapse -->
 	<div class="collapse show" id="entity_list">
-		<div class="card-body p-0">
+		<div class="card-body p-2">
 			<div class="input-group mb-3">
 				<span class="input-group-text">
 					<label for="entity_search_field" class="sr-only">{{ t("search") }}</label>

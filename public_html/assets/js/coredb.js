@@ -66,13 +66,41 @@ $(document).ajaxSuccess(function (evt, request, settings) {
         try {
             var resp = JSON.parse(data);
             if (resp.messages[3]) {
-                alert({
-                    message: resp.messages[3].join("<br/>"),
+                swal.fire({
+                    html: resp.messages[3].join("<br/>"),
                     title: _t("info"),
-                    icon: "success"
+                    icon: "success",
+                    toast: true,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
                 });
             }
         } catch (ex) {
         }
     }
 });
+
+/**
+ * Ajax loader functions
+ */
+
+$(document).on("submit", function () {
+    swal.showLoading();
+});
+var loadingShown = false;
+$(document).ajaxSend(function () {
+    setTimeout(function(){
+        if($.active > 0){
+            swal.showLoading();
+            loadingShown = true;
+        }
+    }, 300);
+});
+$(document).ajaxComplete(function () {
+    if ($.active == 1 && loadingShown) {
+        swal.closeModal();
+        loadingShown = false;
+    }
+})

@@ -11,6 +11,7 @@ window.loadTimeInput = function(){
         el.val("");
         flatpickr(el,{
             format: "H:i",
+            enableTime: true,
             noCalendar: true,
             time_24hr: true,
             locale: language

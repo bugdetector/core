@@ -16,7 +16,7 @@ $(function(){
                 success: function(response){
                     if(!dialog){
                         dialog = swal.fire({
-                            message: response,
+                            html: response,
                             grow: 'fullscreen'
                         });
                     }else{

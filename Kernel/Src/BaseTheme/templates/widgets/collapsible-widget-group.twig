@@ -1,7 +1,7 @@
 <input type="hidden" name="{{ widget.newFieldName }}" value="">
 <div class='{{ widget.classes|join(" ") }}' {{ widget.renderAttributes()|raw }} data-entity="{{ widget.entityName }}">
 {% if widget.label and widget.showAddButtonAndLabel %}
-	<label for="{{ widget.attributes["id"] }}" class="fw-bold text-primary">
+	<label for="{{ widget.attributes["id"] }}" class="form-label fw-bolder fs-6">
 		{{ widget.label }}
 	</label>
 {% endif %}
