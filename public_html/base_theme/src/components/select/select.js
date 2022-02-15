@@ -1,6 +1,6 @@
 import "./select.scss";
 $(function(){
-    for(let select of $(".select2")){
+    for(let select of $(".select2:not(.field)")){
         loadSelect2(select);
     }
 })
