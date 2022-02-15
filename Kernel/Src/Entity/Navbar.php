@@ -3,7 +3,6 @@
 namespace Src\Entity;
 
 use CoreDB;
-use CoreDB\Kernel\Model;
 use CoreDB\Kernel\Database\DataType\ShortText;
 use CoreDB\Kernel\Database\DataType\EnumaratedList;
 use CoreDB\Kernel\Database\DataType\Integer;
@@ -123,7 +122,7 @@ class Navbar extends TreeEntityAbstract
                 ->condition("nr.role_id", null, "IS", "OR");
             } else {
                 $roleCondition = CoreDB::database()->condition($query)
-                ->condition("sr.role_id", null);
+                ->condition("nr.role_id", null);
             }
         } else {
             $availableCondition = CoreDB::database()->condition($query)
