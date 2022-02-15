@@ -74,19 +74,21 @@ $(document).ajaxSuccess(function (evt, request, settings) {
         try {
             var resp = JSON.parse(data);
             if (resp.messages[3]) {
-                swal.fire({
-                    html: resp.messages[3].join("<br/>"),
-                    title: _t("info"),
-                    icon: "success",
-                    toast: true,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    customClass: {
-                        popup: "bg-light-info"
-                    }
-                });
+                setTimeout(function(){
+                    swal.fire({
+                        html: resp.messages[3].join("<br/>"),
+                        title: _t("info"),
+                        icon: "success",
+                        toast: true,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        customClass: {
+                            popup: "bg-light-info"
+                        }
+                    });
+                })
             }
         } catch (ex) {
         }
@@ -97,21 +99,27 @@ $(document).ajaxSuccess(function (evt, request, settings) {
  * Ajax loader functions
  */
 
-$(document).on("submit", function () {
+ $(document).on("submit", function () {
     swal.showLoading();
 });
 var loadingShown = false;
+var isModalVisible = false;
 $(document).ajaxSend(function () {
     setTimeout(function(){
         if($.active > 0){
-            swal.showLoading();
             loadingShown = true;
+            isModalVisible = swal.isVisible();
+            swal.showLoading();
         }
-    }, 300);
+    });
 });
 $(document).ajaxComplete(function () {
     if ($.active == 1 && loadingShown) {
-        swal.closeModal();
+        if(isModalVisible){
+            swal.hideLoading();
+        }else{
+            swal.closeModal();
+        }
         loadingShown = false;
     }
 })
