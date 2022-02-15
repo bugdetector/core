@@ -65,7 +65,7 @@ $(function ($) {
     })
     
     $("#new_table").on("submit", function () {
-        if ($(".has-error input:enabled").length !== 0) {
+        if ($(".is-invalid input:enabled").length !== 0) {
             alert(
                 { message: _t("check_wrong_fields") }
             );
