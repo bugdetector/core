@@ -31,14 +31,14 @@ class InsertForm extends Form
         ) {
             $this->addField($field);
         }
-        $submitSection = ViewGroup::create("div", "d-flex justify-content-end");
+        $submitSection = ViewGroup::create("div", "d-flex position-fixed bottom-0 end-0 mb-3 me-4");
         $submitSection->addField(
             InputWidget::create("save")
             ->setValue(Translation::getTranslation("save"))
             ->setType("submit")
             ->addClass("btn btn-primary mt-2 me-2")
             ->removeClass("form-control")
-        );
+        )->addAttribute("style", "z-index: 2;");
         if ($this->object->ID->getValue()) {
             $submitSection->addField(
                 InputWidget::create("")
