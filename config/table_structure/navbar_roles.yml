@@ -10,7 +10,7 @@ fields:
     isUnique: false
     default: null
     comment: 'Navbar item reference.'
-    reference_table: sidebar
+    reference_table: navbar
   role_id:
     type: table_reference
     column_name: role_id

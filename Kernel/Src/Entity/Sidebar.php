@@ -93,7 +93,7 @@ class Sidebar extends TreeEntityAbstract
 
     protected function getFieldWidget(string $field_name, bool $translateLabel): ?View
     {
-        if (in_array($field_name, ["weight", "parent"])) {
+        if (in_array($field_name, ["weight"])) {
             return null;
         } elseif ($field_name == "roles") {
             /** @var SelectWidget */

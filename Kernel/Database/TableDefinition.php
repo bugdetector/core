@@ -20,9 +20,9 @@ class TableDefinition
         $this->table_name = $table_name;
     }
 
-    public static function getDefinition(string $table_name): ?TableDefinition
+    public static function getDefinition(string $table_name, $doNotUseCache = false): ?TableDefinition
     {
-        $cache = Cache::getByBundleAndKey("table_definition", $table_name);
+        $cache = !$doNotUseCache ? Cache::getByBundleAndKey("table_definition", $table_name) : null;
         if ($cache) {
             return unserialize(base64_decode($cache->value->getValue()));
         } else {
@@ -34,7 +34,8 @@ class TableDefinition
             } else {
                 $definition->table_exist = false;
             }
-            $cache = Cache::set("table_definition", $table_name, base64_encode(serialize($definition)));
+            $cache = $doNotUseCache ?
+            Cache::set("table_definition", $table_name, base64_encode(serialize($definition))) : null;
             return $definition;
         }
     }

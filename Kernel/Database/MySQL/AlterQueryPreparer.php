@@ -19,7 +19,7 @@ class AlterQueryPreparer extends AlterQueryPreparerAbstract
     public function addTableDefinition(TableDefinition $tableDefinition)
     {
         $differences = [];
-        $original_description = TableDefinition::getDefinition($tableDefinition->table_name);
+        $original_description = TableDefinition::getDefinition($tableDefinition->table_name, true);
         /**
          * @var DataTypeAbstract $dataType
          */
@@ -109,7 +109,7 @@ class AlterQueryPreparer extends AlterQueryPreparerAbstract
         return implode(
             "\n",
             array_merge($this->queries, $this->foreignKeyQueries)
-        ) . $this->db->truncate(Cache::getTableName())->getQuery();
+        );
     }
 
     public function execute(): PDOStatement

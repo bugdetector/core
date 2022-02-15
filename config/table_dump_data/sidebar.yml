@@ -1,10 +1,10 @@
 1:
-  title: dashboard
-  icon_class: 'fa fa-tachometer-alt'
+  title: navbar
+  icon_class: 'fa fa-stream'
   link_class: null
-  url: /admin
+  url: /admin/navbar
   available_for: logged_in
-  weight: 0
+  weight: 1
   parent: null
 2:
   title: sidebar
@@ -37,12 +37,4 @@
   url: '#'
   available_for: logged_in
   weight: 5
-  parent: null
-7:
-  title: navbar
-  icon_class: 'fa fa-stream'
-  link_class: null
-  url: /admin/navbar
-  available_for: logged_in
-  weight: 1
   parent: null

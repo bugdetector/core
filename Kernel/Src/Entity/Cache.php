@@ -39,6 +39,12 @@ class Cache extends Model
         return "cache";
     }
 
+    public static function clear()
+    {
+        self::$staticCache = [];
+        parent::clear();
+    }
+
     public static function set(string $bundle, string $key, string $value)
     {
         if ($bundle && $key && $value) {

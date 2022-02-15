@@ -48,7 +48,7 @@ class ConfigurationManager
             $definition = Yaml::parseFile($file->getPathname());
 
             try {
-                $table_definition = TableDefinition::getDefinition($definition["table_name"]);
+                $table_definition = TableDefinition::getDefinition($definition["table_name"], true);
             } catch (DatabaseInstallationException $ex) {
                 $table_definition = new TableDefinition($definition["table_name"]);
             }
@@ -116,6 +116,7 @@ class ConfigurationManager
         }
         $alterQueryPreparer->execute();
 
+        $this->clearCache();
         $dumpTables = Yaml::parseFile(__DIR__ . "/../config/dump_tables.yml");
         foreach ($dumpTables as $tableName => $dumpByColumn) {
             $dataFilePath = __DIR__ . "/../config/table_dump_data/{$tableName}.yml";
@@ -129,7 +130,6 @@ class ConfigurationManager
                 $object->save();
             }
         }
-        $this->clearCache();
     }
 
     public function exportTableConfiguration()
