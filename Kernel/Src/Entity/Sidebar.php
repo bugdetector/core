@@ -109,49 +109,46 @@ class Sidebar extends TreeEntityAbstract
 
     public static function getSidebarElements($parent = null)
     {
-        $cache = Cache::getByBundleAndKey("sidebar_elements", $parent ?: "null");
-        if ($cache) {
-            return unserialize($cache->value->getValue());
-        } else {
-            $query = CoreDB::database()->select(static::getTableName(), "s")
-            ->leftjoin("sidebar_roles", "sr", "sr.sidebar_id = s.ID")
-            ->select("s", ["ID"])
-            ->groupBy("s.ID");
-            if ($parent) {
-                $query->condition("s.parent", $parent);
-            }
-            $currentUser = CoreDB::currentUser();
-            if ($currentUser->isLoggedIn()) {
-                $availableCondition = CoreDB::database()->condition($query)
-                ->condition("s.available_for", [
-                    self::AVAILABLE_FOR_BOTH,
-                    self::AVAILABLE_FOR_LOGGED_IN
-                ], "IN");
-                if ($currentUser->roles->getValue()) {
-                    $roleCondition = CoreDB::database()->condition($query)
-                    ->condition("sr.role_id", $currentUser->roles->getValue(), "IN")
-                    ->condition("sr.role_id", null, "IS", "OR");
-                } else {
-                    $roleCondition = CoreDB::database()->condition($query)
-                    ->condition("sr.role_id", null);
-                }
+        $query = CoreDB::database()->select(static::getTableName(), "s")
+        ->leftjoin("sidebar_roles", "sr", "sr.sidebar_id = s.ID")
+        ->select("s", ["ID"])
+        ->groupBy("s.ID");
+        $query->condition("s.parent", $parent);
+        $currentUser = CoreDB::currentUser();
+        if ($currentUser->isLoggedIn()) {
+            $availableCondition = CoreDB::database()->condition($query)
+            ->condition("s.available_for", [
+                self::AVAILABLE_FOR_BOTH,
+                self::AVAILABLE_FOR_LOGGED_IN
+            ], "IN");
+            if ($currentUser->roles->getValue()) {
+                $roleCondition = CoreDB::database()->condition($query)
+                ->condition("sr.role_id", $currentUser->roles->getValue(), "IN")
+                ->condition("sr.role_id", null, "IS", "OR");
             } else {
-                $availableCondition = CoreDB::database()->condition($query)
-                ->condition("s.available_for", [
-                    self::AVAILABLE_FOR_BOTH,
-                    self::AVAILABLE_FOR_NON_LOGGED_IN
-                ], "IN");
                 $roleCondition = CoreDB::database()->condition($query)
                 ->condition("sr.role_id", null);
             }
-            $query->condition($roleCondition);
-            $query->condition($availableCondition);
-            $ids = $query->execute()->fetchAll(PDO::FETCH_COLUMN);
-            $elements = static::findAll([
-                "ID" => $ids ?: null
-            ], static::getTableName(), "weight");
-            Cache::set("sidebar_elements", $parent ?: "null", serialize($elements));
-            return $elements;
+        } else {
+            $availableCondition = CoreDB::database()->condition($query)
+            ->condition("s.available_for", [
+                self::AVAILABLE_FOR_BOTH,
+                self::AVAILABLE_FOR_NON_LOGGED_IN
+            ], "IN");
+            $roleCondition = CoreDB::database()->condition($query)
+            ->condition("sr.role_id", null);
         }
+        $query->condition($roleCondition);
+        $query->condition($availableCondition);
+        $ids = $query->execute()->fetchAll(PDO::FETCH_COLUMN);
+        if ($ids) {
+            $elements = CoreDB::database()->select(static::getTableName())
+            ->condition("ID", $ids)
+            ->orderBy("weight")
+            ->execute()->fetchAll(PDO::FETCH_OBJ);
+        } else {
+            $elements = [];
+        }
+        return $elements;
     }
 }

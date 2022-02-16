@@ -7,14 +7,7 @@ use Src\Theme\View;
 
 class Sidebar extends View
 {
-    /** @var EntitySidebar */
-    public array $items = [];
 
-    public function __construct()
-    {
-        $this->items = EntitySidebar::getSidebarElements();
-    }
-    
     public static function create(): Sidebar
     {
         return new Sidebar();
@@ -23,5 +16,10 @@ class Sidebar extends View
     public function getTemplateFile(): string
     {
         return "sidebar.twig";
+    }
+
+    public static function getSidebarElements($parent = null)
+    {
+        return EntitySidebar::getSidebarElements($parent);
     }
 }

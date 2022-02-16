@@ -8,14 +8,7 @@ use Src\Theme\View;
 
 class Navbar extends View
 {
-    /** @var EntityNavbar */
-    public array $items = [];
     public array $fields = [];
-
-    public function __construct()
-    {
-        $this->items = EntityNavbar::getNavbarElements();
-    }
 
     public static function create(): Navbar
     {
@@ -41,5 +34,10 @@ class Navbar extends View
             $iconMap[$language] = $translateIcons->$language->getValue();
         }
         return $iconMap;
+    }
+
+    public function getNavbarElements($parent = null)
+    {
+        return EntityNavbar::getNavbarElements($parent);
     }
 }
