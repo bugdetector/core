@@ -111,7 +111,7 @@ $(document).ajaxSend(function () {
             isModalVisible = swal.isVisible();
             swal.showLoading();
         }
-    });
+    }, 300);
 });
 $(document).ajaxComplete(function () {
     if ($.active == 1 && loadingShown) {
