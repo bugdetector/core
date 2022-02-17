@@ -59,12 +59,14 @@ class TreeForm extends Form
         $controller->addJsFiles("assets/js/forms/tree_form.js");
         $controller->addFrontendTranslation("node_remove_warning");
         $className = $this->className;
-        $this->addField(
+        $submitSection = ViewGroup::create("div", "d-flex position-fixed bottom-0 end-0 mb-5 me-20");
+        $submitSection->addField(
             InputWidget::create("save")
             ->setType("submit")
             ->setValue(Translation::getTranslation("save"))
             ->addClass("btn btn-success")
         );
+        $this->addField($submitSection);
         $elements = $className::getRootElements();
         /** @var TreeEntityAbstract $element */
         foreach ($elements as $element) {

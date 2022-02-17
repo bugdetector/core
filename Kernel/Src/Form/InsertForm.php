@@ -31,7 +31,7 @@ class InsertForm extends Form
         ) {
             $this->addField($field);
         }
-        $submitSection = ViewGroup::create("div", "d-flex justify-content-end");
+        $submitSection = ViewGroup::create("div", "d-flex position-fixed bottom-0 end-0 mb-5 me-20");
         $submitSection->addField(
             InputWidget::create("save")
             ->setValue(Translation::getTranslation("save"))
