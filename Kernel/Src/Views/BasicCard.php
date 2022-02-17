@@ -32,7 +32,7 @@ class BasicCard extends View
         $this->title = $title;
         return $this;
     }
-    public function setDescription(string $description): BasicCard
+    public function setDescription($description): BasicCard
     {
         $this->description = $description;
         return $this;

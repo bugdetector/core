@@ -89,7 +89,8 @@ abstract class Form extends View
 
     public function render()
     {
-        return CoreRenderer::getInstance([])->renderForm($this);
+        return CoreRenderer::getInstance()
+        ->renderForm($this);
     }
 
     public function setEnctype(string $enctype)

@@ -32,9 +32,8 @@ class BaseTheme implements ThemeInteface
 
     public function render(ControllerInterface $controller)
     {
-        echo CoreRenderer::getInstance(
-            $this::getTemplateDirectories()
-        )->renderController($this, $controller);
+        echo CoreRenderer::getInstance($this)
+        ->renderController($controller);
     }
 
     public function buildNavbar()

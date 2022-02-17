@@ -3,7 +3,6 @@
 namespace Src\Theme;
 
 use Src\Theme\CoreTwigExtension;
-use CoreDB\Kernel\BaseController;
 use CoreDB\Kernel\ControllerInterface;
 use Src\Theme\View;
 use Src\Form\Form;
@@ -17,9 +16,11 @@ class CoreRenderer
     private static $instance;
 
     public \Twig\Environment $twig;
-    private function __construct($template_directories)
+    public ThemeInteface $theme;
+    private function __construct(ThemeInteface $theme)
     {
-        $loader = new FilesystemLoader($template_directories);
+        $this->theme = $theme;
+        $loader = new FilesystemLoader($this->theme->getTemplateDirectories());
         $twig_options = [];
         $enviroment = defined("ENVIROMENT") ? ENVIROMENT : "development";
         if (in_array($enviroment, ["production", "staging"])) {
@@ -34,18 +35,24 @@ class CoreRenderer
         }
     }
 
-    public static function getInstance(array $template_directories): CoreRenderer
+    public static function getInstance(ThemeInteface $theme = null): CoreRenderer
     {
         if (!self::$instance) {
-            self::$instance = new CoreRenderer($template_directories);
+            if (!$theme) {
+                $themeClass = defined("THEME") ? THEME : BaseTheme::class;
+                $theme = new $themeClass();
+            }
+            self::$instance = new CoreRenderer($theme);
+        } elseif ($theme) {
+            self::$instance->theme = $theme;
         }
         return self::$instance;
     }
 
-    public function renderController(ThemeInteface $theme, ControllerInterface $controller)
+    public function renderController(ControllerInterface $controller)
     {
         return $this->twig->render($controller->getTemplateFile(), [
-            "theme" => $theme,
+            "theme" => $this->theme,
             "controller" => $controller
         ]);
     }
@@ -53,6 +60,7 @@ class CoreRenderer
     public function renderView(View $view)
     {
         return $this->twig->render("views/" . $view->getTemplateFile(), [
+            "theme" => $this->theme,
             "view" => $view,
         ]);
     }
@@ -60,6 +68,7 @@ class CoreRenderer
     public function renderForm(Form $form)
     {
         return $this->twig->render("forms/" . $form->getTemplateFile(), [
+            "theme" => $this->theme,
             "form" => $form,
         ]);
     }
@@ -67,6 +76,7 @@ class CoreRenderer
     public function renderWidget(FormWidget $widget)
     {
         return $this->twig->render("widgets/" . $widget->getTemplateFile(), [
+            "theme" => $this->theme,
             "widget" => $widget,
         ]);
     }
