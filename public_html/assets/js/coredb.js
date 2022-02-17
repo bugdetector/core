@@ -108,7 +108,7 @@ var loadingShown = false;
 var isModalVisible = false;
 $(document).ajaxSend(function () {
     setTimeout(function () {
-        if ($.active > 0) {
+        if ($.active > 0 && !loadingShown) {
             loadingShown = true;
             isModalVisible = swal.isVisible();
             swal.showLoading();
