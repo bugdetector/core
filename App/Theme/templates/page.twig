@@ -51,8 +51,10 @@
 						<div class="post d-flex flex-column-fluid">
 							<div id="kt_content_container" class="container-xxl">
 								{% block content %}
-									{{ controller.printMessages() }}
-									{{ controller.echoContent()|raw }}
+									<div class="card p-2">
+										{{ controller.printMessages() }}
+										{{ controller.echoContent()|raw }}
+									</div>
 								{% endblock %}
 							</div>
 						</div>
