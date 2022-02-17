@@ -1,12 +1,12 @@
 $(document).on("click", ".clear-cache", function (e) {
     e.preventDefault();
     $.ajax(`${root}/admin/ajax/clearCache`);
-}).on("click", "#dark-mode-switch", function(){
+}).on("click", "#dark-mode-switch", function () {
     KTCookie.set("dark-mode", this.checked);
     location.reload();
 });
-$(function(){
-    if(darkMode){
+$(function () {
+    if (darkMode) {
         $("#dark-mode-switch").prop("checked", true);
     }
 })
@@ -46,7 +46,7 @@ window.alert = function (options) {
     }).then((result) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
-          callback();
+            callback();
         }
     });
 }
@@ -74,7 +74,7 @@ $(document).ajaxSuccess(function (evt, request, settings) {
         try {
             var resp = JSON.parse(data);
             if (resp.messages[3]) {
-                setTimeout(function(){
+                setTimeout(function () {
                     swal.fire({
                         html: resp.messages[3].join("<br/>"),
                         title: _t("info"),
@@ -99,14 +99,14 @@ $(document).ajaxSuccess(function (evt, request, settings) {
  * Ajax loader functions
  */
 
- $(document).on("submit", function () {
+$(document).on("submit", function () {
     swal.showLoading();
 });
 var loadingShown = false;
 var isModalVisible = false;
 $(document).ajaxSend(function () {
-    setTimeout(function(){
-        if($.active > 0){
+    setTimeout(function () {
+        if ($.active > 0) {
             loadingShown = true;
             isModalVisible = swal.isVisible();
             swal.showLoading();
@@ -115,9 +115,9 @@ $(document).ajaxSend(function () {
 });
 $(document).ajaxComplete(function () {
     if ($.active == 1 && loadingShown) {
-        if(isModalVisible){
+        if (isModalVisible) {
             swal.hideLoading();
-        }else{
+        } else {
             swal.closeModal();
         }
         loadingShown = false;
@@ -139,11 +139,11 @@ const modalTemplate = `<div class="modal fade" tabindex="-1">
     </div>
 </div>`;
 function openModal(
-    title, 
-    body, 
+    title,
+    body,
     footer,
     size
-    ){
+) {
     let modalContent = $(modalTemplate);
     modalContent.find(".modal-title").text(title);
     modalContent.find(".modal-body").append(body);
@@ -151,20 +151,22 @@ function openModal(
     modalContent.find(".modal-dialog").addClass(size);
     let modal = new bootstrap.Modal(modalContent);
     modal.show();
-    if (typeof window.loadSelect2 === "function") {
-        modalContent.find("select").each(function (i, el) {
-            loadSelect2(el);
-        });
-    }
-    if (typeof window.loadTimeInput === "function") {
-        loadTimeInput();
-        loadDateInput();
-        loadDateTimeInput();
-    }
-    if(typeof window.loadCheckbox === "function"){
-        modalContent.find("input[type='checkbox']").each(function (i, element) {
-            loadCheckbox(element);
-        });
-    }
+    modalContent.on('shown.bs.modal', function () {
+        if (typeof window.loadSelect2 === "function") {
+            modalContent.find("select").each(function (i, el) {
+                loadSelect2(el);
+            });
+        }
+        if (typeof window.loadTimeInput === "function") {
+            loadTimeInput();
+            loadDateInput();
+            loadDateTimeInput();
+        }
+        if (typeof window.loadCheckbox === "function") {
+            modalContent.find("input[type='checkbox']").each(function (i, element) {
+                loadCheckbox(element);
+            });
+        }
+    })
     return [modal, modalContent];
 }

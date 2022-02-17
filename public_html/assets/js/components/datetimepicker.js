@@ -4,45 +4,48 @@ $(function ($) {
     loadDateTimeInput();
 })
 
-window.loadTimeInput = function(){
+window.loadTimeInput = function () {
     $(".timeinput").each(function (i, el) {
         el = $(el);
         let default_value = el.val();
         el.val("");
-        flatpickr(el,{
-            format: "H:i",
+        flatpickr(el, {
             enableTime: true,
             noCalendar: true,
+            dateFormat: "H:i",
             time_24hr: true,
+            defaultDate: default_value,
             locale: language
         });
         el.val(default_value);
     });
 }
 
-window.loadDateInput = function(){
+window.loadDateInput = function () {
     $(".dateinput").each(function (i, el) {
         el = $(el);
         let default_value = el.val();
         el.val("");
         flatpickr(el, {
             dateFormat: "d-m-Y",
-            locale: language
+            locale: language,
+            defaultDate: default_value,
         });
         el.val(default_value);
     });
 }
 
-window.loadDateTimeInput = function(){
+window.loadDateTimeInput = function () {
     $(".datetimeinput").each(function (i, el) {
         el = $(el);
         let default_value = el.val();
         el.val("");
-        flatpickr(el,{
-            format: "d-m-Y H:i",
+        flatpickr(el, {
+            dateFormat: "d-m-Y H:i",
             enableTime: true,
             time_24hr: true,
             locale: language,
+            defaultDate: default_value,
             icons: {
                 time: "fa fa-clock"
             }
