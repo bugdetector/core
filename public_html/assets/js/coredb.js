@@ -6,9 +6,11 @@ $(document).on("click", ".clear-cache", function (e) {
     location.reload();
 });
 $(function () {
-    if (darkMode) {
-        $("#dark-mode-switch").prop("checked", true);
-    }
+    setTimeout(function () {
+        if (darkMode) {
+            $("#dark-mode-switch").prop("checked", true);
+        }
+    })
 })
 window._t = function (key, args) {
     if (args) {
