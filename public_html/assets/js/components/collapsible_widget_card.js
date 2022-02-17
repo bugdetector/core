@@ -1,5 +1,5 @@
-$(function($){
-    $(document).on("click", ".add-new-entity", function(e){
+$(function ($) {
+    $(document).on("click", ".add-new-entity", function (e) {
         e.preventDefault();
         let button = $(this);
         let entityName = button.data("entity");
@@ -9,31 +9,35 @@ $(function($){
         $.ajax({
             url: root + "/ajax/getEntityCard",
             method: "post",
-            data: {entity: entityName, name: name, index: index, hiddenFields: hiddenFields},
-            success: function(response){
+            data: { entity: entityName, name: name, index: index, hiddenFields: hiddenFields },
+            success: function (response) {
                 response = $(response);
-                $(`.collapsible-widget-group[data-entity='${entityName}']`).append(response);
-                response.find("select").each(function(i, el){
-                    loadSelect2(el);
+                let [modal, modalContent] = openModal(
+                    button.text(),
+                    response.find(".card-body").html(),
+                    `<button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal">${_t("cancel")}</button>
+                    <button type="button" class="btn btn-primary btn-sm save-entity">${button.text()}</button>`,
+                    "modal-lg"
+                );
+                modalContent.find(".save-entity").on("click", function(){
+                    response.find(".card-body").html("");
+                    response.find(".card-body").append(modalContent.find(".modal-body"));
+                    $(`.collapsible-widget-group[data-entity='${entityName}']`).append(response);
+                    modal.hide();
                 });
-                if (typeof window.loadTimeInput === "function") { 
-                    loadTimeInput();
-                    loadDateInput();
-                    loadDateTimeInput();
-                }
             }
         });
-    }).on("click", ".remove-entity", function(e){
+    }).on("click", ".remove-entity", function (e) {
         e.preventDefault();
         let button = $(this);
         alert({
             message: _t("record_remove_accept"),
             okLabel: _t("yes"),
             callback: function callback() {
-              button.closest(".card").fadeOut(500).delay(500, function(){
-                  $(this).remove();
-              })
+                button.closest(".card").fadeOut(500).delay(500, function () {
+                    $(this).remove();
+                })
             }
-          });
+        });
     })
 })

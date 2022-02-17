@@ -3,7 +3,6 @@
 namespace Src\Form;
 
 use CoreDB\Kernel\ConfigurationManager;
-use CoreDB\Kernel\Database\DataType\File;
 use Src\Entity\File as EntityFile;
 use Src\Entity\Translation;
 use Src\Entity\User;

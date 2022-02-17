@@ -76,7 +76,7 @@ class CollapsableWidgetGroup extends FormWidget
                     TextElement::create(
                         "<i class='fa fa-trash'></i> " . Translation::getTranslation("delete")
                     )->setIsRaw(true)
-                )->addClass("btn btn-danger mt-2 remove-entity")
+                )->addClass("btn btn-danger btn-sm remove-entity")
             );
         }
         return CollapsableCard::create(

@@ -1,0 +1,9 @@
+<div class='input_widget'>
+	<label class="form-check form-switch form-check-custom">
+        <span class="form-label fw-bolder fs-6 me-2">{{ widget.label }}</span>
+		<input type="checkbox" name="{{ widget.name }}" class='{{ widget.classes|join(" ") }}' {{ widget.renderAttributes()|raw }}>
+	</label>
+	<small for="{{ widget.attributes["id"] }}" class="d-block">
+		{{ widget.description }}
+	</small>
+</div>
