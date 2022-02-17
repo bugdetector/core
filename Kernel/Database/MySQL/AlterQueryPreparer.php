@@ -20,11 +20,11 @@ class AlterQueryPreparer extends AlterQueryPreparerAbstract
     {
         $differences = [];
         $original_description = TableDefinition::getDefinition($tableDefinition->table_name, true);
+        $old_order = array_keys($original_description->fields);
+        $new_order = array_keys($tableDefinition->fields);
         /**
          * @var DataTypeAbstract $dataType
          */
-        $old_order = array_keys($original_description->fields);
-        $new_order = array_keys($tableDefinition->fields);
         foreach ($tableDefinition->fields as $column_name => $dataType) {
             if (in_array($column_name, ["ID", "created_at", "last_updated"])) {
                 continue;
@@ -109,7 +109,7 @@ class AlterQueryPreparer extends AlterQueryPreparerAbstract
         return implode(
             "\n",
             array_merge($this->queries, $this->foreignKeyQueries)
-        );
+        ) . $this->db->truncate(Cache::getTableName())->getQuery();
     }
 
     public function execute(): PDOStatement
