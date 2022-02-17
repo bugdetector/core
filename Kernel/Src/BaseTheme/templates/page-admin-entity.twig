@@ -2,14 +2,14 @@
 
 {% block content %}
 	<div class="row">
-        <div class="col-md-8 order-md-first order-last">
+        <div class="col-md-4">
+            {{ controller.side_entity_list }}
+        </div>
+        <div class="col-md-8">
             <div class="card p-2">
                 {{ controller.printMessages() }}
                 {{ controller.echoContent()|raw }}
             </div>
-        </div>
-        <div class="col-md-4">
-            {{ controller.side_entity_list }}
         </div>
 	</div>
 {% endblock %}
