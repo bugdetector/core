@@ -4,6 +4,12 @@ $(document).on("click", ".clear-cache", function (e) {
 }).on("click", "#dark-mode-switch", function () {
     KTCookie.set("dark-mode", this.checked);
     location.reload();
+}).on("dblclick", ".menu-item.show > a", function(){
+    // Metronic defult behaviour overridden
+    let url = $(this).attr("href");
+    if(url){
+        location.assign(url);
+    }
 });
 $(function () {
     setTimeout(function () {
