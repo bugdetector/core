@@ -24,7 +24,7 @@ try{
         CoreDB\Kernel\Router::getInstance()->route();
     }
 }catch(DatabaseInstallationException $ex){
-    if(!$configurationLoaded){
+    if(!CONFIGURATON_LOADED){
         CoreDB::goTo(InstallController::getUrl());
     }else{
         echo $ex->getMessage();

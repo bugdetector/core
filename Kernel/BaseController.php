@@ -73,6 +73,9 @@ abstract class BaseController implements ControllerInterface
     {
         return true;
     }
+    public function echoContent()
+    {
+    }
     /**
      * @inheritdoc
      */

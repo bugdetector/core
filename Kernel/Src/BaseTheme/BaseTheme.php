@@ -46,10 +46,6 @@ class BaseTheme implements ThemeInteface
         $this->sidebar = Sidebar::create();
     }
 
-    public function echoContent()
-    {
-    }
-
     protected function addDefaultMetaTags(ControllerInterface $controller)
     {
         $controller->addMetaTag("charset", [
