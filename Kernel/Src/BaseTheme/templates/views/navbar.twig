@@ -52,7 +52,7 @@
 									<div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown menu-rounded-0 py-lg-4 w-lg-225px">
 										{% for subnode in subnodes %}
 											<div class="menu-item">
-												<a class="menu-link active py-3 {{ subnode.link_class }}" href="{{ constant("BASE_URL") ~ subnode.url }}">
+												<a class="menu-link py-3 {{ subnode.link_class }}" href="{{ constant("BASE_URL") ~ subnode.url }}">
 													<span class="menu-bullet">
 														<span class="{{ subnode.icon_class ?: "bullet bullet-dot" }}"></span>
 													</span>
@@ -64,7 +64,7 @@
 								</div>
 								{% else %}
 									<div class="menu-item">
-										<a class="menu-link active py-3 {{ item.link_class }}" href="{{ constant("BASE_URL") ~ item.url }}">
+										<a class="menu-link py-3 {{ item.link_class }}" href="{{ constant("BASE_URL") ~ item.url }}">
 											<span class="menu-bullet">
 												<span class="{{ item.icon_class ?: "bullet bullet-dot" }}"></span>
 											</span>
