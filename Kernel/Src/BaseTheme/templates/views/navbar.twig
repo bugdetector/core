@@ -39,7 +39,7 @@
 							{% for item in view.getNavbarElements() %}
 								{% set subnodes = view.getNavbarElements(item.ID) %}
 								{% if subnodes %}
-								<div data-kt-menu-trigger="hover" data-kt-menu-placement="bottom-start" class="menu-item menu-lg-down-accordion me-lg-1">
+								<div data-kt-menu-trigger="{default:'click','lg':'hover'}" data-kt-menu-placement="bottom-start" class="menu-item menu-lg-down-accordion me-lg-1">
 									<a href="{{ constant("BASE_URL") ~ item.url  }}" class="menu-link {{ item.link_class }}">
 										{% if item.icon_class %}
 											<span class="menu-bullet">
