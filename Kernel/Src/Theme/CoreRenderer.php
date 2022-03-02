@@ -4,6 +4,7 @@ namespace Src\Theme;
 
 use Src\Theme\CoreTwigExtension;
 use CoreDB\Kernel\ControllerInterface;
+use Src\BaseTheme\BaseTheme;
 use Src\Theme\View;
 use Src\Form\Form;
 use Src\Form\Widget\FormWidget;
