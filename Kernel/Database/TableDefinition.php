@@ -34,8 +34,7 @@ class TableDefinition
             } else {
                 $definition->table_exist = false;
             }
-            $cache = $doNotUseCache ?
-            Cache::set("table_definition", $table_name, base64_encode(serialize($definition))) : null;
+            $cache = Cache::set("table_definition", $table_name, base64_encode(serialize($definition)));
             return $definition;
         }
     }
