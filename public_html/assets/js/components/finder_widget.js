@@ -15,26 +15,28 @@ $(function(){
                 data: data,
                 success: function(response){
                     if(!dialog){
-                        dialog = swal.fire({
-                            html: response,
-                            grow: 'fullscreen'
-                        });
+                        [dialog, dialogContent] = openModal(
+                            "",
+                            response,
+                            null,
+                            "modal-xl"
+                        );
                     }else{
-                        swal.getHtmlContainer().outerHTML = response;
+                        dialogContent.find(".modal-body").html(response);
                     }
-                    dialog.find("form").on("submit", function(e){
+                    dialogContent.find("form").on("submit", function(e){
                         e.preventDefault();
                         loadData($(this).serializeArray());
                         return false;
                     });
-                    dialog.find("th a").on("click", function(e){
+                    dialogContent.find("th a").on("click", function(e){
                         e.preventDefault();
                         loadData([], $(this).attr("href"));
                     })
-                    dialog.find("select").each(function(i, el){
+                    dialogContent.find("select").each(function(i, el){
                         loadSelect2(el);
                     });
-                    dialog.find(".finder-select").on("click", function(e){
+                    dialogContent.find(".finder-select").on("click", function(e){
                         e.preventDefault();
                         finderArea.find(".finder-input").val(this.value).trigger("change");
                         let row = $(this).parents("tr");
@@ -42,7 +44,7 @@ $(function(){
                             row.find("td:eq(1)").text().trim() + " - " +
                             row.find("td:eq(2)").text().trim()
                         ).trigger("change");
-                        swal.close()
+                        dialog.hide();
                     })
                 }
             })

@@ -8,7 +8,7 @@
         <input type='hidden' name='{{ widget.name }}' class="{{ widget.classes|join(" ") }}" value={{ widget.value }}/>
         <input type='text' class='form-control entity-finder-display-text' disabled value='{{ widget.getText() }}'/>
         <div class="input-group-append">
-            <button class="btn btn-info find" type="button" {{ widget.renderAttributes()|raw }} data-class="{{ widget.getFinderClassEncoded() }}"><i class='fa fa-search'></i></button>
+            <button class="btn btn-primary find" type="button" {{ widget.renderAttributes()|raw }} data-class="{{ widget.getFinderClassEncoded() }}"><i class='fa fa-search'></i></button>
         </div>
     </div>
     {% if widget.description %}
