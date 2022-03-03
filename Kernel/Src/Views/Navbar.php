@@ -2,7 +2,7 @@
 
 namespace Src\Views;
 
-use Src\Entity\Navbar as EntityNavbar;
+use CoreDB;
 use Src\Entity\Translation;
 use Src\Theme\View;
 
@@ -38,6 +38,7 @@ class Navbar extends View
 
     public function getNavbarElements($parent = null)
     {
-        return EntityNavbar::getNavbarElements($parent);
+        $navbarClass = CoreDB::config()->getEntityClassName("navbar");
+        return $navbarClass::getNavbarElements($parent);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Src\Views;
 
-use Src\Entity\Sidebar as EntitySidebar;
+use CoreDB;
 use Src\Theme\View;
 
 class Sidebar extends View
@@ -20,6 +20,7 @@ class Sidebar extends View
 
     public static function getSidebarElements($parent = null)
     {
-        return EntitySidebar::getSidebarElements($parent);
+        $sidebarClass = CoreDB::config()->getEntityClassName("sidebar");
+        return $sidebarClass::getSidebarElements($parent);
     }
 }
