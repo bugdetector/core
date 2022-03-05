@@ -55,7 +55,7 @@ window.alert = function (options) {
         icon: icon,
         buttonsStyling: false,
         confirmButtonText: okLabel,
-        showCancelButton: cancelLabel ? true : false,
+        showCancelButton: options.callback ? true : false,
         cancelButtonText: cancelLabel,
         customClass: {
             confirmButton: "btn btn-light-primary",

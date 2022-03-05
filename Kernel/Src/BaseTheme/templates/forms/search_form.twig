@@ -1,8 +1,11 @@
 {% extends "forms/form.twig" %}
 
 {% block fields %}
-{{ form.search_input_group }}
-{{ form.summary_text }}
-{{ form.viewer }}
-{{ form.pagination }}
+	{{ form.search_input_group }}
+	{{ form.summary_text }}
+	{{ form.viewer }}
+	{{ form.pagination }}
+	{% for field in form.fields %}
+		{{ field }}
+	{% endfor %}
 {% endblock %}
