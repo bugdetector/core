@@ -18,7 +18,9 @@ class Table extends ResultsViewer
     {
         parent::setOrderable($orderable);
         if ($this->orderable) {
-            $this->filter_params = array_filter($_GET);
+            $this->filter_params = array_filter($_GET, function ($el) {
+                return $el !== null && $el !== "";
+            });
             $this->orderBy = isset($this->filter_params["orderBy"]) ? $this->filter_params["orderBy"] : null;
             $this->orderDirection = isset($this->filter_params["orderDirection"]) ?
                                     $this->filter_params["orderDirection"] : "";
