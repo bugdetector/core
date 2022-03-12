@@ -9,6 +9,7 @@ window.loadSelect2 = function(element, defaults = {}){
         language: language,
         width: "100%",
         theme: "bootstrap5",
+        dropdownParent: $(element).closest("div"),
         ...defaults,
         ...$(element).data()
     };
