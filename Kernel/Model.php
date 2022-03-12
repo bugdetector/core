@@ -459,7 +459,7 @@ abstract class Model implements SearchableInterface
                 $this->entityName
             ))->addAttribute("data-key", $removeKeyJwt->createToken());
         }
-        $row["edit_actions"] = ViewGroup::create("div", "d-flex")
+        $row["edit_actions"] = ViewGroup::create("div", "d-flex px-2")
             ->addField(
                 $deleteButton
             )->addField(
