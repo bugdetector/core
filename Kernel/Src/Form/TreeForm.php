@@ -140,7 +140,8 @@ class TreeForm extends Form
         /** @var FormWidget */
         $nameWidget = $element->$treeFieldName->getWidget()
         ->addClass("field");
-        $nameWidget->setLabel(Translation::getTranslation("item_name"));
+        $nameWidget->setLabel(Translation::getTranslation("item_name"))
+        ->addAttribute("required", "true");
         if ($nodeId) {
             $nameWidget->setName("tree[{$nodeId}][$treeFieldName]");
         }

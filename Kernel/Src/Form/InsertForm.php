@@ -38,7 +38,7 @@ class InsertForm extends Form
             ->setType("submit")
             ->addClass("btn btn-primary btn-sm mt-2 me-2")
             ->removeClass("form-control")
-        );
+        )->addAttribute("style", "z-index: 2;");
         if ($this->object->ID->getValue()) {
             $submitSection->addField(
                 InputWidget::create("")

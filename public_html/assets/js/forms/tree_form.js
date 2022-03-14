@@ -14,13 +14,7 @@ $(function($){
         templateCard.find(".remove-node").attr("data-node", `new-${index}`);
         templateCard.attr("data-parent", `new-${index}`);
         $("#parent-"+parent).append(templateCard);
-        let select = templateCard.find(".bootstrap-select");
-        if(select.length>0){
-            select.replaceWith(select.find("select"));
-            setTimeout(function(){
-                loadSelect2(templateCard.find("select"));
-            }, 200);
-        }
+        loadSelect2(templateCard.find("select"));
     })
     
     $(document).on("dragend", ".node-card", function(e){
