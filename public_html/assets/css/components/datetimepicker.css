@@ -1,0 +1,9 @@
+.flatpickr-day.today:not(.selected) {
+    border-color: var(--bs-primary);
+    position: relative;
+    color: var(--bs-primary);
+}
+.flatpickr-day.today:hover{
+    background: var(--bs-blue);
+    color: var(--bs-white);
+}

@@ -2,6 +2,7 @@ $(function ($) {
     loadTimeInput();
     loadDateInput();
     loadDateTimeInput();
+    loadDateRangeInput();
 })
 
 window.loadTimeInput = function () {
@@ -15,7 +16,8 @@ window.loadTimeInput = function () {
             dateFormat: "H:i",
             time_24hr: true,
             defaultDate: default_value,
-            locale: language
+            locale: language,
+            allowInput: true
         });
         el.val(default_value);
     });
@@ -30,6 +32,7 @@ window.loadDateInput = function () {
             dateFormat: "d-m-Y",
             locale: language,
             defaultDate: default_value,
+            allowInput: true,
         });
         el.val(default_value);
     });
@@ -48,8 +51,24 @@ window.loadDateTimeInput = function () {
             defaultDate: default_value,
             icons: {
                 time: "fa fa-clock"
-            }
+            },
+            allowInput: true
         });
         el.val(default_value);
     });
+}
+
+window.loadDateRangeInput = function(){
+    $(".daterangeinput").each(function (i, el) {
+        el = $(el);
+        let default_value = el.val();
+        el.val("");
+        flatpickr(el, {
+            dateFormat: "Y-m-d",
+            locale: { rangeSeparator: ' & ' },
+            defaultDate: default_value,
+            mode: "range",
+            allowInput: true
+        });
+    })
 }
