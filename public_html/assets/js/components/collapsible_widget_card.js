@@ -22,7 +22,7 @@ $(function ($) {
                 modalContent.find(".save-entity").on("click", function(){
                     response.find(".card-body").html("");
                     response.find(".card-body").append(modalContent.find(".modal-body"));
-                    $(`.collapsible-widget-group[data-entity='${entityName}']`).append(response);
+                    $(`.collapsible-widget-group[data-entity='${entityName}'] > div`).append(response);
                     modal.hide();
                 });
             }
