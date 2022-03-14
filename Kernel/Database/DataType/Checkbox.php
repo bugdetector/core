@@ -4,8 +4,8 @@ namespace CoreDB\Kernel\Database\DataType;
 
 use Src\Entity\Translation;
 use Src\Form\Widget\FormWidget;
-use Src\Form\Widget\InputWidget;
 use Src\Form\Widget\SelectWidget;
+use Src\Form\Widget\SwitchWidget;
 
 class Checkbox extends DataTypeAbstract
 {
@@ -22,10 +22,8 @@ class Checkbox extends DataTypeAbstract
      */
     public function getWidget(): FormWidget
     {
-        $widget = InputWidget::create("")
-        ->setType("checkbox")
+        $widget = SwitchWidget::create("")
         ->setDescription(Translation::getTranslation($this->comment))
-        ->removeClass("form-control")
         ->setValue($this->value);
         if (!$this->isNull) {
             $widget->addAttribute("required", "true");

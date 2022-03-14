@@ -26,7 +26,7 @@ class CollapsableWidgetGroup extends FormWidget
         $this->entityName = $fieldEntityName;
         $this->fieldGroup = ViewGroup::create("div", "");
         $controller = CoreDB::controller();
-        $controller->addJsFiles("dist/collapsible_widget_card/collapsible_widget_card.js");
+        $controller->addJsFiles("assets/js/components/collapsible_widget_card.js");
         $this->addClass("collapsible-widget-group")
         ->removeClass("form-control");
     }
@@ -76,7 +76,7 @@ class CollapsableWidgetGroup extends FormWidget
                     TextElement::create(
                         "<i class='fa fa-trash'></i> " . Translation::getTranslation("delete")
                     )->setIsRaw(true)
-                )->addClass("btn btn-danger mt-2 remove-entity")
+                )->addClass("btn btn-danger btn-sm remove-entity")
             );
         }
         return CollapsableCard::create(

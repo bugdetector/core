@@ -1,0 +1,76 @@
+table_name: sidebar
+table_comment: 'Sidebar menu configuration.'
+fields:
+  title:
+    type: short_text
+    column_name: title
+    primary_key: false
+    autoIncrement: false
+    isNull: false
+    isUnique: false
+    default: null
+    comment: 'Menu item title. Will be translated.'
+    length: '255'
+  icon_class:
+    type: short_text
+    column_name: icon_class
+    primary_key: false
+    autoIncrement: false
+    isNull: true
+    isUnique: false
+    default: null
+    comment: 'Icon class of item.'
+    length: '255'
+  link_class:
+    type: short_text
+    column_name: link_class
+    primary_key: false
+    autoIncrement: false
+    isNull: true
+    isUnique: false
+    default: null
+    comment: 'Classes for link item.'
+    length: '255'
+  url:
+    type: short_text
+    column_name: url
+    primary_key: false
+    autoIncrement: false
+    isNull: true
+    isUnique: false
+    default: null
+    comment: 'Url that redirected when click.'
+    length: '255'
+  available_for:
+    type: enumarated_list
+    column_name: available_for
+    primary_key: false
+    autoIncrement: false
+    isNull: false
+    isUnique: false
+    default: null
+    comment: 'Criteria for login status users.'
+    values:
+      both: both
+      logged_in: logged_in
+      non_logged_in: non_logged_in
+  weight:
+    type: integer
+    column_name: weight
+    primary_key: false
+    autoIncrement: false
+    isNull: true
+    isUnique: false
+    default: null
+    comment: 'Order weight.'
+    length: null
+  parent:
+    type: table_reference
+    column_name: parent
+    primary_key: false
+    autoIncrement: false
+    isNull: true
+    isUnique: false
+    default: null
+    comment: ''
+    reference_table: sidebar

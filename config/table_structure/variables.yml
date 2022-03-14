@@ -3,7 +3,6 @@ table_comment: 'Contains less secure site Variables. For more security use confi
 fields:
   key:
     type: short_text
-    length: '255'
     column_name: key
     primary_key: false
     autoIncrement: false
@@ -11,6 +10,7 @@ fields:
     isUnique: true
     default: null
     comment: 'Variable key.'
+    length: '255'
   value:
     type: long_text
     column_name: value
@@ -22,6 +22,13 @@ fields:
     comment: Value.
   type:
     type: enumarated_list
+    column_name: type
+    primary_key: false
+    autoIncrement: false
+    isNull: false
+    isUnique: false
+    default: null
+    comment: ''
     values:
       integer: integer
       float: float
@@ -30,10 +37,3 @@ fields:
       date: date
       datetime: datetime
       hidden: hidden
-    column_name: type
-    primary_key: false
-    autoIncrement: false
-    isNull: false
-    isUnique: false
-    default: null
-    comment: ''

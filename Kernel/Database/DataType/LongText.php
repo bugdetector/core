@@ -26,7 +26,7 @@ class LongText extends DataTypeAbstract
         $widget = TextareaWidget::create("")
         ->setValue($this->value)
         ->setDescription(Translation::getTranslation($this->comment))
-        ->addClass("summernote");
+        ->addClass("html-editor");
         if (!$this->isNull) {
             $widget->addAttribute("required", "true");
         }

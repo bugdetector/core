@@ -3,7 +3,6 @@ table_comment: 'Contains cached data. You can use this table via Cache class.'
 fields:
   bundle:
     type: short_text
-    length: '255'
     column_name: bundle
     primary_key: false
     autoIncrement: false
@@ -11,9 +10,9 @@ fields:
     isUnique: false
     default: null
     comment: 'Cache bundle.'
+    length: '255'
   key:
     type: short_text
-    length: '255'
     column_name: key
     primary_key: false
     autoIncrement: false
@@ -21,6 +20,7 @@ fields:
     isUnique: false
     default: null
     comment: 'Cache key.'
+    length: '255'
   value:
     type: long_text
     column_name: value

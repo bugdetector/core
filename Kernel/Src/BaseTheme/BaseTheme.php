@@ -2,183 +2,89 @@
 
 namespace Src\BaseTheme;
 
-use CoreDB\Kernel\BaseController;
-use Src\Controller\Admin\EntityController;
-use Src\Controller\Admin\TableController;
-use Src\Controller\AdminController;
-use Src\Controller\LoginController;
-use Src\Controller\LogoutController;
-use Src\Controller\ProfileController;
-use Src\Entity\Translation;
-use Src\Views\Image;
+use CoreDB\Kernel\ControllerInterface;
+use Src\Theme\CoreRenderer;
+use Src\Theme\ThemeInteface;
 use Src\Views\Navbar;
-use Src\Views\NavItem;
 use Src\Views\Sidebar;
-use Src\Views\TextElement;
 
-abstract class BaseTheme extends BaseController
+class BaseTheme implements ThemeInteface
 {
 
     public Navbar $navbar;
     public Sidebar $sidebar;
-    public $body_classes = [];
-
-    public function checkAccess(): bool
-    {
-        return true;
-    }
+    public bool $darkTheme = false;
 
     public static function getTemplateDirectories(): array
     {
         return [__DIR__ . "/templates"];
     }
 
-    public function processPage()
+    public function setDefaults(ControllerInterface $controller)
     {
         $this->buildNavbar();
         $this->buildSidebar();
-        $this->addDefaultMetaTags();
-        $this->addDefaultJsFiles();
-        $this->addDefaultCssFiles();
-        $this->addDefaultTranslations();
-        $this->preprocessPage();
-        $this->render();
+        $this->addDefaultMetaTags($controller);
+        $this->addDefaultJsFiles($controller);
+        $this->addDefaultCssFiles($controller);
+        $this->addDefaultTranslations($controller);
     }
-    
+
+    public function render(ControllerInterface $controller)
+    {
+        echo CoreRenderer::getInstance($this)
+        ->renderController($controller);
+    }
+
     public function buildNavbar()
     {
-        $this->navbar = Navbar::create(
-            "nav",
-            "navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"
-        );
-        $currentUser = \CoreDB::currentUser();
-        /**   */
-        $userDropdown = NavItem::create(
-            Image::create($currentUser->getProfilePhotoUrl(), $currentUser->getFullName(), false)
-            ->addClass("img-profile rounded-circle"),
-            ""
-        );
-        $userDropdown->addClass("ms-auto");
-        if ($currentUser->isLoggedIn()) {
-            $userDropdown->addDropdownItem(
-                NavItem::create(
-                    "fa fa-user",
-                    $currentUser->getFullName(),
-                    ProfileController::getUrl()
-                )
-            )->addDropdownItem(
-                NavItem::create(
-                    "fa fa-sign-out-alt",
-                    Translation::getTranslation("logout"),
-                    LogoutController::getUrl()
-                )
-            );
-        } else {
-            $userDropdown->addDropdownItem(
-                NavItem::create(
-                    "fa fa-sign-in-alt",
-                    Translation::getTranslation("login"),
-                    LoginController::getUrl()
-                )
-            );
-        }
-        $userDropdown->addDropdownItem(
-            NavItem::create("", "", "")
-            ->addClass("dropdown-divider")
-        );
-        $translateIcons = Translation::get(["key" => "language_icon"]);
-        foreach (Translation::getAvailableLanguageList() as $language) {
-            $userDropdown->addDropdownItem(
-                NavItem::create(
-                    TextElement::create($translateIcons->$language->getValue())
-                    ->setTagName("div")
-                    ->setIsRaw(true)
-                    ->addClass("d-inline-block"),
-                    Translation::getTranslation($language),
-                    "?lang={$language}"
-                )
-            );
-        }
-        $this->navbar->addNavItem(
-            $userDropdown
-        );
+        $this->navbar = Navbar::create();
     }
 
     public function buildSidebar()
     {
-        $this->sidebar = Sidebar::create(
-            "div",
-            "navbar-nav bg-gradient-secondary sidebar sidebar-dark accordion toggled"
-        );
-        $currentUser = \CoreDB::currentUser();
-        if ($currentUser->isAdmin()) {
-            $this->sidebar->addNavItem(
-                NavItem::create(
-                    "fa fa-tachometer-alt",
-                    Translation::getTranslation("dashboard"),
-                    BASE_URL . "/admin",
-                    static::class == AdminController::class
-                )
-            )->addNavItem(
-                NavItem::create(
-                    "fa fa-cube",
-                    Translation::getTranslation("entities"),
-                    BASE_URL . "/admin/entity",
-                    $this instanceof EntityController
-                )
-            )->addNavItem(
-                NavItem::create(
-                    "fa fa-chart-area",
-                    Translation::getTranslation("tables"),
-                    BASE_URL . "/admin/table",
-                    $this instanceof TableController
-                )
-            )->addNavItem(
-                NavItem::create(
-                    "fa fa-broom",
-                    Translation::getTranslation("clear_cache"),
-                    "#"
-                )->addClass("clear-cache")
-            );
-        }
+        $this->sidebar = Sidebar::create();
     }
 
-    public function echoContent()
+    protected function addDefaultMetaTags(ControllerInterface $controller)
     {
-    }
-
-    protected function addDefaultMetaTags()
-    {
-        $this->addMetaTag("charset", [
+        $controller->addMetaTag("charset", [
             "charset" => "utf-8"
         ]);
-        $this->addMetaTag("viewport", [
+        $controller->addMetaTag("viewport", [
             "name" => "viewport",
             "content" => "width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes"
         ]);
     }
     
-    protected function addDefaultJsFiles()
+    protected function addDefaultJsFiles(ControllerInterface $controller)
     {
-        $this->addJsFiles("dist/_global/_global.js");
+        $controller->addJsFiles("base_theme/assets/js/scripts.bundle.js");
+        $controller->addJsFiles("base_theme/assets/plugins/global/plugins.bundle.js");
+        $controller->addJsFiles("assets/js/coredb.js");
+    }
+
+    protected function addDefaultCssFiles(ControllerInterface $controller)
+    {
+        if (isset($_COOKIE["dark-mode"]) && filter_var($_COOKIE["dark-mode"], FILTER_VALIDATE_BOOL)) {
+            $controller->addCssFiles("base_theme/assets/plugins/global/plugins.dark.bundle.css");
+            $controller->addCssFiles("base_theme/assets/css/style.dark.bundle.css");
+            $this->darkTheme = true;
+        } else {
+            $controller->addCssFiles("base_theme/assets/plugins/global/plugins.bundle.css");
+            $controller->addCssFiles("base_theme/assets/css/style.bundle.css");
+        }
+        $controller->addJsCode("var darkMode = " . var_export($this->darkTheme, true) . ";");
     }
     
-    protected function addDefaultCssFiles()
+    protected function addDefaultTranslations(ControllerInterface $controller)
     {
-        $this->addCssFiles([
-            "dist/_global/_global.css",
-            "dist/icons/icons.css"
-        ]);
-    }
-    
-    protected function addDefaultTranslations()
-    {
-        $this->addFrontendTranslation("yes");
-        $this->addFrontendTranslation("no");
-        $this->addFrontendTranslation("cancel");
-        $this->addFrontendTranslation("warning");
-        $this->addFrontendTranslation("error");
-        $this->addFrontendTranslation("info");
-        $this->addFrontendTranslation("ok");
+        $controller->addFrontendTranslation("yes");
+        $controller->addFrontendTranslation("no");
+        $controller->addFrontendTranslation("cancel");
+        $controller->addFrontendTranslation("warning");
+        $controller->addFrontendTranslation("error");
+        $controller->addFrontendTranslation("info");
+        $controller->addFrontendTranslation("ok");
     }
 }

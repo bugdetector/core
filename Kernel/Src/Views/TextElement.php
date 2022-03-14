@@ -6,7 +6,7 @@ use Src\Theme\View;
 
 class TextElement extends View
 {
-    public $tagName = "text";
+    public $tagName = "span";
     public $text;
     public bool $raw = false;
 

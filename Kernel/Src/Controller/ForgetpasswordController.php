@@ -2,11 +2,11 @@
 
 namespace Src\Controller;
 
+use CoreDB\Kernel\BaseController;
 use Src\Entity\Translation;
 use Src\Form\ForgetPasswordForm;
-use Src\BaseTheme\BaseTheme;
 
-class ForgetpasswordController extends BaseTheme
+class ForgetpasswordController extends BaseController
 {
 
     public $form;
@@ -14,7 +14,6 @@ class ForgetpasswordController extends BaseTheme
     public function __construct($arguments)
     {
         parent::__construct($arguments);
-        $this->body_classes = ["bg-gradient-info"];
         $this->setTitle(Translation::getTranslation("forgot_password_question") . "?");
     }
     public function getTemplateFile(): string

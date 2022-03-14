@@ -2,15 +2,14 @@
 
 namespace Src\Controller;
 
+use CoreDB\Kernel\BaseController;
 use CoreDB\Kernel\ConfigurationManager;
 use CoreDB\Kernel\Messenger;
 use Src\Entity\ResetPassword;
 use Src\Entity\Translation;
-use Src\Entity\User;
 use Src\Form\ResetPasswordForm;
-use Src\BaseTheme\BaseTheme;
 
-class ResetPasswordController extends BaseTheme
+class ResetPasswordController extends BaseController
 {
     
     public $form;
@@ -18,7 +17,6 @@ class ResetPasswordController extends BaseTheme
     public function __construct($arguments)
     {
         parent::__construct($arguments);
-        $this->body_classes = ["bg-gradient-info"];
         $this->setTitle(Translation::getTranslation("reset_password"));
     }
     public function getTemplateFile(): string

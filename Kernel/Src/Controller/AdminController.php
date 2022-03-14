@@ -3,13 +3,13 @@
 namespace Src\Controller;
 
 use CoreDB;
-use Src\BaseTheme\BaseTheme;
+use CoreDB\Kernel\BaseController;
 use Src\Entity\Translation;
 use Src\Entity\User;
 use Src\Entity\Variable;
 use Src\Views\BasicCard;
 
-class AdminController extends BaseTheme
+class AdminController extends BaseController
 {
 
     public $number_of_members;
@@ -32,21 +32,21 @@ class AdminController extends BaseTheme
         ->selectWithFunction(["COUNT(*) as count"])
         ->execute()->fetchObject()->count;
         $this->cards[] = BasicCard::create()
-        ->setBorderClass("border-left-primary")
+        ->setBackgroundClass("bg-primary")
         ->setHref(BASE_URL . "/admin/entity/users")
         ->setTitle(Translation::getTranslation("number_of_members"))
         ->setDescription($this->number_of_members)
         ->setIconClass("fa-user")
         ->addClass("col-xl-3 col-md-6 mb-4");
         $this->cards[] = BasicCard::create()
-        ->setBorderClass("border-left-info")
+        ->setBackgroundClass("bg-success")
         ->setHref(BASE_URL . "/admin/table")
         ->setTitle(Translation::getTranslation("table_count"))
         ->setDescription(count(\CoreDB::database()::getTableList()))
         ->setIconClass("fa-table")
         ->addClass("col-xl-3 col-md-6 mb-4");
         $this->cards[] = BasicCard::create()
-        ->setBorderClass("border-left-info")
+        ->setBackgroundClass("bg-info")
         ->setHref(BASE_URL . "/admin/entity/translations")
         ->setTitle(Translation::getTranslation("translation_count"))
         ->setDescription(count(Translation::getAll([])))

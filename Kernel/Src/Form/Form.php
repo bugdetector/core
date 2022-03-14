@@ -55,7 +55,7 @@ abstract class Form extends View
             if (!empty($this->errors)) {
                 foreach ($this->errors as $field_name => $value) {
                     if (isset($this->fields[$field_name])) {
-                        $this->fields[$field_name]->addClass("has-error");
+                        $this->fields[$field_name]->addClass("is-invalid");
                     }
                 }
                 $this->restoreValues();
@@ -89,7 +89,8 @@ abstract class Form extends View
 
     public function render()
     {
-        return CoreRenderer::getInstance([])->renderForm($this);
+        return CoreRenderer::getInstance()
+        ->renderForm($this);
     }
 
     public function setEnctype(string $enctype)

@@ -15,7 +15,6 @@ class EntityController extends AdminController
     public ?Model $object = null;
     public ?SearchForm $search_form = null;
     public SideEntityList $side_entity_list;
-    public array $actions = [];
 
     public function preprocessPage()
     {

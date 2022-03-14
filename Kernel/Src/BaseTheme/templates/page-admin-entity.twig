@@ -1,27 +1,15 @@
 {% extends "page.twig" %}
 
-{% block title %}
-	<div class="d-sm-flex align-items-center justify-content-between mb-4">
-		<h1 class="h3 mb-0 text-gray-800">{{ controller.title }}</h1>
-		<div class="text-gray-600 ms-3 me-auto">
-			{{ controller.table_comment }}
-		</div>
-        {% for action in controller.actions %}
-            {{ action }}
-        {% endfor %}
-	</div>
-{% endblock %}
-
 {% block content %}
 	<div class="row">
-        <div class="col-md-8 order-md-first order-last">
+        <div class="col-md-4">
+            {{ controller.side_entity_list }}
+        </div>
+        <div class="col-md-8">
             <div class="card p-2">
                 {{ controller.printMessages() }}
                 {{ controller.echoContent()|raw }}
             </div>
-        </div>
-        <div class="col-md-4">
-            {{ controller.side_entity_list }}
         </div>
 	</div>
 {% endblock %}

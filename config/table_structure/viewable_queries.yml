@@ -3,7 +3,6 @@ table_comment: 'Contains viewable queries configuration.'
 fields:
   title:
     type: short_text
-    length: '255'
     column_name: title
     primary_key: false
     autoIncrement: false
@@ -11,6 +10,7 @@ fields:
     isUnique: true
     default: null
     comment: 'Administration title.'
+    length: '255'
   description:
     type: text
     column_name: description
@@ -22,7 +22,6 @@ fields:
     comment: 'Administration description.'
   key:
     type: short_text
-    length: '255'
     column_name: key
     primary_key: false
     autoIncrement: false
@@ -30,6 +29,7 @@ fields:
     isUnique: true
     default: null
     comment: 'Programming key.'
+    length: '255'
   filters:
     type: text
     column_name: filters
@@ -50,7 +50,6 @@ fields:
     comment: 'Required fields data.'
   paging_limit:
     type: integer
-    length: null
     column_name: paging_limit
     primary_key: false
     autoIncrement: false
@@ -58,6 +57,7 @@ fields:
     isUnique: false
     default: null
     comment: 'Paginate results with limit. Default: 100.'
+    length: null
   order_by:
     type: text
     column_name: order_by
@@ -69,9 +69,6 @@ fields:
     comment: 'Order by and order direction.'
   result_view_template:
     type: enumarated_list
-    values:
-      table: table
-      custom_card: custom_card
     column_name: result_view_template
     primary_key: false
     autoIncrement: false
@@ -79,9 +76,11 @@ fields:
     isUnique: false
     default: null
     comment: 'Use a template to show results.'
+    values:
+      table: table
+      custom_card: custom_card
   card_template_class:
     type: short_text
-    length: '500'
     column_name: card_template_class
     primary_key: false
     autoIncrement: false
@@ -89,3 +88,4 @@ fields:
     isUnique: false
     default: null
     comment: 'Enter a view name if you selected result view template as card.'
+    length: '500'

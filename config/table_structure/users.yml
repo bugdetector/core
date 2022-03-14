@@ -3,7 +3,6 @@ table_comment: 'Contains site Users fundemantal data. Connected with User class.
 fields:
   username:
     type: short_text
-    length: '20'
     column_name: username
     primary_key: false
     autoIncrement: false
@@ -11,9 +10,9 @@ fields:
     isUnique: true
     default: null
     comment: Username
+    length: '20'
   name:
     type: short_text
-    length: '50'
     column_name: name
     primary_key: false
     autoIncrement: false
@@ -21,9 +20,9 @@ fields:
     isUnique: false
     default: null
     comment: Name
+    length: '50'
   surname:
     type: short_text
-    length: '50'
     column_name: surname
     primary_key: false
     autoIncrement: false
@@ -31,9 +30,9 @@ fields:
     isUnique: false
     default: null
     comment: Surname
+    length: '50'
   profile_photo:
     type: file
-    reference_table: files
     column_name: profile_photo
     primary_key: false
     autoIncrement: false
@@ -41,9 +40,9 @@ fields:
     isUnique: false
     default: null
     comment: 'User profile photo.'
+    reference_table: files
   email:
     type: short_text
-    length: '50'
     column_name: email
     primary_key: false
     autoIncrement: false
@@ -51,9 +50,9 @@ fields:
     isUnique: true
     default: null
     comment: Email
+    length: '50'
   phone:
     type: short_text
-    length: '20'
     column_name: phone
     primary_key: false
     autoIncrement: false
@@ -61,9 +60,9 @@ fields:
     isUnique: false
     default: null
     comment: ''
+    length: '20'
   password:
     type: short_text
-    length: '255'
     column_name: password
     primary_key: false
     autoIncrement: false
@@ -71,12 +70,9 @@ fields:
     isUnique: false
     default: null
     comment: 'Hashed user password'
+    length: '255'
   status:
     type: enumarated_list
-    values:
-      active: active
-      blocked: blocked
-      banned: banned
     column_name: status
     primary_key: false
     autoIncrement: false
@@ -84,6 +80,10 @@ fields:
     isUnique: false
     default: null
     comment: "Active is user can login and use the site.\r\nBlocked is user has been blocked due to too many untrested actions. Need reset password.\r\nBanned is user is not able to login to site."
+    values:
+      active: active
+      blocked: blocked
+      banned: banned
   last_access:
     type: datetime
     column_name: last_access

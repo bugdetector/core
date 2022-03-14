@@ -1,4 +1,4 @@
-<div class="table_wrapper">
+<div class="table-responsive">
 	<table class="{{ view.classes|join(" ") }}" {{ view.renderAttributes() }}>
 		<thead>
 			<tr>
@@ -6,7 +6,7 @@
 				<th>
 					{% if view.orderable and not( key matches '/^\\d+$/') %}
 						<a href="?{{ view.filter_params|url_encode }}&orderBy={{key}}&orderDirection={{ view.orderBy == key and view.orderDirection == "DESC" ? "ASC" : "DESC" }}"
-							class="text-decoration-none">
+							class="fw-bolder text-nowrap">
 							{{ header }}
 							{% if view.orderBy == key and view.orderDirection == "DESC" %}
 								<i class="fa fa-sort-down"></i>

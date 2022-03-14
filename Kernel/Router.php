@@ -71,18 +71,18 @@ class Router
 
             $controllerFound = false;
             if (class_exists($tempSrcControllerName)) {
-                $namespaceSrc = "{$namespaceSrc}{$page}\\";
                 $srcControllerName = $tempSrcControllerName;
                 $controllerFound = true;
                 $appControllerName = "";
             }
+            $namespaceSrc = "{$namespaceSrc}{$page}\\";
             if ($appControllerFound && class_exists($tempAppControllerName)) {
-                $namespaceApp = "{$namespaceApp}{$page}\\";
                 $appControllerName = $tempAppControllerName;
                 $controllerFound = true;
             } else {
                 $appControllerFound = false;
             }
+            $namespaceApp = "{$namespaceApp}{$page}\\";
             if ($controllerFound) {
                 array_shift($currentArguments);
             } else {

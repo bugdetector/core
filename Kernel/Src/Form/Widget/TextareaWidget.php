@@ -19,9 +19,8 @@ class TextareaWidget extends FormWidget
 
     public function addClass(string $class_name): View
     {
-        if (in_array("summernote", explode(" ", $class_name))) {
-            \CoreDB::controller()->addJsFiles("dist/summernote/summernote.js");
-            \CoreDB::controller()->addCssFiles("dist/summernote/summernote.css");
+        if (in_array("html-editor", explode(" ", $class_name))) {
+            \CoreDB::controller()->addJsFiles("assets/js/components/html-editor.js");
         }
         return parent::addClass($class_name);
     }

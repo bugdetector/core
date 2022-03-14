@@ -43,7 +43,7 @@ class SearchForm extends Form
         $this->page = $page >= 1 ? $page : 1;
         $this->pagination = new Pagination($this->page, $this->object->getPaginationLimit());
         $controller = \CoreDB::controller();
-        $controller->addJsFiles("dist/search_form/search_form.js");
+        $controller->addJsFiles("assets/js/forms/search_form.js");
         $controller->addFrontendTranslation("record_remove_accept");
         $controller->addFrontendTranslation("record_remove_accept_entity");
 

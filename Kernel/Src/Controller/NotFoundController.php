@@ -2,10 +2,10 @@
 
 namespace Src\Controller;
 
+use CoreDB\Kernel\BaseController;
 use Src\Entity\Translation;
-use Src\BaseTheme\BaseTheme;
 
-class NotFoundController extends BaseTheme
+class NotFoundController extends BaseController
 {
 
     public $error_code = 404;

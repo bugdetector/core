@@ -3,10 +3,8 @@
 namespace Src\Controller;
 
 use CoreDB\Kernel\ServiceController;
-use Src\BaseTheme\BaseTheme;
 use Src\Form\SearchForm;
 use Src\JWT;
-use Src\Theme\CoreRenderer;
 
 class FinderController extends ServiceController
 {
@@ -23,7 +21,6 @@ class FinderController extends ServiceController
         $class = $jwt->getPayload()->class;
         $finderQuery = $class::getInstance();
         $form = SearchForm::createByObject($finderQuery);
-        CoreRenderer::getInstance(BaseTheme::getTemplateDirectories());
         return $form;
     }
 }

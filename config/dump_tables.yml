@@ -2,3 +2,7 @@ roles: role
 variables: key
 emails: key
 viewable_queries: key
+sidebar: ID
+sidebar_roles: ID
+navbar: ID
+navbar_roles: ID

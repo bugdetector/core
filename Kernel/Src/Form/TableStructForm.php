@@ -28,7 +28,7 @@ class TableStructForm extends Form
     public function __construct(string $table_name, string $table_comment)
     {
         parent::__construct();
-        \CoreDB::controller()->addJsFiles("dist/table_struct_form/table_struct_form.js");
+        \CoreDB::controller()->addJsFiles("assets/js/forms/table_struct_form.js");
         if (!empty($this->request)) {
             $this->table_name =  preg_replace("/[^a-z1-9_]+/", "", $this->request["table_name"]);
             $this->table_comment = htmlspecialchars($this->request["table_comment"]);
@@ -133,19 +133,19 @@ class TableStructForm extends Form
             InputWidget::create("new_field")
                 ->setValue(Translation::getTranslation("new_field"))
                 ->setType("button")
-                ->addClass("btn btn-info mt-2 newfield text-white")
+                ->addClass("btn btn-info btn-sm mt-2 newfield text-white")
         );
         $this->addField(
             InputWidget::create("save")
                 ->setValue(Translation::getTranslation("save"))
                 ->setType("submit")
-                ->addClass("btn btn-primary mt-2 text-white")
+                ->addClass("btn btn-primary btn-sm mt-2 text-white")
         );
         $this->addField(
             InputWidget::create("drop")
                 ->setValue(Translation::getTranslation("drop_table"))
                 ->setType("submit")
-                ->addClass("btn btn-danger mt-2 tabledrop text-white")
+                ->addClass("btn btn-danger btn-sm mt-2 tabledrop text-white")
                 ->addAttribute("data-table-name", $this->table_name)
         );
 

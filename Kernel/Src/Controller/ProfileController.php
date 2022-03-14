@@ -2,11 +2,11 @@
 
 namespace Src\Controller;
 
-use Src\BaseTheme\BaseTheme;
+use CoreDB\Kernel\BaseController;
 use Src\Entity\Translation;
 use Src\Form\ProfileForm;
 
-class ProfileController extends BaseTheme
+class ProfileController extends BaseController
 {
     public ProfileForm $profileForm;
 

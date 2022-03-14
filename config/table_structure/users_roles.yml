@@ -3,7 +3,6 @@ table_comment: 'Constains User''s roles. Look at User::roles'
 fields:
   user_id:
     type: table_reference
-    reference_table: users
     column_name: user_id
     primary_key: false
     autoIncrement: false
@@ -11,9 +10,9 @@ fields:
     isUnique: false
     default: null
     comment: 'User Id.'
+    reference_table: users
   role_id:
     type: table_reference
-    reference_table: roles
     column_name: role_id
     primary_key: false
     autoIncrement: false
@@ -21,3 +20,4 @@ fields:
     isUnique: false
     default: null
     comment: 'Role Id.'
+    reference_table: roles
