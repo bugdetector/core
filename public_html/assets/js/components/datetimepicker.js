@@ -2,6 +2,7 @@ $(function ($) {
     loadTimeInput();
     loadDateInput();
     loadDateTimeInput();
+    loadDateRangeInput();
 })
 
 window.loadTimeInput = function () {
@@ -52,4 +53,18 @@ window.loadDateTimeInput = function () {
         });
         el.val(default_value);
     });
+}
+
+window.loadDateRangeInput = function(){
+    $(".daterangeinput").each(function (i, el) {
+        el = $(el);
+        let default_value = el.val();
+        el.val("");
+        flatpickr(el, {
+            dateFormat: "Y-m-d",
+            locale: { rangeSeparator: ' & ' },
+            defaultDate: default_value,
+            mode: "range"
+        });
+    })
 }
