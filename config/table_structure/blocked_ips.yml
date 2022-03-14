@@ -3,7 +3,6 @@ table_comment: 'Contains blocked IP adresses. These IP adresses can''t login to 
 fields:
   ip:
     type: short_text
-    length: '16'
     column_name: ip
     primary_key: false
     autoIncrement: false
@@ -11,3 +10,4 @@ fields:
     isUnique: true
     default: null
     comment: 'Ip address'
+    length: '16'

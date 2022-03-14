@@ -15,7 +15,8 @@ abstract class View
 
     public function render()
     {
-        echo CoreRenderer::getInstance(BaseTheme::getTemplateDirectories())->renderView($this);
+        echo CoreRenderer::getInstance()
+        ->renderView($this);
     }
 
     public function addClass(string $class_name): View

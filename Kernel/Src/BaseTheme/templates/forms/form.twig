@@ -8,7 +8,9 @@
 <form method='{{ form.method }}' enctype='{{ form.enctype }}' class='{{ form.classes|join(" ") }}' {{ form.renderAttributes()|raw }}>
 	{% block fields %}
 		{% for field in form.fields %}
-			{{ field }}
+			<div class="mb-3 form-field">
+				{{ field }}
+			</div>
 		{% endfor %}
 	{% endblock %}
 </form>

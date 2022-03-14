@@ -102,9 +102,8 @@ class AjaxController extends ServiceController
                 $fileWidget->setType("file");
                 $fileWidget->setValue($file->ID->getValue());
                 $this->response_type = self::RESPONSE_TYPE_RAW;
-                echo \Src\Theme\CoreRenderer::getInstance(
-                    BaseTheme::getTemplateDirectories()
-                )->renderWidget($fileWidget);
+                echo \Src\Theme\CoreRenderer::getInstance()
+                ->renderWidget($fileWidget);
             }
         } catch (Exception $ex) {
             throw new Exception($ex->getMessage());

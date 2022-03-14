@@ -1,0 +1,23 @@
+table_name: sidebar_roles
+table_comment: 'Sidebar item role restriction.'
+fields:
+  sidebar_id:
+    type: table_reference
+    column_name: sidebar_id
+    primary_key: false
+    autoIncrement: false
+    isNull: true
+    isUnique: false
+    default: null
+    comment: 'Sidebar item reference.'
+    reference_table: sidebar
+  role_id:
+    type: table_reference
+    column_name: role_id
+    primary_key: false
+    autoIncrement: false
+    isNull: true
+    isUnique: false
+    default: null
+    comment: 'Role reference.'
+    reference_table: roles

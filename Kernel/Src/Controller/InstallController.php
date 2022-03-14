@@ -6,9 +6,9 @@ use CoreDB\Kernel\Database\DatabaseInstallationException;
 use Src\Entity\Translation;
 use Src\Entity\Variable;
 use Src\Form\InstallForm;
-use Src\BaseTheme\BaseTheme;
+use CoreDB\Kernel\BaseController;
 
-class InstallController extends BaseTheme
+class InstallController extends BaseController
 {
 
     public ?InstallForm $installForm = null;
@@ -32,18 +32,9 @@ class InstallController extends BaseTheme
         }
     }
 
-    public function processPage()
-    {
-        $this->addDefaultJsFiles();
-        $this->addDefaultCssFiles();
-        $this->preprocessPage();
-        $this->render();
-    }
-
 
     public function preprocessPage()
     {
-        $this->body_classes[] = "bg-gradient-info";
         $this->setTitle(Translation::getTranslation("install_welcome"));
         if (!@fopen("../config/config.php", "w+")) {
             $this->createMessage(Translation::getTranslation("config_file_write_error"));

@@ -1,17 +1,13 @@
 <div class="{{ view.classes|join(" ") }}">
-	<div class="card {{ view.border_class }} shadow h-100 py-2">
-		<a href="{{ view.href }}" class="text-decoration-none">
-			<div class="card-body">
-				<div class="row no-gutters align-items-center">
-					<div class="col me-2">
-						<div class="text-sm fw-bold text-primary text-uppercase mb-1">{{ view.title }}</div>
-						<div class="h5 mb-0 fw-bold text-gray-800">{{ view.description }}</div>
-					</div>
-					<div class="col-auto">
-						<i class="fas fa-2x text-gray-800 {{ view.icon_class }}"></i>
-					</div>
-				</div>
-			</div>
-		</a>
-	</div>
+	<a
+		href="{{ view.href }}" class="card hoverable card-xl-stretch mb-xl-8 {{ view.background_class }}">
+		<!--begin::Body-->
+		<div
+			class="card-body">
+			<i class="fas fa-2x text-light {{ view.icon_class }}"></i>
+			<div class="text-light fw-bolder fs-2 mb-2 mt-5">{{ view.description }}</div>
+			<div class="fw-bold text-light fw-bolder">{{ view.title }}</div>
+		</div>
+		<!--end::Body-->
+	</a>
 </div>

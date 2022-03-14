@@ -4,9 +4,12 @@ namespace Src\Controller\Admin;
 
 use CoreDB\Kernel\Database\TableDefinition;
 use CoreDB\Kernel\Messenger;
+use Src\Controller\Admin\Table\StructController;
 use Src\Controller\AdminController;
+use Src\Entity\DynamicModel;
 use Src\Entity\Translation;
 use Src\Form\SearchForm;
+use Src\Views\Link;
 use Src\Views\SideTableList;
 
 class TableController extends AdminController
@@ -27,6 +30,8 @@ class TableController extends AdminController
             $this->table_name = $this->arguments[0];
             $this->table_comment = $table_definition->table_comment;
             $this->table_search = SearchForm::createByTableName($this->table_name);
+            $instance = new DynamicModel($this->table_name);
+            $this->actions = $instance->actions();
             /**
              * Creating table and table search form
              */
@@ -36,6 +41,12 @@ class TableController extends AdminController
             $this->setTitle(Translation::getTranslation("tables"));
         }
         $this->side_table_list = new SideTableList($this->table_name);
+        $this->actions[] = Link::create(
+            StructController::getUrl(),
+            Translation::getTranslation("new_table")
+        )->addClass("btn btn-primary btn-sm");
+        $this->addFrontendTranslation("truncate_accept");
+        $this->addFrontendTranslation("drop_accept");
     }
 
     public function echoContent()
@@ -46,17 +57,5 @@ class TableController extends AdminController
     public function getTemplateFile(): string
     {
         return "page-admin-table.twig";
-    }
-
-    protected function addDefaultJsFiles()
-    {
-        parent::addDefaultJsFiles();
-    }
-
-    protected function addDefaultTranslations()
-    {
-        parent::addDefaultTranslations();
-        $this->addFrontendTranslation("truncate_accept");
-        $this->addFrontendTranslation("drop_accept");
     }
 }

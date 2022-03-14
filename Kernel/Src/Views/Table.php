@@ -11,14 +11,16 @@ class Table extends ResultsViewer
     public array $filter_params;
     public function __construct()
     {
-        $this->classes = ["table", "table-bordered", "text-gray-900"];
+        $this->classes = ["table", "table-striped", "table-light", "table-hover"];
     }
 
     public function setOrderable(bool $orderable)
     {
         parent::setOrderable($orderable);
         if ($this->orderable) {
-            $this->filter_params = array_filter($_GET);
+            $this->filter_params = array_filter($_GET, function ($el) {
+                return $el !== null && $el !== "";
+            });
             $this->orderBy = isset($this->filter_params["orderBy"]) ? $this->filter_params["orderBy"] : null;
             $this->orderDirection = isset($this->filter_params["orderDirection"]) ?
                                     $this->filter_params["orderDirection"] : "";

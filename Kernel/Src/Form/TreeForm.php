@@ -56,15 +56,17 @@ class TreeForm extends Form
     {
         parent::processForm();
         $controller = CoreDB::controller();
-        $controller->addJsFiles("dist/tree_form/tree_form.js");
+        $controller->addJsFiles("assets/js/forms/tree_form.js");
         $controller->addFrontendTranslation("node_remove_warning");
         $className = $this->className;
-        $this->addField(
+        $submitSection = ViewGroup::create("div", "d-flex position-fixed bottom-0 end-0 mb-5 me-20");
+        $submitSection->addField(
             InputWidget::create("save")
             ->setType("submit")
             ->setValue(Translation::getTranslation("save"))
             ->addClass("btn btn-success")
         );
+        $this->addField($submitSection);
         $elements = $className::getRootElements();
         /** @var TreeEntityAbstract $element */
         foreach ($elements as $element) {
@@ -166,7 +168,7 @@ class TreeForm extends Form
                         TextElement::create(
                             '<i class="fa fa-plus"></i> ' . Translation::getTranslation("add_subitem")
                         )->setIsRaw(true)
-                    )->addClass("btn btn-primary add-new-node")
+                    )->addClass("btn btn-primary btn-sm add-new-node")
                     ->addAttribute("data-parent", $nodeId)
                     ->addAttribute("data-field-name", $treeFieldName)
                 );
@@ -177,7 +179,7 @@ class TreeForm extends Form
                         TextElement::create(
                             '<i class="fa fa-plus"></i> ' . Translation::getTranslation("add_subitem")
                         )->setIsRaw(true)
-                    )->addClass("btn btn-primary")
+                    )->addClass("btn btn-primary btn-sm w-auto")
                 );
             }
         } else {
@@ -188,7 +190,7 @@ class TreeForm extends Form
         $content->addField(
             Link::create("#", TextElement::create(
                 '<i class="fa fa-trash"></i> ' . Translation::getTranslation("delete")
-            )->setIsRaw(true))->addClass("btn btn-danger ms-3 remove-node w-auto")
+            )->setIsRaw(true))->addClass("btn btn-danger btn-sm ms-3 remove-node w-auto")
             ->addAttribute("data-node", $nodeId)
             ->addAttribute("data-service-url", $element->getRemoveServiceUrl())
         );
@@ -199,7 +201,7 @@ class TreeForm extends Form
                     TextElement::create(
                         '<i class="fa fa-edit"></i> ' . Translation::getTranslation("edit")
                     )->setIsRaw(true)
-                )->addClass("btn btn-info ms-3 w-auto")
+                )->addClass("btn btn-info btn-sm ms-3 w-auto")
             );
         }
         return $content;
@@ -207,7 +209,7 @@ class TreeForm extends Form
 
     protected function getSubCards(TreeEntityAbstract $element = null): ViewGroup
     {
-        $subCardGroup = ViewGroup::create("div", "sortable_list col-sm-12 mt-3");
+        $subCardGroup = ViewGroup::create("div", "sortable_list col-sm-12 mt-3 min-h-25px");
         $subCardGroup->addAttribute("id", $element ? "parent-{$element->ID->getValue()}" : "");
         if ($element) {
             /** @var TreeEntityAbstract $subCard */

@@ -1,14 +1,14 @@
 <input type="hidden" name="{{ widget.newFieldName }}" value="">
 <div class='{{ widget.classes|join(" ") }}' {{ widget.renderAttributes()|raw }} data-entity="{{ widget.entityName }}">
 {% if widget.label and widget.showAddButtonAndLabel %}
-	<label for="{{ widget.attributes["id"] }}" class="fw-bold text-primary">
+	<label for="{{ widget.attributes["id"] }}" class="form-label fw-bolder fs-6">
 		{{ widget.label }}
 	</label>
 {% endif %}
 {{ widget.fieldGroup  }}
 </div>
 {% if widget.showAddButtonAndLabel %}
-	<a href="#" class="btn btn-primary add-new-entity" 
+	<a href="#" class="btn btn-primary btn-sm add-new-entity" 
 		data-entity="{{ widget.entityName }}" data-name="{{ widget.newFieldName }}"
 		data-hidden-fields="{{ widget.hiddenFields|json_encode }}">
 		<i class="fa fa-plus"></i>

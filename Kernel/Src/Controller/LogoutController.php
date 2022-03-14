@@ -2,10 +2,9 @@
 
 namespace Src\Controller;
 
-use Src\BaseTheme\BaseTheme;
-use Src\Entity\Session;
+use CoreDB\Kernel\BaseController;
 
-class LogoutController extends BaseTheme
+class LogoutController extends BaseController
 {
     
     

@@ -81,7 +81,7 @@ class ColumnDefinition extends CollapsableCard
         $column_comment->addAttribute("placeholder", Translation::getTranslation("column_comment"))
         ->addClass("my-2");
 
-        $remove_button = ViewGroup::create("a", "btn btn-danger removefield text-white")
+        $remove_button = ViewGroup::create("a", "btn btn-danger btn-sm removefield text-white")
         ->addAttribute("href", "#")
         ->addField(
             ViewGroup::create("i", "fa fa-trash")
@@ -121,10 +121,10 @@ class ColumnDefinition extends CollapsableCard
             ViewGroup::create("div", "col-sm-3")
                 ->addField($field_name_input)
         )->addField(
-            ViewGroup::create("div", "col-sm-3")
+            ViewGroup::create("div", "col-sm-4")
                 ->addField($data_type_select)
         )->addField(
-            ViewGroup::create("div", "col-sm-2 " . (!$reference_table_select->value ? "d-none" : ""))
+            ViewGroup::create("div", "col-sm-4 " . (!$reference_table_select->value ? "d-none" : ""))
                 ->addField($reference_table_select)
         )->addField(
             ViewGroup::create("div", "col-sm-2 " .

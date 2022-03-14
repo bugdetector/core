@@ -3,12 +3,20 @@
 namespace App\Controller;
 
 use App\Theme\CustomTheme;
+use CoreDB\Kernel\BaseController;
 use Src\Entity\Translation;
+use Src\Theme\ThemeInteface;
 
-class MainpageController extends CustomTheme
+class MainpageController extends BaseController
 {
 
     public $content;
+
+    public function getTheme(): ThemeInteface
+    {
+        return new CustomTheme();
+    }
+
     public function checkAccess(): bool
     {
         return true;

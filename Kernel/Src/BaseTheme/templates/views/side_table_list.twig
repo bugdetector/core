@@ -1,12 +1,18 @@
 <div
-	class="card shadow mb-4">
-	<!-- Card Header - Accordion -->
-	<a href="#table_list" class="d-block card-header py-3 text-decoration-none" data-bs-toggle="collapse" role="button" aria-expanded="true">
-		<div class="m-0 fw-bold text-primary">{{ t("tables") }}</div>
-	</a>
+	class="card mb-2">
+	<div class="card-header" data-bs-toggle="collapse">
+		<div class="card-title" href="#table_list" class="btn btn-icon btn-circle btn-sm btn-light-primary me-1" data-bs-toggle="collapse" role='button'>
+			<h3 class="card-label fw-bolder">{{ t("tables") }}</h3>
+		</div>
+		<div class="card-toolbar">
+			<a href="#table_list" class="btn btn-icon btn-circle btn-sm btn-light-primary me-1" data-bs-toggle="collapse">
+				<i class="bi bi-arrow-down"></i>
+			</a>
+		</div>
+	</div>
 	<!-- Card Content - Collapse -->
 	<div class="collapse show" id="table_list">
-		<div class="card-body">
+		<div class="card-body p-2">
 			<div class="input-group mb-3">
 				<span class="input-group-text">
 					<label for="table_search_field" class="sr-only">{{ t("search") }}</label>
@@ -17,11 +23,11 @@
 			<div class="list-group">
 				{% for table_name in view.information_scheme %}
 					<div class="btn-group mb-1 table_info">
-						<a href="{{ constant("BASE_URL") ~ "/admin/table/" ~ table_name }}" class="btn btn-outline-dark text-start {{ view.active_table == table_name ? " active" : " " }}">
+						<a href="{{ constant("BASE_URL") ~ "/admin/table/" ~ table_name }}" class="btn btn-outline-dark btn-sm text-start {{ view.active_table == table_name ? " active" : " " }}">
 							<span class="fa fa-table"></span>
 							{{ table_name }}
 						</a>
-						<button type="button" class="btn btn-info dropdown-toggle dropdown-toggle-split" style="max-width: min-content;" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<button type="button" class="btn btn-info btn-sm dropdown-toggle dropdown-toggle-split" style="max-width: min-content;" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							<span class="sr-only">{{ t("toggle") }}</span>
 						</button>
 						<div class="dropdown-menu bg-gradient-info">

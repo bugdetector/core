@@ -2,23 +2,15 @@
 
 namespace Src\Views;
 
-class Sidebar extends ViewGroup
+use CoreDB;
+use Src\Theme\View;
+
+class Sidebar extends View
 {
 
-    public function __construct(string $tag_name, string $wrapper_class)
+    public static function create(): Sidebar
     {
-        parent::__construct($tag_name, $wrapper_class);
-    }
-    
-    public static function create(string $tag_name, string $wrapper_class): Sidebar
-    {
-        return new Sidebar($tag_name, $wrapper_class);
-    }
-
-    public function addNavItem(NavItem $item)
-    {
-        $this->addField($item);
-        return $this;
+        return new Sidebar();
     }
 
     public function getTemplateFile(): string
@@ -26,12 +18,9 @@ class Sidebar extends ViewGroup
         return "sidebar.twig";
     }
 
-    public function setIsOpened(bool $isOpened)
+    public static function getSidebarElements($parent = null)
     {
-        if ($isOpened) {
-            $this->removeClass("toggled");
-        } else {
-            $this->addClass("toggled");
-        }
+        $sidebarClass = CoreDB::config()->getEntityClassName("sidebar");
+        return $sidebarClass::getSidebarElements($parent);
     }
 }

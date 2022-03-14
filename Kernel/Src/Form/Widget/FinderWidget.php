@@ -23,7 +23,7 @@ class FinderWidget extends FormWidget
     {
         parent::__construct($name);
         $this->addClass("finder-input");
-        \CoreDB::controller()->addJsFiles("dist/finder_widget/finder_widget.js");
+        \CoreDB::controller()->addJsFiles("assets/js/components/finder_widget.js");
     }
 
     public static function create(string $name): FinderWidget

@@ -2,13 +2,13 @@
 
 namespace Src\Controller;
 
+use CoreDB\Kernel\BaseController;
 use CoreDB\Kernel\ConfigurationManager;
 use Src\Entity\Translation;
 use Src\Form\LoginForm;
-use Src\BaseTheme\BaseTheme;
 use Src\Entity\User;
 
-class LoginController extends BaseTheme
+class LoginController extends BaseController
 {
     
     public $form;
@@ -17,8 +17,7 @@ class LoginController extends BaseTheme
     public function __construct($arguments)
     {
         parent::__construct($arguments);
-        $this->body_classes = ["bg-gradient-info"];
-        $this->setTitle(Translation::getTranslation("welcome") . "!");
+        $this->setTitle(Translation::getTranslation("login"));
         if (isset($_GET["login_as_user"])) {
             $userClass = ConfigurationManager::getInstance()->getEntityInfo("users")["class"];
             $this->loginAsUser = $userClass::get($_GET["login_as_user"]);

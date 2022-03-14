@@ -31,12 +31,12 @@ class InsertForm extends Form
         ) {
             $this->addField($field);
         }
-        $submitSection = ViewGroup::create("div", "d-flex justify-content-end");
+        $submitSection = ViewGroup::create("div", "d-flex position-fixed bottom-0 end-0 mb-5 me-20");
         $submitSection->addField(
             InputWidget::create("save")
             ->setValue(Translation::getTranslation("save"))
             ->setType("submit")
-            ->addClass("btn btn-primary mt-2 me-2")
+            ->addClass("btn btn-primary btn-sm mt-2 me-2")
             ->removeClass("form-control")
         );
         if ($this->object->ID->getValue()) {
@@ -44,20 +44,20 @@ class InsertForm extends Form
                 InputWidget::create("")
                 ->setValue(Translation::getTranslation("delete"))
                 ->setType("button")
-                ->addClass("btn btn-danger mt-2 me-2")
+                ->addClass("btn btn-danger btn-sm mt-2 me-2")
                 ->addClass("remove_accept")
                 ->removeClass("form-control")
             );
             $submitSection->addField(
                 InputWidget::create("delete")
                 ->setType("submit")
-                ->addClass("btn btn-danger mt-2")
+                ->addClass("btn btn-danger btn-sm mt-2")
                 ->addAttribute("hidden", "true")
             );
         }
         $this->addField($submitSection);
         $controller = \CoreDB::controller();
-        $controller->addJsFiles("dist/insert_form/insert_form.js");
+        $controller->addJsFiles("assets/js/forms/insert_form.js");
         $controller->addFrontendTranslation("record_remove_accept");
         $controller->addFrontendTranslation("record_remove_accept_field");
     }

@@ -2,6 +2,7 @@
 
 namespace CoreDB\Kernel\Database\DataType;
 
+use ReflectionClass;
 use Src\Form\Widget\FormWidget;
 
 abstract class DataTypeAbstract
@@ -22,7 +23,7 @@ abstract class DataTypeAbstract
 
     public function getClassName()
     {
-        return (new \ReflectionClass($this))->getName();
+        return (new ReflectionClass($this))->getName();
     }
 
     /**

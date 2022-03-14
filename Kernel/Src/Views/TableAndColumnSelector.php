@@ -54,7 +54,7 @@ class TableAndColumnSelector extends CollapsableCard
             $this->subCardTitle = Translation::getTranslation("new_field");
             $this->addClass("fields");
         }
-        \CoreDB::controller()->addJsFiles("dist/table_and_column_selector/table_and_column_selector.js");
+        \CoreDB::controller()->addJsFiles("assets/js/views/table_and_column_selector.js");
     }
 
     public function setValue($value)
@@ -86,7 +86,7 @@ class TableAndColumnSelector extends CollapsableCard
                         ->addField(
                             $this->getTableAndColumnSelectboxes($index, $filter)
                         )->addField(
-                            ViewGroup::create("a", "btn btn-outline-danger removefilter mt-2")
+                            ViewGroup::create("a", "btn btn-danger btn-sm removefilter mt-2")
                             ->addAttribute("href", "#")
                             ->addField(
                                 ViewGroup::create("i", "fa fa-trash")
@@ -98,7 +98,7 @@ class TableAndColumnSelector extends CollapsableCard
             }
         }
         $this->content->addField(
-            ViewGroup::create("a", "btn btn-outline-primary mt-2 " .
+            ViewGroup::create("a", "btn btn-primary btn-sm mt-2 " .
             ($this->type == self::TYPE_COMPARISON ? "new_filter" : "new_field"))
             ->addAttribute("href", "#")
             ->addField(
