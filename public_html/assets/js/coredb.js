@@ -185,6 +185,11 @@ function openModal(
                 loadCheckbox(element);
             });
         }
+        if(typeof window.loadHtmlEditor === "function"){
+            modalContent.find('.html-editor').each(function(i,el){
+                loadHtmlEditor(el);
+            })
+        }
     })
     return [modal, modalContent];
 }
