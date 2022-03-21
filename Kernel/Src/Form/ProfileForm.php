@@ -40,7 +40,7 @@ class ProfileForm extends Form
         $userFields["password"]
             ->setValue("")
             ->setDescription("");
-        $userFields["profile_photo"]->fileClass = "rounded-circle";
+        $userFields["profile_photo"]->fileClass = "profile_photo rounded-circle w-200px h-200px";
 
         $password_input = $userFields["password"]
         ->setType("password")
@@ -123,7 +123,24 @@ class ProfileForm extends Form
             } else {
                 $contents = file_get_contents($profilePhoto->getFilePath());
                 $image = imagecreatefromstring($contents);
-                $image = imagescale($image, 200, 200);
+                $imageX          =   imageSX($image);
+                $imageY          =   imageSY($image);
+                $newWidth = 200;
+                $newHeight = 200;
+                $thumbWidth = $newWidth;
+                $thumbHeight = $newHeight;
+                if($imageX > $imageY) 
+                {
+                    $thumbWidth    =   $newWidth;
+                    $thumbHeight    =   $imageY*($newHeight/$imageX);
+                }
+                if($imageX < $imageY) 
+                {
+                    $thumbWidth    =   $imageX*($newWidth/$imageY);
+                    $thumbHeight    =   $newHeight;
+                }
+                $image = imagescale($image, 200);
+
                 $exif = exif_read_data($profilePhoto->getFilePath());
                 if (!empty($exif['Orientation'])) {
                     switch ($exif['Orientation']) {
