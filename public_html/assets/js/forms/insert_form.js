@@ -26,13 +26,4 @@ $(document).on("click", ".remove_accept", function (e) {
             })
         }
     });
-}).on("click", ".image-preview", function(e){
-    e.preventDefault();
-    let img = $(this).children("img");
-    openModal(
-        $(this).data("field-name"),
-        img.clone(),
-        `<button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal">${_t("close")}</button>`,
-        "modal-lg"
-    );
 })

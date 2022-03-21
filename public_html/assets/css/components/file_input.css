@@ -1,3 +1,7 @@
 .image-preview img{
     max-width: 30%;
 }
+
+.profile_photo{
+    object-fit: cover;
+}
