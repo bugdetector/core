@@ -347,9 +347,9 @@ class User extends Model
                 "-" . ini_get("session.gc_maxlifetime") . " seconds"
             )), "<")
             ->condition("created_at", date("Y-m-d H:i:s", strtotime(
-                defined("REMEMBER_ME_TIMEOUT") ? REMEMBER_ME_TIMEOUT : "-" . self::DEFAULT_REMEMBER_ME_TIMEOUT
+                defined("REMEMBER_ME_TIMEOUT") ? "-" . REMEMBER_ME_TIMEOUT : "-" . self::DEFAULT_REMEMBER_ME_TIMEOUT
             )), "<")
-            ->condition("remember_me_token", null)
+            ->condition("remember_me_token", null, "IS NOT")
             ->execute();
     }
 }

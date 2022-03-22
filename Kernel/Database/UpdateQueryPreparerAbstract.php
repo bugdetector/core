@@ -5,12 +5,13 @@ namespace CoreDB\Kernel\Database;
 abstract class UpdateQueryPreparerAbstract extends QueryPreparerAbstract
 {
     protected array $fields = [];
-    protected string $condition = "";
+    protected QueryCondition $condition;
 
     public function __construct(string $table, array $fields)
     {
         $this->table = $table;
         $this->fields = $fields;
+        $this->condition = new QueryCondition($this);
     }
     
     /**
@@ -29,7 +30,7 @@ abstract class UpdateQueryPreparerAbstract extends QueryPreparerAbstract
     abstract public function condition(
         string $column,
         $value,
-        string $operator = "=",
+        string $operator = null,
         string $connect = "AND"
     ): UpdateQueryPreparerAbstract;
     

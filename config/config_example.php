@@ -39,7 +39,7 @@ define("LOGIN_POLICY_ROLES", []);
 /**
  * Write a time for strtotime().
  */
-define("REMEMBER_ME_TIMEOUT", "+1 week");
+define("REMEMBER_ME_TIMEOUT", "1 week");
 
 // To configure PWA feature use the section below.
 if (!IS_CLI) {

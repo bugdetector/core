@@ -86,16 +86,18 @@ class Session extends Model
 
             if ($notify) {
                 $userSessions = $user->getUserSessions();
-                \CoreDB::messenger()->createMessage(
-                    TextElement::create(Translation::getTranslation(
-                        "user_sessions_notify",
-                        [
-                            count($userSessions),
-                            SessionsController::getUrl()
-                        ]
-                    ))->setIsRaw(true),
-                    Messenger::WARNING
-                );
+                if ($userSessions) {
+                    \CoreDB::messenger()->createMessage(
+                        TextElement::create(Translation::getTranslation(
+                            "user_sessions_notify",
+                            [
+                                count($userSessions),
+                                SessionsController::getUrl()
+                            ]
+                        ))->setIsRaw(true),
+                        Messenger::WARNING
+                    );
+                }
             }
         }
     }

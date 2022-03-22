@@ -15,7 +15,7 @@ class QueryCondition
         $this->query = $query;
     }
 
-    public function condition($column, $value = null, $operator = "=", $conjuction = "AND"): QueryCondition
+    public function condition($column, $value = null, $operator = null, $conjuction = "AND"): QueryCondition
     {
         if ($column instanceof QueryCondition) {
             if ($column->condition) {
@@ -32,19 +32,20 @@ class QueryCondition
                     $condition .= ($condition != "(" ? "," : "") . ":{$placeholder}";
                 }
                 $condition .= ")";
-                $operator = "IN";
+                $operator = $operator ?: "IN";
             } elseif ($value instanceof SelectQueryPreparer) {
                 foreach ($value->getParams() as $paramKey => $param) {
                     $this->query->addParameter($paramKey, $param);
                 }
                 $condition = "(" . $value->getQuery() . ")";
             } elseif ($value === null) {
-                $operator = "IS";
+                $operator = $operator ?: "IS";
                 $condition = "NULL";
             } else {
                 $placeholder = $this->query->addParameter($column, $value);
                 $condition = ":$placeholder";
             }
+            $operator = $operator ?: "=";
             $this->condition .= ($this->condition != "" ? $conjuction : "") .
             " `$column`$fieldName $operator $condition ";
         }

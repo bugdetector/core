@@ -235,7 +235,7 @@ class CoreDB
                 "remember_me_token" => $token
             ]);
             $rememberMeTimeout = defined("REMEMBER_ME_TIMEOUT") ?
-            REMEMBER_ME_TIMEOUT : "+" . User::DEFAULT_REMEMBER_ME_TIMEOUT;
+            "+" . REMEMBER_ME_TIMEOUT : "+" . User::DEFAULT_REMEMBER_ME_TIMEOUT;
             setcookie(
                 "session-token",
                 $token,

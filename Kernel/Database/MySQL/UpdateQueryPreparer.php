@@ -33,38 +33,15 @@ class UpdateQueryPreparer extends UpdateQueryPreparerAbstract
     public function condition(
         string $column,
         $value,
-        string $operator = "=",
+        string $operator = null,
         string $connect = "AND"
     ): UpdateQueryPreparerAbstract {
-        $placeholder = str_replace(".", "_", $column);
-        $columnInfo = explode(".", $column);
-        $column = $columnInfo[0];
-        $fieldName = isset($columnInfo[1]) ? ".{$columnInfo[1]}" : "";
-        $index = 0;
-        while (isset($this->params[":$placeholder"])) {
-            $placeholder = "{$column}_{$index}";
-            $index++;
-        }
-        if (is_array($value)) {
-            $condition = "(";
-            foreach ($value as $index => $val) {
-                $condition .= ($condition != "(" ? "," : "") . ":{$placeholder}_{$index}";
-                $this->params[":{$placeholder}_{$index}"] = $val;
-            }
-            $condition .= ")";
-        } elseif ($value === null) {
-            $operator = "IS";
-            $condition = "NULL";
-        } else {
-            $condition = ":$placeholder";
-            $this->params[":$placeholder"] = $value;
-        }
-        $this->condition .= ($this->condition ? $connect : "") . " `$column`$fieldName $operator $condition ";
+        $this->condition->condition($column, $value, $operator, $connect);
         return $this;
     }
 
     public function getCondition(): string
     {
-        return $this->condition ? "WHERE " . $this->condition : "";
+        return $this->condition->condition ? "WHERE " . $this->condition->condition : "";
     }
 }
