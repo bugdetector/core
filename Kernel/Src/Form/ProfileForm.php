@@ -129,14 +129,12 @@ class ProfileForm extends Form
                 $newHeight = 200;
                 $thumbWidth = $newWidth;
                 $thumbHeight = $newHeight;
-                if($imageX > $imageY) 
-                {
+                if ($imageX > $imageY) {
                     $thumbWidth    =   $newWidth;
-                    $thumbHeight    =   $imageY*($newHeight/$imageX);
+                    $thumbHeight    =   $imageY * ($newHeight / $imageX);
                 }
-                if($imageX < $imageY) 
-                {
-                    $thumbWidth    =   $imageX*($newWidth/$imageY);
+                if ($imageX < $imageY) {
+                    $thumbWidth    =   $imageX * ($newWidth / $imageY);
                     $thumbHeight    =   $newHeight;
                 }
                 $image = imagescale($image, 200);
