@@ -29,6 +29,6 @@ class Pagination extends View
 
     public function getPageCount()
     {
-        return intval($this->total_count / $this->limit) + 1;
+        return $this->limit ? intval($this->total_count / $this->limit) + 1 : 0;
     }
 }
