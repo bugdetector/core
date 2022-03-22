@@ -21,7 +21,7 @@ class DeleteQueryPreparer extends DeleteQueryPreparerAbstract
     public function condition(
         $column,
         $value = null,
-        string $operator = "=",
+        string $operator = null,
         string $conjuction = "AND"
     ): DeleteQueryPreparerAbstract {
         $this->condition->condition($column, $value, $operator, $conjuction);

@@ -217,6 +217,9 @@ abstract class Model implements SearchableInterface
 
     protected function update()
     {
+        $query =  CoreDB::database()
+        ->update($this->getTableName(), $this->toArray())
+        ->condition("ID", $this->ID->getValue())->getQuery();
         $result = CoreDB::database()
             ->update($this->getTableName(), $this->toArray())
             ->condition("ID", $this->ID->getValue())

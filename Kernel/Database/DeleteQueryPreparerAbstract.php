@@ -27,7 +27,7 @@ abstract class DeleteQueryPreparerAbstract extends QueryPreparerAbstract
     abstract public function condition(
         string $column,
         $value,
-        string $operator = "=",
+        string $operator = null,
         string $connect = "AND"
     ): DeleteQueryPreparerAbstract;
     
