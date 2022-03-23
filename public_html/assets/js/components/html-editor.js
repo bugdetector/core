@@ -1,6 +1,6 @@
 $(function(){
     window.loadHtmlEditor = function(element){
-        tinymce.init({
+        return tinymce.init({
             target: element,
             toolbar: ['styleselect fontselect fontsizeselect',
                 'undo redo | cut copy paste | bold italic forecolor backcolor | link image | alignleft aligncenter alignright alignjustify | bullist numlist | outdent indent | blockquote | code'],

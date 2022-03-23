@@ -196,13 +196,12 @@ class Translation extends Model
                     e.preventDefault();
                     if($(this).hasClass('html_toggle')){
                         $(this).text('RAW');
-                        editor = loadHtmlEditor($(this).closest('div').find('textarea')[0]).then( instance => {
+                        loadHtmlEditor($(this).closest('div').find('textarea')[0]).then( instance => {
                             editor = instance;
                         } );
-                        console.log(editor);
                     }else{
                         $(this).text('HTML');
-                        editor.destroy();
+                        editor[0].destroy();
                     }
                     $(this).toggleClass('html_toggle raw_toggle');
                 });
