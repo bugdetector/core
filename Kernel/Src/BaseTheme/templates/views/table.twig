@@ -1,5 +1,5 @@
 <div class="table-responsive">
-	<table class="{{ view.classes|join(" ") }}" {{ view.renderAttributes() }}>
+	<table class="{{ view.classes|join(" ") }}" {{ view.renderAttributes()|raw }}>
 		<thead>
 			<tr>
 			{% for key, header in view.headers %}
