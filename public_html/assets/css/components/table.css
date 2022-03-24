@@ -1,6 +1,13 @@
 .table-responsive{
     max-height: 80vh;
 }
+.table-responsive{
+    scrollbar-color: var(--bs-info) var(--bs-light);
+    scrollbar-width: auto;
+}
+.table-responsive:hover{
+    scrollbar-color: var(--bs-active-info) var(--bs-light);
+}
 .table-responsive thead{
     position: sticky;
     top: 0;
