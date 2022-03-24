@@ -2,6 +2,7 @@
 
 namespace Src\Views;
 
+use CoreDB;
 use Src\Theme\ResultsViewer;
 
 class Table extends ResultsViewer
@@ -11,7 +12,8 @@ class Table extends ResultsViewer
     public array $filter_params;
     public function __construct()
     {
-        $this->classes = ["table", "table-striped", "table-light", "table-hover"];
+        $this->classes = ["table", "table-striped", "table-light", "table-hover", "position-relative"];
+        CoreDB::controller()->addCssFiles("assets/css/components/table.css");
     }
 
     public function setOrderable(bool $orderable)

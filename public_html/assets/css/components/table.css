@@ -1,0 +1,17 @@
+.table-responsive{
+    max-height: 80vh;
+}
+.table-responsive thead{
+    position: sticky;
+    top: 0;
+}
+.table-responsive::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+.table-responsive::-webkit-scrollbar-thumb {
+    background-color: var(--bs-info);
+}
+.table-responsive:hover::-webkit-scrollbar-thumb{
+    background-color: var(--bs-active-info);
+}
