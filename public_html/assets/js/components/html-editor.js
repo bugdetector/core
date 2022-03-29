@@ -8,6 +8,8 @@ $(function(){
             branding: false,
             resize: true,
             min_height: 500,
+            relative_urls: false,
+            remove_script_host: false,
             setup: function(editor) {
                 editor.on('change keyup input', function () {
                     editor.save();
