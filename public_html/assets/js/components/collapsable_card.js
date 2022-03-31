@@ -1,5 +1,5 @@
 $(function ($) {
-    new Sortable.default($(".sortable_list").toArray(), {
+    let sortable = new Sortable.default($(".sortable_list").toArray(), {
         animation: 100,
         group: 'sortable_list',
         draggable: '.sortable',
@@ -10,5 +10,11 @@ $(function ($) {
             appendTo: 'body',
             constrainDimensions: true
         }
+    });
+
+    sortable.on("sortable:sorted", function (event) {
+        setTimeout(function(){
+            $(event.data.dragEvent.data.originalSource).trigger("dragend");
+        }, 500);
     });
 })
