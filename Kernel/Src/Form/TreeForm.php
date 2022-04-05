@@ -169,7 +169,7 @@ class TreeForm extends Form
                         TextElement::create(
                             '<i class="fa fa-plus"></i> ' . Translation::getTranslation("add_subitem")
                         )->setIsRaw(true)
-                    )->addClass("btn btn-primary btn-sm add-new-node")
+                    )->addClass("btn btn-primary btn-sm add-new-node w-auto")
                     ->addAttribute("data-parent", $nodeId)
                     ->addAttribute("data-field-name", $treeFieldName)
                 );
