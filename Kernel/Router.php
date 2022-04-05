@@ -106,7 +106,13 @@ class Router
         $mainPath = explode("\\", str_replace(["Src\\Controller\\", "App\\Controller\\"], "", $controller));
         $route = "/";
         foreach ($mainPath as $path) {
-            $route .= str_replace("controller", "", mb_strtolower($path)) . "/";
+            $route .= strtolower(
+                preg_replace(
+                    '/(?<!^)[A-Z]/',
+                    '_$0',
+                    str_replace("Controller", "", $path)
+                )
+            ) . "/";
         }
         return BASE_URL . $route;
     }
