@@ -166,7 +166,7 @@ class InstallForm extends Form
             "user_id" => $userID,
             "role_id" => 1 // Admin role
         ])->execute();
-        
+
         $hashSaltVar = Variable::getByKey("hash_salt");
         if (!$hashSaltVar->value->getValue()) {
             $hashSaltVar->value->setValue($hashSalt);

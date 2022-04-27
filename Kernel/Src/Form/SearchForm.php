@@ -26,10 +26,10 @@ class SearchForm extends Form
     public Pagination $pagination;
     public $page;
     public string $summary_text;
-    
+
     protected array $searchableFields = [];
     protected SelectQueryPreparerAbstract $query;
-    
+
     protected function __construct(SearchableInterface $object, $translateLabels = true)
     {
         parent::__construct();
@@ -48,7 +48,7 @@ class SearchForm extends Form
         $controller->addFrontendTranslation("record_remove_accept_entity");
 
         $search_input_group = new ViewGroup("div", "row");
-        
+
         /**
          * @var FormWidget $searchWidget
          */
@@ -161,7 +161,7 @@ class SearchForm extends Form
         $this->query->limit($this->pagination->limit, ($this->pagination->page - 1) * $this->pagination->limit);
         $queryResult = $this->query->execute();
         $this->data = $queryResult->fetchAll(PDO::FETCH_ASSOC);
-        
+
         foreach ($this->data as &$row) {
             $this->object->postProcessRow($row);
         }

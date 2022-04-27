@@ -8,9 +8,8 @@ use Src\Form\ForgetPasswordForm;
 
 class ForgetpasswordController extends BaseController
 {
-
     public $form;
-    
+
     public function __construct($arguments)
     {
         parent::__construct($arguments);

@@ -14,7 +14,7 @@ class DeleteQueryPreparer extends DeleteQueryPreparerAbstract
         return "DELETE FROM `" . $this->table . "` " .
         $this->getCondition();
     }
-    
+
     /**
      * @inheritdoc
      */

@@ -9,7 +9,6 @@ use Src\Form\Widget\TextareaWidget;
 
 class LongText extends DataTypeAbstract
 {
-
     /**
      * @inheritdoc
      */

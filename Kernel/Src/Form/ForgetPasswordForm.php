@@ -62,13 +62,13 @@ class ForgetPasswordForm extends Form
             $reset_password->key->setValue(hash("SHA256", \CoreDB::currentDate() . json_encode($this->user->ID)));
             $reset_password->save();
         }
-        
+
         $reset_link = BASE_URL . "/reset_password/?USER=" . $this->user->ID . "&KEY=" . $reset_password->key;
         $message = Translation::getEmailTranslation("password_reset", [$reset_link, $reset_link]);
         $username = $this->user->getFullName();
-        
+
         \CoreDB::HTMLMail($this->user->email, Translation::getTranslation("reset_password"), $message, $username);
-        
+
         \CoreDB::messenger()
         ->createMessage(
             Translation::getTranslation("password_reset_mail_success"),

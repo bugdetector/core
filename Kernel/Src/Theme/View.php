@@ -7,7 +7,6 @@ use Src\Theme\CoreRenderer;
 
 abstract class View
 {
-
     public $classes = [];
     public $attributes = [];
 
@@ -40,7 +39,7 @@ abstract class View
         }
         return $this;
     }
-    
+
     public function addAttribute(string $attribute_name, string $attribute_value)
     {
         $this->attributes[$attribute_name] = $attribute_value;
@@ -52,7 +51,7 @@ abstract class View
         unset($this->attributes[$attribute_name]);
         return $this;
     }
-    
+
     public function renderAttributes()
     {
         $render = "";

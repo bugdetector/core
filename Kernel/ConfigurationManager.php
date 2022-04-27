@@ -18,9 +18,8 @@ use Symfony\Component\Yaml\Yaml;
 
 class ConfigurationManager
 {
-
     private static ?ConfigurationManager $instance = null;
-    
+
     private array $entityConfig = [];
 
     private function __construct()

@@ -8,7 +8,6 @@ use Src\Form\TableStructForm;
 
 class StructController extends TableController
 {
-
     public TableStructForm $form;
 
     public function preprocessPage()

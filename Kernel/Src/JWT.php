@@ -22,7 +22,7 @@ class JWT
         $this->alg = $alg;
         $this->typ = $typ;
     }
-    
+
     public static function createFromString(string $string): self
     {
         $parts = explode(".", $string);
@@ -96,7 +96,7 @@ class JWT
             $this->payload = json_decode(base64_decode($payload));
         }
     }
-    
+
     /**
      * Returns token
      * @return string
@@ -117,12 +117,12 @@ class JWT
     {
         return $this->encrypt($this->getEncodedJoseHeader() . "." . $this->getEncodedPayload());
     }
-    
+
     public function validateSignature(string $signature): bool
     {
         return $this->decrypt($signature) == $this->generateSignature();
     }
-    
+
     /**
      * Returns encoded JOSE Header
      * @return string
@@ -131,7 +131,7 @@ class JWT
     {
         return base64_encode(json_encode(["alg" => $this->alg, "typ" => $this->typ]));
     }
-    
+
     /**
      * Sets decoded JOSE Header
      * @return string
@@ -145,7 +145,7 @@ class JWT
         $this->setAlg($decoded_header->alg);
         $this->setTyp($decoded_header->typ);
     }
-    
+
     /**
      * Returns encoded Payload
      * @return string
@@ -154,7 +154,7 @@ class JWT
     {
         return base64_encode(json_encode($this->payload));
     }
-    
+
     /**
      *
      * @return string
@@ -164,7 +164,7 @@ class JWT
         $encrypted_string = openssl_encrypt($pure_string, $this->alg, HASH_SALT, OPENSSL_RAW_DATA, self::IV);
         return base64_encode($encrypted_string);
     }
-    
+
     /**
      *
      * @return type

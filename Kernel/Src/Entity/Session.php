@@ -18,7 +18,6 @@ use Src\Views\TextElement;
 
 class Session extends Model
 {
-
     public const POLICY_NOTIFY_ALL_USERS = "notify_all_users";
     public const POLICY_ROLE_BASED_NOTIFY = "role_based_notify";
     public const POLICY_NOT_NOTIFY = "not_notify";

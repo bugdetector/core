@@ -10,7 +10,6 @@ use Src\Form\Widget\SelectWidget;
 
 class TableReference extends DataTypeAbstract
 {
-
     public string $reference_table = "";
     /**
      * @inheritdoc

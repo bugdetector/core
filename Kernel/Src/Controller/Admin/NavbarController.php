@@ -10,7 +10,6 @@ use Src\Form\TreeForm;
 
 class NavbarController extends AdminController
 {
-
     public ?TreeForm $treeForm;
 
     public function preprocessPage()

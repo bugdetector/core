@@ -10,7 +10,6 @@ use Src\Views\ViewGroup;
 
 class UserInsertForm extends InsertForm
 {
-
     public function __construct(User $user)
     {
         parent::__construct($user);

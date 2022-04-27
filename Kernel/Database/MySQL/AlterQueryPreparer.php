@@ -83,7 +83,7 @@ class AlterQueryPreparer extends AlterQueryPreparerAbstract
                     $this->queries[] =
                     "ALTER TABLE `{$tableDefinition->table_name}` ADD UNIQUE(`{$new_column->column_name}`);";
                 }
-    
+
                 if ($new_column instanceof TableReference) {
                     $this->foreignKeyQueries[] =
                     "ALTER TABLE `{$tableDefinition->table_name}` ADD FOREIGN KEY (`{$new_column->column_name}`) " .

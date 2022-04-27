@@ -11,10 +11,9 @@ use Src\Views\BasicCard;
 
 class AdminController extends BaseController
 {
-
     public $number_of_members;
     public $cards = [];
-    
+
     public function checkAccess(): bool
     {
         return \CoreDB::currentUser()->isAdmin();
@@ -24,7 +23,7 @@ class AdminController extends BaseController
     {
         return "page-admin.twig";
     }
-    
+
     public function preprocessPage()
     {
         $this->setTitle(Variable::getByKey("site_name")->value . " | " . Translation::getTranslation("dashboard"));
@@ -53,7 +52,7 @@ class AdminController extends BaseController
         ->setIconClass("fa-language")
         ->addClass("col-xl-3 col-md-6 mb-4");
     }
-    
+
     public function echoContent()
     {
     }

@@ -4,7 +4,6 @@ namespace Src\Lib;
 
 class CaptchaService
 {
-
     private int $lenght = 6;
     private const CAPTCHA_KEY = "captcha";
 

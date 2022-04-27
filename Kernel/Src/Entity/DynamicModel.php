@@ -7,7 +7,7 @@ use CoreDB\Kernel\Model;
 class DynamicModel extends Model
 {
     public static $table;
-    
+
     public function __construct(string $tableName = null, array $mapData = [])
     {
         self::$table = $tableName;

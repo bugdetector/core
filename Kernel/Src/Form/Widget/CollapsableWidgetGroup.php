@@ -12,13 +12,12 @@ use Src\Views\ViewGroup;
 
 class CollapsableWidgetGroup extends FormWidget
 {
-
     public ViewGroup $fieldGroup;
     public string $newFieldName;
     public string $entityName;
     public array $hiddenFields = [];
     public bool $showAddButtonAndLabel = true;
-    
+
     public function __construct(string $entityName, string $fieldEntityName)
     {
         parent::__construct("{$entityName}[{$fieldEntityName}]");

@@ -17,11 +17,11 @@ class ColumnDefinition extends CollapsableCard
     {
         $this->name = $name;
         $this->dataType = $dataType;
-        
+
         $this->setId($this->name);
         $this->addClass("column_definition");
         $this->opened = true;
-        
+
         $field_name_input = InputWidget::create("{$this->name}[field_name]");
         $field_name_input->setLabel(Translation::getTranslation("column_name"))
             ->setDescription(Translation::getTranslation("available_characters", ["a-z, _, 1-9"]))
@@ -66,7 +66,7 @@ class ColumnDefinition extends CollapsableCard
         ->addClass("field_length")
         ->addAttribute("placeholder", Translation::getTranslation("length"))
         ->addAttribute("required", "true");
-        
+
         $is_unique_checkbox = InputWidget::create("{$this->name}[is_unique]")
         ->setType("checkbox")
         ->setLabel(Translation::getTranslation("unique"))
