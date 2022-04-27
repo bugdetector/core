@@ -10,7 +10,7 @@ abstract class DeleteQueryPreparerAbstract extends QueryPreparerAbstract
         $this->table = $table;
         $this->condition = new QueryCondition($this);
     }
-    
+
      /**
      * Add condition to query
      * @param string $column
@@ -30,7 +30,7 @@ abstract class DeleteQueryPreparerAbstract extends QueryPreparerAbstract
         string $operator = null,
         string $connect = "AND"
     ): DeleteQueryPreparerAbstract;
-    
+
     /**
      * Return condition string
      * @return string

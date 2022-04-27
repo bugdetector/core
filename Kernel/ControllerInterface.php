@@ -4,7 +4,6 @@ namespace CoreDB\Kernel;
 
 interface ControllerInterface
 {
-
     /**
      * Check is page accessible. If returns false not found page will shown
      *

@@ -18,7 +18,6 @@ use Src\Views\TextElement;
 
 class User extends Model
 {
-
     public const DEFAULT_REMEMBER_ME_TIMEOUT = "1 week";
 
     /**
@@ -41,7 +40,7 @@ class User extends Model
     public ShortText $username;
 
     public EntityReference $roles;
-    
+
     /**
     * @var ShortText $name
     * Name
@@ -341,7 +340,7 @@ class User extends Model
             )), "<")
             ->condition("remember_me_token", null)
             ->execute();
-        
+
         \CoreDB::database()->delete(Session::getTableName(), "s")
             ->condition("last_access", date("Y-m-d H:i:s", strtotime(
                 "-" . ini_get("session.gc_maxlifetime") . " seconds"

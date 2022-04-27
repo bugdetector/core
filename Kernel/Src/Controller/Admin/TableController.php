@@ -16,7 +16,7 @@ class TableController extends AdminController
 {
     public $table_name;
     public $table_comment;
-    
+
     public ?SearchForm $table_search = null;
     public SideTableList $side_table_list;
 

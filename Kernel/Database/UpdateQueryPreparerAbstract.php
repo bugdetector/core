@@ -13,7 +13,7 @@ abstract class UpdateQueryPreparerAbstract extends QueryPreparerAbstract
         $this->fields = $fields;
         $this->condition = new QueryCondition($this);
     }
-    
+
     /**
      * Add condition to query
      * @param string $column
@@ -33,6 +33,6 @@ abstract class UpdateQueryPreparerAbstract extends QueryPreparerAbstract
         string $operator = null,
         string $connect = "AND"
     ): UpdateQueryPreparerAbstract;
-    
+
     abstract public function getCondition(): string;
 }

@@ -8,7 +8,6 @@ use Src\JWT;
 
 class FinderController extends ServiceController
 {
-    
     public function checkAccess(): bool
     {
         return \CoreDB::currentUser()->isLoggedIn();

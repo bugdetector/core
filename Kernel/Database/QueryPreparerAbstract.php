@@ -8,7 +8,7 @@ abstract class QueryPreparerAbstract
 {
     protected string $table;
     protected $params = [];
-    
+
     abstract public function getQuery(): string;
 
     public function params(array $params)
@@ -16,7 +16,7 @@ abstract class QueryPreparerAbstract
         $this->params = array_merge($this->params, $params);
         return $this;
     }
-    
+
     public function getParams(): array
     {
         return $this->params;
@@ -38,7 +38,7 @@ abstract class QueryPreparerAbstract
         $this->params[$placeholder] = $value;
         return $placeholder;
     }
-    
+
     public function execute(): PDOStatement
     {
         return \CoreDB::database()->execute($this);

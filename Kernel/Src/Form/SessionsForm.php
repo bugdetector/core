@@ -11,7 +11,6 @@ use Src\Views\TextElement;
 
 class SessionsForm extends Form
 {
-
     public string $method = "POST";
     /** @var Session[] */
     private array $userSessions;

@@ -10,7 +10,6 @@ use Src\Form\TreeForm;
 
 class SidebarController extends AdminController
 {
-
     public ?TreeForm $treeForm;
 
     public function preprocessPage()

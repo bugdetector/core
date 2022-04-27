@@ -10,10 +10,9 @@ use Src\Entity\User;
 
 class LoginController extends BaseController
 {
-    
     public $form;
     public ?User $loginAsUser = null;
-    
+
     public function __construct($arguments)
     {
         parent::__construct($arguments);

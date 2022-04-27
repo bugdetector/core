@@ -9,7 +9,6 @@ use Symfony\Component\Yaml\Yaml;
 
 class SitemapXmlController extends ServiceController
 {
-   
     public function __construct(array $arguments)
     {
         parent::__construct($arguments);
@@ -32,7 +31,7 @@ class SitemapXmlController extends ServiceController
             "<?xml version='1.0' encoding='utf-8'?>" .
             "<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'></urlset>"
         );
-        
+
         /**
          * @var XMLSitemapEntityInterface
          */

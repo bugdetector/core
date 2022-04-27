@@ -8,7 +8,6 @@ use Src\JWT;
 
 class FinderWidget extends FormWidget
 {
-
     /**
      * @property string $finderClass
      *  This class must be implements \CoreDB\Kernel\FilterableInterface

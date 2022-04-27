@@ -14,7 +14,7 @@ class TableDefinition
     public string $table_comment = "";
     public array $fields = [];
     public bool $table_exist = false;
-    
+
     public function __construct(string $table_name)
     {
         $this->table_name = $table_name;

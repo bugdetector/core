@@ -8,7 +8,6 @@ use Src\Form\Widget\InputWidget;
 
 class Integer extends DataTypeAbstract
 {
-
     public $length;
     /**
      * @inheritdoc
