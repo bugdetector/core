@@ -32,7 +32,7 @@ class File extends Model
     public ShortText $file_size;
     public ShortText $mime_type;
     public ShortText $extension;
-    
+
     /**
     * @var EnumaratedList $status
     * File is temporary or permanent.

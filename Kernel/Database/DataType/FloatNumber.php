@@ -8,7 +8,6 @@ use Src\Form\Widget\InputWidget;
 
 class FloatNumber extends DataTypeAbstract
 {
-
     /**
      * @inheritdoc
      */

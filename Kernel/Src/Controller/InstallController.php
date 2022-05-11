@@ -10,7 +10,6 @@ use CoreDB\Kernel\BaseController;
 
 class InstallController extends BaseController
 {
-
     public ?InstallForm $installForm = null;
 
     public function __construct($arguments)

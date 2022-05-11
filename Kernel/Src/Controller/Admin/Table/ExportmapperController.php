@@ -10,7 +10,6 @@ use Src\Controller\NotFoundController;
 
 class ExportmapperController extends TableController
 {
-
     public array $consts = [];
     public array $usedClasses = [];
     public array $fields = [];

@@ -21,7 +21,7 @@ class Variable extends Model
     public ShortText $key;
     public LongText $value;
     public EnumaratedList $type;
-    
+
     /**
      * @inheritdoc
      */

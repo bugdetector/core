@@ -6,7 +6,6 @@ use Exception;
 
 abstract class ServiceController extends BaseController
 {
-
     public const RESPONSE_TYPE_JSON = 0;
     public const RESPONSE_TYPE_RAW = 1;
     public $arguments = [];

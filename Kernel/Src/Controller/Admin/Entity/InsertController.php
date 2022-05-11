@@ -10,7 +10,6 @@ use Src\Entity\Translation;
 
 class InsertController extends EntityController
 {
-
     public ?Model $object = null;
     public $insert_form;
 

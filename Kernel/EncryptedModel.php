@@ -13,7 +13,6 @@ use CoreDB\Kernel\Model;
 
 abstract class EncryptedModel extends Model
 {
-    
     protected const ENCRYPTION_ALG = "AES128";
 
     /**
@@ -93,7 +92,7 @@ abstract class EncryptedModel extends Model
         );
         return base64_encode($encrypted_string);
     }
-    
+
     /**
      *
      * @return type

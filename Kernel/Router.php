@@ -11,7 +11,7 @@ class Router
      * Controller
      */
     private ControllerInterface $controller;
-    
+
     private static $instance = null;
 
 
@@ -31,7 +31,7 @@ class Router
         }
         return self::$instance;
     }
-    
+
     public function route($route = null)
     {
         if (!$route) {

@@ -18,7 +18,6 @@ use Src\Views\ViewGroup;
 
 class TreeForm extends Form
 {
-
     public string $className;
     public string $method = "POST";
     public array $cards = [];
@@ -157,7 +156,7 @@ class TreeForm extends Form
         }
         $content = ViewGroup::create("div", "row")
         ->addField($contentInputs);
-        
+
         if ($element->hasSubItems()) {
             $content->addField(
                 $this->getSubCards($element)

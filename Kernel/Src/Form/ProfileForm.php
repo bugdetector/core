@@ -14,7 +14,6 @@ use Src\Views\ViewGroup;
 
 class ProfileForm extends Form
 {
-
     public const VALID_KEYS = [
         "name",
         "surname",

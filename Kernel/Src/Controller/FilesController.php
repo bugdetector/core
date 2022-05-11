@@ -11,7 +11,7 @@ class FilesController extends ServiceController
     {
         return true;
     }
-    
+
     public function uploaded()
     {
         $this->response_type = self::RESPONSE_TYPE_RAW;

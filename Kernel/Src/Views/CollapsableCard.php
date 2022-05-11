@@ -19,7 +19,7 @@ class CollapsableCard extends View
         $controller->addJsFiles("base_theme/assets/plugins/custom/draggable/draggable.bundle.js");
         $controller->addJsFiles("assets/js/components/collapsable_card.js");
     }
-    
+
     public static function create($title): CollapsableCard
     {
         return new CollapsableCard($title);

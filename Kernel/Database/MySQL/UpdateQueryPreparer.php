@@ -26,7 +26,7 @@ class UpdateQueryPreparer extends UpdateQueryPreparerAbstract
         }
         return $fields;
     }
-    
+
     /**
      * @inheritdoc
      */

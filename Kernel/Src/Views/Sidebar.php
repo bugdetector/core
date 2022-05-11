@@ -7,7 +7,6 @@ use Src\Theme\View;
 
 class Sidebar extends View
 {
-
     public static function create(): Sidebar
     {
         return new Sidebar();

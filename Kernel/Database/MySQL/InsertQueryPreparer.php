@@ -6,7 +6,6 @@ use CoreDB\Kernel\Database\InsertQueryPreparerAbstract;
 
 class InsertQueryPreparer extends InsertQueryPreparerAbstract
 {
-
     /**
      * @inheritdoc
      */
@@ -16,7 +15,7 @@ class InsertQueryPreparer extends InsertQueryPreparerAbstract
                 $this->table . "` " .
                 $this->getBackQuery();
     }
-    
+
     private function getBackQuery()
     {
         $fields = "( ";
@@ -32,7 +31,7 @@ class InsertQueryPreparer extends InsertQueryPreparerAbstract
             $this->params[] = $field;
             $index++;
         }
-        
+
         return $fields . ") " . $values . ")";
     }
 }

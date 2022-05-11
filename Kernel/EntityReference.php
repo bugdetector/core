@@ -13,7 +13,6 @@ use Src\Form\Widget\SelectWidget;
 
 class EntityReference extends DataTypeAbstract
 {
-
     public const CONNECTION_MANY_TO_MANY = "manyToMany";
     public const CONNECTION_MANY_TO_ONE = "manyToOne";
     public const CONNECTION_ONE_TO_MANY = "oneToMany";

@@ -11,7 +11,7 @@ class Watchdog extends Model
     public ShortText $event;
     public ShortText $value;
     public ShortText $ip;
-    
+
     /**
      * @inheritdoc
      */

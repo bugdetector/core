@@ -8,7 +8,6 @@ use Src\Form\Widget\InputWidget;
 
 class File extends TableReference
 {
-
     public function __construct(string $column_name)
     {
         parent::__construct($column_name);

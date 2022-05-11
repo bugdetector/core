@@ -6,7 +6,6 @@ use Src\Form\Widget\FormWidget;
 
 class CaptchaWidget extends FormWidget
 {
-
     public function __construct(string $name)
     {
         parent::__construct($name);

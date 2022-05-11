@@ -45,7 +45,7 @@ abstract class Form extends View
         }
     }
 
-    
+
     public function processForm()
     {
         if (isset($this->request["form_id"]) && $this->request["form_id"] == $this->getFormId()) {

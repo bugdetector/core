@@ -14,7 +14,7 @@ abstract class SelectQueryPreparerAbstract extends QueryPreparerAbstract
     protected $quote;
     protected $distinct = "";
     protected $having;
-    
+
     public function __construct(string $table_name, string $alias = "", bool $quote = true)
     {
         $this->quote = $quote;
@@ -30,7 +30,7 @@ abstract class SelectQueryPreparerAbstract extends QueryPreparerAbstract
      * @return $this
      */
     abstract public function distinct();
-    
+
     /**
      * Join a table
      * @param string $table_name
@@ -90,7 +90,7 @@ abstract class SelectQueryPreparerAbstract extends QueryPreparerAbstract
         $this->join($table_name, $alias, $on, "RIGHT");
         return $this;
     }
-    
+
     /**
      * Add fields to result.
      * If fields is null query will select all columns
@@ -102,7 +102,7 @@ abstract class SelectQueryPreparerAbstract extends QueryPreparerAbstract
      *  Chaining
      */
     abstract public function select(?string $table, array $fields);
-    
+
     /**
      * Add field without a table alias and quote
      * @param array $function
@@ -120,7 +120,7 @@ abstract class SelectQueryPreparerAbstract extends QueryPreparerAbstract
         }
         return $this;
     }
-    
+
     /**
      * Set order direction and column
      * @param $orderBy
@@ -159,7 +159,7 @@ abstract class SelectQueryPreparerAbstract extends QueryPreparerAbstract
         $this->having = $having;
         return $this;
     }
-    
+
 
     /**
      * Add condition to query
@@ -180,7 +180,7 @@ abstract class SelectQueryPreparerAbstract extends QueryPreparerAbstract
         string $operator = null,
         string $connect = "AND"
     ): SelectQueryPreparerAbstract;
-    
+
     /**
      * Range results
      * @param int $limit

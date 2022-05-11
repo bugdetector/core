@@ -4,7 +4,6 @@ namespace Src\Views;
 
 class NavPills extends ViewGroup
 {
-
     public function __construct()
     {
         parent::__construct("div", "nav nav-pills");

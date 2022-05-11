@@ -56,7 +56,7 @@ class Sidebar extends TreeEntityAbstract
     public ShortText $url;
 
     public EntityReference $roles;
-    
+
      /**
     * @var EnumaratedList $available_for
     * Criteria for login status users.

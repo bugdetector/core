@@ -10,7 +10,6 @@ use Src\Views\Sidebar;
 
 class BaseTheme implements ThemeInteface
 {
-
     public Navbar $navbar;
     public Sidebar $sidebar;
     public bool $darkTheme = false;
@@ -56,7 +55,7 @@ class BaseTheme implements ThemeInteface
             "content" => "width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes"
         ]);
     }
-    
+
     protected function addDefaultJsFiles(ControllerInterface $controller)
     {
         $controller->addJsFiles("base_theme/assets/js/scripts.bundle.js");
@@ -76,7 +75,7 @@ class BaseTheme implements ThemeInteface
         }
         $controller->addJsCode("var darkMode = " . var_export($this->darkTheme, true) . ";");
     }
-    
+
     protected function addDefaultTranslations(ControllerInterface $controller)
     {
         $controller->addFrontendTranslation("yes");

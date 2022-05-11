@@ -8,7 +8,6 @@ use Src\Form\Widget\SelectWidget;
 
 class EnumaratedList extends DataTypeAbstract
 {
-
     public array $values = [];
 
     public function __construct(string $column_name)

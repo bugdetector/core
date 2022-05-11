@@ -11,9 +11,8 @@ use Src\Form\ResetPasswordForm;
 
 class ResetPasswordController extends BaseController
 {
-    
     public $form;
-    
+
     public function __construct($arguments)
     {
         parent::__construct($arguments);

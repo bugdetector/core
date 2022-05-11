@@ -6,8 +6,6 @@ use CoreDB\Kernel\BaseController;
 
 class LogoutController extends BaseController
 {
-    
-    
     public function checkAccess(): bool
     {
         return \CoreDB::currentUser()->isLoggedIn();

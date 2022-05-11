@@ -15,7 +15,6 @@ use Src\JWT;
 
 class AjaxController extends ServiceController
 {
-
     public function autocompleteFilter()
     {
         $autocompleteToken = @$_POST["token"];
@@ -24,7 +23,7 @@ class AjaxController extends ServiceController
             $autocompleteData = $_SESSION["autocomplete"][$autocompleteToken];
             $referenceTable = $autocompleteData["referenceTable"];
             $referenceColumn = $autocompleteData["referenceColumn"];
-            
+
             $data = "%{$data}%";
             $query = \CoreDB::database()->select($referenceTable)
                 ->select($referenceTable, ["ID AS id", $referenceColumn . " AS text"])

@@ -8,7 +8,6 @@ use Src\Form\Widget\SelectWidget;
 
 class TableAndColumnSelector extends CollapsableCard
 {
-
     public const TYPE_COMPARISON = "comparison";
     public const TYPE_FIELD = "field";
     public const TYPE_ORDER = "order";

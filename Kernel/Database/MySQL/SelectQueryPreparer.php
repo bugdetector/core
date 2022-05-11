@@ -6,7 +6,6 @@ use CoreDB\Kernel\Database\SelectQueryPreparerAbstract;
 
 class SelectQueryPreparer extends SelectQueryPreparerAbstract
 {
-
     public function getQuery(): string
     {
         return "SELECT " . $this->distinct .
@@ -18,7 +17,7 @@ class SelectQueryPreparer extends SelectQueryPreparerAbstract
                 $this->getOrderBy() . " " .
                 $this->getLimit();
     }
-    
+
     /**
      *
      * @return $this
@@ -45,7 +44,7 @@ class SelectQueryPreparer extends SelectQueryPreparerAbstract
         }
         return $tables;
     }
-    
+
     /**
      * @inheritdoc
      */
@@ -59,7 +58,7 @@ class SelectQueryPreparer extends SelectQueryPreparerAbstract
         }
         return $this;
     }
-    
+
     private function getFields()
     {
         if (!$this->fields) {
@@ -73,7 +72,7 @@ class SelectQueryPreparer extends SelectQueryPreparerAbstract
         }
         return $fields;
     }
-    
+
     private function getOrderBy()
     {
         return $this->orderBy ? "ORDER BY " . $this->orderBy : "";
@@ -88,7 +87,7 @@ class SelectQueryPreparer extends SelectQueryPreparerAbstract
     {
         return $this->having ? "HAVING $this->having" : "";
     }
-    
+
     /**
      * @inheritdoc
      */
@@ -101,12 +100,12 @@ class SelectQueryPreparer extends SelectQueryPreparerAbstract
         $this->condition->condition($column, $value, $operator, $conjuction);
         return $this;
     }
-    
+
     private function getCondition()
     {
         return $this->condition->condition ? "WHERE " . $this->condition->condition : "";
     }
-    
+
     private function getLimit()
     {
         return $this->limit ? "LIMIT " . $this->limit . ($this->offset ? " OFFSET " . $this->offset : "") : "";
