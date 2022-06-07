@@ -6,6 +6,7 @@ $(function ($) {
         let name = button.data("name");
         let hiddenFields = button.data("hidden-fields");
         let index = $(`.collapsible-widget-group[data-entity='${entityName}'] > div > div`).length;
+        let saveText = button.data("save-text") ? button.data("save-text") : button.text();
         $.ajax({
             url: root + "/ajax/getEntityCard",
             method: "post",
@@ -16,7 +17,7 @@ $(function ($) {
                     button.text(),
                     response.find(".card-body").html(),
                     `<button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal">${_t("cancel")}</button>
-                    <button type="button" class="btn btn-primary btn-sm save-entity">${button.text()}</button>`,
+                    <button type="button" class="btn btn-primary btn-sm save-entity">${saveText}</button>`,
                     "modal-lg"
                 );
                 modalContent.find(".save-entity").on("click", function(){
