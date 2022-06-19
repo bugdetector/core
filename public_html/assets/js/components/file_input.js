@@ -1,7 +1,7 @@
 $(function(){
     $(document).on("change", "input[type='file'].asyncronous", function(e){
         var form = $(this).closest("form");
-        var fileId = $( document.getElementById($(this).data("file-for")) );
+        var fileId = $(`[id='${$(this).data("file-for")}']`);
         var formData = new FormData();
         formData.append('file', this.files[0]);
         formData.append("form_build_id", form.find("#input_form_build_id").val());
