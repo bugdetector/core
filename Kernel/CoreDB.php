@@ -37,13 +37,13 @@ class CoreDB
      *      filename = $filename
      *  ]
      */
-    public static function HTMLMail($to, $subject, $message, $toUsername, array $attachments = [])
+    public static function HTMLMail($tos, $subject, $message, $toUsernames, array $attachments = [])
     {
         if(ENVIROMENT != "production"){
             $message .= Translation::getTranslation("originally_send_to", [
-                $to
+                $tos
             ]);
-            $to = Variable::getByKey("test_email_send_address")
+            $tos = Variable::getByKey("test_email_send_address")
             ->value->getValue();
         }
         $siteMail = Variable::getByKey("email_address")->value->getValue();
@@ -59,7 +59,10 @@ class CoreDB
         $mail->Username = $siteMail;
         $mail->Password = Variable::getByKey("email_password")->value->getValue();
         $mail->SetFrom($siteMail, Variable::getByKey("email_username")->value->getValue());
-        $mail->AddAddress($to, $toUsername);
+        $toUsernames = explode(";", $toUsernames);
+        foreach(explode(";", $tos) as $index => $to){
+            $mail->AddAddress($to, @$toUsernames[$index] ?: current($toUsernames));
+        }
         $mail->Subject = $subject;
         $mail->Body = $message;
         foreach($attachments as $attachment){
