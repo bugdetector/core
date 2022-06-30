@@ -1,0 +1,19 @@
+<div class='input_widget'>
+	{% if widget.label %}
+		<label for="{{ widget.attributes["id"] }}" class="form-label fw-bolder fs-6">
+			{{ widget.label }}
+		</label>
+	{% endif %}
+    {{ widget.getFilesTable() }}
+	<label class="btn btn-sm btn-primary multiple-file-input" data-entity="{{ widget.referenceClassEntityName }}" data-name="{{ widget.name }}"
+    data-field-name="{{ t(widget.referenceClassEntityName) }}">
+        <span class="fa fa-file-upload"></span>
+         {{ t("add_new_entity", [t(widget.referenceClassEntityName)]) }}
+         <input class="d-none" type="file" multiple data-key="{{ widget.fileKeyJwt.createToken() }}">
+    </label>
+	{% if widget.description %}
+		<small for="{{ widget.attributes["id"] }}" class="d-block">
+			{{ widget.description }}
+		</small>
+	{% endif %}
+</div>
