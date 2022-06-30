@@ -73,13 +73,12 @@ class InputWidget extends FormWidget
 
     public function addFileKey($entityName, $id, $fieldName, $isNull = true): InputWidget
     {
-        $removeKeyJwt = new JWT();
-        $removeKeyJwt->setPayload([
+        $this->fileKey = new JWT();
+        $this->fileKey->setPayload([
             "entity" => $entityName,
             "id" => $id,
             "field" => $fieldName
         ]);
-        $this->fileKey = $removeKeyJwt;
         $this->isNull = $isNull;
         return $this;
     }

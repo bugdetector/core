@@ -39,7 +39,7 @@ class File extends Model
     */
     public EnumaratedList $status;
 
-    public bool $isImage;
+    public bool $isImage = false;
     /**
      * @inheritdoc
      */
@@ -103,7 +103,7 @@ class File extends Model
         $this->mime_type->setValue($fileInfo["type"]);
         $this->file_size->setValue($fileInfo["size"]);
         $this->extension->setValue(pathinfo($fileInfo["name"], PATHINFO_EXTENSION));
-        if (strpos($this->mime_type, "image/")) {
+        if (strpos($this->mime_type, "image/") === 0) {
             $this->isImage = true;
         }
 
@@ -178,5 +178,50 @@ class File extends Model
             ->setValue($this->ID)
             ->addClass("p-1 asyncronous")
         ];
+    }
+
+    public function getFileIconClass()
+    {
+        $icon = "";
+        switch ($this->extension->getValue()) {
+            case 'pdf':
+                $icon = 'fa fa-file-pdf';
+                break;
+            case 'doc':
+            case 'docx':
+                $icon = 'fa fa-file-word';
+                break;
+            case 'txt':
+                $icon = 'fa fa-file-alt';
+                break;
+            case 'xls':
+            case 'xlsx':
+            case 'xlsm':
+                $icon = 'fa fa-file-excel';
+                break;
+            case 'ppt':
+            case 'pptx':
+                $icon = 'fa fa-file-powerpoint';
+                break;
+            case 'mp3':
+            case 'wmv':
+            case 'mp4':
+            case 'mpeg':
+                $icon = 'fa fa-file-audio';
+                break;
+            case 'html':
+                $icon = 'fa fa-html5';
+                break;
+            case "jpg":
+            case "jpeg":
+            case "png":
+                $icon = "fa fa-image";
+                break;
+            default:
+                $icon = 'fa fa-file';
+                break;
+        }
+
+        return $icon;
     }
 }
