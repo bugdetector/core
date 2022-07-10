@@ -117,6 +117,7 @@ class MultipleFileInputWidget extends FormWidget
                         ->addClass("img-thumbnail ms-2")
                     )->addClass("image-preview")
                     ->addAttribute("data-field-name", Translation::getTranslation($fileFieldName))
+                    ->addAttribute("target", "_blank")
                 );
             } else {
                 $row[0] = ViewGroup::create("div", "mw-50px")
