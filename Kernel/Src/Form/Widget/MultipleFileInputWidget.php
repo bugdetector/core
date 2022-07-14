@@ -47,6 +47,7 @@ class MultipleFileInputWidget extends FormWidget
         ]);
         $controller = CoreDB::controller();
         $controller->addJsFiles([
+            "assets/js/components/file_input.js",
             "assets/js/widget/multiple-file-input-widget.js"
         ]);
     }
