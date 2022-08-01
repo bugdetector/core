@@ -5,13 +5,15 @@ $(function(){
         let className = button.data("class");
         let dialog = null;
         loadData();
-        function loadData(data = [], orderBy = ""){
-            data.push({
-                name: "className",
-                value: className
-            });
+        function loadData(data = [], orderBy = "", url = null){
+            if(!url){
+                data.push({
+                    name: "className",
+                    value: className
+                });
+            }
             $.ajax({
-                url: `${root}/finder/findData` + orderBy,
+                url: url ? url : `${root}/finder/findData` + orderBy,
                 data: data,
                 success: function(response){
                     if(!dialog){
@@ -32,6 +34,10 @@ $(function(){
                     dialogContent.find("th a").on("click", function(e){
                         e.preventDefault();
                         loadData([], $(this).attr("href"));
+                    })
+                    dialogContent.find(".page-link").on("click", function(e){
+                        e.preventDefault();
+                        loadData([], null, $(this).attr("href"));
                     })
                     dialogContent.find("select").each(function(i, el){
                         loadSelect2(el);
