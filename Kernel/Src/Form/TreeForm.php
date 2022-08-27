@@ -209,7 +209,7 @@ class TreeForm extends Form
 
     protected function getSubCards(TreeEntityAbstract $element = null): ViewGroup
     {
-        $subCardGroup = ViewGroup::create("div", "sortable_list col-sm-12 mt-3 min-h-25px");
+        $subCardGroup = ViewGroup::create("div", "sortable_list col-sm-12 mt-3 min-h-50px");
         $subCardGroup->addAttribute("id", $element ? "parent-{$element->ID->getValue()}" : "");
         if ($element) {
             /** @var TreeEntityAbstract $subCard */
