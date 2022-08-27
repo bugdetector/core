@@ -12,7 +12,7 @@ $(function ($) {
         }
     });
 
-    sortable.on("sortable:sorted", function (event) {
+    sortable.on("sortable:stop", function (event) {
         setTimeout(function(){
             $(event.data.dragEvent.data.originalSource).trigger("dragend");
         }, 500);
