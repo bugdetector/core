@@ -61,3 +61,9 @@
   `phpcs --standard=PSR12 <file>` 
 
   `phpcbf --standard=PSR12 <file>`
+
+   6. Git commit işlemleri
+  Lokal veritabanında yapılan değişiklileri dışa aktarmak için aşağıdaki komutu çalıştırın
+  `php bin/console config:export`
+  Sonrasında 5. maddede anlatılan kod standardı kontrol işlemlerini gerçekleştirin.
+  Her commit yapmadan önce bu işlemleri yapın.
