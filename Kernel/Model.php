@@ -19,6 +19,7 @@ use Src\Entity\Translation;
 use Src\Form\InsertForm;
 use Src\Form\Widget\FormWidget;
 use Src\Form\Widget\InputWidget;
+use Src\Form\Widget\TextareaWidget;
 use Src\JWT;
 use Src\Theme\ResultsViewer;
 use Src\Theme\View;
@@ -312,7 +313,7 @@ abstract class Model implements SearchableInterface
     {
         /** @var File */
         $file = File::get($this->$field_name);
-        return $file->getUrl();
+        return $file ? $file->getUrl() : null;
     }
 
     public function getForm()
@@ -346,7 +347,15 @@ abstract class Model implements SearchableInterface
                 if ($field instanceof \CoreDB\Kernel\Database\DataType\File) {
                     /** @var InputWidget $widget*/
                     $widget->addFileKey(
-                        $this->entityName,
+                        $this->entityName ?: $this->getTableName(),
+                        $this->ID->getValue(),
+                        $field_name,
+                        $field->isNull
+                    );
+                } elseif ($field instanceof \CoreDB\Kernel\Database\DataType\LongText) {
+                    /** @var TextareaWidget $widget*/
+                    $widget->addFileKey(
+                        $this->entityName ?: $this->getTableName(),
                         $this->ID->getValue(),
                         $field_name,
                         $field->isNull
