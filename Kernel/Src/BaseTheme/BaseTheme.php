@@ -61,6 +61,7 @@ class BaseTheme implements ThemeInteface
         $controller->addJsFiles("base_theme/assets/js/scripts.bundle.js");
         $controller->addJsFiles("base_theme/assets/plugins/global/plugins.bundle.js");
         $controller->addJsFiles("assets/js/coredb.js");
+        $controller->addJsFiles("base_theme/assets/plugins/custom/prismjs/prismjs.bundle.js");
     }
 
     protected function addDefaultCssFiles(ControllerInterface $controller)
@@ -73,6 +74,7 @@ class BaseTheme implements ThemeInteface
             $controller->addCssFiles("base_theme/assets/plugins/global/plugins.bundle.css");
             $controller->addCssFiles("base_theme/assets/css/style.bundle.css");
         }
+        $controller->addCssFiles("base_theme/assets/plugins/custom/prismjs/prismjs.bundle.css");
         $controller->addJsCode("var darkMode = " . var_export($this->darkTheme, true) . ";");
     }
 
