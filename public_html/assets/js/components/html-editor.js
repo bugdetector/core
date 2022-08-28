@@ -3,8 +3,8 @@ $(function(){
         return tinymce.init({
             target: element,
             toolbar: ['styleselect fontselect fontsizeselect',
-                'undo redo | cut copy paste | bold italic forecolor backcolor | link image | alignleft aligncenter alignright alignjustify | bullist numlist | table | outdent indent | blockquote | code'],
-            plugins : 'autosave link image table lists code',
+                'undo redo | cut copy paste | bold italic forecolor backcolor | link image | alignleft aligncenter alignright alignjustify | bullist numlist | table codesample | outdent indent | blockquote | code visualblocks fullscreen'],
+            plugins : 'autosave link image table lists code codesample visualblocks fullscreen',
             contextmenu: 'cut copy paste',
             branding: false,
             resize: true,
