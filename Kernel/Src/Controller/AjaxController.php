@@ -6,6 +6,7 @@ use CoreDB\Kernel\Messenger;
 use CoreDB\Kernel\ServiceController;
 use CoreDB\Kernel\Model;
 use Exception;
+use Src\Entity\DynamicModel;
 use Src\Entity\File;
 use Src\Entity\Translation;
 use Src\Form\Widget\CollapsableWidgetGroup;
@@ -81,9 +82,14 @@ class AjaxController extends ServiceController
         try {
             $jwt = JWT::createFromString($key);
             $data = $jwt->getPayload();
-            $referenceClass = \CoreDB::config()->getEntityInfo($data->entity)["class"];
-            /** @var Model */
-            $object = $referenceClass::get($data->id) ?: new $referenceClass();
+            $referenceClass = \CoreDB::config()->getEntityClassName($data->entity);
+            if ($referenceClass) {
+                /** @var Model */
+                $object = $referenceClass::get($data->id) ?: new $referenceClass();
+            } else {
+                /** @var Model */
+                $object = DynamicModel::get($data->id, $data->entity) ?: new DynamicModel($data->entity);
+            }
             if (@$data->field) {
                 $file = new File();
                 $file->storeUploadedFile($object->getTableName(), $data->field, $_FILES["file"]);
@@ -91,10 +97,10 @@ class AjaxController extends ServiceController
                 $file->save();
                 $fileWidget = InputWidget::create(@$_POST["name"]);
                 $fileWidget->addFileKey(
-                    $object->entityName,
+                    $object->entityName ?: $object->getTableName(),
                     $object->ID->getValue(),
                     $data->field,
-                    $object->{$data->field}->isNull
+                    $object->{$data->field} ? $object->{$data->field}->isNull : true
                 );
                 $fileWidget->setLabel(@$_POST["label"]);
                 $fileWidget->setType("file");
@@ -114,13 +120,56 @@ class AjaxController extends ServiceController
         try {
             $jwt = JWT::createFromString($key);
             $data = $jwt->getPayload();
-            $referenceClass = \CoreDB::config()->getEntityInfo($data->entity)["class"];
-            /** @var Model */
-            $object = $referenceClass::get($data->id) ?: new $referenceClass();
+            $referenceClass = \CoreDB::config()->getEntityClassName($data->entity);
+            if ($referenceClass) {
+                /** @var Model */
+                $object = $referenceClass::get($data->id) ?: new $referenceClass();
+            } else {
+                /** @var Model */
+                $object = DynamicModel::get($data->id, $data->entity) ?: new DynamicModel($data->entity);
+            }
             if (@$data->field) {
                 $file = new File();
                 $file->storeUploadedFile($object->getTableName(), $data->field, $_FILES["file"]);
                 $file->status->setValue(File::STATUS_TEMPORARY);
+                $file->save();
+                $response = $file->toArray();
+                $response["ID"] = $file->ID->getValue();
+                $response["file_size"] = $file->sizeConvertToString($response["file_size"]);
+                $response["is_image"] = $file->isImage;
+
+                $removeKeyJwt = new JWT();
+                $removeKeyJwt->setPayload([
+                    "entity" => $file->entityName,
+                    "id" => $file->ID->getValue()
+                ]);
+                $response["remove_key"] = $removeKeyJwt->createToken();
+                $response["icon_class"] = $file->getFileIconClass();
+                return $response;
+            }
+        } catch (Exception $ex) {
+            throw new Exception($ex->getMessage());
+        }
+    }
+
+    public function uploadFileForTextarea()
+    {
+        $key = @$_POST["key"];
+        try {
+            $jwt = JWT::createFromString($key);
+            $data = $jwt->getPayload();
+            $referenceClass = \CoreDB::config()->getEntityClassName($data->entity);
+            if ($referenceClass) {
+                /** @var Model */
+                $object = $referenceClass::get($data->id) ?: new $referenceClass();
+            } else {
+                /** @var Model */
+                $object = DynamicModel::get($data->id, $data->entity) ?: new DynamicModel($data->entity);
+            }
+            if (@$data->field) {
+                $file = new File();
+                $file->storeUploadedFile($object->getTableName(), $data->field, $_FILES["file"]);
+                $file->status->setValue(File::STATUS_PERMANENT);
                 $file->save();
                 $response = $file->toArray();
                 $response["ID"] = $file->ID->getValue();

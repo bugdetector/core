@@ -2,10 +2,13 @@
 
 namespace Src\Form\Widget;
 
+use Src\JWT;
 use Src\Theme\View;
 
 class TextareaWidget extends FormWidget
 {
+    public ?JWT $fileKey = null;
+
     public static function create(string $name): TextareaWidget
     {
         return new TextareaWidget($name);
@@ -26,5 +29,17 @@ class TextareaWidget extends FormWidget
             ]);
         }
         return parent::addClass($class_name);
+    }
+
+    public function addFileKey($entityName, $id, $fieldName, $isNull = true): TextareaWidget
+    {
+        $this->fileKey = new JWT();
+        $this->fileKey->setPayload([
+            "entity" => $entityName,
+            "id" => $id,
+            "field" => $fieldName
+        ]);
+        $this->isNull = $isNull;
+        return $this;
     }
 }

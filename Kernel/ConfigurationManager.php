@@ -172,12 +172,12 @@ class ConfigurationManager
 
     public function getEntityInfo(string $entityName)
     {
-        return $this->entityConfig[$entityName];
+        return @$this->entityConfig[$entityName];
     }
 
     public function getEntityClassName(string $entityName)
     {
-        return $this->entityConfig[$entityName]["class"];
+        return @$this->entityConfig[$entityName]["class"];
     }
 
     public function getEntityInstance(string $entityName)
