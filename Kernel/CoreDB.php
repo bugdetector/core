@@ -12,6 +12,8 @@ use Src\Entity\User;
 use Src\Entity\Variable;
 use Src\Entity\Watchdog;
 use Src\JWT;
+use Src\Theme\CoreRenderer;
+use Src\Views\EmailTemplate;
 
 class CoreDB
 {
@@ -37,7 +39,7 @@ class CoreDB
      *      filename = $filename
      *  ]
      */
-    public static function HTMLMail($tos, $subject, $message, $toUsernames, array $attachments = [])
+    public static function HTMLMail($tos, $subject, $message, $toUsernames, array $attachments = [], $template = EmailTemplate::class)
     {
         if(ENVIROMENT != "production"){
             $message .= Translation::getTranslation("originally_send_to", [
@@ -64,7 +66,7 @@ class CoreDB
             $mail->AddAddress($to, @$toUsernames[$index] ?: current($toUsernames));
         }
         $mail->Subject = $subject;
-        $mail->Body = $message;
+        $mail->Body = CoreRenderer::getInstance()->renderView(new $template($message));
         foreach($attachments as $attachment){
             switch($attachment["type"]){
                 case "content":
