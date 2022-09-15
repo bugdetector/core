@@ -78,12 +78,12 @@ class SearchForm extends Form
                     InputWidget::create("search")
                         ->setType("submit")
                         ->setValue(Translation::getTranslation("search"))
-                        ->addClass("btn btn-primary me-sm-1")
+                        ->addClass("btn btn-sm btn-primary me-sm-1")
                 )->addField(
                     InputWidget::create("reset")
                         ->setType("reset")
                         ->setValue(Translation::getTranslation("reset"))
-                        ->addClass("btn btn-danger ms-sm-1")
+                        ->addClass("btn btn-sm btn-danger ms-sm-1")
                 )
         );
 
