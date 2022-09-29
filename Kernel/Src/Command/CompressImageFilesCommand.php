@@ -2,6 +2,7 @@
 
 namespace Src\Command;
 
+use Exception;
 use Src\Entity\File;
 use Src\Entity\Translation;
 use Symfony\Component\Console\Command\Command;
@@ -26,27 +27,44 @@ class CompressImageFilesCommand extends Command
         ->select("f", ["ID"])
         ->execute()->fetchAll(\PDO::FETCH_COLUMN);
         $count = 0;
+        $fail = 0;
         foreach ($imageFileIds as $fileId) {
             /** @var File */
             $file = File::get($fileId);
             if (in_array($file->mime_type->getValue(), ["image/png", "image/jpeg"])) {
-                $filePath = $file->getFilePath();
-                if ($file->mime_type->getValue() == 'image/jpeg') {
-                    $image = imagecreatefromjpeg($filePath);
-                    imagejpeg($image, $filePath, 35);
-                } elseif ($file->mime_type->getValue() == 'image/png') {
-                    $image = imagecreatefrompng($filePath);
-                    if (filesize($filePath) > 204800) { // 20 kB
+                try {
+                    $filePath = "public_html/files/uploaded/{$file->file_path}";
+                    if ($file->mime_type->getValue() == 'image/jpeg') {
+                        $image = imagecreatefromjpeg($filePath);
+                        if (!$image) {
+                            throw new Exception("Image create failed.");
+                        }
                         imagejpeg($image, $filePath, 35);
-                        $file->mime_type->setValue("image/jpeg");
-                    } else {
-                        imagesavealpha($image, true);
-                        imagepng($image, $filePath, 9);
+                    } elseif ($file->mime_type->getValue() == 'image/png') {
+                        $image = imagecreatefrompng($filePath);
+                        if (!$image) {
+                            throw new Exception("Image create failed.");
+                        }
+                        if (filesize($filePath) > 204800) { // 20 kB
+                            imagejpeg($image, $filePath, 35);
+                            $file->mime_type->setValue("image/jpeg");
+                        } else {
+                            imagesavealpha($image, true);
+                            imagepng($image, $filePath, 9);
+                        }
                     }
+                    $file->file_size->setValue(filesize($filePath));
+                    $file->save();
+                    $count++;
+                } catch (Exception $ex) {
+                    $output->writeln("<error>"
+                        . Translation::getTranslation("an_error_occured") . " :" . $ex->getMessage() . "\n" .
+                        json_encode(
+                            $file->toArray()
+                        ) .
+                    "</error>");
+                    $fail++;
                 }
-                $file->file_size->setValue(filesize($filePath));
-                $file->save();
-                $count++;
             }
         }
         $output->writeln("<info>"
