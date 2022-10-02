@@ -1,6 +1,6 @@
 {
     "require": {
-        "twig/twig": "^3.0",
+        "twig/twig": "^3",
         "squizlabs/php_codesniffer": "*",
         "phpmailer/phpmailer": "^6.1",
         "symfony/yaml": "^5.1",
