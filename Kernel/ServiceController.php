@@ -65,6 +65,7 @@ abstract class ServiceController extends BaseController
         }
         switch ($this->response_type) {
             case self::RESPONSE_TYPE_JSON:
+                header("Content-Type: application/json");
                 echo json_encode($response_data);
                 break;
             case self::RESPONSE_TYPE_RAW:
