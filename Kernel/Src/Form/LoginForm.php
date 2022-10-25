@@ -12,11 +12,11 @@ use Src\Form\Widget\InputWidget;
 
 class LoginForm extends Form
 {
-    private const PASSWORD_FALSE_COUNT = "PASSWORD_FALSE_COUNT";
-    private const LOGIN_UNTRUSTED_ACTIONS = "LOGIN_UNTRUSTED_ACTIONS";
+    protected const PASSWORD_FALSE_COUNT = "PASSWORD_FALSE_COUNT";
+    protected const LOGIN_UNTRUSTED_ACTIONS = "LOGIN_UNTRUSTED_ACTIONS";
     public string $method = "POST";
 
-    private ?User $user;
+    protected ?User $user;
 
     public function __construct()
     {
