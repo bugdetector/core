@@ -2,6 +2,8 @@
 
 namespace CoreDB\Kernel;
 
+use Src\Entity\Translation;
+
 class Router
 {
     /**
@@ -39,13 +41,22 @@ class Router
         }
         $this->controller = $this->getControllerFromUrl($route);
         if (!$this->controller->checkAccess()) {
-            if (!\CoreDB::currentUser()->isLoggedIn()) {
+            if ($this->controller instanceof ServiceController) {
+                http_response_code(403);
+                header("Content-Type: application/json");
+                echo json_encode([
+                    "data" => [
+                        "message" => Translation::getTranslation("access_denied")
+                    ]
+                ]);
+            } elseif (!\CoreDB::currentUser()->isLoggedIn()) {
                 \CoreDB::goTo($this->getControllerFromUrl("login")->getUrl(), ["destination" => \CoreDB::requestUrl()]);
             } else {
                 $this->controller = $this->getControllerFromUrl("accessdenied");
             }
+        } else {
+            $this->controller->processPage();
         }
-        $this->controller->processPage();
         die();
     }
 
