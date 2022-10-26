@@ -20,6 +20,12 @@ try{
             date_default_timezone_set(TIMEZONE);
         }
         define("BASE_URL", $_SERVER["REQUEST_SCHEME"]."://".$host.SITE_ROOT);
+        $headers = getallheaders();
+        if(@$headers["Authorization"]){
+            session_id(
+                str_replace("Bearer ", "", $headers["Authorization"])
+            );
+        }
         session_start();
         CoreDB\Kernel\Router::getInstance()->route();
     }
