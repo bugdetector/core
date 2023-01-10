@@ -181,6 +181,8 @@ class CoreDB
             return self::$currentUser;
         } else {
             $userClass = ConfigurationManager::getInstance()->getEntityInfo("users")["class"];
+            $userClass::deleteExpiredSessions();
+            $headers = getallheaders();
             if (isset($_SESSION[BASE_URL . "-UID"])) {
                 $session = Session::get(["session_key" => session_id()]);
                 if($session){
@@ -193,12 +195,12 @@ class CoreDB
                     ]);
                     $session->save();
                 }
-            } elseif (isset($_COOKIE["session-token"])) {
-                $jwt = JWT::createFromString($_COOKIE["session-token"]);
+            } elseif (isset($_COOKIE["session-token"]) || isset($headers["Authorization"])) {
+                $jwt = JWT::createFromString(@$_COOKIE["session-token"] ?: $headers["Authorization"]);
                 /** @var Session */
                 $session = Session::get([
                     "user" => $jwt->getPayload()->ID,
-                    "remember_me_token" => $_COOKIE["session-token"]
+                    "remember_me_token" => @$_COOKIE["session-token"] ?: $headers["Authorization"]
                 ]);
                 if($session){
                     self::$currentUser = $userClass::get([
