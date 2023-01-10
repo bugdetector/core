@@ -1,4 +1,6 @@
 RewriteEngine On
+RewriteCond %{HTTP:Authorization} .
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 RewriteRule ^files index.php [L,NC] 
 RewriteRule ^index\.php$ - [L]
 #RewriteCond %{HTTPS} off
