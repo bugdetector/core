@@ -66,7 +66,9 @@ class CoreDB
             $mail->AddAddress($to, @$toUsernames[$index] ?: current($toUsernames));
         }
         $mail->Subject = $subject;
-        $mail->Body = CoreRenderer::getInstance()->renderView(new $template($message));
+        $mail->Body = CoreRenderer::getInstance(
+            CoreDB::controller()->getTheme()
+        )->renderView(new $template($message));
         foreach($attachments as $attachment){
             switch($attachment["type"]){
                 case "content":
