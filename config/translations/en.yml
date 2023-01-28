@@ -224,3 +224,4 @@ parent: Parent
 language: Language
 navbar: 'Header menu'
 dark-mode: 'Dark Mode'
+states: States

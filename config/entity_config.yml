@@ -16,6 +16,8 @@ viewable_queries:
   class: Src\Entity\ViewableQueries
 variables:
   class: Src\Entity\Variable
+states:
+  class: Src\Entity\State
 sidebar:
   class: Src\Entity\Sidebar
   manyToMany:
