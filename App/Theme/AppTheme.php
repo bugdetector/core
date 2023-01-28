@@ -4,9 +4,8 @@ namespace App\Theme;
 
 use Src\BaseTheme\BaseTheme;
 
-class CustomTheme extends BaseTheme
+class AppTheme extends BaseTheme
 {
-
     public static function getTemplateDirectories(): array
     {
         $directories = parent::getTemplateDirectories();
