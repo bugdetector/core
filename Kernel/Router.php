@@ -53,6 +53,7 @@ class Router
                 \CoreDB::goTo($this->getControllerFromUrl("login")->getUrl(), ["destination" => \CoreDB::requestUrl()]);
             } else {
                 $this->controller = $this->getControllerFromUrl("accessdenied");
+                $this->controller->processPage();
             }
         } else {
             $this->controller->processPage();
