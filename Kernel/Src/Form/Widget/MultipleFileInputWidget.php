@@ -80,7 +80,7 @@ class MultipleFileInputWidget extends FormWidget
         return $fileField->getCheckeds();
     }
 
-    protected function getFileFieldNameOfReferenceClass()
+    public function getFileFieldNameOfReferenceClass()
     {
         $referenceClassInstance = new $this->referenceClass();
         foreach ($referenceClassInstance as $fieldName => $field) {
@@ -115,7 +115,7 @@ class MultipleFileInputWidget extends FormWidget
                     Link::create(
                         "#",
                         Image::create($file->getUrl(), $file->file_name)
-                        ->addClass("img-thumbnail ms-2")
+                        ->addClass("img-thumbnail ms-2 mw-100")
                     )->addClass("image-preview")
                     ->addAttribute("data-field-name", Translation::getTranslation($fileFieldName))
                 );
