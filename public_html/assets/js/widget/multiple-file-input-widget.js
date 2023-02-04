@@ -23,7 +23,7 @@ $(function () {
     }).on("change", ".multiple-file-input input", function () {
         let inputButton = $(this).closest(".multiple-file-input");
         let name = inputButton.data("name");
-        let entity = inputButton.data("entity");
+        let fileField = inputButton.data("file-field");
         let fieldName = inputButton.data("field-name");
         let table = $(`table.multiple-files-content[data-name='${inputButton.data("name")}']`);
         for (file of this.files) {
@@ -57,7 +57,7 @@ $(function () {
                     table.append(`<tr>
                         <td>
                             ${preview}
-                            <input type='hidden' name='${name}[${entity}]' value='${response.data.ID}'/>
+                            <input type='hidden' name='${name}[${fileField}]' value='${response.data.ID}'/>
                         </td>
                         <td>
                             <a href="${root + "/files/uploaded/" + response.data.file_path}">
