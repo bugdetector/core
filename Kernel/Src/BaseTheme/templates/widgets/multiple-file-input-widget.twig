@@ -6,7 +6,7 @@
 	{% endif %}
     {{ widget.getFilesTable() }}
 	<label class="btn btn-sm btn-primary multiple-file-input" data-entity="{{ widget.referenceClassEntityName }}" data-name="{{ widget.name }}"
-    data-field-name="{{ t(widget.referenceClassEntityName) }}">
+    data-field-name="{{ t(widget.referenceClassEntityName) }}" data-file-field="{{ widget.getFileFieldNameOfReferenceClass() }}">
         <span class="fa fa-file-upload"></span>
          {{ t("add_new_entity", [t(widget.referenceClassEntityName)]) }}
          <input class="d-none" type="file" multiple data-key="{{ widget.fileKeyJwt.createToken() }}">
