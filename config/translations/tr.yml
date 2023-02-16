@@ -225,3 +225,5 @@ language: Dil
 navbar: 'Başlık menüsü'
 dark-mode: 'Karanlık Mod'
 states: Durumlar
+push_notification_welcome_title: '%s''e Hoşgeldiniz'
+notification_welcome_text: 'Bildirimlerimize başarıyla abone oldunuz. Güzel haberler için bekleyin.'

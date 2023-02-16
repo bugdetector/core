@@ -141,9 +141,6 @@ abstract class BaseController implements ControllerInterface
 
     public function addJsCode(string $js_code)
     {
-        if (!$this->js_codes) {
-            $this->js_codes = [];
-        }
         $this->js_codes[] = $js_code;
     }
 
@@ -154,6 +151,11 @@ abstract class BaseController implements ControllerInterface
         } elseif (!in_array($css_file_path, $this->css_files)) {
             $this->css_files[] = $css_file_path;
         }
+    }
+
+    public function addCssCode(string $css_code)
+    {
+        $this->css_codes[] = $css_code;
     }
 
     public function addFrontendTranslation($translation_key)

@@ -44,6 +44,10 @@ define("REMEMBER_ME_TIMEOUT", "1 week");
 // To configure PWA feature use the section below.
 if (!IS_CLI) {
     define("PWA_ENABLED", true);
+    define("NOTIFICATIONS_ENABLED", false);
+    define("VAPID_SUBJECT", "");
+    define("PUBLIC_VAPID_KEY", "");
+    define("PRIVATE_VAPID_KEY", "");
     define(
         "PWA_MANIFEST",
         [

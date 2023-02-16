@@ -225,3 +225,5 @@ language: Language
 navbar: 'Header menu'
 dark-mode: 'Dark Mode'
 states: States
+push_notification_welcome_title: 'Welcome to %s'
+notification_welcome_text: 'You have successfully registered for our notifications. Wait for exiting news.'

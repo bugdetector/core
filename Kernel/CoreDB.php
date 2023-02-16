@@ -12,6 +12,7 @@ use Src\Entity\User;
 use Src\Entity\Variable;
 use Src\Entity\Watchdog;
 use Src\JWT;
+use Src\Lib\PushNotification\PushNotificationService;
 use Src\Theme\CoreRenderer;
 use Src\Views\EmailTemplate;
 
@@ -303,6 +304,16 @@ class CoreDB
     public static function controller(): BaseController
     {
         return Router::getInstance()->getController();
+    }
+
+    /**
+     * Returns notification service.
+     * @return PushNotificationService
+     * PushNotificationService instance
+     */
+    public static function notification(): PushNotificationService
+    {
+        return PushNotificationService::getInstance();
     }
 
     /**
