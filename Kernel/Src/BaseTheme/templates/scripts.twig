@@ -1,0 +1,17 @@
+{% for js_file  in controller.js_files %}
+	<script {{ ("http" in js_file) ? "async" }} src="{{ ("http" not in js_file) ? (constant("BASE_URL") ~ "/" ~ js_file) ~ "?" ~ getHashedFilemTime(js_file) : js_file }}"></script>
+{% endfor %}
+{% if constant("PWA_ENABLED") is defined and constant("PWA_ENABLED") %}
+    <script src="{{ constant("BASE_URL") ~ "/pwa_registerer.js" }}"></script>
+    {% if constant("NOTIFICATIONS_ENABLED") is defined and constant("NOTIFICATIONS_ENABLED") %}
+        <script language="javascript">var NOTIFICATIONS_ENABLED=true;</script>
+    {% else %}
+        <script language="javascript">var NOTIFICATIONS_ENABLED=false;</script>
+    {% endif %}
+{% endif %}
+<script language="javascript">
+	var root = "{{ constant("BASE_URL") }}";
+    var translations = {{ controller.frontend_translations|json_encode()|raw }};
+    {{ controller.js_codes|join(";")|raw }}
+    var language = '{{ language() }}';
+</script>

@@ -22,6 +22,9 @@ abstract class ServiceController extends BaseController
     {
         $this->arguments = $arguments;
         $this->method = isset($this->arguments[0]) ? $this->arguments[0] : null;
+        if ($data = json_decode(file_get_contents('php://input'), true)) {
+            $_POST += $data;
+        }
     }
 
     /**
