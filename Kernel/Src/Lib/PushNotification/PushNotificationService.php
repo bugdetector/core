@@ -6,6 +6,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use Psr\Http\Message\ResponseInterface;
 use Src\Entity\PushNotificationSubscription;
+use Src\Entity\User;
 
 class PushNotificationService
 {
@@ -38,6 +39,25 @@ class PushNotificationService
             PUBLIC_VAPID_KEY,
             PRIVATE_VAPID_KEY
         );
+    }
+
+    /**
+     * Push payload to subscriptions of user if exist.
+     * @param PNPayload $payload
+     *  Notification payload
+     * @param User|int $user
+     *  User entity or user id.
+     */
+    public function pushNotificationToUser(PNPayload $payload, User|int $user)
+    {
+        if (![$user instanceof User]) {
+            /** @var User */
+            $user = \CoreDB::config()->getEntityClassName("users")::get($user);
+        }
+        $subscriptions = PushNotificationSubscription::getAll(["user" => $user->ID]);
+        foreach ($subscriptions as $subscription) {
+            $this->push($payload, $subscription);
+        }
     }
 
     /**
