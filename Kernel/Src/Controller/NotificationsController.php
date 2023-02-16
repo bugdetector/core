@@ -11,11 +11,6 @@ use Src\Lib\PushNotification\PNPayload;
 
 class NotificationsController extends ServiceController
 {
-    public function checkAccess(): bool
-    {
-        return true;
-    }
-
     public function enabled()
     {
         return defined("NOTIFICATIONS_ENABLED") ? NOTIFICATIONS_ENABLED : false;
