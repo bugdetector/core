@@ -3,7 +3,7 @@
 {% endfor %}
 {% if constant("PWA_ENABLED") is defined and constant("PWA_ENABLED") %}
     <script src="{{ constant("BASE_URL") ~ "/pwa_registerer.js" }}"></script>
-    {% if constant("NOTIFICATIONS_ENABLED") is defined and constant("NOTIFICATIONS_ENABLED") %}
+    {% if user().isLoggedIn() and constant("NOTIFICATIONS_ENABLED") is defined and constant("NOTIFICATIONS_ENABLED") %}
         <script language="javascript">var NOTIFICATIONS_ENABLED=true;</script>
     {% else %}
         <script language="javascript">var NOTIFICATIONS_ENABLED=false;</script>
