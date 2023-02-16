@@ -51,7 +51,6 @@ class InstallForm extends Form
                 ->setType("password")
                 ->addClass("form-control-user")
                 ->addAttribute("placeholder", Translation::getTranslation("db_password"))
-                ->addAttribute("required", "true")
                 ->addAttribute("autocomplete", "new-password")
         );
         $this->addField(

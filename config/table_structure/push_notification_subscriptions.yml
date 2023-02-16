@@ -1,0 +1,41 @@
+table_name: push_notification_subscriptions
+table_comment: 'Contains configuration for push notification subscription.'
+fields:
+  user:
+    type: table_reference
+    column_name: user
+    primary_key: false
+    autoIncrement: false
+    isNull: true
+    isUnique: false
+    default: null
+    comment: 'User reference.'
+    reference_table: users
+  endpoint:
+    type: short_text
+    column_name: endpoint
+    primary_key: false
+    autoIncrement: false
+    isNull: false
+    isUnique: false
+    default: null
+    comment: 'Subscription endpoint.'
+    length: '500'
+  expirationTime:
+    type: datetime
+    column_name: expirationTime
+    primary_key: false
+    autoIncrement: false
+    isNull: true
+    isUnique: false
+    default: null
+    comment: 'Timestamp converted to date time.'
+  keys:
+    type: text
+    column_name: keys
+    primary_key: false
+    autoIncrement: false
+    isNull: true
+    isUnique: false
+    default: null
+    comment: 'Json formatted keys.'
