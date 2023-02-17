@@ -50,7 +50,7 @@ class PushNotificationService
      */
     public function pushNotificationToUser(PNPayload $payload, User|int $user)
     {
-        if (![$user instanceof User]) {
+        if (!($user instanceof User)) {
             /** @var User */
             $user = \CoreDB::config()->getEntityClassName("users")::get($user);
         }
