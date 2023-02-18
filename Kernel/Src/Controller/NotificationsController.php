@@ -34,7 +34,7 @@ class NotificationsController extends ServiceController
                 Variable::getByKey("site_name")->value->getValue()
             ]),
             Translation::getTranslation("notification_welcome_text"),
-            BASE_URL . "assets/logo.png"
+            BASE_URL . "/assets/logo.png"
         );
         $payload->setTag('news', true);
         $payload->setURL(BASE_URL);
