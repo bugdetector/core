@@ -2,6 +2,7 @@
 
 namespace Src\Lib\PushNotification;
 
+use CoreDB;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use Psr\Http\Message\ResponseInterface;
@@ -54,7 +55,8 @@ class PushNotificationService
             /** @var User */
             $user = \CoreDB::config()->getEntityClassName("users")::get($user);
         }
-        $subscriptions = PushNotificationSubscription::getAll(["user" => $user->ID]);
+        $pnsClass = CoreDB::config()->getEntityClassName("push_notification_subscriptions");
+        $subscriptions = $pnsClass::getAll(["user" => $user->ID]);
         foreach ($subscriptions as $subscription) {
             $this->push($payload, $subscription);
         }

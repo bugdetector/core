@@ -227,3 +227,7 @@ dark-mode: 'Karanlık Mod'
 states: Durumlar
 push_notification_welcome_title: '%s''e Hoşgeldiniz'
 notification_welcome_text: 'Bildirimlerimize başarıyla abone oldunuz. Güzel haberler için bekleyin.'
+push_notification_subscriptions: 'Anlık Bildirim Abonelikleri'
+expirationTime: 'Son Kullanma Tarihi'
+endpoint: 'Uç Nokta'
+keys: Anahtarlar

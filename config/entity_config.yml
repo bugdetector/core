@@ -34,3 +34,5 @@ navbar:
       selfKey: "navbar_id"
       foreignKey: "role_id"
       createIfNotExist: false
+push_notification_subscriptions:
+  class: Src\Entity\PushNotificationSubscription
