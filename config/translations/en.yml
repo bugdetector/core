@@ -231,3 +231,8 @@ push_notification_subscriptions: 'Push Notification Subscriptions'
 expirationTime: 'Expiration Time'
 endpoint: Endpoint
 keys: Keys
+send_push_notifications: 'Send waiting push notifications to subscribers.'
+push_notifications: 'Push Notifications'
+subscription: Subscription
+icon: Icon
+all_notifications_pushed: 'All notifications pushed.'

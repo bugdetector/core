@@ -1,0 +1,53 @@
+table_name: push_notifications
+table_comment: 'Contains push notification data.'
+fields:
+  subscription:
+    type: table_reference
+    column_name: subscription
+    primary_key: false
+    autoIncrement: false
+    isNull: false
+    isUnique: false
+    default: null
+    comment: 'Subscription reference that this push notification to be pushed.'
+    reference_table: push_notification_subscriptions
+  title:
+    type: short_text
+    column_name: title
+    primary_key: false
+    autoIncrement: false
+    isNull: false
+    isUnique: false
+    default: null
+    comment: 'Notification title'
+    length: '255'
+  text:
+    type: short_text
+    column_name: text
+    primary_key: false
+    autoIncrement: false
+    isNull: false
+    isUnique: false
+    default: null
+    comment: 'Notification text.'
+    length: '255'
+  icon:
+    type: short_text
+    column_name: icon
+    primary_key: false
+    autoIncrement: false
+    isNull: false
+    isUnique: false
+    default: null
+    comment: 'Icon url.'
+    length: '500'
+  url:
+    type: short_text
+    column_name: url
+    primary_key: false
+    autoIncrement: false
+    isNull: true
+    isUnique: false
+    default: null
+    comment: 'Url that user will redirect when clicked.'
+    length: '500'

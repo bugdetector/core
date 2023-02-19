@@ -36,7 +36,6 @@ class NotificationsController extends ServiceController
             Translation::getTranslation("notification_welcome_text"),
             BASE_URL . "/assets/logo.png"
         );
-        $payload->setTag('news', true);
         $payload->setURL(BASE_URL);
         \CoreDB::notification()->push($payload, $subscription);
     }

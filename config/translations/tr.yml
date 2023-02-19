@@ -231,3 +231,8 @@ push_notification_subscriptions: 'Anlık Bildirim Abonelikleri'
 expirationTime: 'Son Kullanma Tarihi'
 endpoint: 'Uç Nokta'
 keys: Anahtarlar
+send_push_notifications: 'Bekleyen anlık bildirimleri aboneliklere gönder.'
+push_notifications: 'Anlık Bildirimler'
+subscription: Abonelik
+icon: İkon
+all_notifications_pushed: 'Tüm bildirimler gönderildi.'

@@ -83,4 +83,13 @@ class PushNotificationSubscription extends Model
                 "last_updated"
             ]);
     }
+
+    public function delete(): bool
+    {
+        $pnClass = CoreDB::config()->getEntityClassName("push_notifications");
+        CoreDB::database()->delete($pnClass::getTableName())
+            ->condition("subscription", $this->ID->getValue())
+            ->execute();
+        return parent::delete();
+    }
 }
