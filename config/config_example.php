@@ -45,9 +45,6 @@ define("REMEMBER_ME_TIMEOUT", "1 week");
 if (!IS_CLI) {
     define("PWA_ENABLED", true);
     define("NOTIFICATIONS_ENABLED", false);
-    define("VAPID_SUBJECT", "");
-    define("PUBLIC_VAPID_KEY", "");
-    define("PRIVATE_VAPID_KEY", "");
     define(
         "PWA_MANIFEST",
         [
@@ -73,5 +70,11 @@ if (!IS_CLI) {
         ]
     );
 }
+
+// Configure push notifications id notifications enabled otherwise no need to configure.
+define("VAPID_SUBJECT", "");
+define("PUBLIC_VAPID_KEY", "");
+define("PRIVATE_VAPID_KEY", "");
+
 
 define("THEME", BaseTheme::class);

@@ -2,6 +2,7 @@
 
 namespace Src\Lib\PushNotification;
 
+use CoreDB;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use Psr\Http\Message\ResponseInterface;
@@ -42,6 +43,21 @@ class PushNotificationService
     }
 
     /**
+     * Get users subscriptions.
+     *  @param User|int $user
+     *  User entity or user id.
+     */
+    public function getUserSubscriptions(User|int $user)
+    {
+        if (!($user instanceof User)) {
+            /** @var User */
+            $user = \CoreDB::config()->getEntityClassName("users")::get($user);
+        }
+        $pnsClass = CoreDB::config()->getEntityClassName("push_notification_subscriptions");
+        return $pnsClass::getAll(["user" => $user->ID]);
+    }
+
+    /**
      * Push payload to subscriptions of user if exist.
      * @param PNPayload $payload
      *  Notification payload
@@ -50,11 +66,7 @@ class PushNotificationService
      */
     public function pushNotificationToUser(PNPayload $payload, User|int $user)
     {
-        if (!($user instanceof User)) {
-            /** @var User */
-            $user = \CoreDB::config()->getEntityClassName("users")::get($user);
-        }
-        $subscriptions = PushNotificationSubscription::getAll(["user" => $user->ID]);
+        $subscriptions = $this->getUserSubscriptions($user);
         foreach ($subscriptions as $subscription) {
             $this->push($payload, $subscription);
         }

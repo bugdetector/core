@@ -2,6 +2,7 @@
 
 namespace Src\Command;
 
+use CoreDB;
 use Exception;
 use Src\Entity\Translation;
 use Src\Entity\User;
@@ -27,7 +28,7 @@ class AddAdminUserCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $user = new User();
+        $user = CoreDB::config()->getEntityInstance("users");
         $user->map([
             "username" => $input->getArgument("username"),
             "name" => $input->getArgument("name"),

@@ -2,11 +2,13 @@
 
 namespace Src\Entity;
 
+use CoreDB;
 use CoreDB\Kernel\Database\DataType\DateTime;
 use CoreDB\Kernel\Model;
 use CoreDB\Kernel\Database\DataType\TableReference;
 use CoreDB\Kernel\Database\DataType\ShortText;
 use CoreDB\Kernel\Database\DataType\Text;
+use CoreDB\Kernel\Database\SelectQueryPreparerAbstract;
 
 /**
  * Object relation with table pn_subscriptions
@@ -51,5 +53,43 @@ class PushNotificationSubscription extends Model
     public static function getOrigin($endpoint): string
     {
         return parse_url($endpoint, PHP_URL_SCHEME) . '://' . parse_url($endpoint, PHP_URL_HOST);
+    }
+
+    public function getResultHeaders(bool $translateLabel = true): array
+    {
+        return [
+            "",
+            "ID" => "ID",
+            "user" => Translation::getTranslation("user"),
+            "expirationTime" => Translation::getTranslation("expirationTime"),
+            "created_at" => Translation::getTranslation("created_at"),
+            "last_updated" => Translation::getTranslation("last_updated"),
+        ];
+    }
+
+    public function getResultQuery(): SelectQueryPreparerAbstract
+    {
+        $userClass = CoreDB::config()->getEntityClassName("users");
+        return CoreDB::database()->select(static::getTableName(), "pns")
+            ->join($userClass::getTableName(), "u", "u.ID = pns.user")
+            ->select("pns", [
+                "ID as edit_actions",
+                "ID"
+            ])->selectWithFunction([
+                "CONCAT(u.username, ' - ', u.name, ' ', u.surname) as userinfo",
+            ])->select("pns", [
+                "expirationTime",
+                "created_at",
+                "last_updated"
+            ]);
+    }
+
+    public function delete(): bool
+    {
+        $pnClass = CoreDB::config()->getEntityClassName("push_notifications");
+        CoreDB::database()->delete($pnClass::getTableName())
+            ->condition("subscription", $this->ID->getValue())
+            ->execute();
+        return parent::delete();
     }
 }

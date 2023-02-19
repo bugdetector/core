@@ -4,3 +4,5 @@
 - Src\Command\ClearTemporaryFilesCommand
 - Src\Command\ClearCacheCommand
 - Src\Command\CompressImageFilesCommand
+- Src\Command\SendPushNotificationsCommand
+- Src\Command\SendTestPushNotificationsCommand

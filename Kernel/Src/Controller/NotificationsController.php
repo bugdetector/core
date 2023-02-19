@@ -4,7 +4,6 @@ namespace Src\Controller;
 
 use CoreDB;
 use CoreDB\Kernel\ServiceController;
-use Src\Entity\PushNotificationSubscription;
 use Src\Entity\Translation;
 use Src\Entity\Variable;
 use Src\Lib\PushNotification\PNPayload;
@@ -26,7 +25,8 @@ class NotificationsController extends ServiceController
         $data = $_POST;
         $data["user"] = CoreDB::currentUser()->ID->getValue();
         $data["expirationTime"] = $data["expirationTime"] ? date("Y-m-d H:i:s", $data["expirationTime"]) : null;
-        $subscription = new PushNotificationSubscription();
+
+        $subscription = CoreDB::config()->getEntityInstance("push_notification_subscriptions");
         $subscription->map($data);
         $subscription->save();
         $payload = new PNPayload(
@@ -36,7 +36,6 @@ class NotificationsController extends ServiceController
             Translation::getTranslation("notification_welcome_text"),
             BASE_URL . "/assets/logo.png"
         );
-        $payload->setTag('news', true);
         $payload->setURL(BASE_URL);
         \CoreDB::notification()->push($payload, $subscription);
     }
