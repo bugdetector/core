@@ -199,21 +199,29 @@ class CoreDB
                     $session->save();
                 }
             } elseif (isset($_COOKIE["session-token"]) || isset($headers["Authorization"])) {
-                $jwt = JWT::createFromString(@$_COOKIE["session-token"] ?: $headers["Authorization"]);
-                /** @var Session */
-                $session = Session::get([
-                    "user" => $jwt->getPayload()->ID,
-                    "remember_me_token" => @$_COOKIE["session-token"] ?: $headers["Authorization"]
-                ]);
-                if($session){
-                    self::$currentUser = $userClass::get([
-                        "ID" => $session->user->getValue(),
-                        "status" => User::STATUS_ACTIVE
+                try{
+                    $authorization = null;
+                    if(isset($_COOKIE["session-token"])){
+                        $authorization = isset($_COOKIE["session-token"]);
+                    } else if(isset($headers["Authorization"])){
+                        $authorization = str_replace("Bearer ", "", $headers["Authorization"]);
+                    }
+                    $jwt = JWT::createFromString($authorization);
+                    /** @var Session */
+                    $session = Session::get([
+                        "user" => $jwt->getPayload()->ID,
+                        "remember_me_token" => $authorization
                     ]);
-                    $session->session_key->setValue(session_id());
-                    $session->save();
-                    $_SESSION[BASE_URL . "-UID"] = self::$currentUser->ID;
-                }
+                    if($session){
+                        self::$currentUser = $userClass::get([
+                            "ID" => $session->user->getValue(),
+                            "status" => User::STATUS_ACTIVE
+                        ]);
+                        $session->session_key->setValue(session_id());
+                        $session->save();
+                        $_SESSION[BASE_URL . "-UID"] = self::$currentUser->ID;
+                    }
+                }catch(Exception $ex){}
             }
             if (!self::$currentUser) {
                 self::$currentUser = new $userClass();
