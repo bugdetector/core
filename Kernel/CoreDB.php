@@ -216,13 +216,19 @@ class CoreDB
                         "remember_me_token" => $authorization
                     ]);
                     if($session){
-                        self::$currentUser = $userClass::get([
-                            "ID" => $session->user->getValue(),
-                            "status" => User::STATUS_ACTIVE
-                        ]);
-                        $session->session_key->setValue(session_id());
-                        $session->save();
-                        $_SESSION[BASE_URL . "-UID"] = self::$currentUser->ID;
+                        $rememberMeTimeout = defined("REMEMBER_ME_TIMEOUT") ?
+                            "+" . REMEMBER_ME_TIMEOUT : "+" . User::DEFAULT_REMEMBER_ME_TIMEOUT;
+                        if(strtotime($session->last_access->getValue()) < strtotime("-". $rememberMeTimeout)){
+                            $session->delete();
+                        } else {
+                            self::$currentUser = $userClass::get([
+                                "ID" => $session->user->getValue(),
+                                "status" => User::STATUS_ACTIVE
+                            ]);
+                            $session->session_key->setValue(session_id());
+                            $session->save();
+                            $_SESSION[BASE_URL . "-UID"] = self::$currentUser->ID;
+                        }
                     }
                 }catch(Exception $ex){}
             }
@@ -250,6 +256,7 @@ class CoreDB
             $jwt = new JWT();
             $payload = new stdClass();
             $payload->ID = $user->ID->getValue();
+            $payload->timestamp = time();
             $jwt->setPayload($payload);
             $token = $jwt->createToken();
             $session->map([
