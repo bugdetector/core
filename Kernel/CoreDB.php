@@ -186,6 +186,9 @@ class CoreDB
             $userClass = ConfigurationManager::getInstance()->getEntityInfo("users")["class"];
             $userClass::deleteExpiredSessions();
             $headers = getallheaders();
+            if(!@$headers["Authorization"] && @$_SERVER["REDIRECT_HTTP_AUTHORIZATION"]) {
+                $headers["Authorization"] = @$_SERVER["REDIRECT_HTTP_AUTHORIZATION"];
+            }
             if (isset($_SESSION[BASE_URL . "-UID"])) {
                 $session = Session::get(["session_key" => session_id()]);
                 if($session){
