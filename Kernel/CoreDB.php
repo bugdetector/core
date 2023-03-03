@@ -250,7 +250,8 @@ class CoreDB
         $session->map([
             "session_key" => session_id(),
             "ip_address" => User::getUserIp(),
-            "user" => $user->ID->getValue()
+            "user" => $user->ID->getValue(),
+            "last_access" => \CoreDB::currentDate(),
         ]);
         if ($rememberMe) {
             $jwt = new JWT();
