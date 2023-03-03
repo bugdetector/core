@@ -21,9 +21,12 @@ try{
         }
         define("BASE_URL", $_SERVER["REQUEST_SCHEME"]."://".$host.SITE_ROOT);
         $headers = getallheaders();
+        if(!@$headers["Authorization"] && @$_SERVER["REDIRECT_HTTP_AUTHORIZATION"]) {
+            $headers["Authorization"] = @$_SERVER["REDIRECT_HTTP_AUTHORIZATION"];
+        }
         if(@$headers["Authorization"]){
             $sessionId = str_replace("Bearer ", "", $headers["Authorization"]);
-            if(strlen($sessionId) > 26){
+            if(strlen($sessionId) > ini_get("session.sid_length")){
                 $sessionId = md5($sessionId);
             }
             session_id($sessionId);
