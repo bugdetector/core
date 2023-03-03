@@ -129,7 +129,21 @@ class JWT
      */
     private function getEncodedJoseHeader(): string
     {
-        return base64_encode(json_encode(["alg" => $this->alg, "typ" => $this->typ]));
+        return $this->encodeBase64URL(json_encode(["alg" => $this->alg, "typ" => $this->typ]));
+    }
+
+    /**
+     * Encode data to Base64URL.
+     * @param string $data
+     * @return string   encoded string
+     */
+    private function encodeBase64URL(string $data): string
+    {
+        // Convert Base64 to Base64URL by replacing “+” with “-” and “/” with “_”
+        $url = strtr(base64_encode($data), '+/', '-_');
+
+        // Remove padding character from the end of line and return the Base64URL result
+        return rtrim($url, '=');
     }
 
     /**
