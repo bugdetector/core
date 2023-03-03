@@ -22,9 +22,11 @@ try{
         define("BASE_URL", $_SERVER["REQUEST_SCHEME"]."://".$host.SITE_ROOT);
         $headers = getallheaders();
         if(@$headers["Authorization"]){
-            session_id(
-                str_replace("Bearer ", "", $headers["Authorization"])
-            );
+            $sessionId = str_replace("Bearer ", "", $headers["Authorization"]);
+            if(strlen($sessionId) > 26){
+                $sessionId = md5($sessionId);
+            }
+            session_id($sessionId);
         }
         session_start();
         CoreDB\Kernel\Router::getInstance()->route();
