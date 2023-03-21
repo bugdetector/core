@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="phpcs-standard">
+  <description>Codestyle ruleset for CoreDB</description>
+
+  <!-- Specify standards. -->
+  <rule ref="PSR12"/>
+
+  <arg name="extensions" value="php,yml"/>
+
+  <!-- Specify folders. -->
+  <file>App/</file>
+
+  <rule ref="Generic.Files.LineEndings">
+      <properties>
+          <property name="eolChar" value="\n"/>
+      </properties>
+  </rule>
+</ruleset>
