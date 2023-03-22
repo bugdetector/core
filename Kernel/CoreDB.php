@@ -205,7 +205,7 @@ class CoreDB
                 try{
                     $authorization = null;
                     if(isset($_COOKIE["session-token"])){
-                        $authorization = isset($_COOKIE["session-token"]);
+                        $authorization = $_COOKIE["session-token"];
                     } else if(isset($headers["Authorization"])){
                         $authorization = str_replace("Bearer ", "", $headers["Authorization"]);
                     }
