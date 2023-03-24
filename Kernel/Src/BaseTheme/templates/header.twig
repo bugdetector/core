@@ -2,7 +2,17 @@
 	{% for metaTag  in controller.metaTags %}
 		<meta {% for key, value in metaTag %} {{ key }}="{{ value }}" {% endfor %}>
 	{% endfor %}
-	<link rel="icon" href="{{ constant("BASE_URL") ~ "/assets/favicon.png" }}"/>
+	
+	<link rel="icon" href="{{ constant("BASE_URL") ~ "/assets/favicon.ico" }}"/>
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ constant("BASE_URL") }}/assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ constant("BASE_URL") }}/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ constant("BASE_URL") }}/assets/favicon-16x16.png">
+    <link rel="mask-icon" href="{{ constant("BASE_URL") }}/assets/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="canonical" href="{{ theme.canonicalUrl() }}" />
+    <meta name="msapplication-TileColor" content="#00aba9">
+	<meta name="theme-color" content="#ffffff">
+    <meta name="MobileOptimized" content="width" />
+    <meta name="HandheldFriendly" content="true" />
 	<title>
 		{{ controller.title }}
 	</title>
