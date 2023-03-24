@@ -88,4 +88,9 @@ class BaseTheme implements ThemeInteface
         $controller->addFrontendTranslation("info");
         $controller->addFrontendTranslation("ok");
     }
+
+    public function canonicalUrl()
+    {
+        return BASE_URL . \CoreDB::requestUrl();
+    }
 }
