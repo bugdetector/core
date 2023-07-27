@@ -125,7 +125,7 @@ class CoreDB
 
     public static function cleanXSS($data)
     {
-        if ($data == strip_tags($data)) {
+        if ($data == strip_tags($data ?: "")) {
             // is HTML
             //If not html then no need to sanitize
             return $data;

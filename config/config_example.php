@@ -78,3 +78,7 @@ define("PRIVATE_VAPID_KEY", "");
 
 
 define("THEME", BaseTheme::class);
+
+define("HTTP_AUTH_ENABLED", false);
+define("HTTP_AUTH_USERNAME", "core_user");
+define("HTTP_AUTH_PASSWORD", "core_1234");

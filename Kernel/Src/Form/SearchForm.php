@@ -10,6 +10,7 @@ use Src\Entity\DynamicModel;
 use Src\Entity\Translation;
 use Src\Form\Widget\FormWidget;
 use Src\Form\Widget\InputWidget;
+use Src\Theme\ResultsViewer;
 use Src\Views\CollapsableCard;
 use Src\Views\Pagination;
 use Src\Views\Table;
@@ -26,6 +27,7 @@ class SearchForm extends Form
     public Pagination $pagination;
     public $page;
     public string $summary_text;
+    public ?ResultsViewer $viewer;
 
     protected array $searchableFields = [];
     protected SelectQueryPreparerAbstract $query;

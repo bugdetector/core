@@ -8,6 +8,7 @@ use Src\Theme\View;
 class TextareaWidget extends FormWidget
 {
     public ?JWT $fileKey = null;
+    public bool $isNull = true;
 
     public static function create(string $name): TextareaWidget
     {
