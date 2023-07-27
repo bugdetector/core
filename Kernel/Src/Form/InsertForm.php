@@ -4,7 +4,6 @@ namespace Src\Form;
 
 use CoreDB\Kernel\Model;
 use Exception;
-use Src\Controller\Admin\TableController;
 use Src\Entity\DynamicModel;
 use Src\Entity\Translation;
 use Src\Entity\TreeEntityAbstract;
@@ -122,6 +121,6 @@ class InsertForm extends Form
 
     protected function deleteSuccess(): string
     {
-        \CoreDB::goTo(TableController::getUrl() . $this->object->getTableName());
+        \CoreDB::goTo(BASE_URL . \CoreDB::requestUrl() . "/..");
     }
 }
