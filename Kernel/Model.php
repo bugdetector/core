@@ -190,7 +190,7 @@ abstract class Model implements SearchableInterface
     {
         $this->changed_fields = [];
         foreach ($array as $key => $value) {
-            if (!property_exists($this, $key)) {
+            if (!property_exists($this, $key) && !array_key_exists($key, $this->fields)) {
                 continue;
             }
             if (!$isConstructor && $this->{$key}->getValue() != $value) {

@@ -47,7 +47,7 @@ abstract class EncryptedModel extends Model
      */
     public function toArray(): array
     {
-        foreach ($this as $field_name => $field) {
+        foreach ($this->getAllFields() as $field_name => $field) {
             if (
                 !($field instanceof DataTypeAbstract) ||
                 ($field instanceof EntityReference) ||
