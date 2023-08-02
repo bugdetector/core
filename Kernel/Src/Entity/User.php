@@ -239,7 +239,7 @@ class User extends Model
     public static function validatePassword(string $password)
     {
         return preg_match(
-            "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\p{P})(?=(.*[\W]){1,})[a-zA-Z\d\p{P}]{8,}$/",
+            "/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^\w\s]).{8,}$/",
             $password
         );
     }
