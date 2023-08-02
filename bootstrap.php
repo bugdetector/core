@@ -37,7 +37,7 @@ try {
         if (!@$headers["Authorization"] && @$_SERVER["REDIRECT_HTTP_AUTHORIZATION"]) {
             $headers["Authorization"] = @$_SERVER["REDIRECT_HTTP_AUTHORIZATION"];
         }
-        if (@$headers["Authorization"]) {
+        if (@$headers["Authorization"] && !isset($_COOKIE[session_name()])) {
             $sessionId = str_replace("Bearer ", "", $headers["Authorization"]);
             if (strlen($sessionId) > ini_get("session.sid_length")) {
                 $sessionId = md5($sessionId);
