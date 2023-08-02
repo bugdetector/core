@@ -238,7 +238,10 @@ class User extends Model
 
     public static function validatePassword(string $password)
     {
-        return preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\p{P})[a-zA-Z\d\p{P}]{8,}$/", $password);
+        return preg_match(
+            "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\p{P})(?=(.*[\W]){1,})[a-zA-Z\d\p{P}]{8,}$/",
+            $password
+        );
     }
 
     public function isAdmin()
