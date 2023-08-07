@@ -2,20 +2,33 @@
 
 namespace Src\Theme;
 
-use Src\BaseTheme\BaseTheme;
+use Src\Entity\Cache;
 use Src\Theme\CoreRenderer;
 
 abstract class View
 {
     public $classes = [];
     public $attributes = [];
+    public bool $cachable = false;
 
     abstract public function getTemplateFile(): string;
 
     public function render()
     {
-        echo CoreRenderer::getInstance()
-        ->renderView($this);
+        if ($this->cachable) {
+            $cache = $this->getCache();
+            if (!$cache) {
+                $render = CoreRenderer::getInstance()
+                        ->renderView($this);
+                Cache::set("view_render", $this->getCacheKey(), $render);
+                echo $render;
+            } else {
+                echo $cache->value;
+            }
+        } else {
+            echo CoreRenderer::getInstance()
+                ->renderView($this);
+        }
     }
 
     public function addClass(string $class_name): View
@@ -59,6 +72,22 @@ abstract class View
             $render .= " $name='$value' ";
         }
         return $render;
+    }
+
+    public function getCache(): ?Cache
+    {
+        return Cache::getByBundleAndKey("view_render", $this->getCacheKey());
+    }
+
+    protected function getCacheKey(): string
+    {
+        return static::class;
+    }
+
+    public function setCachable(bool $cachable)
+    {
+        $this->cachable = $cachable;
+        return $this;
     }
 
     public function __toString()

@@ -3,6 +3,7 @@
 namespace Src\Form;
 
 use CoreDB\Kernel\Messenger;
+use Src\Entity\Cache;
 use Src\Entity\Translation;
 use Src\Entity\User;
 use Src\Form\Widget\FormWidget;
@@ -89,8 +90,20 @@ abstract class Form extends View
 
     public function render()
     {
-        return CoreRenderer::getInstance()
-        ->renderForm($this);
+        if ($this->cachable) {
+            $cache = $this->getCache();
+            if (!$cache) {
+                $render = CoreRenderer::getInstance()
+                        ->renderForm($this);
+                Cache::set("view_render", $this->getCacheKey(), $render);
+                echo $render;
+            } else {
+                echo $cache->value;
+            }
+        } else {
+            echo CoreRenderer::getInstance()
+                ->renderForm($this);
+        }
     }
 
     public function setEnctype(string $enctype)

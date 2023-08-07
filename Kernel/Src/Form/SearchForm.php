@@ -159,24 +159,31 @@ class SearchForm extends Form
 
     public function processForm()
     {
-        $this->submit();
-        $this->query->limit($this->pagination->limit, ($this->pagination->page - 1) * $this->pagination->limit);
-        $queryResult = $this->query->execute();
-        $this->data = $queryResult->fetchAll(PDO::FETCH_ASSOC);
+        if (!$this->getCache()) {
+            $this->submit();
+            $this->query->limit($this->pagination->limit, ($this->pagination->page - 1) * $this->pagination->limit);
+            $queryResult = $this->query->execute();
+            $this->data = $queryResult->fetchAll(PDO::FETCH_ASSOC);
 
-        foreach ($this->data as &$row) {
-            $this->object->postProcessRow($row);
+            foreach ($this->data as &$row) {
+                $this->object->postProcessRow($row);
+            }
+            $this->pagination->total_count = $this->query->limit(0)->execute()->rowCount();
+            $this->summary_text = Translation::getTranslation("result_summary", [
+                $this->pagination->total_count,
+                ($this->pagination->page - 1) * $this->pagination->limit + 1,
+                ($this->pagination->page) * $this->pagination->limit > $this->pagination->total_count ?
+                $this->pagination->total_count : ($this->pagination->page) * $this->pagination->limit
+            ]);
+            $this->viewer = $this->object->getResultsViewer()
+            ->setHeaders($this->headers)
+            ->setData($this->data)
+            ->setOrderable(true);
         }
-        $this->pagination->total_count = $this->query->limit(0)->execute()->rowCount();
-        $this->summary_text = Translation::getTranslation("result_summary", [
-            $this->pagination->total_count,
-            ($this->pagination->page - 1) * $this->pagination->limit + 1,
-            ($this->pagination->page) * $this->pagination->limit > $this->pagination->total_count ?
-            $this->pagination->total_count : ($this->pagination->page) * $this->pagination->limit
-        ]);
-        $this->viewer = $this->object->getResultsViewer()
-        ->setHeaders($this->headers)
-        ->setData($this->data)
-        ->setOrderable(true);
+    }
+
+    protected function getCacheKey(): string
+    {
+        return hash("sha256", json_encode($this->request) . static::class);
     }
 }
