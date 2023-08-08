@@ -3,6 +3,7 @@
 namespace Src\Theme;
 
 use Src\Entity\Cache;
+use Src\Entity\Translation;
 use Src\Theme\CoreRenderer;
 
 abstract class View
@@ -81,7 +82,7 @@ abstract class View
 
     protected function getCacheKey(): string
     {
-        return static::class;
+        return Translation::getLanguage() . static::class;
     }
 
     public function setCachable(bool $cachable)

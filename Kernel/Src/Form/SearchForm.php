@@ -184,6 +184,6 @@ class SearchForm extends Form
 
     protected function getCacheKey(): string
     {
-        return hash("sha256", json_encode($this->request) . static::class);
+        return hash("sha256", json_encode($this->request) . Translation::getLanguage() . static::class);
     }
 }
