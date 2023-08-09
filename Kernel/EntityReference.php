@@ -59,7 +59,7 @@ class EntityReference extends DataTypeAbstract
      */
     public function setValue($value)
     {
-        $this->value = array_filter($value);
+        $this->value = is_array($value) ? array_filter($value) : $value;
     }
 
     /**
