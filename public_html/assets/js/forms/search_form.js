@@ -51,7 +51,7 @@ var loadMoreIntersectionObserver = new IntersectionObserver(function (entries) {
             let target = $(entries[0].target);
             let nextPage = target.data("page");
             target.removeClass("load-more-section invisible");
-            fetch(root + "/ajax/getNextPage" + (location.search ? location.search + "&" : "?") + new URLSearchParams({
+            fetch(root + "/search/getNextPage" + (location.search ? location.search + "&" : "?") + new URLSearchParams({
                     page: nextPage
                 }), {
                     method: "post",
