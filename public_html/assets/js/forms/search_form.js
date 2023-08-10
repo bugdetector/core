@@ -52,26 +52,28 @@ var loadMoreIntersectionObserver = new IntersectionObserver(function (entries) {
             let nextPage = target.data("page");
             target.removeClass("load-more-section invisible");
             fetch(root + "/search/getNextPage" + (location.search ? location.search + "&" : "?") + new URLSearchParams({
-                    page: nextPage
-                }), {
-                    method: "post",
-                    body: JSON.stringify({
-                        token: target.data("token")
-                    })
-                }
+                page: nextPage
+            }), {
+                method: "post",
+                body: JSON.stringify({
+                    token: target.data("token")
+                })
+            }
             )
-            .then((response) => response.json())
-            .then((response) => {
-                if (response.data.status) {
-                    let resultItems = $(response.data.render).find(".result-viewer");
-                    target.closest("form").find(".result-viewer:last").after(resultItems);
-                    target.addClass("load-more-section invisible")
-                        .data("page", nextPage + 1);
-                    ajaxActive = false;
-                } else {
-                    target.remove();
-                }
-            })
+                .then((response) => response.json())
+                .then((response) => {
+                    if (response.data.status) {
+                        let resultItems = $(response.data.render).find(".result-viewer");
+                        let form = target.closest("form");
+                        form.find(".result-viewer:last").after(resultItems);
+                        target.addClass("load-more-section invisible")
+                            .data("page", nextPage + 1);
+                        ajaxActive = false;
+                        form.trigger("autoload-page", [resultItems, nextPage]);
+                    } else {
+                        target.remove();
+                    }
+                })
         }
     }
 }, { threshold: [1] });
