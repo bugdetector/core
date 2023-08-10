@@ -193,7 +193,7 @@ class SearchForm extends Form
         $tokenData = [
             "form" => static::class,
             "object" => serialize($this->object),
-            "theme" => CoreRenderer::getInstance()->theme::class,
+            "theme" => get_class(CoreRenderer::getInstance()->theme),
             "time" => time()
         ];
         $autoLoadToken = hash("sha256", json_encode($tokenData));
