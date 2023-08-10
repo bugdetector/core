@@ -51,26 +51,25 @@ var loadMoreIntersectionObserver = new IntersectionObserver(function (entries) {
             let target = $(entries[0].target);
             let nextPage = target.data("page");
             target.removeClass("load-more-section invisible");
-            $.ajax({
-                url: root + "/ajax/getNextPage" + (
-                    location.search ? location.search + "&" : "?"
-                ) + new URLSearchParams({
+            fetch(root + "/ajax/getNextPage" + (location.search ? location.search + "&" : "?") + new URLSearchParams({
                     page: nextPage
-                }),
-                method: "post",
-                data: {
-                    token: target.data("token")
-                },
-                success: function (response) {
-                    if (response.data.status) {
-                        let resultItems = $(response.data.render).find(".result-viewer");
-                        target.closest("form").find(".result-viewer:last").after(resultItems);
-                        target.addClass("load-more-section invisible")
-                            .data("page", nextPage + 1);
-                        ajaxActive = false;
-                    } else {
-                        target.remove();
-                    }
+                }), {
+                    method: "post",
+                    body: JSON.stringify({
+                        token: target.data("token")
+                    })
+                }
+            )
+            .then((response) => response.json())
+            .then((response) => {
+                if (response.data.status) {
+                    let resultItems = $(response.data.render).find(".result-viewer");
+                    target.closest("form").find(".result-viewer:last").after(resultItems);
+                    target.addClass("load-more-section invisible")
+                        .data("page", nextPage + 1);
+                    ajaxActive = false;
+                } else {
+                    target.remove();
                 }
             })
         }
