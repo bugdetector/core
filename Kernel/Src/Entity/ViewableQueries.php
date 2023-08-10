@@ -2,6 +2,7 @@
 
 namespace Src\Entity;
 
+use CoreDB\Kernel\Database\DataType\Checkbox;
 use CoreDB\Kernel\Model;
 use CoreDB\Kernel\Database\DataType\ShortText;
 use CoreDB\Kernel\Database\DataType\Text;
@@ -86,6 +87,11 @@ class ViewableQueries extends Model implements FilterableInterface
      * Enter a view name if you selected result template card.
      */
     public ShortText $card_template_class;
+    /**
+    * @var Checkbox $load_async
+    * Load data async.
+    */
+    public Checkbox $load_async;
 
     /**
      * @inheritdoc
@@ -178,10 +184,16 @@ class ViewableQueries extends Model implements FilterableInterface
     {
         if ($this->ID->getValue() && $this->result_view_template->getValue() != self::RESULT_TEMPLATE_TABLE) {
             $cardClass = $this->card_template_class->getValue();
-            return new $cardClass();
+            /** @var ResultsViewer */
+            $viewer = new $cardClass();
         } else {
-            return parent::getResultsViewer();
+            /** @var ResultsViewer */
+            $viewer = parent::getResultsViewer();
         }
+        $viewer->setAsyncLoad(
+            boolval($this->load_async->getValue())
+        );
+        return $viewer;
     }
 
     /**

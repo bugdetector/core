@@ -3,7 +3,6 @@
 namespace Src\Form\Widget;
 
 use Src\Entity\Translation;
-use Src\JWT;
 
 class SelectWidget extends FormWidget
 {
@@ -82,11 +81,7 @@ class SelectWidget extends FormWidget
     public function setAutoComplete($referenceTable, $referenceColumn): SelectWidget
     {
         $this->addClass("autocomplete");
-        $autoCompleteJWT = new JWT();
-        $autoCompleteJWT->setPayload([
-            "autocomplete" => "autocomplete-" . $referenceTable . random_int(0, 100)
-        ]);
-        $autoCompleteToken = $autoCompleteJWT->createToken();
+        $autoCompleteToken = hash("sha256", "autocomplete-" . $referenceTable . random_int(0, 100));
         $_SESSION["autocomplete"][$autoCompleteToken] = [
             "referenceTable" => $referenceTable,
             "referenceColumn" => $referenceColumn

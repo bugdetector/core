@@ -236,3 +236,5 @@ push_notifications: 'Push Notifications'
 subscription: Subscription
 icon: Icon
 all_notifications_pushed: 'All notifications pushed.'
+load_async: 'Load Async'
+'Load data async.': 'Load data async.'

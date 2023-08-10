@@ -3,8 +3,16 @@
 {% block fields %}
 	{{ form.search_input_group }}
 	{{ form.summary_text }}
-	{{ form.viewer }}
-	{{ form.pagination }}
+	<div class="result-viewer">
+		{{ form.viewer }}
+	</div>
+	{% if form.viewer.useAsyncLoad %}
+		<div class="load-more-section invisible d-flex justify-content-center" data-page="{{ form.page + 1 }}" data-token="{{ form.getAsynchLoadToken() }}">
+			<span class="spinner-border text-primary"></span>
+		</div>
+	{% else %}
+		{{ form.pagination }}
+	{% endif %}
 	{% for field in form.fields %}
 		{{ field }}
 	{% endfor %}
