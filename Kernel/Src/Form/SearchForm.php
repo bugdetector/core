@@ -10,7 +10,6 @@ use Src\Entity\DynamicModel;
 use Src\Entity\Translation;
 use Src\Form\Widget\FormWidget;
 use Src\Form\Widget\InputWidget;
-use Src\Theme\CoreRenderer;
 use Src\Theme\ResultsViewer;
 use Src\Views\CollapsableCard;
 use Src\Views\Pagination;
@@ -147,7 +146,10 @@ class SearchForm extends Form
                     $condition->condition($column_name, $dates[0] . " 00:00:00", ">=")
                     ->condition($column_name, $dates[1] . " 23:59:59", "<=");
                 } elseif (@$this->object->$column_name instanceof EntityReference) {
-                    $condition->condition("{$column_name}.ID", $params[$paramField], "IN");
+                    $params[$paramField] = is_array($params[$paramField]) ? array_filter($params[$paramField]) : [];
+                    if ($params[$paramField]) {
+                        $condition->condition("{$column_name}.ID", $params[$paramField], "IN");
+                    }
                 } elseif (is_array($params[$paramField])) {
                     $condition->condition($column_name, $params[$paramField]);
                 } else {
@@ -176,39 +178,15 @@ class SearchForm extends Form
                 ($this->pagination->page) * $this->pagination->limit > $this->pagination->total_count ?
                 $this->pagination->total_count : ($this->pagination->page) * $this->pagination->limit
             ]);
-        }
-        $this->viewer = $this->object->getResultsViewer()
+            $this->viewer = $this->object->getResultsViewer()
             ->setHeaders($this->headers)
             ->setData($this->data)
             ->setOrderable(true);
-    }
-
-    public function render()
-    {
-        if ($this->viewer->useAsyncLoad) {
-            \CoreDB::controller()->addJsCode("$(() => {
-                $('.load-more-section').data('token', '" . $this->getAsynchLoadToken() . "')
-                    .data('page', " . ( $this->page + 1 ) . ")
-            })");
         }
-        parent::render();
     }
 
     protected function getCacheKey(): string
     {
         return hash("sha256", json_encode($this->request) . Translation::getLanguage() . static::class);
-    }
-
-    public function getAsynchLoadToken(): string
-    {
-        $tokenData = [
-            "form" => static::class,
-            "object" => serialize($this->object),
-            "theme" => get_class(CoreRenderer::getInstance()->theme),
-            "time" => time()
-        ];
-        $autoLoadToken = hash("sha256", json_encode($tokenData));
-        $_SESSION["autoload"][$autoLoadToken] = $tokenData;
-        return $autoLoadToken;
     }
 }
