@@ -7,6 +7,7 @@ abstract class ResultsViewer extends View
     public array $headers;
     public array $data;
     public bool $orderable = false;
+    public bool $useAsyncLoad = false;
     public function setHeaders(array $headers)
     {
         $this->headers = $headers;
@@ -23,5 +24,10 @@ abstract class ResultsViewer extends View
     {
         $this->orderable = $orderable;
         return $this;
+    }
+
+    public function setAsyncLoad($asyncLoad)
+    {
+        $this->useAsyncLoad = $asyncLoad;
     }
 }

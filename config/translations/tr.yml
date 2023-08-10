@@ -236,3 +236,5 @@ push_notifications: 'Anlık Bildirimler'
 subscription: Abonelik
 icon: İkon
 all_notifications_pushed: 'Tüm bildirimler gönderildi.'
+load_async: 'Asenkron Yükle'
+'Load data async.': 'Veriyi asenkron yükle.'

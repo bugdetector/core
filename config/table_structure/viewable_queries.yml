@@ -89,3 +89,12 @@ fields:
     default: null
     comment: 'Enter a view name if you selected result view template as card.'
     length: '500'
+  load_async:
+    type: checkbox
+    column_name: load_async
+    primary_key: false
+    autoIncrement: false
+    isNull: true
+    isUnique: false
+    default: null
+    comment: 'Load data async.'

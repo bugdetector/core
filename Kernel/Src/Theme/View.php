@@ -8,6 +8,8 @@ use Src\Theme\CoreRenderer;
 
 abstract class View
 {
+    protected ?Cache $cache = null;
+
     public $classes = [];
     public $attributes = [];
     public bool $cachable = false;
@@ -77,7 +79,10 @@ abstract class View
 
     public function getCache(): ?Cache
     {
-        return Cache::getByBundleAndKey("view_render", $this->getCacheKey());
+        if (!$this->cache) {
+            $this->cache = Cache::getByBundleAndKey("view_render", $this->getCacheKey());
+        }
+        return $this->cache;
     }
 
     protected function getCacheKey(): string
