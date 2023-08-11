@@ -191,7 +191,7 @@ class SearchForm extends Form
         if ($this->viewer->useAsyncLoad) {
             \CoreDB::controller()->addJsCode("$(() => {
                 $('.load-more-section').data('token', '" . $this->getAsynchLoadToken() . "')
-                    .data('page', " . $this->page + 1 . ")
+                    .data('page', " . ($this->page + 1) . ")
             })");
         }
         parent::render();
