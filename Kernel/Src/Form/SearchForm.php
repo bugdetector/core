@@ -10,6 +10,7 @@ use Src\Entity\DynamicModel;
 use Src\Entity\Translation;
 use Src\Form\Widget\FormWidget;
 use Src\Form\Widget\InputWidget;
+use Src\Theme\CoreRenderer;
 use Src\Theme\ResultsViewer;
 use Src\Views\CollapsableCard;
 use Src\Views\Pagination;
@@ -185,8 +186,32 @@ class SearchForm extends Form
         }
     }
 
+    public function render()
+    {
+        if ($this->viewer->useAsyncLoad) {
+            \CoreDB::controller()->addJsCode("$(() => {
+                $('.load-more-section').data('token', '" . $this->getAsynchLoadToken() . "')
+                    .data('page', " . $this->page + 1 . ")
+            })");
+        }
+        parent::render();
+    }
+
     protected function getCacheKey(): string
     {
         return hash("sha256", json_encode($this->request) . Translation::getLanguage() . static::class);
+    }
+
+    public function getAsynchLoadToken(): string
+    {
+        $tokenData = [
+            "form" => static::class,
+            "object" => serialize($this->object),
+            "theme" => get_class(CoreRenderer::getInstance()->theme),
+            "time" => time()
+        ];
+        $autoLoadToken = hash("sha256", json_encode($tokenData));
+        $_SESSION["autoload"][$autoLoadToken] = $tokenData;
+        return $autoLoadToken;
     }
 }
