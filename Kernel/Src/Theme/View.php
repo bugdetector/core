@@ -79,7 +79,7 @@ abstract class View
 
     public function getCache(): ?Cache
     {
-        if (!$this->cache) {
+        if (!$this->cache && defined("ENVIROMENT") && ENVIROMENT != "development") {
             $this->cache = Cache::getByBundleAndKey("view_render", $this->getCacheKey());
         }
         return $this->cache;
