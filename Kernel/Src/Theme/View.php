@@ -18,7 +18,7 @@ abstract class View
 
     public function render()
     {
-        if ($this->cachable) {
+        if ($this->cachable && defined("ENVIROMENT") && ENVIROMENT != "development") {
             $cache = $this->getCache();
             if (!$cache) {
                 $render = CoreRenderer::getInstance()
