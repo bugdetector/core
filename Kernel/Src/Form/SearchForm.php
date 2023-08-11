@@ -179,11 +179,11 @@ class SearchForm extends Form
                 ($this->pagination->page) * $this->pagination->limit > $this->pagination->total_count ?
                 $this->pagination->total_count : ($this->pagination->page) * $this->pagination->limit
             ]);
-            $this->viewer = $this->object->getResultsViewer()
+        }
+        $this->viewer = $this->object->getResultsViewer()
             ->setHeaders($this->headers)
             ->setData($this->data)
             ->setOrderable(true);
-        }
     }
 
     public function render()
