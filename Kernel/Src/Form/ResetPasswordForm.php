@@ -80,8 +80,18 @@ class ResetPasswordForm extends Form
         $message = Translation::getTranslation("password_reset_success");
         $username = $this->user->getFullName();
 
-        \CoreDB::HTMLMail($this->user->email, Translation::getTranslation("reset_password"), $message, $username);
-
-        $this->setMessage(Translation::getTranslation("password_reset_success"));
+        $sent = \CoreDB::HTMLMail(
+            $this->user->email,
+            Translation::getTranslation("reset_password"),
+            $message,
+            $username
+        );
+        if ($sent) {
+            $this->setMessage(
+                Translation::getTranslation("password_reset_mail_success")
+            );
+        } else {
+            $this->setError("email", Translation::getTranslation("an_error_occured"));
+        }
     }
 }

@@ -3,7 +3,6 @@
 namespace Src\Form;
 
 use CoreDB\Kernel\ConfigurationManager;
-use CoreDB\Kernel\Messenger;
 use Src\Entity\ResetPassword;
 use Src\Entity\Translation;
 use Src\Entity\User;
@@ -66,14 +65,17 @@ class ForgetPasswordForm extends Form
         $reset_link = BASE_URL . "/reset_password/?USER=" . $this->user->ID . "&KEY=" . $reset_password->key;
         $message = Translation::getEmailTranslation("password_reset", [$reset_link, $reset_link]);
         $username = $this->user->getFullName();
-
-        \CoreDB::HTMLMail($this->user->email, Translation::getTranslation("reset_password"), $message, $username);
-
-        \CoreDB::messenger()
-        ->createMessage(
-            Translation::getTranslation("password_reset_mail_success"),
-            Messenger::SUCCESS
+        $sent = \CoreDB::HTMLMail(
+            $this->user->email,
+            Translation::getTranslation("reset_password"),
+            $message,
+            $username
         );
+        if ($sent) {
+            $this->setMessage(Translation::getTranslation("password_reset_mail_success"));
+        } else {
+            $this->setError("email", Translation::getTranslation("an_error_occured"));
+        }
     }
 
     protected function csrfTokenCheckFailed()
