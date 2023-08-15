@@ -79,7 +79,8 @@ $(function () {
         }
     }, { threshold: [1] });
 
-    loadMoreIntersectionObserver.observe(
-        document.querySelector(".load-more-section")
-    );
+    let loadMoreSection = document.querySelector(".load-more-section");
+    if(loadMoreSection){
+        loadMoreIntersectionObserver.observe(loadMoreSection);
+    }
 })
