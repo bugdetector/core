@@ -104,6 +104,7 @@ function asynchLoad(form, searchParams = null, pushState = true, timeoutDuration
                 form.trigger("autoload-page", [resultItems]);
             } else {
                 form.find(".result-viewer").html(response.data.render);
+                form.find(".result-pagination").html("");
             }
             form.find(".search-form-asynch-loading").addClass('d-none');
         }, pushState)
