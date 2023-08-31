@@ -36,12 +36,112 @@ $(document).on("click", ".rowdelete", function (e) {
             })
         }
     });
-}).on("click", "input[type='reset']", function (e) {
+}).on("click", "input[type='reset'],button[type='reset']", function (e) {
     e.preventDefault();
     $(this).parents("form").find("input:not([type='submit']):not([type='reset']),textarea").val("");
     loadSelect2($(this).parents("form").find("select").val("NULL"));
     $(this).parents("form").find("input[type='checkbox']").prop("checked", false).trigger("change");
+})
+
+$(document).on("input", ".search-form-asynch", function () {
+    let form = $(this).closest(".search-form");
+    form.find("input:not([type='submit']):not([type='reset']):not(.search-form-asynch),textarea").val("");
+    if (typeof window.loadSelect2 === "function") {
+        loadSelect2(form.find("select").val("NULL"));
+    }
+    form.find("input[type='checkbox']").prop("checked", false).trigger("change");
+    asynchLoad(form);
+}).on("submit", '.search-form', function () {
+    let form = $(this);
+    form.find(".search-form-asynch").val("");
+    asynchLoad(form);
+    return false;
+}).on("click", ".search-form #pagination .page-link", function (e) {
+    e.preventDefault();
+    let form = $(this).closest(".search-form");
+    let searchParams = new URLSearchParams(form.serialize());
+    searchParams.set("page", $(this).data("page"));
+    asynchLoad(form, searchParams, true, 0);
+    $('html,body').animate({
+        scrollTop: form.offset().top - 200
+    }, 500);
+}).on('click', '.search-form .order-results', function (e) {
+    e.preventDefault();
+    let form = $(this).closest(".search-form");
+    let searchParams = new URLSearchParams($(this).data('order'));
+    asynchLoad(form, searchParams, true, 0);
 });
+
+window.addEventListener("popstate", (event) => {
+    $('.search-form').each(function (i, el) {
+        let form = $(el);
+        form.find("input:not([type='submit']):not([type='reset']),textarea").val("");
+        loadSelect2(form.find("select").val("NULL"));
+        form.find("input[type='checkbox']").prop("checked", false).trigger("change");
+        let searchParams = new URLSearchParams(event.currentTarget.location.search);
+        for (key of searchParams.keys()) {
+            form.find(`[name='${key}']`).val(searchParams.get(key));
+        }
+        asynchLoad(form, new URLSearchParams(event.currentTarget.location.search), false, 0);
+    })
+});
+
+
+var timeout = null;
+function asynchLoad(form, searchParams = null, pushState = true, timeoutDuration = 500) {
+    if (timeout) {
+        clearTimeout(timeout);
+    }
+    form.find(".search-form-asynch-loading").removeClass('d-none');
+    timeout = setTimeout(function () {
+        filterSearchForm(form, searchParams ?? new URLSearchParams(form.serialize()), pushState, function (response) {
+            if (response.data.status) {
+                let resultItems = $(response.data.render).find(".result-viewer");
+                let pagination = $(response.data.render).find(".result-pagination");
+                form.find(".result-viewer").replaceWith(resultItems);
+                form.find(".result-pagination").replaceWith(pagination);
+                initComponents(resultItems);
+                form.trigger("autoload-page", [resultItems]);
+            } else {
+                form.find(".result-viewer").html(response.data.render);
+            }
+            form.find(".search-form-asynch-loading").addClass('d-none');
+        }, pushState)
+    }, timeoutDuration);
+}
+
+function filterSearchForm(form, searchParams, pushState = true, callback = () => { }) {
+    let keys = [];
+    for (key of searchParams.keys()) {
+        keys.push(key);
+    }
+    for (key of keys) {
+        if (!searchParams.get(key)) {
+            searchParams.delete(key);
+        }
+    }
+    form = $(form);
+    let url = root + "/search/filter" + (searchParams.size ? "?" + searchParams : "");
+    fetch(url, {
+        method: "post",
+        body: JSON.stringify({
+            token: form.data("token")
+        })
+    }
+    )
+        .then((response) => response.json())
+        .then((response) => {
+            let newUrl = window.location.pathname + (searchParams.size ? "?" + searchParams : "");
+            if (pushState) {
+                if (window.history.pushState) {
+                    window.history.pushState({ path: newUrl }, '', newUrl);
+                } else {
+                    window.history.replaceState({ path: newUrl }, '', newUrl);
+                }
+            }
+            callback(response);
+        })
+}
 
 $(function () {
     var ajaxActive = false;
@@ -50,37 +150,62 @@ $(function () {
             if (!ajaxActive) {
                 ajaxActive = true;
                 let target = $(entries[0].target);
+                let form = target.closest(".search-form");
+                let searchParams = new URLSearchParams(window.location.search);
                 let nextPage = target.data("page");
+                searchParams.set("page", nextPage);
+                filterSearchForm(form, searchParams, true, function (response) {
+                    if (response.data.status) {
+                        let resultItems = $(response.data.render).find(".result-viewer");
+                        form.find(".result-viewer:last").after(resultItems);
+                        target.addClass("load-more-section invisible")
+                            .data("page", nextPage + 1);
+                        ajaxActive = false;
+                        initComponents(resultItems);
+                        form.trigger("autoload-page", [resultItems, nextPage]);
+                    } else {
+                        target.remove();
+                    }
+                });
                 target.removeClass("load-more-section invisible");
-                fetch(root + "/search/getNextPage" + (location.search ? location.search + "&" : "?") + new URLSearchParams({
-                    page: nextPage
-                }), {
-                    method: "post",
-                    body: JSON.stringify({
-                        token: target.data("token")
-                    })
-                }
-                )
-                    .then((response) => response.json())
-                    .then((response) => {
-                        if (response.data.status) {
-                            let resultItems = $(response.data.render).find(".result-viewer");
-                            let form = target.closest("form");
-                            form.find(".result-viewer:last").after(resultItems);
-                            target.addClass("load-more-section invisible")
-                                .data("page", nextPage + 1);
-                            ajaxActive = false;
-                            form.trigger("autoload-page", [resultItems, nextPage]);
-                        } else {
-                            target.remove();
-                        }
-                    })
             }
         }
     }, { threshold: [1] });
 
     let loadMoreSection = document.querySelector(".load-more-section");
-    if(loadMoreSection){
+    if (loadMoreSection) {
         loadMoreIntersectionObserver.observe(loadMoreSection);
     }
 })
+
+function initComponents(resultItems) {
+    var tooltipTriggerList = resultItems.find('[data-bs-toggle="tooltip"]');
+    tooltipTriggerList.each(function (i, tooltipTriggerEl) {
+        new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+    var popoverTriggerList = resultItems.find('[data-bs-toggle="popover"]');
+    popoverTriggerList.each(function (i, popoverTriggerEl) {
+        new bootstrap.Popover(popoverTriggerEl);
+    });
+    if (typeof window.loadSelect2 === "function") {
+        resultItems.find("select").each(function (i, el) {
+            loadSelect2(el);
+        });
+    }
+    if (typeof window.loadTimeInput === "function") {
+        loadTimeInput();
+        loadDateInput();
+        loadDateTimeInput();
+    }
+    if (typeof window.loadCheckbox === "function") {
+        resultItems.find("input[type='checkbox']").each(function (i, element) {
+            loadCheckbox(element);
+        });
+    }
+    if (typeof window.loadHtmlEditor === "function") {
+        resultItems.find('.html-editor').each(function (i, el) {
+            loadHtmlEditor(el);
+        })
+    }
+
+}

@@ -9,22 +9,23 @@ use PDO;
 use Src\Entity\DynamicModel;
 use Src\Entity\Translation;
 use Src\Form\Widget\FormWidget;
-use Src\Form\Widget\InputWidget;
 use Src\Theme\CoreRenderer;
 use Src\Theme\ResultsViewer;
-use Src\Views\CollapsableCard;
+use Src\Theme\View;
+use Src\Views\NoResult;
 use Src\Views\Pagination;
 use Src\Views\Table;
-use Src\Views\ViewGroup;
 
 class SearchForm extends Form
 {
+    protected $cacheKey;
+
     public SearchableInterface $object;
     public bool $translateLabels;
     public array $headers = [];
     public array $data = [];
     public Table $table;
-    public CollapsableCard $search_input_group;
+    public array $searchInputs;
     public Pagination $pagination;
     public $page;
     public string $summary_text;
@@ -35,13 +36,17 @@ class SearchForm extends Form
 
     protected function __construct(SearchableInterface $object, $translateLabels = true)
     {
-        parent::__construct();
+        if ($this->method == "GET") {
+            $this->request = $_GET;
+        } elseif ($this->method == "POST") {
+            $this->request = $_POST;
+        }
         $this->object = $object;
         $this->headers = $object->getResultHeaders($translateLabels);
         $this->query = $object->getResultQuery();
         $this->translateLabels = $translateLabels;
-        $this->search_input_group = new CollapsableCard(Translation::getTranslation("search"));
-        $this->search_input_group->setId("search_input_group");
+
+
         $page = intval(@$_GET["page"]);
         $this->page = $page >= 1 ? $page : 1;
         $this->pagination = new Pagination($this->page, $this->object->getPaginationLimit());
@@ -49,48 +54,19 @@ class SearchForm extends Form
         $controller->addJsFiles("assets/js/forms/search_form.js");
         $controller->addFrontendTranslation("record_remove_accept");
         $controller->addFrontendTranslation("record_remove_accept_entity");
-
-        $search_input_group = new ViewGroup("div", "row");
-
         /**
          * @var FormWidget $searchWidget
          */
         foreach ($this->object->getSearchFormFields($this->translateLabels) as $field_name => $searchWidget) {
             $searchFieldName = str_replace(".", "_", $field_name);
             $this->searchableFields[] = $field_name;
-            if (in_array("daterangeinput", $searchWidget->classes)) {
-                $searchWidgetClass = "col-sm-6 col-lg-3";
-            } else {
-                $searchWidgetClass = "col-sm-3";
-            }
-            $search_input_group->addField(
-                ViewGroup::create("div", $searchWidgetClass)->addField(
-                    $searchWidget
-                    ->setValue(isset($this->request[$searchFieldName]) ? $this->request[$searchFieldName] : "")
-                    ->addAttribute("autocomplete", "off")
-                )
-            );
+            $this->searchInputs[] = $searchWidget
+                ->setValue(isset($this->request[$searchFieldName]) ? $this->request[$searchFieldName] : "")
+                ->addAttribute("autocomplete", "off");
         }
 
-        /**
-         * Adding search and reset buttons
-         */
-        $search_input_group->addField(
-            ViewGroup::create("div", "col-sm-12 d-flex mt-2")
-                ->addField(
-                    InputWidget::create("search")
-                        ->setType("submit")
-                        ->setValue(Translation::getTranslation("search"))
-                        ->addClass("btn btn-sm btn-primary me-sm-1")
-                )->addField(
-                    InputWidget::create("reset")
-                        ->setType("reset")
-                        ->setValue(Translation::getTranslation("reset"))
-                        ->addClass("btn btn-sm btn-danger ms-sm-1")
-                )
-        );
-
-        $this->search_input_group->setContent($search_input_group);
+        $this->addClass("search-form");
+        $this->addAttribute("data-key", $this->getCacheKey());
     }
 
 
@@ -136,6 +112,22 @@ class SearchForm extends Form
         }
 
         $condition = \CoreDB::database()->condition($this->query);
+        if (@$params["q"]) {
+            $searchCondition = \CoreDB::database()->condition($this->query);
+            $search = preg_replace(
+                "/[^\w\s0-9a-zA-Z]/",
+                "",
+                mb_strtolower($params["q"])
+            );
+            foreach ($this->searchableFields as $column_name) {
+                if (
+                    !(@$this->object->$column_name instanceof EntityReference)
+                ) {
+                    $searchCondition->condition($column_name, "%" . $search . "%", "LIKE", "OR");
+                }
+            }
+            $this->query->condition($searchCondition);
+        }
         foreach ($this->searchableFields as $column_name) {
             $paramField = str_replace(".", "_", $column_name);
             if (isset($params[$paramField]) && $params[$paramField] !== "") {
@@ -188,18 +180,24 @@ class SearchForm extends Form
 
     public function render()
     {
+        $asynchToken = $this->getAsynchLoadToken();
         if ($this->viewer->useAsyncLoad) {
             \CoreDB::controller()->addJsCode("$(() => {
-                $('.load-more-section').data('token', '" . $this->getAsynchLoadToken() . "')
-                    .data('page', " . ($this->page + 1) . ")
+                $('.load-more-section').data('page', " . ($this->page + 1) . ")
             })");
         }
+        \CoreDB::controller()->addJsCode("$(() => {
+            $('.search-form[data-key=\'" . $this->getCacheKey() . "\']').data('token', '" . $asynchToken . "');
+        })");
         parent::render();
     }
 
     protected function getCacheKey(): string
     {
-        return hash("sha256", json_encode($this->request) . Translation::getLanguage() . static::class);
+        if (!$this->cacheKey) {
+            $this->cacheKey = hash("sha256", json_encode($this->request) . Translation::getLanguage() . static::class);
+        }
+        return $this->cacheKey;
     }
 
     public function getAsynchLoadToken(): string
@@ -210,8 +208,15 @@ class SearchForm extends Form
             "theme" => get_class(CoreRenderer::getInstance()->theme),
             "time" => time()
         ];
-        $autoLoadToken = hash("sha256", json_encode($tokenData));
-        $_SESSION["autoload"][$autoLoadToken] = $tokenData;
-        return $autoLoadToken;
+        $asyncLoadToken = hash("sha256", json_encode($tokenData));
+        $_SESSION["search_asynch"][$asyncLoadToken] = $tokenData;
+        return $asyncLoadToken;
+    }
+
+    public function noResultBehaviour(): View
+    {
+        return new NoResult(
+            Translation::getTranslation("no_result_found")
+        );
     }
 }

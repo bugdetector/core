@@ -238,3 +238,5 @@ icon: İkon
 all_notifications_pushed: 'Tüm bildirimler gönderildi.'
 load_async: 'Asenkron Yükle'
 'Load data async.': 'Veriyi asenkron yükle.'
+filter: Filtrele
+no_result_found: 'Hiçbir Sonuç Bulunamadı'

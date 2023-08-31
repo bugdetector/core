@@ -238,3 +238,5 @@ icon: Icon
 all_notifications_pushed: 'All notifications pushed.'
 load_async: 'Load Async'
 'Load data async.': 'Load data async.'
+filter: Filter
+no_result_found: 'No Result Found'

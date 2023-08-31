@@ -12,6 +12,9 @@
     position: sticky;
     top: 0;
 }
+.table-responsive thead a{
+    color: var(--bs-dark);
+}
 .table-responsive::-webkit-scrollbar {
     width: 10px;
     height: 10px;
@@ -21,4 +24,7 @@
 }
 .table-responsive:hover::-webkit-scrollbar-thumb{
     background-color: var(--bs-active-info);
+}
+.table-responsive tr td:first-child{
+    padding-left: 10px;
 }
