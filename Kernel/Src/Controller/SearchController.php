@@ -5,6 +5,7 @@ namespace Src\Controller;
 use CoreDB\Kernel\ServiceController;
 use Exception;
 use Src\Entity\Translation;
+use Src\Form\SearchForm;
 use Src\Theme\CoreRenderer;
 
 class SearchController extends ServiceController
@@ -14,22 +15,25 @@ class SearchController extends ServiceController
         return true;
     }
 
-    public function getNextPage()
+    public function filter()
     {
-        $autoLoadToken = @$_POST["token"];
-        $autoLoadData = @$_SESSION["autoload"][$autoLoadToken];
-        if (!$autoLoadToken || !$autoLoadData) {
+        $asyncToken = @$_POST["token"];
+        $asyncLoadData = @$_SESSION["search_asynch"][$asyncToken];
+        if (!$asyncToken || !$asyncLoadData) {
             throw new Exception(Translation::getTranslation("invalid_operation"));
         }
-        $formClass = $autoLoadData["form"];
-        $object = unserialize($autoLoadData["object"]);
-        $themeClass = $autoLoadData["theme"];
+        $formClass = $asyncLoadData["form"];
+        $object = unserialize($asyncLoadData["object"]);
+        $themeClass = $asyncLoadData["theme"];
         CoreRenderer::getInstance(new $themeClass());
         /** @var SearchForm */
         $form = $formClass::createByObject($object);
         if (!$form->data && !$form->getCache()) {
             return [
-                "status" => false
+                "status" => false,
+                "render" => CoreRenderer::getInstance()->renderView(
+                    $form->noResultBehaviour()
+                )
             ];
         } else {
             ob_start();

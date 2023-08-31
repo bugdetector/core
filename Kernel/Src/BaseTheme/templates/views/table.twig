@@ -2,23 +2,22 @@
 	<table class="{{ view.classes|join(" ") }}" {{ view.renderAttributes()|raw }}>
 		<thead>
 			<tr>
-			{% for key, header in view.headers %}
-				<th>
-					{% if view.orderable and not( key matches '/^\\d+$/') %}
-						<a href="?{{ view.filter_params|url_encode }}&orderBy={{key}}&orderDirection={{ view.orderBy == key and view.orderDirection == "DESC" ? "ASC" : "DESC" }}"
-							class="fw-bolder text-nowrap">
+				{% for key, header in view.headers %}
+					<th>
+						{% if view.orderable and not( key matches '/^\\d+$/') %}
+							<a href="#" data-order="{{ view.filter_params|url_encode }}&orderBy={{key}}&orderDirection={{ view.orderBy == key and view.orderDirection == "DESC" ? "ASC" : "DESC" }}" class="fw-bolder text-nowrap order-results">
+								{{ header }}
+								{% if view.orderBy == key and view.orderDirection == "DESC" %}
+									<span class="fa fa-sort-down"></span>
+								{% else %}
+									<span class="fa fa-sort-up"></span>
+								{% endif %}
+							</a>
+						{% else %}
 							{{ header }}
-							{% if view.orderBy == key and view.orderDirection == "DESC" %}
-								<i class="fa fa-sort-down"></i>
-							{% else %}
-								<i class="fa fa-sort-up"></i>
-							{% endif %}
-						</a>
-					{% else %}
-						{{ header }}
-					{% endif %}
-				</th>
-			{% endfor %}
+						{% endif %}
+					</th>
+				{% endfor %}
 			</tr>
 		</thead>
 		<tbody>

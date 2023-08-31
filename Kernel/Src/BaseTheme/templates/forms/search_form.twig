@@ -1,18 +1,57 @@
 {% extends "forms/form.twig" %}
 
 {% block fields %}
-	{{ form.search_input_group }}
-	{{ form.summary_text }}
-	<div class="result-viewer">
-		{{ form.viewer }}
-	</div>
-	{% if form.viewer.useAsyncLoad %}
-		<div class="load-more-section invisible d-flex justify-content-center">
-			<span class="spinner-border text-primary"></span>
+	<div class="d-flex justify-content-between flex-wrap mb-3">
+		<div class="search-input-wrapper">
+			<div class="d-flex align-items-center position-relative my-1 mb-2 mb-md-0">
+                <span class="fa fa-search fs-1 position-absolute ms-6 text-gray-700"></span>                
+				<input type="text" name="q" class="form-control form-control-solid w-350px ps-15 search-form-asynch" placeholder="{{ t("search") }}" value="{{ form.request.q }}">
+				<span class="fs-1 position-absolute end-0 me-2 spinner-border text-primary search-form-asynch-loading d-none"></span>
+            </div>
 		</div>
-	{% else %}
-		{{ form.pagination }}
-	{% endif %}
+		<div>
+			<button type="button" class="btn btn-light-primary me-3" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+				<span class="fa fa-filter"></span>
+				{{ t("filter") }}
+			</button>
+			<div class="menu menu-sub menu-sub-dropdown w-300px w-md-325px" data-kt-menu="true">
+				<div class="px-7 py-5">
+					<div class="fs-4 text-dark fw-bold">{{ t("filter") }}</div>
+				</div>
+				<div class="separator border-gray-200"></div>
+				<div class="px-7 py-5">
+					<div class="row overflow-auto mh-500px">
+						{% for input in form.searchInputs %}
+							{{ input }}
+						{% endfor %}
+					</div>
+					<div class="d-flex justify-content-end mt-3">
+						<button type="reset" class="btn btn-light btn-active-light-primary me-2" data-kt-menu-dismiss="false">{{ t("reset") }}</button>
+
+						<button type="submit" class="btn btn-primary" data-kt-menu-dismiss="true">{{ t("search") }}</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="result-viewer">
+		{{ form.summary_text }}
+		{% if form.viewer.data is empty %}
+			{{ form.noResultBehaviour() }}
+		{% else %}
+			{{ form.viewer }}
+		{% endif %}
+		
+	</div>
+	<div class="result-pagination">
+		{% if form.viewer.useAsyncLoad %}
+			<div class="load-more-section invisible d-flex justify-content-center">
+				<span class="spinner-border text-primary"></span>
+			</div>
+		{% else %}
+			{{ form.pagination }}
+		{% endif %}
+	</div>
 	{% for field in form.fields %}
 		{{ field }}
 	{% endfor %}

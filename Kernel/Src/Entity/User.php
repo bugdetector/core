@@ -129,6 +129,23 @@ class User extends Model
         return $headers;
     }
 
+    public function getSearchFormFields(bool $translateLabel = true): array
+    {
+        $fields = parent::getSearchFormFields($translateLabel);
+        $searchFields = [
+            "u.ID" => $fields["ID"]->setName("u.ID"),
+            "username" => $fields["username"],
+            "name" => $fields["name"],
+            "surname" => $fields["surname"],
+            "email" => $fields["email"],
+            "phone" => $fields["phone"],
+            "roles" => $fields["roles"]->setName("roles"),
+            "last_access" => $fields["last_access"],
+            "u.created_at" => $fields["created_at"]->setName("u.created_at"),
+        ];
+        return $searchFields;
+    }
+
     public function getResultQuery(): SelectQueryPreparerAbstract
     {
         return \CoreDB::database()->select($this->getTableName(), "u")

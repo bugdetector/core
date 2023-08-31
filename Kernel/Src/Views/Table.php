@@ -12,7 +12,7 @@ class Table extends ResultsViewer
     public array $filter_params;
     public function __construct()
     {
-        $this->classes = ["table", "table-striped", "table-light", "table-hover", "position-relative"];
+        $this->classes = ["table", "table-striped", "table-hover", "position-relative", "gy-7", "gs-7"];
         CoreDB::controller()->addCssFiles("assets/css/components/table.css");
     }
 
