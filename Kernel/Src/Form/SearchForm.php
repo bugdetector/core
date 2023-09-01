@@ -115,8 +115,8 @@ class SearchForm extends Form
         if (@$params["q"]) {
             $searchCondition = \CoreDB::database()->condition($this->query);
             $search = preg_replace(
-                "/[^\w\s0-9a-zA-Z]/",
-                "",
+                "/[^\w\s\p{P}0-9a-zA-Z]/",
+                " ",
                 mb_strtolower($params["q"])
             );
             foreach ($this->searchableFields as $column_name) {
