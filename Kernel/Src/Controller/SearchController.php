@@ -4,6 +4,7 @@ namespace Src\Controller;
 
 use CoreDB\Kernel\ServiceController;
 use Exception;
+use Src\Entity\DynamicModel;
 use Src\Entity\Translation;
 use Src\Form\SearchForm;
 use Src\Theme\CoreRenderer;
@@ -24,6 +25,9 @@ class SearchController extends ServiceController
         }
         $formClass = $asyncLoadData["form"];
         $object = unserialize($asyncLoadData["object"]);
+        if ($object instanceof DynamicModel) {
+            $object::$table = $asyncLoadData["table"];
+        }
         $themeClass = $asyncLoadData["theme"];
         CoreRenderer::getInstance(new $themeClass());
         /** @var SearchForm */
