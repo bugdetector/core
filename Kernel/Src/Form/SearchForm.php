@@ -205,6 +205,7 @@ class SearchForm extends Form
         $tokenData = [
             "form" => static::class,
             "object" => serialize($this->object),
+            "table" => $this->object instanceof DynamicModel ? $this->object->getTableName() : null,
             "theme" => get_class(CoreRenderer::getInstance()->theme),
             "time" => time()
         ];
