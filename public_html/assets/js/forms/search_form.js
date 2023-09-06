@@ -122,7 +122,7 @@ function filterSearchForm(form, searchParams, pushState = true, callback = () =>
         }
     }
     form = $(form);
-    let url = root + "/search/filter" + (searchParams.size ? "?" + searchParams : "");
+    let url = root + "/search/filter" + (Array.from(searchParams).length ? "?" + searchParams : "");
     fetch(url, {
         method: "post",
         body: JSON.stringify({
