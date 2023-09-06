@@ -2,12 +2,12 @@
 
 {% block fields %}
 	<div class="d-flex justify-content-between flex-wrap mb-3">
-		<div class="search-input-wrapper">
+		<div class="search-input-wrapper d-flex align-items-center">
 			<div class="d-flex align-items-center position-relative my-1 mb-2 mb-md-0">
                 <span class="fa fa-search fs-1 position-absolute ms-6 text-gray-700"></span>                
-				<input type="text" name="q" class="form-control form-control-solid w-350px ps-15 search-form-asynch" placeholder="{{ t("search") }}" value="{{ form.request.q }}">
-				<span class="fs-1 position-absolute end-0 me-2 spinner-border text-primary search-form-asynch-loading d-none"></span>
+				<input type="search" name="q" class="form-control form-control-solid w-350px ps-15 search-form-asynch" placeholder="{{ t("search") }}" value="{{ form.request.q }}">
             </div>
+			<span class="fs-1 ms-3 spinner-border text-primary search-form-asynch-loading d-none"></span>
 		</div>
 		<div>
 			<button type="button" class="btn btn-light-primary me-3" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">

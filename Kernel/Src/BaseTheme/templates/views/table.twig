@@ -1,7 +1,7 @@
 <div class="table-responsive">
 	<table class="{{ view.classes|join(" ") }}" {{ view.renderAttributes()|raw }}>
 		<thead>
-			<tr>
+			<tr class="bg-light">
 				{% for key, header in view.headers %}
 					<th>
 						{% if view.orderable and not( key matches '/^\\d+$/') %}
