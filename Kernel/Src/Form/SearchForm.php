@@ -121,7 +121,8 @@ class SearchForm extends Form
             );
             foreach ($this->searchableFields as $column_name) {
                 if (
-                    !(@$this->object->$column_name instanceof EntityReference)
+                    !(@$this->object->$column_name instanceof EntityReference) &&
+                    !is_numeric($column_name)
                 ) {
                     $searchCondition->condition($column_name, "%" . $search . "%", "LIKE", "OR");
                 }
@@ -186,9 +187,13 @@ class SearchForm extends Form
                 $('.load-more-section').data('page', " . ($this->page + 1) . ")
             })");
         }
-        \CoreDB::controller()->addJsCode("$(() => {
-            $('.search-form[data-key=\'" . $this->getCacheKey() . "\']').data('token', '" . $asynchToken . "');
-        })");
+        if ($this->cachable) {
+            \CoreDB::controller()->addJsCode("$(() => {
+                $('.search-form[data-key=\'" . $this->getCacheKey() . "\']').data('token', '" . $asynchToken . "');
+            })");
+        } else {
+            $this->addAttribute("data-token", $asynchToken);
+        }
         parent::render();
     }
 
