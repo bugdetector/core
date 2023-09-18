@@ -132,7 +132,7 @@ function filterSearchForm(form, searchParams, pushState = true, callback = () =>
     )
         .then((response) => response.json())
         .then((response) => {
-            let newUrl = window.location.pathname + (searchParams.size ? "?" + searchParams : "");
+            let newUrl = window.location.pathname + (Array.from(searchParams).length ? "?" + searchParams : "");
             if (pushState) {
                 if (window.history.pushState) {
                     window.history.pushState({ path: newUrl }, '', newUrl);
