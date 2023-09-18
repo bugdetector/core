@@ -15,6 +15,7 @@ class ColumnDefinition extends CollapsableCard
 
     public function __construct(string $name, DataTypeAbstract $dataType = null)
     {
+        parent::__construct("");
         $this->name = $name;
         $this->dataType = $dataType;
 
