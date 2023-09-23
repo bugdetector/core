@@ -59,7 +59,7 @@ $(document).on("input", ".search-form-asynch", function () {
 }).on("click", ".search-form #pagination .page-link", function (e) {
     e.preventDefault();
     let form = $(this).closest(".search-form");
-    let searchParams = new URLSearchParams(form.serialize());
+    let searchParams = new URLSearchParams(location.search);
     searchParams.set("page", $(this).data("page"));
     asynchLoad(form, searchParams, true, 0);
     $('html,body').animate({
