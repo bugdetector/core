@@ -120,27 +120,6 @@ $(document).ajaxSuccess(function (evt, request, settings) {
 $(document).on("submit", function () {
     swal.showLoading();
 });
-var loadingShown = false;
-var isModalVisible = false;
-$(document).ajaxSend(function () {
-    setTimeout(function () {
-        if ($.active > 0 && !loadingShown) {
-            loadingShown = true;
-            isModalVisible = swal.isVisible();
-            swal.showLoading();
-        }
-    }, 300);
-});
-$(document).ajaxComplete(function () {
-    if ($.active == 1 && loadingShown) {
-        if (isModalVisible) {
-            swal.hideLoading();
-        } else {
-            swal.closeModal();
-        }
-        loadingShown = false;
-    }
-})
 
 
 const modalTemplate = `<div class="modal fade" tabindex="-1">
