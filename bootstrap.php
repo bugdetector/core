@@ -22,7 +22,13 @@ try {
         define("BASE_URL", $_SERVER["REQUEST_SCHEME"] . "://" . $host . SITE_ROOT);
 
 
+        $httpAuthorizationHeader = @$_SERVER["HTTP_AUTHORIZATION"] ?: (
+            @$_SERVER["REDIRECT_HTTP_AUTHORIZATION"] ?: @$_SERVER["REDIRECT_REDIRECT_HTTP_AUTHORIZATION"]
+        );
         if (defined("HTTP_AUTH_ENABLED") && HTTP_AUTH_ENABLED) {
+            if ($httpAuthorizationHeader && !@$_SERVER['PHP_AUTH_USER'] && !@$_SERVER['PHP_AUTH_PW']) {
+                list($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']) = explode(':', base64_decode(substr($httpAuthorizationHeader, 6)));
+            }
             if (
                 @$_SERVER['PHP_AUTH_USER'] !== HTTP_AUTH_USERNAME ||
                 @$_SERVER['PHP_AUTH_PW'] !== HTTP_AUTH_PASSWORD
@@ -34,8 +40,8 @@ try {
         }
 
         $headers = getallheaders();
-        if (!@$headers["Authorization"] && @$_SERVER["REDIRECT_HTTP_AUTHORIZATION"]) {
-            $headers["Authorization"] = @$_SERVER["REDIRECT_HTTP_AUTHORIZATION"];
+        if (!@$headers["Authorization"] && $httpAuthorizationHeader) {
+            $headers["Authorization"] = $httpAuthorizationHeader;
         }
         if (@$headers["Authorization"] && !isset($_COOKIE[session_name()])) {
             $sessionId = str_replace("Bearer ", "", $headers["Authorization"]);
