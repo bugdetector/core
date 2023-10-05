@@ -144,7 +144,7 @@ function pnNotificationClick(event) {
   if (event.notification.data && event.notification.data.url) {
     const promise = clients.openWindow(event.notification.data.url);
     event.waitUntil(promise);
-    notification.close();
+    event.notification.close();
   }
 }
 
