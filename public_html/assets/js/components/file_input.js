@@ -22,11 +22,14 @@ $(function(){
     }).on("click", ".image-preview", function(e){
         e.preventDefault();
         let img = $(this).children("img");
-        openModal(
-            $(this).data("field-name"),
-            img.clone(),
-            `<button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal">${_t("close")}</button>`,
-            "modal-lg"
-        );
+        let imageSource = "";
+        if(img.length == 0){
+            imageSource = $(this).attr("href");
+        } else {
+            imageSource = img.attr("src");
+        }
+        var lightbox = new FsLightbox();
+        lightbox.props.sources = [imageSource];
+        lightbox.open();
     })
 })
