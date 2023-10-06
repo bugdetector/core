@@ -43,7 +43,12 @@ $(document).on("click", ".rowdelete", function (e) {
     $(this).parents("form").find("input[type='checkbox']").prop("checked", false).trigger("change");
 })
 
-$(document).on("input", ".search-form-asynch", function () {
+$(document).on("keydown", ".search-form-asynch", function(e){
+    if(e.which == 13){ // Enter key
+        e.preventDefault();
+        return;
+    }
+}).on("input", ".search-form-asynch", function (e) {
     let form = $(this).closest(".search-form");
     form.find("input:not([type='submit']):not([type='reset']):not(.search-form-asynch),textarea").val("");
     if (typeof window.loadSelect2 === "function") {
