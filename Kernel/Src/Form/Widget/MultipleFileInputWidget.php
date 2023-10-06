@@ -48,7 +48,8 @@ class MultipleFileInputWidget extends FormWidget
         $controller = CoreDB::controller();
         $controller->addJsFiles([
             "assets/js/components/file_input.js",
-            "assets/js/widget/multiple-file-input-widget.js"
+            "assets/js/widget/multiple-file-input-widget.js",
+            "base_theme/assets/plugins/custom/fslightbox/fslightbox.bundle.js",
         ]);
     }
 
@@ -130,10 +131,24 @@ class MultipleFileInputWidget extends FormWidget
                 ->setType("hidden")
                 ->setValue($file->ID->getValue())
             );
-            $row[] = Link::create(
+            $fileLink = Link::create(
                 $file->getUrl(),
                 $file->file_name
-            )->addAttribute("target", "_blank");
+            );
+            if ($file->isImage) {
+                $fileLink->addClass("image-preview");
+            } else {
+                $fileLink->addAttribute('download', $file->file_name);
+            }
+            $row[] = ViewGroup::create("div", "d-flex justify-content-between")
+                ->addField($fileLink)
+                ->addField(
+                    Link::create(
+                        $file->getUrl(),
+                        ViewGroup::create("span", "fa fa-download")
+                    )->addAttribute('download', $file->file_name)
+                    ->addClass("btn btn-icon btn-sm btn-primary")
+                );
             $row[] = $file->sizeConvertToString($file->file_size->getValue());
             $removeKeyJwt = new JWT();
             $removeKeyJwt->setPayload([

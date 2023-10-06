@@ -20,7 +20,7 @@ $(document).on("click", ".clear-cache", function (e) {
             location.assign(url);
         }
     }
-});;
+});
 $(function () {
     setTimeout(function () {
         if (darkMode) {
