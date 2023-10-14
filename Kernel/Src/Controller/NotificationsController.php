@@ -39,4 +39,9 @@ class NotificationsController extends ServiceController
         $payload->setURL(BASE_URL);
         \CoreDB::notification()->push($payload, $subscription);
     }
+
+    public function denySubscription()
+    {
+        $_SESSION["PN_DENIED"] = true;
+    }
 }

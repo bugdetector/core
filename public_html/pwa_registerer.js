@@ -1,7 +1,7 @@
 
 document.addEventListener("DOMContentLoaded", () => {
     if (NOTIFICATIONS_ENABLED) {
-        pnSubscribe();
+        showPnSubscribeMessage();
     } else {
         registerServiceWorker();
     }
@@ -30,6 +30,38 @@ function pushNotificationAvailable() {
     return bAvailable;
 }
 
+function showPnSubscribeMessage(){
+    // if not granted or denied so far...
+    if(window.Notification.permission === 'default' && !PN_DENIED){
+        let [modal, modalContent] = openModal(
+            _t("subscribe_notifications"),
+            _t("subscribe_notifications_message"),
+            `<div class="d-flex w-100">
+                <div class="w-50 px-2">
+                    <button type="button" class="btn btn-light-danger w-100 deny-pn" data-bs-dismiss="modal">${_t("thanks")}</button>
+                </div>
+                <div class="w-50 px-2">
+                    <button type="button" class="btn btn-primary w-100 subscribe-pn">${_t("allow_notifications")}</button>
+                </div>
+            </div>`,
+            "modal-md",
+            false
+        );
+        modalContent.find(".subscribe-pn").on("click", function(e){
+            pnSubscribe();
+            modal.hide();
+            modalContent.remove();
+        })
+        modalContent.find(".deny-pn").on("click", function(){
+            fetch(root + "/notifications/denySubscription");
+            modal.hide();
+            modalContent.remove();
+        })
+    } else if(window.Notification.permission === 'granted'){
+        registerServiceWorker();
+    }
+}
+
 async function pnSubscribe() {
     if (pushNotificationAvailable()) {
         navigator.permissions.query({ name: 'notifications' }).then(function (notificationPerm) {
@@ -44,10 +76,7 @@ async function pnSubscribe() {
                     });
             };
         });
-        // if not granted or denied so far...
-        if (window.Notification.permission === 'default') {
-            await window.Notification.requestPermission();
-        }
+        await window.Notification.requestPermission();
         registerServiceWorker();
     }
 }
