@@ -10,11 +10,12 @@ $(function () {
             branding: false,
             resize: true,
             min_height: 500,
-            relative_urls: false,
+            relative_urls: true,
             remove_script_host: false,
             forced_root_block: false,
             image_title: true,
             automatic_uploads: true,
+            verify_html: false,
             images_upload_handler: function (blobInfo, success, failure) {
                 var formData = new FormData();
                 formData.append('file', blobInfo.blob(), blobInfo.filename());

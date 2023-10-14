@@ -62,6 +62,13 @@ class BaseTheme implements ThemeInteface
         $controller->addJsFiles("base_theme/assets/plugins/global/plugins.bundle.js");
         $controller->addJsFiles("assets/js/coredb.js");
         $controller->addJsFiles("base_theme/assets/plugins/custom/prismjs/prismjs.bundle.js");
+        if (defined("PWA_ENABLED") && PWA_ENABLED) {
+            $controller->addJsFiles("pwa_registerer.js");
+            $controller->addJsCode("NOTIFICATIONS_ENABLED = " . var_export(boolval(
+                \CoreDB::currentUser()->isLoggedIn() && defined("NOTIFICATIONS_ENABLED") && NOTIFICATIONS_ENABLED
+            ), true));
+            $controller->addJsCode("PN_DENIED = " . var_export(boolval(@$_SESSION["PN_DENIED"]), true));
+        }
     }
 
     protected function addDefaultCssFiles(ControllerInterface $controller)
@@ -87,6 +94,12 @@ class BaseTheme implements ThemeInteface
         $controller->addFrontendTranslation("error");
         $controller->addFrontendTranslation("info");
         $controller->addFrontendTranslation("ok");
+        if (\CoreDB::currentUser()->isLoggedIn() && defined("NOTIFICATIONS_ENABLED") && NOTIFICATIONS_ENABLED) {
+            $controller->addFrontendTranslation("subscribe_notifications");
+            $controller->addFrontendTranslation("subscribe_notifications_message");
+            $controller->addFrontendTranslation("thanks");
+            $controller->addFrontendTranslation("allow_notifications");
+        }
     }
 
     public function canonicalUrl()

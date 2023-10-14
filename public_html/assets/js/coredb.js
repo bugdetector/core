@@ -123,7 +123,7 @@ $(document).on("submit", function () {
 
 
 const modalTemplate = `<div class="modal fade" tabindex="-1">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"></h5>
@@ -139,9 +139,11 @@ function openModal(
     title,
     body,
     footer,
-    size
+    size = "modal-lg",
+    backdrop = "static",
 ) {
     let modalContent = $(modalTemplate);
+    modalContent.attr("data-bs-backdrop", backdrop);
     modalContent.find(".modal-title").text(title);
     modalContent.find(".modal-body").append(body);
     modalContent.find(".modal-footer").append(footer);
