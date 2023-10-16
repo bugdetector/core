@@ -31,8 +31,12 @@ function pushNotificationAvailable() {
 }
 
 function showPnSubscribeMessage(){
+    /**
+     * CoreDB is not supporting push notifications on safari by default.
+     * Implement your code if neccessary.
+     */
     // if not granted or denied so far...
-    if(window.Notification.permission === 'default' && !PN_DENIED){
+    if(!window.safari && window.Notification.permission === 'default' && !PN_DENIED){
         let [modal, modalContent] = openModal(
             _t("subscribe_notifications"),
             _t("subscribe_notifications_message"),
