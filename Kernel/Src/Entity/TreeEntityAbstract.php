@@ -23,6 +23,19 @@ abstract class TreeEntityAbstract extends Model
         }
     }
 
+    protected function insert()
+    {
+        if (!$this->weight->getValue()) {
+            $this->weight->setValue(
+                \CoreDB::database()->select($this->getTableName())
+                    ->selectWithFunction([
+                        "MAX(weight)"
+                    ])->execute()->fetchColumn() + 1
+            );
+        }
+        return parent::insert();
+    }
+
     public static function hasSubItems()
     {
         return true;
