@@ -3,6 +3,7 @@
 namespace Src\BaseTheme;
 
 use CoreDB\Kernel\ControllerInterface;
+use CoreDB\Kernel\Database\DatabaseInstallationException;
 use Src\Theme\CoreRenderer;
 use Src\Theme\ThemeInteface;
 use Src\Views\Navbar;
@@ -94,11 +95,14 @@ class BaseTheme implements ThemeInteface
         $controller->addFrontendTranslation("error");
         $controller->addFrontendTranslation("info");
         $controller->addFrontendTranslation("ok");
-        if (\CoreDB::currentUser()->isLoggedIn() && defined("NOTIFICATIONS_ENABLED") && NOTIFICATIONS_ENABLED) {
-            $controller->addFrontendTranslation("subscribe_notifications");
-            $controller->addFrontendTranslation("subscribe_notifications_message");
-            $controller->addFrontendTranslation("thanks");
-            $controller->addFrontendTranslation("allow_notifications");
+        try {
+            if (\CoreDB::currentUser()->isLoggedIn() && defined("NOTIFICATIONS_ENABLED") && NOTIFICATIONS_ENABLED) {
+                $controller->addFrontendTranslation("subscribe_notifications");
+                $controller->addFrontendTranslation("subscribe_notifications_message");
+                $controller->addFrontendTranslation("thanks");
+                $controller->addFrontendTranslation("allow_notifications");
+            }
+        } catch (DatabaseInstallationException $ex) {
         }
     }
 
