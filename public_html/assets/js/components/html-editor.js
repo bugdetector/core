@@ -17,6 +17,7 @@ $(function () {
             image_title: true,
             automatic_uploads: true,
             verify_html: false,
+            force_p_newlines: true,
             images_upload_handler: function (blobInfo, success, failure) {
                 var formData = new FormData();
                 formData.append('file', blobInfo.blob(), blobInfo.filename());
