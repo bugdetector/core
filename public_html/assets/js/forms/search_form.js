@@ -137,12 +137,15 @@ function filterSearchForm(form, searchParams, pushState = true, callback = () =>
     )
         .then((response) => response.json())
         .then((response) => {
-            let newUrl = window.location.pathname + (Array.from(searchParams).length ? "?" + searchParams : "");
-            if (pushState) {
-                if (window.history.pushState) {
-                    window.history.pushState({ path: newUrl }, '', newUrl);
-                } else {
-                    window.history.replaceState({ path: newUrl }, '', newUrl);
+            let data = response.data;
+            if(data.status){
+                let newUrl = window.location.pathname + (Array.from(searchParams).length ? "?" + searchParams : "");
+                if (pushState) {
+                    if (window.history.pushState) {
+                        window.history.pushState({ path: newUrl }, '', newUrl);
+                    } else {
+                        window.history.replaceState({ path: newUrl }, '', newUrl);
+                    }
                 }
             }
             callback(response);

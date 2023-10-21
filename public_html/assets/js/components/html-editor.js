@@ -12,6 +12,7 @@ $(function () {
             min_height: 500,
             relative_urls: true,
             remove_script_host: false,
+            convert_urls : false,
             forced_root_block: false,
             image_title: true,
             automatic_uploads: true,
