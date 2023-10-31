@@ -12,7 +12,6 @@ use Src\Entity\Translation;
 use Src\JWT;
 use Src\Views\Image;
 use Src\Views\Link;
-use Src\Views\Table;
 use Src\Views\TextElement;
 use Src\Views\ViewGroup;
 
@@ -83,8 +82,10 @@ class MultipleFileInputWidget extends FormWidget
 
     public function getFileFieldNameOfReferenceClass()
     {
+        /** @var Model */
         $referenceClassInstance = new $this->referenceClass();
-        foreach ($referenceClassInstance as $fieldName => $field) {
+        $referenceFields = $referenceClassInstance->getAllFields();
+        foreach ($referenceFields as $fieldName => $field) {
             if ($field instanceof File) {
                 return $fieldName;
             }
@@ -92,26 +93,34 @@ class MultipleFileInputWidget extends FormWidget
         throw new Exception("Reference class is not have any File field.");
     }
 
-    public function getFilesTable(): Table
+    public function getTableHeaders()
     {
-        $table = new Table();
-        $table->addClass("multiple-files-content")
-        ->addAttribute("data-name", $this->name);
-        $table->setHeaders([
+        $headers = [
+            "",
             "",
             Translation::getTranslation("file_name"),
             Translation::getTranslation("file_size"),
             "",
-        ]);
+        ];
+        return $headers;
+    }
+
+    public function getTableData()
+    {
         $referenceClassEntityName = $this->referenceClassEntityName;
         $fileFieldName = $this->getFileFieldNameOfReferenceClass();
+        $formName = "{$this->baseObject->entityName}[{$fileFieldName}]";
         $data = [];
         foreach ($this->getFiles() as $index => $fileInfo) {
             /** @var EntityFile */
             $file = EntityFile::get($fileInfo->{$fileFieldName}->getValue());
             $row = [];
+            $row[] = Link::create(
+                "#",
+                ViewGroup::create("span", "fa fa-arrows-alt")
+            )->addClass("move_icon");
             if ($file->isImage) {
-                $row[0] = ViewGroup::create("div", "mw-50px")
+                $row[1] = ViewGroup::create("div", "mw-50px")
                 ->addField(
                     Link::create(
                         "#",
@@ -121,13 +130,13 @@ class MultipleFileInputWidget extends FormWidget
                     ->addAttribute("data-field-name", Translation::getTranslation($fileFieldName))
                 );
             } else {
-                $row[0] = ViewGroup::create("div", "mw-50px")
+                $row[1] = ViewGroup::create("div", "mw-50px")
                 ->addField(
                     ViewGroup::create("span", $file->getFileIconClass() . " fs-2x ms-2 text-primary")
                 );
             }
-            $row[0]->addField(
-                InputWidget::create($this->name . "[{$index}][{$fileFieldName}]")
+            $row[1]->addField(
+                InputWidget::create($formName . "[{$index}][{$fileFieldName}]")
                 ->setType("hidden")
                 ->setValue($file->ID->getValue())
             );
@@ -165,8 +174,7 @@ class MultipleFileInputWidget extends FormWidget
             ->addAttribute("data-field-name", Translation::getTranslation($fileFieldName));
             $data[] = $row;
         }
-        $table->setData($data);
-        return $table;
+        return $data;
     }
 
     public function getTemplateFile(): string

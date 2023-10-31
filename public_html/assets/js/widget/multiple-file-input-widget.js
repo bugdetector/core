@@ -55,6 +55,7 @@ $(function () {
                         </div>`
                     };
                     table.append(`<tr>
+                        <td></td>
                         <td>
                             ${preview}
                             <input type='hidden' name='${name}[${fileField}]' value='${response.data.ID}'/>
@@ -79,4 +80,21 @@ $(function () {
             });
         }
     })
+
+    initializeMultipleFileInput();
 })
+
+function initializeMultipleFileInput(){
+    let sortable = new Sortable.default($(".files-sortable-list").toArray(), {
+        animation: 100,
+        group: 'files-sortable-list',
+        draggable: '.file-sortable',
+        handle: '.file-sortable .move_icon',
+        sort: true,
+        filter: '.sortable-disabled',
+        mirror: {
+            appendTo: '.files-sortable-list',
+            constrainDimensions: true
+        }
+    });
+}

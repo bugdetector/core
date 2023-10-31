@@ -171,6 +171,9 @@ function openModal(
                 loadHtmlEditor(el);
             })
         }
+        if (typeof window.initializeMultipleFileInput === "function") {
+            initializeMultipleFileInput();
+        }
     })
     return [modal, modalContent];
 }

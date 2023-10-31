@@ -241,7 +241,10 @@ abstract class Model implements SearchableInterface
                 if ($field instanceof DataTypeFile && @$this->changed_fields[$fieldName]) {
                     $file = File::get($this->changed_fields[$fieldName]["old_value"]);
                     if ($file) {
-                        $file->delete();
+                        $file->map([
+                            "status" => File::STATUS_TEMPORARY
+                        ]);
+                        $file->save();
                     }
                 }
             }
@@ -381,7 +384,7 @@ abstract class Model implements SearchableInterface
         return $fields;
     }
 
-    protected function getAllFields()
+    public function getAllFields()
     {
         $fields = [];
         foreach ($this as $field_name => $field) {
