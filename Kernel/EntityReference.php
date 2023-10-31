@@ -99,7 +99,7 @@ class EntityReference extends DataTypeAbstract
             }
             $widget = SelectWidget::create("")
             ->setNullElement(null)
-            ->addAttribute("multiple", "true")
+            ->addAttribute("multiple", "multiple")
             ->setOptions($options)
             ->setAutoComplete($referenceClass::getTableName(), array_keys(
                 (new $referenceClass())->toArray()
@@ -228,6 +228,7 @@ class EntityReference extends DataTypeAbstract
             if ($this->value) {
                 foreach ($this->value as $data) {
                     if (!empty($existing)) {
+                        /** @var Model */
                         $object = array_shift($existing);
                     } else {
                         /** @var Model */

@@ -4,13 +4,31 @@
 			{{ widget.label }}
 		</label>
 	{% endif %}
-    {{ widget.getFilesTable() }}
-	<label class="btn btn-sm btn-primary multiple-file-input" data-entity="{{ widget.referenceClassEntityName }}" data-name="{{ widget.name }}"
-    data-field-name="{{ t(widget.referenceClassEntityName) }}" data-file-field="{{ widget.getFileFieldNameOfReferenceClass() }}">
-        <span class="fa fa-file-upload"></span>
-         {{ t("add_new_entity", [t(widget.referenceClassEntityName)]) }}
-         <input class="d-none" type="file" multiple data-key="{{ widget.fileKeyJwt.createToken() }}">
-    </label>
+	<div class="table-responsive">
+		<table class="table table-striped table-hover position-relative gy-7 gs-7 multiple-files-content" data-name="{{ widget.name }}">
+			<thead>
+				<tr class="bg-light">
+					{% for head in widget.getTableHeaders() %}
+						<th class="fw-bolder">{{ head }}</th>
+					{% endfor %}
+				</tr>
+			</thead>
+			<tbody class="files-sortable-list">
+				{% for row in widget.getTableData() %}
+					<tr class="file-sortable">
+						{% for column in row %}
+							<td>{{ column }}</td>
+						{% endfor %}
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<label class="btn btn-sm btn-primary multiple-file-input" data-entity="{{ widget.referenceClassEntityName }}" data-name="{{ widget.name }}" data-field-name="{{ t(widget.referenceClassEntityName) }}" data-file-field="{{ widget.getFileFieldNameOfReferenceClass() }}">
+		<span class="fa fa-file-upload"></span>
+		{{ t("add_new_entity", [t(widget.referenceClassEntityName)]) }}
+		<input class="d-none" type="file" multiple data-key="{{ widget.fileKeyJwt.createToken() }}">
+	</label>
 	{% if widget.description %}
 		<small for="{{ widget.attributes["id"] }}" class="d-block">
 			{{ widget.description }}
