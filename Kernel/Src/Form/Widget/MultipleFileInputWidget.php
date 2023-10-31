@@ -109,7 +109,7 @@ class MultipleFileInputWidget extends FormWidget
     {
         $referenceClassEntityName = $this->referenceClassEntityName;
         $fileFieldName = $this->getFileFieldNameOfReferenceClass();
-        $formName = "{$this->baseObject->entityName}[{$fileFieldName}]";
+        $formName = "{$this->baseObject->entityName}[{$referenceClassEntityName}]";
         $data = [];
         foreach ($this->getFiles() as $index => $fileInfo) {
             /** @var EntityFile */
