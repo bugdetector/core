@@ -5,7 +5,7 @@ $(function () {
             target: element,
             toolbar: ['styleselect fontselect fontsizeselect',
                 'undo redo | cut copy paste | bold italic forecolor backcolor | link image | alignleft aligncenter alignright alignjustify | bullist numlist | table codesample | outdent indent | blockquote | code visualblocks fullscreen'],
-            plugins: 'autosave link image imagetools table lists code codesample visualblocks fullscreen',
+            plugins: 'autosave link image imagetools table lists code codesample visualblocks fullscreen autolink',
             contextmenu: 'cut copy paste',
             branding: false,
             resize: true,
