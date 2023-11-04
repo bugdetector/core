@@ -2,7 +2,6 @@
 // phpcs:ignoreFile
 use CoreDB\Kernel\BaseController;
 use CoreDB\Kernel\ConfigurationManager;
-use CoreDB\Kernel\Database\MySQL\MySQLDriver;
 use CoreDB\Kernel\Database\DatabaseDriver;
 use CoreDB\Kernel\Messenger;
 use CoreDB\Kernel\Router;
@@ -302,7 +301,7 @@ class CoreDB
 
     public static function database(): DatabaseDriver
     {
-        return MySQLDriver::getInstance();
+        return DatabaseDriver::getDriver();
     }
 
     /**
