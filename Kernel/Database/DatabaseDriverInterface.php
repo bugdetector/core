@@ -18,6 +18,7 @@ use PDOStatement;
 interface DatabaseDriverInterface
 {
     public const INTEGER = "integer";
+    public const UNSIGNED_BIG_INTEGER  = "big_integer";
     public const FLOAT = "float";
     public const CHECKBOX = "checkbox";
     public const SHORT_TEXT = "short_text";

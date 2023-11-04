@@ -6,7 +6,7 @@ use CoreDB;
 use CoreDB\Kernel\Database\DataType\DataTypeAbstract;
 use CoreDB\Kernel\Database\DataType\DateTime;
 use CoreDB\Kernel\Database\DataType\File as DataTypeFile;
-use CoreDB\Kernel\Database\DataType\Integer;
+use CoreDB\Kernel\Database\DataType\UnsignedBigInteger;
 use CoreDB\Kernel\Database\SelectQueryPreparerAbstract;
 use CoreDB\Kernel\Database\TableDefinition;
 use PDO;
@@ -30,7 +30,7 @@ use Src\Views\ViewGroup;
 
 abstract class Model implements SearchableInterface
 {
-    public Integer $ID;
+    public UnsignedBigInteger $ID;
     public DateTime $created_at;
     public DateTime $last_updated;
     public string $entityName = "";

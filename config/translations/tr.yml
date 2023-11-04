@@ -244,3 +244,4 @@ subscribe_notifications: 'Bildirimlere Abone Ol'
 allow_notifications: 'Bildirimlere İzin Ver'
 subscribe_notifications_message: "<div class=\"d-flex flex-column text-center\">\r\n<div><span class=\"fa fa-bell display-4 text-warning\"></span></div>\r\n<div class=\"fw-bolder fs-4 mt-3\">Bildirimlerimize üye olun ve güncellemeleri kaçırmayın.</div>\r\n</div>"
 thanks: Teşekkürler
+big_integer: 'Büyük Tam Sayı'

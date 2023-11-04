@@ -28,6 +28,7 @@ use CoreDB\Kernel\Database\UpdateQueryPreparerAbstract;
 use CoreDB\Kernel\Database\DatabaseDriver;
 use CoreDB\Kernel\Database\DataType\Checkbox;
 use CoreDB\Kernel\Database\DatabaseInstallationException;
+use CoreDB\Kernel\Database\DataType\UnsignedBigInteger;
 use CoreDB\Kernel\Database\QueryCondition;
 use PDO;
 use PDOException;
@@ -102,6 +103,7 @@ class MySQLDriver extends DatabaseDriver
             if ($this->connection->inTransaction()) {
                 $this->connection->rollBack();
             }
+            print_r($ex->getTraceAsString());
             if ($ex->getCode() == "42S02") {
                 throw new DatabaseInstallationException($ex->getMessage());
             }
@@ -240,7 +242,7 @@ class MySQLDriver extends DatabaseDriver
             $field = null;
             $type = substr($description["Type"], 0, strpos($description["Type"], "(") ?: strlen($description["Type"]));
             if (
-                $type == "int" && ($description["Key"] == "MUL" ||
+                $type == "bigint unsigned" && ($description["Key"] == "MUL" ||
                 ($description["Key"] == "UNI" && self::isUniqueForeignKey($table, $description["Field"])))
             ) {
                 $type = "table_reference";
@@ -248,6 +250,9 @@ class MySQLDriver extends DatabaseDriver
             switch ($type) {
                 case "int":
                     $field = new Integer($description["Field"]);
+                    break;
+                case "bigint unsigned":
+                    $field = new UnsignedBigInteger($description["Field"]);
                     break;
                 case "double":
                     $field = new FloatNumber($description["Field"]);
@@ -275,8 +280,8 @@ class MySQLDriver extends DatabaseDriver
                     $field = new Time($description["Field"]);
                     break;
                 case "table_reference":
-                    $fk_description = self::getForeignKeyDescription($table, $description["Field"]);
-                    $reference_table = !empty($fk_description) ? $fk_description["REFERENCED_TABLE_NAME"] : "";
+                    $fk_descriptions = self::getForeignKeyDescription($table, $description["Field"]);
+                    $reference_table = !empty($fk_descriptions) ? $fk_descriptions[0]["REFERENCED_TABLE_NAME"] : "";
                     if ($reference_table == "files") {
                         $field = new File($description["Field"]);
                     } else {
@@ -354,11 +359,11 @@ class MySQLDriver extends DatabaseDriver
     public static function getForeignKeyDescription(string $table, string $foreignKey): array
     {
         $result = CoreDB::database()->select("INFORMATION_SCHEMA.KEY_COLUMN_USAGE", "", false)
-            ->select("", ["REFERENCED_TABLE_NAME", "REFERENCED_COLUMN_NAME"])
+            ->select("", ["REFERENCED_TABLE_NAME", "REFERENCED_COLUMN_NAME", "CONSTRAINT_NAME"])
             ->condition("REFERENCED_TABLE_SCHEMA", DB_NAME)
             ->condition("TABLE_NAME", $table)
             ->condition("COLUMN_NAME", $foreignKey)
-            ->execute()->fetch(PDO::FETCH_BOTH);
+            ->execute()->fetchAll(PDO::FETCH_BOTH);
         return $result ?: [];
     }
 
@@ -408,12 +413,14 @@ class MySQLDriver extends DatabaseDriver
         return $comment;
     }
 
-    public function getColumnDefinition(DataTypeAbstract $dataType): string
+    public function getColumnDefinition(DataTypeAbstract $dataType, $updateColumn = false): string
     {
         $type_description = "`$dataType->column_name` ";
         $class_name = get_class($dataType);
         if ($class_name == Integer::class) {
             $type_description .= "INT";
+        } elseif ($class_name == UnsignedBigInteger::class) {
+            $type_description .= "BIGINT UNSIGNED";
         } elseif ($class_name == FloatNumber::class) {
             $type_description .= "DOUBLE";
         } elseif ($class_name == Checkbox::class) {
@@ -434,10 +441,11 @@ class MySQLDriver extends DatabaseDriver
         } elseif ($class_name == Time::class) {
             $type_description .= "TIME";
         } elseif ($class_name == File::class) {
-            $type_description .= "INT";
+            $type_description .= "BIGINT UNSIGNED";
         } elseif ($class_name == TableReference::class) {
-            $type_description .= "INT";
+            $type_description .= "BIGINT UNSIGNED";
         } elseif ($class_name == EnumaratedList::class) {
+            /** @var EnumaratedList $dataType */
             $type_description .= "ENUM('" . implode("','", $dataType->values) . "')";
         }
         if (!$dataType->isNull) {
@@ -446,7 +454,7 @@ class MySQLDriver extends DatabaseDriver
         if ($dataType->autoIncrement) {
             $type_description .= " AUTO_INCREMENT";
         }
-        if ($dataType->primary_key) {
+        if ($dataType->primary_key && !$updateColumn) {
             $type_description .= " PRIMARY KEY";
         }
         if ($dataType->default) {

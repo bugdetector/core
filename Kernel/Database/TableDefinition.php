@@ -5,7 +5,7 @@ namespace CoreDB\Kernel\Database;
 use CoreDB;
 use CoreDB\Kernel\Database\DataType\DataTypeAbstract;
 use CoreDB\Kernel\Database\DataType\DateTime;
-use CoreDB\Kernel\Database\DataType\Integer;
+use CoreDB\Kernel\Database\DataType\UnsignedBigInteger;
 use Src\Entity\Cache;
 
 class TableDefinition
@@ -24,7 +24,7 @@ class TableDefinition
     {
         $cache = !$doNotUseCache ? Cache::getByBundleAndKey("table_definition", $table_name) : null;
         if ($cache) {
-            return unserialize(base64_decode($cache->value->getValue()));
+            $definition = unserialize(base64_decode($cache->value->getValue()));
         } else {
             $definition = new TableDefinition($table_name);
             if (in_array($table_name, CoreDB::database()->getTableList())) {
@@ -34,9 +34,24 @@ class TableDefinition
             } else {
                 $definition->table_exist = false;
             }
-            $cache = Cache::set("table_definition", $table_name, base64_encode(serialize($definition)));
-            return $definition;
+            if (!$doNotUseCache) {
+                $cache = Cache::set("table_definition", $table_name, base64_encode(serialize($definition)));
+            }
         }
+        /**
+         * Migration:
+         * This block detects system need to update ID field data type.
+         * Will be removed in future relase.
+         */
+        if (
+            @$definition->fields["ID"] &&
+            !($definition->fields["ID"] instanceof UnsignedBigInteger) &&
+            !$doNotUseCache
+        ) {
+            self::migrateIdFiedlsToUnsignedBigInteger();
+            return TableDefinition::getDefinition($table_name, $doNotUseCache);
+        }
+        return $definition;
     }
 
     public function setComment(string $table_comment)
@@ -50,7 +65,7 @@ class TableDefinition
             return;
         }
         if (!isset($this->fields["ID"])) {
-            $id_field = (new Integer("ID"));
+            $id_field = (new UnsignedBigInteger("ID"));
             $id_field->isNull = false;
             $id_field->primary_key = true;
             $id_field->autoIncrement = true;
@@ -95,5 +110,40 @@ class TableDefinition
             $array["fields"][$field_name] = $field->toArray();
         }
         return $array;
+    }
+
+    /**
+     * Migration:
+     * This block migrated ID field data type to unsigned big integer.
+     * Will be removed in future relase.
+     */
+    public static function migrateIdFiedlsToUnsignedBigInteger()
+    {
+        $allReferences = \CoreDB::database()->getAllTableReferences()->fetchAll(\PDO::FETCH_ASSOC);
+        $dbQuery = "";
+        $finishingDbQuery = "";
+        foreach ($allReferences as $reference) {
+            $fkDescriptions = \CoreDB::database()
+                ->getForeignKeyDescription($reference["TABLE_NAME"], $reference["COLUMN_NAME"]);
+            foreach ($fkDescriptions as $fkDescription) {
+                $dbQuery .= "ALTER TABLE `{$reference["TABLE_NAME"]}` DROP FOREIGN KEY " .
+                    "`{$fkDescription["CONSTRAINT_NAME"]}`;";
+                $dbQuery .= "ALTER TABLE `{$reference["TABLE_NAME"]}` CHANGE `{$reference["COLUMN_NAME"]}`" .
+                    " `{$reference["COLUMN_NAME"]}` BIGINT UNSIGNED;";
+                $finishingDbQuery .= "ALTER TABLE `{$reference["TABLE_NAME"]}` " .
+                    "ADD FOREIGN KEY (`{$reference["COLUMN_NAME"]}`) " .
+                    "REFERENCES `{$fkDescription["REFERENCED_TABLE_NAME"]}`(ID);";
+            }
+        }
+        foreach (\CoreDB::database()->getTableList() as $table_name) {
+            $dbQuery .= "ALTER TABLE `{$table_name}` CHANGE `ID` `ID` BIGINT UNSIGNED AUTO_INCREMENT;";
+        }
+        $dbQuery .= $finishingDbQuery;
+        if ($dbQuery) {
+            \CoreDB::database()->query($dbQuery);
+        }
+        Cache::clear();
+        \CoreDB::database()->query("SET FOREIGN_KEY_CHECKS = 0;");
+        \CoreDB::config()->importTableConfiguration();
     }
 }

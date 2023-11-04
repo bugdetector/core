@@ -15,6 +15,7 @@ use CoreDB\Kernel\Database\DataType\LongText;
 use CoreDB\Kernel\Database\DataType\ShortText;
 use CoreDB\Kernel\Database\DataType\Text;
 use CoreDB\Kernel\Database\DataType\Time;
+use CoreDB\Kernel\Database\DataType\UnsignedBigInteger;
 
 abstract class DatabaseDriver implements DatabaseDriverInterface
 {
@@ -22,6 +23,7 @@ abstract class DatabaseDriver implements DatabaseDriverInterface
     {
         return [
             self::INTEGER => Integer::class,
+            self::UNSIGNED_BIG_INTEGER => UnsignedBigInteger::class,
             self::FLOAT => FloatNumber::class,
             self::CHECKBOX => Checkbox::class,
             self::SHORT_TEXT => ShortText::class,

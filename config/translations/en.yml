@@ -244,3 +244,4 @@ subscribe_notifications: 'Subscribe Notification'
 allow_notifications: 'Allow Notifications'
 subscribe_notifications_message: "<div class=\"d-flex flex-column text-center\">\r\n<div><span class=\"fa fa-bell display-4 text-warning\"></span></div>\r\n<div class=\"fw-bolder fs-4 mt-3\">Subscribe our notifications and don't miss any updates.</div>\r\n</div>"
 thanks: Thanks
+big_integer: 'Big Integer'
