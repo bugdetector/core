@@ -1,0 +1,12 @@
+clear_cache:
+  command: 'clear:cache'
+  at: '0 2 * * *'
+clear_temporary-files:
+  command: 'clear:temporary-files'
+  at: '0 2 * * *'
+compress_image_files:
+  command: 'image:compress'
+  at: '0 2 * * *'
+send_push_notifications:
+  command: 'notifications:send'
+  at: '* * * * *'
