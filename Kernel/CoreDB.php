@@ -3,6 +3,8 @@
 use CoreDB\Kernel\BaseController;
 use CoreDB\Kernel\ConfigurationManager;
 use CoreDB\Kernel\Database\DatabaseDriver;
+use CoreDB\Kernel\Events\EventsManager;
+use CoreDB\Kernel\Events\EventsManagerInterface;
 use CoreDB\Kernel\Messenger;
 use CoreDB\Kernel\Router;
 use Src\Entity\Session;
@@ -342,6 +344,16 @@ class CoreDB
     public static function config(): ConfigurationManager
     {
         return ConfigurationManager::getInstance();
+    }
+
+    /**
+     * Returns event manager
+     * @return EventsManagerInterface
+     * Event Manager
+     */
+    public static function events(): EventsManagerInterface
+    {
+        return EventsManager::getInstance();
     }
 
     public static function isImage($path)
