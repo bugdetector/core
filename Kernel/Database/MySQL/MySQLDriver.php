@@ -242,7 +242,7 @@ class MySQLDriver extends DatabaseDriver
             $field = null;
             $type = substr($description["Type"], 0, strpos($description["Type"], "(") ?: strlen($description["Type"]));
             if (
-                $type == "bigint unsigned" && ($description["Key"] == "MUL" ||
+                in_array($type, ["bigint", "bigint unsigned"]) && ($description["Key"] == "MUL" ||
                 ($description["Key"] == "UNI" && self::isUniqueForeignKey($table, $description["Field"])))
             ) {
                 $type = "table_reference";
@@ -251,6 +251,7 @@ class MySQLDriver extends DatabaseDriver
                 case "int":
                     $field = new Integer($description["Field"]);
                     break;
+                case "bigint":
                 case "bigint unsigned":
                     $field = new UnsignedBigInteger($description["Field"]);
                     break;
