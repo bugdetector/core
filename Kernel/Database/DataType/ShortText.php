@@ -44,6 +44,7 @@ class ShortText extends DataTypeAbstract
      */
     public function equals(DataTypeAbstract $dataType): bool
     {
+        /** @var ShortText $dataType */
         return parent::equals($dataType) &&
             (isset($dataType->length) ? $dataType->length == $this->length : false);
     }

@@ -2,6 +2,7 @@
 
 namespace Src\Form;
 
+use CoreDB\Kernel\Database\DatabaseDriver;
 use CoreDB\Kernel\Database\MySQL\MySQLDriver;
 use CoreDB\Kernel\Messenger;
 use Src\Entity\DynamicModel;
@@ -10,6 +11,9 @@ use Src\Entity\Translation;
 use Src\Entity\User;
 use Src\Entity\Variable;
 use Src\Form\Widget\InputWidget;
+use Src\Form\Widget\SelectWidget;
+use Src\Views\AlertMessage;
+use Src\Views\TextElement;
 
 class InstallForm extends Form
 {
@@ -21,6 +25,17 @@ class InstallForm extends Form
         if (!isset($this->request["save"])) {
             $this->setMessage(Translation::getTranslation("install_description"), Messenger::INFO);
         }
+        $this->addField(
+            SelectWidget::create("db_driver")
+                ->setOptions(
+                    DatabaseDriver::drivers()
+                )->setNullElement(null)
+                ->setLabel(Translation::getTranslation("db_driver"))
+                ->addClass("form-control-user")
+                ->addAttribute("placeholder", Translation::getTranslation("db_driver"))
+                ->addAttribute("required", "true")
+                ->addAttribute("autocomplete", "false")
+        );
         $this->addField(
             InputWidget::create("db_server")
                 ->setLabel(Translation::getTranslation("db_server"))
@@ -47,11 +62,17 @@ class InstallForm extends Form
         );
         $this->addField(
             InputWidget::create("db_password")
-                ->setLabel(Translation::getTranslation("password"))
+                ->setLabel(Translation::getTranslation("db_password"))
                 ->setType("password")
                 ->addClass("form-control-user")
                 ->addAttribute("placeholder", Translation::getTranslation("db_password"))
                 ->addAttribute("autocomplete", "new-password")
+        );
+        $this->addField(
+            TextElement::create(
+                Translation::getTranslation("user_details")
+            )->setTagName("h2")
+            ->addClass("my-3")
         );
         $this->addField(
             InputWidget::create("username")
@@ -90,9 +111,9 @@ class InstallForm extends Form
         $this->addField(
             InputWidget::create("save")
                 ->setType("submit")
-                ->setValue(Translation::getTranslation("save"))
+                ->setValue(Translation::getTranslation("install"))
                 ->removeClass("form-control")
-                ->addClass("btn btn-info btn-user btn-block")
+                ->addClass("btn btn-info btn-user btn-block mt-3")
                 ->addAttribute("required", "true")
         );
     }
@@ -131,6 +152,7 @@ class InstallForm extends Form
         $hashSalt = base64_encode(random_bytes(50));
         $config = str_replace(
             [
+                "%db_driver",
                 "%db_server",
                 "%db_name",
                 "%db_user",
@@ -138,6 +160,7 @@ class InstallForm extends Form
                 "%hash_salt"
             ],
             [
+                $this->request["db_driver"],
                 $this->request["db_server"],
                 $this->request["db_name"],
                 $this->request["db_user"],

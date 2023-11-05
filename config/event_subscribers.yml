@@ -1,0 +1,3 @@
+# Please write classes that implements Symfony\Component\EventDispatcher\EventSubscriberInterface
+# Example
+# - App\EventSubscriber\MySiteSubscriber

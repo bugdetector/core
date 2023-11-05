@@ -1,4 +1,4 @@
-<div class="alert {{ view.type }}">
+<div class="alert {{ view.type }} {{ view.classes|join(" ") }}">
 	<strong>{{ view.getMessageHeader() }}</strong>
 	{{ view.message }}
 </div>

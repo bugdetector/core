@@ -15,13 +15,34 @@ use CoreDB\Kernel\Database\DataType\LongText;
 use CoreDB\Kernel\Database\DataType\ShortText;
 use CoreDB\Kernel\Database\DataType\Text;
 use CoreDB\Kernel\Database\DataType\Time;
+use CoreDB\Kernel\Database\DataType\UnsignedBigInteger;
+use CoreDB\Kernel\Database\MySQL\MySQLDriver;
 
 abstract class DatabaseDriver implements DatabaseDriverInterface
 {
+    public static function drivers()
+    {
+        return [
+            'mysql' => "MySQL",
+        ];
+    }
+
+    public static function getDriver()
+    {
+        $drivers = self::drivers();
+        $driver = defined("DB_DRIVER") && array_key_exists(DB_DRIVER, $drivers) ? DB_DRIVER : "mysql";
+        switch ($driver) {
+            case "mysql":
+            default:
+                return MySQLDriver::getInstance();
+        }
+    }
+
     public static function dataTypes(): array
     {
         return [
             self::INTEGER => Integer::class,
+            self::UNSIGNED_BIG_INTEGER => UnsignedBigInteger::class,
             self::FLOAT => FloatNumber::class,
             self::CHECKBOX => Checkbox::class,
             self::SHORT_TEXT => ShortText::class,

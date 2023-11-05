@@ -3,9 +3,9 @@
 namespace Src\Entity;
 
 use CoreDB\Kernel\Database\DataType\DateTime;
-use CoreDB\Kernel\Database\DataType\Integer;
 use CoreDB\Kernel\Database\DataType\LongText;
 use CoreDB\Kernel\Database\DataType\ShortText;
+use CoreDB\Kernel\Database\DataType\UnsignedBigInteger;
 use CoreDB\Kernel\Model;
 
 /**
@@ -22,7 +22,7 @@ class Cache extends Model
     private static array $staticCache = [];
     public function __construct(string $tableName = null, array $mapData = [])
     {
-        $this->ID = new Integer("");
+        $this->ID = new UnsignedBigInteger("");
         $this->bundle = new ShortText("");
         $this->key = new ShortText("");
         $this->value = new LongText("");
