@@ -6,3 +6,4 @@
 - Src\Command\CompressImageFilesCommand
 - Src\Command\SendPushNotificationsCommand
 - Src\Command\SendTestPushNotificationsCommand
+- Src\Command\ScheduleRunCommand
