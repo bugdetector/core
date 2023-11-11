@@ -46,6 +46,7 @@ class MultipleFileInputWidget extends FormWidget
         ]);
         $controller = CoreDB::controller();
         $controller->addJsFiles([
+            "base_theme/assets/plugins/custom/draggable/draggable.bundle.js",
             "assets/js/components/file_input.js",
             "assets/js/widget/multiple-file-input-widget.js",
             "base_theme/assets/plugins/custom/fslightbox/fslightbox.bundle.js",
@@ -120,6 +121,7 @@ class MultipleFileInputWidget extends FormWidget
                 ViewGroup::create("span", "fa fa-arrows-alt")
             )->addClass("move_icon");
             if ($file->isImage) {
+                /** @var ViewGroup */
                 $row[1] = ViewGroup::create("div", "mw-50px")
                 ->addField(
                     Link::create(
@@ -130,6 +132,7 @@ class MultipleFileInputWidget extends FormWidget
                     ->addAttribute("data-field-name", Translation::getTranslation($fileFieldName))
                 );
             } else {
+                /** @var ViewGroup */
                 $row[1] = ViewGroup::create("div", "mw-50px")
                 ->addField(
                     ViewGroup::create("span", $file->getFileIconClass() . " fs-2x ms-2 text-primary")
