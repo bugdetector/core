@@ -27,7 +27,7 @@ abstract class DatabaseDriver implements DatabaseDriverInterface
         ];
     }
 
-    public static function getDriver()
+    public static function getDriver(): DatabaseDriver
     {
         $drivers = self::drivers();
         $driver = defined("DB_DRIVER") && array_key_exists(DB_DRIVER, $drivers) ? DB_DRIVER : "mysql";
