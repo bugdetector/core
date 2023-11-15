@@ -15,6 +15,7 @@ use Src\Entity\Watchdog;
 use Src\JWT;
 use Src\Lib\PushNotification\PushNotificationService;
 use Src\Theme\CoreRenderer;
+use Src\Theme\ThemeInteface;
 use Src\Views\EmailTemplate;
 
 class CoreDB
@@ -41,7 +42,15 @@ class CoreDB
      *      filename = $filename
      *  ]
      */
-    public static function HTMLMail($tos, $subject, $message, $toUsernames, array $attachments = [], $template = EmailTemplate::class)
+    public static function HTMLMail(
+        $tos, 
+        $subject, 
+        $message, 
+        $toUsernames, 
+        array $attachments = [], 
+        $template = EmailTemplate::class,
+        ThemeInteface $theme = null
+    )
     {
         if(ENVIROMENT != "production"){
             $message .= Translation::getTranslation("originally_send_to", [
@@ -69,7 +78,7 @@ class CoreDB
         }
         $mail->Subject = $subject;
         $mail->Body = CoreRenderer::getInstance(
-            CoreDB::controller()->getTheme()
+            $theme ?: CoreDB::controller()->getTheme()
         )->renderView(new $template($message));
         foreach($attachments as $attachment){
             switch($attachment["type"]){
