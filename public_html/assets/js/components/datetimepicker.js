@@ -36,7 +36,9 @@ window.loadDateInput = function () {
         el.val("");
         let instance = flatpickr(el, {
             dateFormat: "d-m-Y",
-            locale: language,
+            locale: { 
+                firstDayOfWeek: 1
+            },
             defaultDate: default_value,
             allowInput: true,
         });
@@ -59,7 +61,9 @@ window.loadDateTimeInput = function () {
             dateFormat: "d-m-Y H:i",
             enableTime: true,
             time_24hr: true,
-            locale: language,
+            locale: { 
+                firstDayOfWeek: 1
+            },
             defaultDate: default_value,
             icons: {
                 time: "fa fa-clock"
@@ -83,7 +87,12 @@ window.loadDateRangeInput = function(){
         el.val("");
         flatpickr(el, {
             dateFormat: "Y-m-d",
-            locale: { rangeSeparator: ' & ' },
+            altInput: true,
+            altFormat: "d-m-Y",
+            locale: { 
+                rangeSeparator: ' & ',
+                firstDayOfWeek: 1
+            },
             defaultDate: default_value,
             mode: "range",
             allowInput: true
