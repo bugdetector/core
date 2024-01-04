@@ -103,7 +103,6 @@ class MySQLDriver extends DatabaseDriver
             if ($this->connection->inTransaction()) {
                 $this->connection->rollBack();
             }
-            print_r($ex->getTraceAsString());
             if ($ex->getCode() == "42S02") {
                 throw new DatabaseInstallationException($ex->getMessage());
             }
