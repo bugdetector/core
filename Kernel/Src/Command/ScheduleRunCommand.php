@@ -25,9 +25,15 @@ class ScheduleRunCommand extends Command
             $scheduler = new Scheduler();
             foreach ($scheduledJobs as $identifier => $command) {
                 $scheduler
-                ->php(__DIR__ . "/../../../bin/console.php", null, [
-                    $command["command"] => null
-                ], $identifier)->at($command["at"])
+                ->php(
+                    __DIR__ . "/../../../bin/console.php",
+                    null,
+                    is_array($command["command"]) ?
+                    $command["command"] : [
+                        $command["command"] => null
+                    ],
+                    $identifier
+                )->at($command["at"])
                 ->then(function ($out) use ($output) {
                     $output->writeln($out);
                 });
