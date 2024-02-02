@@ -54,7 +54,7 @@ class NotificationsController extends ServiceController
         /** @var PushNotificationSubscription */
         $subscriptionClasss = CoreDB::config()->getEntityClassName("push_notification_subscriptions");
         $subscription = $subscriptionClasss::get([
-            "token" => is_array($keysData) ? json_encode($keysData) : $keysData
+            "keys" => is_array($keysData) ? json_encode($keysData) : $keysData
         ]) ?: new $subscriptionClasss();
         $subscription->map($data);
         if (!$subscription->ID->getValue()) {
