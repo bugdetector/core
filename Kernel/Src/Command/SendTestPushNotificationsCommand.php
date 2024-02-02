@@ -47,6 +47,10 @@ class SendTestPushNotificationsCommand extends Command
                     ])
                 );
                 foreach ($pnSubscriptions as $pnSubscription) {
+                    $payload->setURL(
+                        $pnSubscription->subscription_type->getValue() == PushNotificationSubscription::SUBSCRIPTION_TYPE_SITE ?
+                        BASE_URL : FRONTEND_URL
+                    );
                     $pnService->push($payload, $pnSubscription);
                 }
                 $state->value->setValue(0);

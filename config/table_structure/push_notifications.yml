@@ -41,6 +41,16 @@ fields:
     default: null
     comment: 'Icon url.'
     length: '500'
+  image:
+    type: short_text
+    column_name: image
+    primary_key: false
+    autoIncrement: false
+    isNull: true
+    isUnique: false
+    default: null
+    comment: 'Image url.'
+    length: '500'
   url:
     type: short_text
     column_name: url

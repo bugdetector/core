@@ -71,7 +71,8 @@ if (!IS_CLI) {
         ]
     );
 }
-
+// Frontend app url
+define("FRONTEND_URL", "http://localhost:3000");
 // Configure push notifications id notifications enabled otherwise no need to configure.
 define("VAPID_SUBJECT", "");
 define("PUBLIC_VAPID_KEY", "");

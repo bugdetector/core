@@ -50,6 +50,7 @@ class SendPushNotificationsCommand extends Command
                             $pushNotification->text,
                             $pushNotification->icon
                         );
+                        $payload->setImage($pushNotification->image);
                         if ($pushNotification->url->getValue()) {
                             $payload->setURL($pushNotification->url);
                         }
