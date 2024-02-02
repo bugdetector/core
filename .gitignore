@@ -1,5 +1,6 @@
 public_html/files/uploaded
 config/config.php
+config/firebase-service-account.json
 .htaccess
 .composer.lock
 vendor/
