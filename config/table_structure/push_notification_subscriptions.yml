@@ -16,7 +16,7 @@ fields:
     column_name: endpoint
     primary_key: false
     autoIncrement: false
-    isNull: false
+    isNull: true
     isUnique: false
     default: null
     comment: 'Subscription endpoint.'
@@ -39,3 +39,17 @@ fields:
     isUnique: false
     default: null
     comment: 'Json formatted keys.'
+  subscription_type:
+    type: enumarated_list
+    column_name: subscription_type
+    primary_key: false
+    autoIncrement: false
+    isNull: false
+    isUnique: false
+    default: null
+    comment: ''
+    values:
+      SITE: SITE
+      APP: APP
+      ANDROID_APP: ANDROID_APP
+      IOS_APP: IOS_APP

@@ -4,6 +4,7 @@ namespace Src\Entity;
 
 use CoreDB;
 use CoreDB\Kernel\Database\DataType\DateTime;
+use CoreDB\Kernel\Database\DataType\EnumaratedList;
 use CoreDB\Kernel\Model;
 use CoreDB\Kernel\Database\DataType\TableReference;
 use CoreDB\Kernel\Database\DataType\ShortText;
@@ -17,6 +18,25 @@ use CoreDB\Kernel\Database\SelectQueryPreparerAbstract;
 
 class PushNotificationSubscription extends Model
 {
+    /**
+    * SUBSCRIPTION_TYPE_SITE subscribed in this site.
+    */
+    public const SUBSCRIPTION_TYPE_SITE = "SITE";
+    /**
+    * SUBSCRIPTION_TYPE_APP User subscribed on external site.
+    */
+    public const SUBSCRIPTION_TYPE_APP = "APP";
+    /**
+    * SUBSCRIPTION_TYPE_ANDROID_APP subscribed in android app.
+    * Firebase credentials needed.
+    */
+    public const SUBSCRIPTION_TYPE_ANDROID_APP = "ANDROID_APP";
+    /**
+    * SUBSCRIPTION_TYPE_IOS_APP User subscribed in ios app.
+    * Firebase credentials needed.
+    */
+    public const SUBSCRIPTION_TYPE_IOS_APP = "IOS_APP";
+
     /**
     * @var TableReference $user
     * User reference.
@@ -37,6 +57,11 @@ class PushNotificationSubscription extends Model
     * Json formatted keys.
     */
     public Text $keys;
+    /**
+    * @var EnumaratedList $subscription_type
+    * User subscription channel.
+    */
+    public EnumaratedList $subscription_type;
 
     /**
      * @inheritdoc

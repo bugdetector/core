@@ -34,6 +34,11 @@ class PushNotification extends Model
     */
     public ShortText $icon;
     /**
+    * @var ShortText $image
+    * Image url.
+    */
+    public ShortText $image;
+    /**
     * @var ShortText $url
     * Url that user will redirect when clicked.
     */

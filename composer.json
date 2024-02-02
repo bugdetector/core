@@ -7,7 +7,8 @@
         "symfony/console": "^5.1",
         "guzzlehttp/guzzle": "^7.5",
         "symfony/event-dispatcher": "^6.3",
-        "peppeocchi/php-cron-scheduler": "^4.0"
+        "peppeocchi/php-cron-scheduler": "^4.0",
+        "kreait/firebase-php": "^7.9"
     },
     "autoload": {
         "psr-4": {

@@ -5,6 +5,9 @@ namespace Src\Lib\PushNotification;
 use CoreDB;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use Kreait\Firebase\Factory;
+use Kreait\Firebase\Messaging\CloudMessage;
+use Kreait\Firebase\Messaging\Notification;
 use Psr\Http\Message\ResponseInterface;
 use Src\Entity\PushNotificationSubscription;
 use Src\Entity\User;
@@ -82,31 +85,68 @@ class PushNotificationService
      */
     public function push(PNPayload $payload, PushNotificationSubscription $subscription)
     {
-
-        $keys = json_decode($subscription->keys->getValue(), true);
-        $pnVapid = $this->getVapid();
-        $pnEncrypt = new PNEncryption($keys["p256dh"], $keys["auth"]);
-        $encryptedPayload = $pnEncrypt->encrypt($payload);
-        $client = new Client([
-            "headers" =>
-            $pnEncrypt->getHeaders($pnVapid->getHeaders($subscription->endpoint)) + [
-                "Content-Length" => mb_strlen($payload, '8bit'),
-                "TTL" => 2419200
-            ]
-        ]);
-        try {
-            /** @var ResponseInterface */
-            $response = $client->post(
-                $subscription->endpoint->getValue(),
+        if (
+            !in_array(
+                $subscription->subscription_type->getValue(),
                 [
-                    "body" => $encryptedPayload
+                PushNotificationSubscription::SUBSCRIPTION_TYPE_ANDROID_APP,
+                PushNotificationSubscription::SUBSCRIPTION_TYPE_IOS_APP
                 ]
-            );
-            if (!($response->getStatusCode() >= 200 && $response->getStatusCode() < 300)) {
+            )
+        ) {
+            $keys = json_decode($subscription->keys->getValue(), true);
+            $pnVapid = $this->getVapid();
+            $pnEncrypt = new PNEncryption($keys["p256dh"], $keys["auth"]);
+            $encryptedPayload = $pnEncrypt->encrypt($payload);
+            $client = new Client([
+                "headers" =>
+                $pnEncrypt->getHeaders($pnVapid->getHeaders($subscription->endpoint)) + [
+                    "Content-Length" => mb_strlen($payload, '8bit'),
+                    "TTL" => 2419200
+                ]
+            ]);
+            try {
+                /** @var ResponseInterface */
+                $response = $client->post(
+                    $subscription->endpoint->getValue(),
+                    [
+                        "body" => $encryptedPayload
+                    ]
+                );
+                if (!($response->getStatusCode() >= 200 && $response->getStatusCode() < 300)) {
+                    $subscription->delete();
+                }
+            } catch (ClientException $ex) {
                 $subscription->delete();
             }
-        } catch (ClientException $ex) {
-            $subscription->delete();
+        } else {
+            $factory = (new Factory())
+            ->withServiceAccount(
+                __DIR__ . '/../../../../config/firebase-service-account.json'
+            );
+            $messaging = $factory->createMessaging();
+
+            $data = $payload->getPayload();
+
+            $message = CloudMessage::withTarget(
+                "token",
+                $subscription->keys->getValue()
+            )
+                ->withNotification(Notification::create(
+                    $data["title"],
+                    $data["opt"]["body"],
+                    @$data['opt']['icon'],
+                ))
+                ->withData([
+                    'url' => @$data['opt']['data']['url'],
+                    'image' => @$data['opt']['image']
+                ]);
+
+            try {
+                $messaging->send($message);
+            } catch (\Exception $ex) {
+                $subscription->delete();
+            }
         }
     }
 }
