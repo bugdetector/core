@@ -166,7 +166,7 @@ class JWT
      */
     private function getEncodedPayload(): string
     {
-        return base64_encode(json_encode($this->payload));
+        return $this->encodeBase64URL(json_encode($this->payload));
     }
 
     /**
@@ -176,7 +176,7 @@ class JWT
     private function encrypt($pure_string)
     {
         $encrypted_string = openssl_encrypt($pure_string, $this->alg, HASH_SALT, OPENSSL_RAW_DATA, self::IV);
-        return base64_encode($encrypted_string);
+        return $this->encodeBase64URL($encrypted_string);
     }
 
     /**
