@@ -48,6 +48,7 @@ class NotificationsController extends ServiceController
         }
         $data = [];
         $data["user"] = CoreDB::currentUser()->ID->getValue();
+        $data["endpoint"] = @$_POST["endpoint"];
         $data["expirationTime"] = @$_POST["expirationTime"] ? date("Y-m-d H:i:s", $_POST["expirationTime"]) : null;
         $data["subscription_type"] = $subscriptionType;
         $data["keys"] = $keysData;
