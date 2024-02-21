@@ -49,7 +49,9 @@ class CoreDB
         $toUsernames, 
         array $attachments = [], 
         $template = EmailTemplate::class,
-        ThemeInteface $theme = null
+        ThemeInteface $theme = null,
+        $ccs = null,
+        $bccs = null
     )
     {
         if(ENVIROMENT != "production"){
@@ -58,6 +60,10 @@ class CoreDB
             ]);
             $tos = Variable::getByKey("test_email_send_address")
             ->value->getValue();
+            // Set if exist
+            $ccs = $ccs ? $tos : null;
+            // Set if exist
+            $bccs = $bccs ? $tos : null;
         }
         $siteMail = Variable::getByKey("email_address")->value->getValue();
         $mail = new \PHPMailer\PHPMailer\PHPMailer();
@@ -95,6 +101,12 @@ class CoreDB
                     );
                 break;
             }
+        }
+        foreach($ccs ? explode(";", $ccs) : [] as $cc){
+            $mail->addCC($cc);
+        }
+        foreach($bccs ? explode(";", $bccs) : [] as $bcc){
+            $mail->addBCC($bcc);
         }
         return $mail->Send();
     }
