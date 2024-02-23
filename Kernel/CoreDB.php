@@ -249,7 +249,9 @@ class CoreDB
                             ]);
                             $session->session_key->setValue(session_id());
                             $session->save();
-                            $_SESSION[BASE_URL . "-UID"] = self::$currentUser->ID;
+                            if(@$_COOKIE["session-token"]){
+                                $_SESSION[BASE_URL . "-UID"] = self::$currentUser->ID;
+                            }
                         }
                     }
                 }catch(Exception $ex){}
