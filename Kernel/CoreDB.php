@@ -20,7 +20,7 @@ use Src\Views\EmailTemplate;
 
 class CoreDB
 {
-    private static $currentUser;
+    private static $currentUser = null;
 
     public static function currentDate()
     {
@@ -223,7 +223,10 @@ class CoreDB
                     ]);
                     $session->save();
                 }
-            } elseif (isset($_COOKIE["session-token"]) || isset($headers["Authorization"])) {
+            } 
+            if (!self::$currentUser && (
+                isset($_COOKIE["session-token"]) || isset($headers["Authorization"])
+            )) {
                 try{
                     $authorization = null;
                     if(isset($_COOKIE["session-token"])){
@@ -249,9 +252,7 @@ class CoreDB
                             ]);
                             $session->session_key->setValue(session_id());
                             $session->save();
-                            if(@$_COOKIE["session-token"]){
-                                $_SESSION[BASE_URL . "-UID"] = self::$currentUser->ID;
-                            }
+                            $_SESSION[BASE_URL . "-UID"] = self::$currentUser->ID;
                         }
                     }
                 }catch(Exception $ex){}
