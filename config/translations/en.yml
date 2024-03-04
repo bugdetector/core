@@ -226,7 +226,7 @@ navbar: 'Header menu'
 dark-mode: 'Dark Mode'
 states: States
 push_notification_welcome_title: 'Welcome to %s'
-notification_welcome_text: 'You have successfully registered for our notifications. Wait for exiting news.'
+notification_welcome_text: 'You have successfully registered for our notifications. Wait for exciting news.'
 push_notification_subscriptions: 'Push Notification Subscriptions'
 expirationTime: 'Expiration Time'
 endpoint: Endpoint
