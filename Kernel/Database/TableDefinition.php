@@ -140,10 +140,10 @@ class TableDefinition
         }
         $dbQuery .= $finishingDbQuery;
         if ($dbQuery) {
+            \CoreDB::database()->query("SET FOREIGN_KEY_CHECKS = 0;");
             \CoreDB::database()->query($dbQuery);
         }
         Cache::clear();
-        \CoreDB::database()->query("SET FOREIGN_KEY_CHECKS = 0;");
         \CoreDB::config()->importTableConfiguration();
     }
 }
