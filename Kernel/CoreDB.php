@@ -51,7 +51,8 @@ class CoreDB
         $template = EmailTemplate::class,
         ThemeInteface $theme = null,
         $ccs = null,
-        $bccs = null
+        $bccs = null,
+        $fromName = null,
     )
     {
         if(ENVIROMENT != "production"){
@@ -77,7 +78,10 @@ class CoreDB
         $mail->CharSet  = "utf-8";
         $mail->Username = $siteMail;
         $mail->Password = Variable::getByKey("email_password")->value->getValue();
-        $mail->SetFrom($siteMail, Variable::getByKey("email_username")->value->getValue());
+        $mail->SetFrom(
+            $siteMail, 
+            $fromName ?: Variable::getByKey("email_username")->value->getValue()
+        );
         $toUsernames = explode(";", $toUsernames);
         foreach(explode(";", $tos) as $index => $to){
             $mail->AddAddress($to, @$toUsernames[$index] ?: current($toUsernames));
