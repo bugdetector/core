@@ -8,8 +8,10 @@ use Src\BaseTheme\BaseTheme;
 use Src\Theme\View;
 use Src\Form\Form;
 use Src\Form\Widget\FormWidget;
+use Symfony\Component\Yaml\Yaml;
 use Twig\Environment;
 use Twig\Extension\DebugExtension;
+use Twig\Extension\StringLoaderExtension;
 use Twig\Loader\FilesystemLoader;
 
 class CoreRenderer
@@ -31,6 +33,13 @@ class CoreRenderer
         }
         $this->twig = new Environment($loader, $twig_options);
         $this->twig->addExtension(new CoreTwigExtension());
+        $this->twig->addExtension(new StringLoaderExtension());
+
+        $extensions = Yaml::parseFile(__DIR__ . "/../../../config/twig_extensions.yml");
+        foreach ($extensions as $extension) {
+            $this->twig->addExtension(new $extension());
+        }
+
         if ($enviroment == "development") {
             $this->twig->addExtension(new DebugExtension());
         }
