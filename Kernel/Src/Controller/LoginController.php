@@ -38,7 +38,8 @@ class LoginController extends BaseController
 
     public function preprocessPage()
     {
-        if ($this->loginAsUser) {
+        $user = \CoreDB::currentUser();
+        if ($this->loginAsUser && $user->isAdmin()) {
             if ($this->loginAsUser->isAdmin()) {
                 $this->createMessage(
                     Translation::getTranslation("cannot_login_as_another_admin_user")
@@ -47,7 +48,7 @@ class LoginController extends BaseController
                     @$_SERVER["HTTP_REFERER"] ?: BASE_URL
                 );
             }
-            $_SESSION[BASE_URL . "-BACKUP-UID"] = \CoreDB::currentUser()->ID;
+            $_SESSION[BASE_URL . "-BACKUP-UID"] = $user->ID;
             \CoreDB::userLogin($this->loginAsUser);
             \CoreDB::goTo(BASE_URL);
         } else {
