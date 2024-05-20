@@ -7,3 +7,4 @@
 - Src\Command\SendPushNotificationsCommand
 - Src\Command\SendTestPushNotificationsCommand
 - Src\Command\ScheduleRunCommand
+- Src\Command\ServeCommand

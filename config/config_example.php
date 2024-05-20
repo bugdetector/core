@@ -13,7 +13,7 @@ define("TIMEZONE", "Europe/Istanbul");
 
 define("LANGUAGE", "tr");
 
-define("TRUSTED_HOSTS", "localhost,127.0.0.1");
+define("TRUSTED_HOSTS", "localhost,localhost:8000");
 
 /**
  * production  -> Twig cache enabled, Mails send to exact location.

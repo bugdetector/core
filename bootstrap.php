@@ -19,7 +19,7 @@ try {
         if (defined("TIMEZONE")) {
             date_default_timezone_set(TIMEZONE);
         }
-        define("BASE_URL", $_SERVER["REQUEST_SCHEME"] . "://" . $host . SITE_ROOT);
+        define("BASE_URL", (@$_SERVER["REQUEST_SCHEME"] ?: "http") . "://" . $host . SITE_ROOT);
 
 
         $httpAuthorizationHeader = @$_SERVER["HTTP_AUTHORIZATION"] ?: (

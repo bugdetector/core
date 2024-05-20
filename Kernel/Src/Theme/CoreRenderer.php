@@ -36,7 +36,7 @@ class CoreRenderer
         $this->twig->addExtension(new StringLoaderExtension());
 
         $extensions = Yaml::parseFile(__DIR__ . "/../../../config/twig_extensions.yml");
-        foreach ($extensions as $extension) {
+        foreach ($extensions ?: [] as $extension) {
             $this->twig->addExtension(new $extension());
         }
 
