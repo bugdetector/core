@@ -46,8 +46,8 @@ class SendPushNotificationsCommand extends Command
                     $subscription = $pnsClass::get($pushNotification->subscription->getValue());
                     if ($subscription) {
                         $payload = new PNPayload(
-                            $pushNotification->title,
-                            $pushNotification->text,
+                            html_entity_decode($pushNotification->title),
+                            html_entity_decode($pushNotification->text),
                             $pushNotification->icon
                         );
                         $payload->setImage($pushNotification->image);
