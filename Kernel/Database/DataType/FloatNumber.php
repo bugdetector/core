@@ -40,7 +40,7 @@ class FloatNumber extends DataTypeAbstract
 
     public function getValue()
     {
-        return floatval($this->value);
+        return $this->value !== null ? floatval($this->value) : null;
     }
 
     /**
