@@ -361,16 +361,13 @@ abstract class Model implements SearchableInterface
                  * @var FormWidget $widget
                  */
                 $widget->setName($inputName);
-                if ($field instanceof \CoreDB\Kernel\Database\DataType\File) {
-                    /** @var InputWidget $widget*/
-                    $widget->addFileKey(
-                        $this->entityName ?: $this->getTableName(),
-                        $this->ID->getValue(),
-                        $field_name,
-                        $field->isNull
-                    );
-                } elseif ($field instanceof \CoreDB\Kernel\Database\DataType\LongText) {
-                    /** @var TextareaWidget $widget*/
+                if (
+                    (
+                    $field instanceof \CoreDB\Kernel\Database\DataType\File ||
+                    $field instanceof \CoreDB\Kernel\Database\DataType\LongText
+                    ) && method_exists($widget, 'addFileKey')
+                ) {
+                    /** @var InputWidget|TextareaWidget $widget */
                     $widget->addFileKey(
                         $this->entityName ?: $this->getTableName(),
                         $this->ID->getValue(),
