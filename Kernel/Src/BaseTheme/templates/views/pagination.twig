@@ -14,7 +14,11 @@
 						<i class="fa fa-angle-left"></i>
 					</a>
 				</div>
-				{% for i in  (view.page > 5 ? view.page - 4 : 1)..(view.page + 5 < view.getPageCount() ? view.page + 4 : view.getPageCount() ) %}
+				{% set totalPages = view.getPageCount() %}
+				{% set pageStart = view.page > 5 ? view.page - 4 : 1 %}
+				{% set pageStart = pageStart < totalPages ? pageStart : totalPages %}
+				{% set pageEnd = pageStart + 5 < totalPages ? pageStart + 5 : totalPages %}
+				{% for i in  (pageStart)..(pageEnd) %}
 					<div class='page-item {{ i == view.page ? "active" : "" }}'>
 						<a class='page-link' href='{{ view.query_link ~ "&page=" ~ i }}' data-page="{{ i }}">{{ i }}</a>
 					</div>
