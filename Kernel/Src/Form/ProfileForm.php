@@ -122,22 +122,6 @@ class ProfileForm extends Form
             } else {
                 $contents = file_get_contents($profilePhoto->getFilePath());
                 $image = imagecreatefromstring($contents);
-                $imageX          =   imageSX($image);
-                $imageY          =   imageSY($image);
-                $newWidth = 200;
-                $newHeight = 200;
-                $thumbWidth = $newWidth;
-                $thumbHeight = $newHeight;
-                if ($imageX > $imageY) {
-                    $thumbWidth    =   $newWidth;
-                    $thumbHeight    =   $imageY * ($newHeight / $imageX);
-                }
-                if ($imageX < $imageY) {
-                    $thumbWidth    =   $imageX * ($newWidth / $imageY);
-                    $thumbHeight    =   $newHeight;
-                }
-                $image = imagescale($image, 200);
-
                 $exif = exif_read_data($profilePhoto->getFilePath());
                 if (!empty($exif['Orientation'])) {
                     switch ($exif['Orientation']) {
