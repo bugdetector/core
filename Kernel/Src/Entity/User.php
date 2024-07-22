@@ -139,7 +139,7 @@ class User extends Model
             "surname" => $fields["surname"],
             "email" => $fields["email"],
             "phone" => $fields["phone"],
-            "roles" => $fields["roles"]->setName("roles"),
+            "roles" => $fields["roles"],
             "last_access" => $fields["last_access"],
             "u.created_at" => $fields["created_at"]->setName("u.created_at"),
         ];
