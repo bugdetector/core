@@ -110,4 +110,21 @@ class SelectQueryPreparer extends SelectQueryPreparerAbstract
     {
         return $this->limit ? "LIMIT " . $this->limit . ($this->offset ? " OFFSET " . $this->offset : "") : "";
     }
+
+    /**
+     * @return int
+     *  Result total count
+     */
+    public function getResultTotalCount(): int
+    {
+        $query = "SELECT {$this->distinct} " .
+                ($this->tables[0]['alias'] ?: $this->tables[0]['tableName']) . ".ID FROM " .
+                $this->getTables() . " " .
+                $this->getCondition() . " " .
+                $this->getGroupBy() . " ";
+        return \CoreDB::database()->query(
+            "SELECT COUNT(*) FROM ($query) AS query_table",
+            $this->getParams(),
+        )->fetchColumn();
+    }
 }

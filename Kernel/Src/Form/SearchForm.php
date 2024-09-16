@@ -165,7 +165,8 @@ class SearchForm extends Form
             foreach ($this->data as &$row) {
                 $this->object->postProcessRow($row);
             }
-            $this->pagination->total_count = $this->query->limit(0)->execute()->rowCount();
+
+            $this->pagination->total_count = $this->query->getResultTotalCount();
             $this->summary_text = Translation::getTranslation("result_summary", [
                 $this->pagination->total_count,
                 ($this->pagination->page - 1) * $this->pagination->limit + 1,

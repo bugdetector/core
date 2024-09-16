@@ -116,7 +116,9 @@ class MySQLDriver extends DatabaseDriver
     public function query(string $query, array $params = null): PDOStatement
     {
         try {
-            return $this->connection->query($query);
+            $statement = $this->connection->prepare($query);
+            $statement->execute($params);
+            return $statement;
         } catch (PDOException $ex) {
             if ($this->connection->inTransaction()) {
                 $this->connection->rollBack();
