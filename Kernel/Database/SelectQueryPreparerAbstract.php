@@ -196,4 +196,10 @@ abstract class SelectQueryPreparerAbstract extends QueryPreparerAbstract
         $this->offset = $offset;
         return $this;
     }
+
+    /**
+     * @return int
+     *  Result total count
+     */
+    abstract public function getResultTotalCount(): int;
 }
