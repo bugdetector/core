@@ -11,6 +11,7 @@ use Src\Form\Widget\FormWidget;
 use Src\Form\Widget\OptionWidget;
 use Src\Form\Widget\SelectWidget;
 
+/** @property array $value */
 class EntityReference extends DataTypeAbstract
 {
     public const CONNECTION_MANY_TO_MANY = "manyToMany";
