@@ -5,6 +5,7 @@ namespace Src\Form\Widget;
 use CoreDB;
 use CoreDB\Kernel\Model;
 use Src\Entity\Translation;
+use Src\Theme\View;
 use Src\Views\CollapsableCard;
 use Src\Views\Link;
 use Src\Views\TextElement;
@@ -67,11 +68,19 @@ class CollapsableWidgetGroup extends FormWidget
         bool $removeButton = true
     ): CollapsableCard {
         $content = ViewGroup::create("div", "");
+        /** @var View */
         foreach ($object->getFormFields($name) as $fieldName => $field) {
             if (in_array($fieldName, $hiddenFields)) {
                 continue;
             }
-            $field->setName("{$name}[{$index}][{$fieldName}]");
+            $inputName = "{$name}[{$index}][{$fieldName}]";
+            if ($field instanceof SelectWidget && @$field->attributes['multiple']) {
+                $inputName .= "[]";
+            }
+            if ($field instanceof FormWidget) {
+                $field->setName($inputName);
+            }
+
             $content->addField($field);
         }
         if ($removeButton) {
