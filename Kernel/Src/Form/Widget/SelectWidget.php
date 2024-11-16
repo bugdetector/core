@@ -78,13 +78,14 @@ class SelectWidget extends FormWidget
         return $this;
     }
 
-    public function setAutoComplete($referenceTable, $referenceColumn): SelectWidget
+    public function setAutoComplete($referenceTable, $referenceColumn, $conditions = []): SelectWidget
     {
         $this->addClass("autocomplete");
         $autoCompleteToken = hash("sha256", "autocomplete-" . $referenceTable . random_int(0, 100));
         $_SESSION["autocomplete"][$autoCompleteToken] = [
             "referenceTable" => $referenceTable,
-            "referenceColumn" => $referenceColumn
+            "referenceColumn" => $referenceColumn,
+            "conditions" => $conditions,
         ];
         $this->addAttribute("data-autocomplete-token", $autoCompleteToken);
         return $this;

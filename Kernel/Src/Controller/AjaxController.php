@@ -23,12 +23,16 @@ class AjaxController extends ServiceController
             $autocompleteData = $_SESSION["autocomplete"][$autocompleteToken];
             $referenceTable = $autocompleteData["referenceTable"];
             $referenceColumn = $autocompleteData["referenceColumn"];
+            $conditions = $autocompleteData["conditions"];
 
             $data = "%{$data}%";
             $query = \CoreDB::database()->select($referenceTable)
                 ->select($referenceTable, ["ID AS id", $referenceColumn . " AS text"])
                 ->condition($referenceColumn, $data, "LIKE")
                 ->limit(20);
+            foreach($conditions ?: [] as $column => $value){
+                $query->condition($column, $value);
+            }
             return $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
         } else {
             return [];
