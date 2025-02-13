@@ -19,7 +19,7 @@ $(function($){
     
     $(document).on("dragend", ".node-card", function(e){
         let item = $(this);
-        let parent = item.parents().closest(".node-card").data("parent");
+        let parent = item.parent().closest(".node-card").data("parent");
         item.find(".parent").first().val(parent);
     })
     
