@@ -39,19 +39,14 @@ class CompressImageFilesCommand extends Command
                         if (!$image) {
                             throw new Exception("Image create failed.");
                         }
-                        imagejpeg($image, $filePath, 35);
+                        imagejpeg($image, $filePath);
                     } elseif ($file->mime_type->getValue() == 'image/png') {
                         $image = imagecreatefrompng($filePath);
                         if (!$image) {
                             throw new Exception("Image create failed.");
                         }
-                        if (filesize($filePath) > 204800) { // 20 kB
-                            imagejpeg($image, $filePath, 35);
-                            $file->mime_type->setValue("image/jpeg");
-                        } else {
-                            imagesavealpha($image, true);
-                            imagepng($image, $filePath, 9);
-                        }
+                        imagesavealpha($image, true);
+                        imagepng($image, $filePath, 9);
                     }
                     $file->file_size->setValue(filesize($filePath));
                     $file->save();
