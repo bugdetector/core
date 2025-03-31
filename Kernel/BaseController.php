@@ -64,10 +64,10 @@ abstract class BaseController implements ControllerInterface
             "content" => $siteName
         ]);
 
-        $httpAuthorizationHeader = @$_SERVER["HTTP_AUTHORIZATION"] ?: (
-            @$_SERVER["REDIRECT_HTTP_AUTHORIZATION"] ?: @$_SERVER["REDIRECT_REDIRECT_HTTP_AUTHORIZATION"]
-        );
         if (defined("HTTP_AUTH_ENABLED") && HTTP_AUTH_ENABLED) {
+            $httpAuthorizationHeader = @$_SERVER["HTTP_AUTHORIZATION"] ?: (
+                @$_SERVER["REDIRECT_HTTP_AUTHORIZATION"] ?: @$_SERVER["REDIRECT_REDIRECT_HTTP_AUTHORIZATION"]
+            );
             if ($httpAuthorizationHeader && !@$_SERVER['PHP_AUTH_USER'] && !@$_SERVER['PHP_AUTH_PW']) {
                 list(
                     $_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']
