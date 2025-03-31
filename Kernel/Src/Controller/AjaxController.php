@@ -30,7 +30,7 @@ class AjaxController extends ServiceController
                 ->select($referenceTable, ["ID AS id", $referenceColumn . " AS text"])
                 ->condition($referenceColumn, $data, "LIKE")
                 ->limit(20);
-            foreach($conditions ?: [] as $column => $value){
+            foreach ($conditions ?: [] as $column => $value) {
                 $query->condition($column, $value);
             }
             return $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
