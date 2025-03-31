@@ -63,6 +63,25 @@ abstract class BaseController implements ControllerInterface
             "name" => "description",
             "content" => $siteName
         ]);
+
+        $httpAuthorizationHeader = @$_SERVER["HTTP_AUTHORIZATION"] ?: (
+            @$_SERVER["REDIRECT_HTTP_AUTHORIZATION"] ?: @$_SERVER["REDIRECT_REDIRECT_HTTP_AUTHORIZATION"]
+        );
+        if (defined("HTTP_AUTH_ENABLED") && HTTP_AUTH_ENABLED) {
+            if ($httpAuthorizationHeader && !@$_SERVER['PHP_AUTH_USER'] && !@$_SERVER['PHP_AUTH_PW']) {
+                list(
+                    $_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']
+                ) = explode(':', base64_decode(substr($httpAuthorizationHeader, 6)));
+            }
+            if (
+                @$_SERVER['PHP_AUTH_USER'] !== HTTP_AUTH_USERNAME ||
+                @$_SERVER['PHP_AUTH_PW'] !== HTTP_AUTH_PASSWORD
+            ) {
+                header("WWW-Authenticate: Basic realm=\"Coredb Auth\"");
+                header("HTTP/1.0 401 Unauthorized");
+                die();
+            }
+        }
     }
 
     /**
