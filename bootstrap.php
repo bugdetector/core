@@ -22,6 +22,9 @@ try {
         define("BASE_URL", (@$_SERVER["REQUEST_SCHEME"] ?: "http") . "://" . $host . SITE_ROOT);
 
         $headers = getallheaders();
+        $httpAuthorizationHeader = @$_SERVER["HTTP_AUTHORIZATION"] ?: (
+            @$_SERVER["REDIRECT_HTTP_AUTHORIZATION"] ?: @$_SERVER["REDIRECT_REDIRECT_HTTP_AUTHORIZATION"]
+        );
         if (!@$headers["Authorization"] && $httpAuthorizationHeader) {
             $headers["Authorization"] = $httpAuthorizationHeader;
         }
