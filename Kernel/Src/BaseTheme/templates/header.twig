@@ -21,5 +21,5 @@
 	{% if constant("PWA_ENABLED") is defined and constant("PWA_ENABLED") %}
 		<link rel="manifest" href="{{ constant("BASE_URL") ~ "/manifest.json" }}"/>
 	{% endif %}
-    <style>{{controller.css_codes|join(";")|raw}}</style>
+    <style>{{controller.css_codes|join(" ")|raw}}</style>
 </head>
