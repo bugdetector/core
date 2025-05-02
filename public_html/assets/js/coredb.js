@@ -160,6 +160,7 @@ function openModal(
             loadTimeInput();
             loadDateInput();
             loadDateTimeInput();
+            loadDateRangeInput();
         }
         if (typeof window.loadCheckbox === "function") {
             modalContent.find("input[type='checkbox']").each(function (i, element) {
