@@ -177,7 +177,7 @@ abstract class SelectQueryPreparerAbstract extends QueryPreparerAbstract
     abstract public function condition(
         $column,
         $value = null,
-        string $operator = null,
+        ?string $operator = null,
         string $connect = "AND"
     ): SelectQueryPreparerAbstract;
 

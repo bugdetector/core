@@ -8,7 +8,7 @@ abstract class AlterQueryPreparerAbstract extends QueryPreparerAbstract
     public array $foreignKeyQueries = [];
     public DatabaseDriverInterface $db;
 
-    public function __construct(TableDefinition $tableDefinition = null)
+    public function __construct(?TableDefinition $tableDefinition = null)
     {
         $this->db = \CoreDB::database();
         if ($tableDefinition) {

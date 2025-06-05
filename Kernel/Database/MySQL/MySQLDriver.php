@@ -113,7 +113,7 @@ class MySQLDriver extends DatabaseDriver
     /**
      * @inheritdoc
      */
-    public function query(string $query, array $params = null): PDOStatement
+    public function query(string $query, ?array $params = null): PDOStatement
     {
         try {
             $statement = $this->connection->prepare($query);
@@ -195,7 +195,7 @@ class MySQLDriver extends DatabaseDriver
     /**
      * @inheritdoc
      */
-    public function alter(TableDefinition $table = null): AlterQueryPreparerAbstract
+    public function alter(?TableDefinition $table = null): AlterQueryPreparerAbstract
     {
         return new AlterQueryPreparer($table);
     }

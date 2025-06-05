@@ -42,7 +42,7 @@ class SelectWidget extends FormWidget
         return $this;
     }
 
-    public function setNullElement(string $null_element = null): SelectWidget
+    public function setNullElement(?string $null_element = null): SelectWidget
     {
         if ($null_element) {
             $this->null_element = new OptionWidget("", $null_element);

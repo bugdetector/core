@@ -49,7 +49,7 @@ class CoreDB
         $toUsernames, 
         array $attachments = [], 
         $template = EmailTemplate::class,
-        ThemeInteface $theme = null,
+        ?ThemeInteface $theme = null,
         $ccs = null,
         $bccs = null,
         $fromName = null,

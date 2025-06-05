@@ -74,7 +74,7 @@ class TableDefinition
         $this->fields[$data_type->column_name] = $data_type;
     }
 
-    public function saveDefinition(AlterQueryPreparerAbstract &$query = null)
+    public function saveDefinition(?AlterQueryPreparerAbstract &$query = null)
     {
         unset($this->fields["created_at"], $this->fields["last_updated"]);
         $created_at = new DateTime("created_at");

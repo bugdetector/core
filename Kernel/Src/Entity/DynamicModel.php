@@ -8,7 +8,7 @@ class DynamicModel extends Model
 {
     public static $table;
 
-    public function __construct(string $tableName = null, array $mapData = [])
+    public function __construct(?string $tableName = null, array $mapData = [])
     {
         self::$table = $tableName;
         parent::__construct($tableName, $mapData);
@@ -25,7 +25,7 @@ class DynamicModel extends Model
     /**
      * @inheritdoc
      */
-    public static function get($filter, string $table_name = null)
+    public static function get($filter, ?string $table_name = null)
     {
         self::$table = $table_name;
         return parent::get($filter);
@@ -34,7 +34,7 @@ class DynamicModel extends Model
     /**
      * @inheritdoc
      */
-    public static function getAll(array $filter, string $table_name = null): array
+    public static function getAll(array $filter, ?string $table_name = null): array
     {
         self::$table = $table_name;
         return static::findAll($filter, static::getTableName());

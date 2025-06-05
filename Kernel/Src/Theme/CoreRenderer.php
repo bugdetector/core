@@ -45,7 +45,7 @@ class CoreRenderer
         }
     }
 
-    public static function getInstance(ThemeInteface $theme = null): CoreRenderer
+    public static function getInstance(?ThemeInteface $theme = null): CoreRenderer
     {
         if (!self::$instance) {
             if (!$theme) {

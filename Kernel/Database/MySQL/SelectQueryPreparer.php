@@ -94,7 +94,7 @@ class SelectQueryPreparer extends SelectQueryPreparerAbstract
     public function condition(
         $column,
         $value = null,
-        string $operator = null,
+        ?string $operator = null,
         string $conjuction = "AND"
     ): SelectQueryPreparerAbstract {
         $this->condition->condition($column, $value, $operator, $conjuction);
