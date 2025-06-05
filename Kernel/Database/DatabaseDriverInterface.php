@@ -61,7 +61,7 @@ interface DatabaseDriverInterface
      * @return PDOStatement
      *  Result
      */
-    public function query(string $query, array $params = null): PDOStatement;
+    public function query(string $query, ?array $params = null): PDOStatement;
 
     /**
      * Select from a table
@@ -134,7 +134,7 @@ interface DatabaseDriverInterface
      * @return DropQueryPreparerAbstract
      *  Drop query preparer
      */
-    public function drop(string $table_name, string $column = null): DropQueryPreparerAbstract;
+    public function drop(string $table_name, ?string $column = null): DropQueryPreparerAbstract;
 
     /**
      * Create new table
@@ -152,7 +152,7 @@ interface DatabaseDriverInterface
      * @return AlterQueryPreparerAbstract
      *  Alter query preparer
      */
-    public function alter(TableDefinition $table = null): AlterQueryPreparerAbstract;
+    public function alter(?TableDefinition $table = null): AlterQueryPreparerAbstract;
 
     /**
      * Begin transaction

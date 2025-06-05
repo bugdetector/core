@@ -109,7 +109,7 @@ class TableAndColumnSelector extends CollapsableCard
         );
     }
 
-    private function getTableAndColumnSelectboxes($index, array $description = null): ViewGroup
+    private function getTableAndColumnSelectboxes($index, ?array $description = null): ViewGroup
     {
         $column_options = [];
         if ($this->type == self::TYPE_FIELD) {

@@ -72,7 +72,7 @@ class Translation extends Model
         return self::$instance;
     }
 
-    public static function getTranslation($key, array $arguments = null, $useLanguage = null)
+    public static function getTranslation($key, ?array $arguments = null, $useLanguage = null)
     {
         if (!isset(self::$cache[$key])) {
             try {
@@ -88,7 +88,7 @@ class Translation extends Model
         return !$arguments ? self::$cache[$key] : vsprintf(self::$cache[$key], $arguments);
     }
 
-    public static function getEmailTranslation(string $key, array $arguments = null, $useLanguage = null)
+    public static function getEmailTranslation(string $key, ?array $arguments = null, $useLanguage = null)
     {
         $mail = Email::get(["key" => $key]);
         $language = $useLanguage ?: Translation::getLanguage();

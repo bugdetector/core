@@ -20,7 +20,7 @@ class Cache extends Model
     public LongText $value;
 
     private static array $staticCache = [];
-    public function __construct(string $tableName = null, array $mapData = [])
+    public function __construct(?string $tableName = null, array $mapData = [])
     {
         $this->ID = new UnsignedBigInteger("");
         $this->bundle = new ShortText("");

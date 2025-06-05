@@ -9,6 +9,7 @@ use CoreDB\Kernel\Database\DataType\Integer;
 use CoreDB\Kernel\Database\DataType\TableReference;
 use PDO;
 use Src\Controller\Admin\AjaxController;
+use Src\Form\Widget\SelectWidget;
 use Src\Theme\View;
 
 /**

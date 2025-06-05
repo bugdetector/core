@@ -33,7 +33,7 @@ class UpdateQueryPreparer extends UpdateQueryPreparerAbstract
     public function condition(
         string $column,
         $value,
-        string $operator = null,
+        ?string $operator = null,
         string $connect = "AND"
     ): UpdateQueryPreparerAbstract {
         $this->condition->condition($column, $value, $operator, $connect);

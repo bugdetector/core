@@ -10,7 +10,7 @@ namespace CoreDB\Kernel\Database;
 abstract class DropQueryPreparerAbstract extends QueryPreparerAbstract
 {
     protected $column;
-    public function __construct(string $table, string $column = null)
+    public function __construct(string $table, ?string $column = null)
     {
         $this->table = $table;
         $this->column = $column;

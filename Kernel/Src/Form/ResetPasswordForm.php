@@ -14,7 +14,7 @@ class ResetPasswordForm extends Form
     public string $method = "POST";
 
     private ?User $user;
-    public function __construct(User $user = null)
+    public function __construct(?User $user = null)
     {
         $this->user = $user;
         parent::__construct();

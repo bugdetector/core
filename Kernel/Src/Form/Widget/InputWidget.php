@@ -88,6 +88,9 @@ class InputWidget extends FormWidget
 
     public function render()
     {
+        if (!@$this->attributes['id']) {
+            $this->attributes['id'] = str_replace(["[","]"], ["_",""], strtolower($this->name ?: uniqid('input_')));
+        }
         if ($this->value) {
             if ($this->hasClass("dateinput")) {
                 $this->value = date("d-m-Y", strtotime($this->value));

@@ -39,7 +39,7 @@ abstract class Model implements SearchableInterface
     protected $changed_fields;
     protected $fields = [];
 
-    public function __construct(string $tableName = null, array $mapData = [])
+    public function __construct(?string $tableName = null, array $mapData = [])
     {
         $table_definition = TableDefinition::getDefinition($this->getTableName());
         /**

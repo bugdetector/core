@@ -64,6 +64,15 @@ class EntityReference extends DataTypeAbstract
     }
 
     /**
+     * @inheritdoc
+     * @return array
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    /**
      * Pseudo function. There is no use.
      * @inheritdoc
      */
@@ -170,6 +179,7 @@ class EntityReference extends DataTypeAbstract
                 $this->foreignKey => $this->object->ID
             ]);
         }
+        return [];
     }
 
     public function save()
