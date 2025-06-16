@@ -81,14 +81,6 @@ class ConfigurationManager
         $droppedTables = array_diff($table_list, $new_table_list);
 
         $db_query = "";
-        $alterQueryPreparer = CoreDB::database()->alter();
-        foreach ($existingChangedTables as $alter_table) {
-            try {
-                $alterQueryPreparer->addTableDefinition($tables[$alter_table]);
-            } catch (Exception $ex) {
-            }
-        }
-        $db_query .= implode("\n", $alterQueryPreparer->queries);
         foreach ($createdTables as $create_table) {
             unset($tables[$create_table]->fields["created_at"], $tables[$create_table]->fields["last_updated"]);
             $created_at = new DateTime("created_at");
@@ -99,6 +91,14 @@ class ConfigurationManager
             $tables[$create_table]->fields["last_updated"] = $last_updated;
             $db_query .= "\n" . CoreDB::database()->create($tables[$create_table], true)->getQuery();
         }
+        $alterQueryPreparer = CoreDB::database()->alter();
+        foreach ($existingChangedTables as $alter_table) {
+            try {
+                $alterQueryPreparer->addTableDefinition($tables[$alter_table]);
+            } catch (Exception $ex) {
+            }
+        }
+        $db_query .= implode("\n", $alterQueryPreparer->queries);
         foreach ($droppedTables as $drop_table) {
             $db_query .= "\n" . CoreDB::database()->drop($drop_table)->getQuery();
         }
