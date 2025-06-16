@@ -44,8 +44,9 @@ abstract class FormWidget extends View
 
     public function render()
     {
-        if (!isset($this->attributes["id"]) && $this->name) {
-            $this->addAttribute("id", "input_{$this->name}");
+        if (!isset($this->attributes["id"])) {
+            $nameSuffix = str_replace(["[", '-', "]"], ["_", '_', ""], strtolower($this->name ?: uniqid()));
+            $this->addAttribute("id", "input_{$nameSuffix}");
         }
         echo CoreRenderer::getInstance()
         ->renderWidget($this);
