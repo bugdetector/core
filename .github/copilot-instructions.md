@@ -21,13 +21,34 @@ CoreDB is a PHP-based MVC framework with custom ORM and routing. Key architectur
 4. Export as PHP class: "Tabloyu sınıf olarak dışa aktar" button
 5. Place generated model in `App/Entity/` directory
 
-### Column Data Types
-- **Integer**: `UnsignedBigInteger`
-- **Short Text**: `ShortText` (requires length limit)
-- **Long Text/HTML**: For rich text editor fields
-- **File**: For file uploads/references
-- **Related Table**: Foreign key relationships
-- **List**: Enum values (comma-separated), generates constants
+### Data Type System
+CoreDB uses a comprehensive data type system located in `Kernel/Database/DataType/`:
+
+**Basic Types:**
+- `UnsignedBigInteger` - Auto-incrementing primary keys
+- `Integer` - Standard integers
+- `FloatNumber` - Decimal/floating point numbers
+- `ShortText` - VARCHAR fields (requires `length` property)
+- `Text` - TEXT fields for medium content
+- `LongText` - LONGTEXT fields for large content/HTML
+- `Checkbox` - Boolean fields
+
+**Date/Time Types:**
+- `Date` - Date only (Y-m-d)
+- `DateTime` - Full timestamp (Y-m-d H:i:s)
+- `Time` - Time only (H:i:s)
+
+**Specialized Types:**
+- `EnumaratedList` - Enum with predefined values (generates constants)
+- `TableReference` - Foreign key to another table
+- `File` - File upload/reference (extends TableReference to 'files' table)
+
+**Data Type Features:**
+- Auto-generate form widgets via `getWidget()` method
+- Search widget support via `getSearchWidget()` method
+- Value validation and sanitization
+- Translation support for labels/descriptions
+- Automatic constraint handling
 
 ## Controller Patterns
 
@@ -190,6 +211,44 @@ rm -r cache/
 - `config/table_structure/` - Database schema definitions
 - `config/dump_tables.yml` - Tables exported as config data
 - `config/xmlsitemap_config.yml` - XML sitemap entity definitions
+
+### Table Structure Configuration
+Database schemas are defined in `config/table_structure/{table_name}.yml` files:
+
+```yaml
+table_name: users
+table_comment: 'Contains site Users fundemantal data. Connected with User class.'
+fields:
+  username:
+    type: short_text
+    column_name: username
+    primary_key: false
+    autoIncrement: false
+    isNull: false
+    isUnique: true
+    default: null
+    comment: Username
+    length: '20'
+  status:
+    type: enumarated_list
+    column_name: status
+    values:
+      active: active
+      blocked: blocked
+      banned: banned
+```
+
+**Field Properties:**
+- `type`: Data type (see Data Types section)
+- `isNull`: Allow NULL values
+- `isUnique`: Unique constraint
+- `primary_key`: Primary key field
+- `autoIncrement`: Auto-incrementing field
+- `default`: Default value
+- `comment`: Field description
+- `length`: For text fields
+- `values`: For enumerated lists
+- `reference_table`: For foreign keys
 
 ## Common Patterns
 
