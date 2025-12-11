@@ -117,7 +117,7 @@ class SearchForm extends Form
             $search = preg_replace(
                 "/[^\w\s\p{P}0-9a-zA-Z]/",
                 " ",
-                mb_strtolower($params["q"])
+                mb_strtolower(trim($params["q"]))
             );
             foreach ($this->searchableFields as $column_name) {
                 if (
