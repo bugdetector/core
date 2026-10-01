@@ -44,7 +44,7 @@ class MySQLDriver extends DatabaseDriver
         self::$instance = $this;
         $this->connection = new PDO("mysql:host=" . $dbServer . ";dbname=" . $dbName, $dbUsername, $dbPassword);
         $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $this->connection->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
+        $this->connection->setAttribute(Pdo\Mysql::ATTR_USE_BUFFERED_QUERY, true);
         if (defined("TIMEZONE")) {
             $this->connection->query("SET time_zone =  '" . TIMEZONE . "' ;");
         }
