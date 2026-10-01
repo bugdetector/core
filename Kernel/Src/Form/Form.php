@@ -130,6 +130,7 @@ abstract class Form extends View
         $this->errors[$field_name]->addField(
             AlertMessage::create($message)
         );
+        http_response_code(422);
     }
 
     public function setMessage(string $message, int $type = Messenger::SUCCESS)
