@@ -5,5 +5,17 @@ services:
   app:
     build:
       context: .
+      target: app-prod
+
+  web:
+    build:
+      context: .
+      target: web
     ports:
-      - "${APP_PORT:-8000}:80"
+      - "80:80"
+      - "443:443"
+    volumes:
+      # cert.pem and key.pem
+      - ./docker/nginx/certs:/etc/nginx/certs
+    depends_on:
+      - app

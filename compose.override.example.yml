@@ -7,7 +7,7 @@
 services:
   app:
     build:
-      target: dev
+      target: app-dev
     volumes:
       - .:/var/www/app
     environment:
@@ -19,6 +19,14 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
+
+  web:
+    environment:
+      # Generates a self-signed certificate in docker/nginx/certs when none exists.
+      # For a trusted one, see "HTTPS certificate" in README.md.
+      SSL_SELF_SIGNED: "true"
+    volumes:
+      - ./public_html:/var/www/app/public_html:ro
 
   mysql:
     image: mysql:8.4

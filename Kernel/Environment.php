@@ -25,8 +25,8 @@ class Environment
         self::$projectDir = $projectDir;
 
         // Dotenv never overrides variables it can see in $_ENV/$_SERVER.
-        // Apache does not expose container variables there, so copy them in
-        // to let docker compose / CI variables win over .env files.
+        // PHP does not fill $_ENV by default (variables_order), so copy real
+        // variables in to let docker compose / CI values win over .env files.
         $_ENV += getenv();
         (new Dotenv())->loadEnv($projectDir . "/.env");
 

@@ -11,3 +11,4 @@ public_html/package-lock.json
 .env.local
 .env.*.local
 compose.override.yml
+docker/nginx/certs/
