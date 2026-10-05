@@ -7,7 +7,7 @@ Architecture and coding conventions are documented in [AGENTS.md](AGENTS.md).
 
 ## Quick start (Docker)
 
-Requirements: Docker with Compose v2.
+Requirements: Docker with Compose v2. Ports 80 and 443 must be free (stop any local Apache/nginx).
 
 ```bash
 cp compose.override.example.yml compose.override.yml   # once
@@ -16,22 +16,34 @@ docker compose up
 
 | Service | URL | Credentials |
 |---|---|---|
-| Application | http://localhost:8000 | `admin` / `admin` |
+| Application | https://localhost | `admin` / `admin` |
 | phpMyAdmin | http://localhost:8080 | `core` / `core` |
 | MySQL (from the host) | `127.0.0.1:3307` | `core` / `core` |
 
-On the first start the container waits for MySQL, creates the tables (`config:import`) and the admin user.
-Your working copy is mounted into the container, so code changes are live.
+On the first start the app container waits for MySQL, creates the tables (`config:import`) and the admin user.
+Your working copy is mounted into the containers, so code changes are live.
+http://localhost redirects to https://localhost.
 
-Console commands run inside the container:
+Console commands run inside the app container:
 
 ```bash
 docker compose exec app php bin/console.php list
 ```
 
-Ports can be changed with `APP_PORT`, `PMA_PORT` and `MYSQL_PORT`, e.g. `APP_PORT=8001 docker compose up`.
-When you change `APP_PORT`, also set `TRUSTED_HOSTS=localhost:8001` in `.env.local`: untrusted hosts fall back to the
-first trusted one, so links would still point to port 8000.
+phpMyAdmin and MySQL ports can be changed with `PMA_PORT` and `MYSQL_PORT`, e.g. `PMA_PORT=8081 docker compose up`.
+
+### HTTPS certificate
+
+On the first start nginx generates a self-signed certificate in `docker/nginx/certs/` (gitignored),
+so the browser shows a warning once. For a certificate your browser trusts, use [mkcert](https://github.com/FiloSottile/mkcert):
+
+```bash
+brew install mkcert   # or see mkcert's README for Linux/Windows
+mkcert -install
+rm -f docker/nginx/certs/*.pem
+mkcert -cert-file docker/nginx/certs/cert.pem -key-file docker/nginx/certs/key.pem localhost 127.0.0.1 ::1
+docker compose restart web
+```
 
 ## Configuration
 
@@ -48,7 +60,8 @@ Every variable is documented in [.env](.env).
 
 ## Production
 
-Production uses the same image without the bundled MySQL; the database runs on the host machine.
+Production uses the same images without the bundled MySQL and phpMyAdmin; the database runs on the host machine.
+nginx serves HTTPS on 443 and redirects 80 to it.
 
 1. Create `.env.prod.local` next to the compose files:
 
@@ -79,7 +92,20 @@ Production uses the same image without the bundled MySQL; the database runs on t
    - `TIMEZONE` uses named time zones, so load them once:
      `mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u root mysql`
 
-3. Start it:
+3. Put the TLS certificate (full chain) and its private key into `docker/nginx/certs/` as `cert.pem` and `key.pem`.
+   With Let's Encrypt, for example:
+
+   ```bash
+   cp /etc/letsencrypt/live/example.com/fullchain.pem docker/nginx/certs/cert.pem
+   cp /etc/letsencrypt/live/example.com/privkey.pem docker/nginx/certs/key.pem
+   ```
+
+   nginx refuses to start without them; production never falls back to a self-signed certificate.
+   Port 80 only redirects, so obtain certificates with certbot's DNS challenge, or with `--standalone`
+   while the `web` container is stopped. After a renewal, copy the files again and reload nginx:
+   `docker compose -f compose.yml -f compose.prod.yml exec web nginx -s reload`
+
+4. Start it:
 
    ```bash
    docker compose -f compose.yml -f compose.prod.yml up -d --build
@@ -92,14 +118,14 @@ Production uses the same image without the bundled MySQL; the database runs on t
      php bin/console.php user:add-admin <username> <email> "<name>" <password>
    ```
 
-4. Scheduled jobs (`config/scheduled_jobs.yml`) need a cron entry on the host:
+5. Scheduled jobs (`config/scheduled_jobs.yml`) need a cron entry on the host:
 
    ```cron
    * * * * * cd /path/to/project && docker compose -f compose.yml -f compose.prod.yml exec -T app php bin/console.php schedule:run
    ```
 
-5. Push notifications with Firebase need the service account file mounted into the container.
-   Add it to the `volumes` of `compose.prod.yml`:
+6. Push notifications with Firebase need the service account file mounted into the container.
+   Add it to the `volumes` of the `app` service in `compose.prod.yml`:
 
    ```yaml
    - ./config/firebase-service-account.json:/var/www/app/config/firebase-service-account.json:ro
@@ -128,11 +154,13 @@ Database structure and default data live in `config/` as YAML. Before every comm
 ## Running without Docker
 
 Requirements: PHP 8.4 with `pdo_mysql`, `gd`, `exif`, `gmp`, `bcmath`, `intl`, `mbstring`, `zip`;
-Apache with `mod_rewrite`; MySQL 8; Composer.
+nginx with PHP-FPM, or Apache with `mod_rewrite`; MySQL 8; Composer.
 
 1. `composer install`
-2. Point the Apache document root to `public_html/` with `AllowOverride All`, and copy
-   `public_html/.htaccess_example` to `public_html/.htaccess`.
+2. Point the web server's document root to `public_html/`:
+   - nginx: start from `docker/nginx/default.conf` (change `fastcgi_pass` and the certificate paths).
+     If you use PHP-FPM with environment variables, set `clear_env = no` as in `docker/php/fpm-pool.conf`.
+   - Apache: enable `AllowOverride All` and copy `public_html/.htaccess_example` to `public_html/.htaccess`.
 3. Create `.env.local` with your database settings (`DB_SERVER=127.0.0.1`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`).
 4. `php bin/console.php config:import`
 5. `php bin/console.php user:add-admin <username> <email> "<name>" <password>`

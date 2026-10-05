@@ -26,7 +26,8 @@ loaded by `Kernel/Environment.php` (Symfony Dotenv) at the start of `bootstrap.p
 
 Load order, later wins: `.env` → `.env.local` → `.env.{APP_ENV}` → `.env.{APP_ENV}.local` → real environment variables.
 Real variables (from docker compose or CI) override every file. `$_ENV += getenv()` in `Environment::load()`
-exists because Apache does not expose container variables to Dotenv on its own.
+exists because PHP does not fill `$_ENV` by default (`variables_order`), so Dotenv would not see them.
+php-fpm also needs `clear_env = no` (`docker/php/fpm-pool.conf`), otherwise workers get no variables at all.
 
 `Environment::load()` turns the variables into the global constants the framework uses
 (`DB_SERVER`, `HASH_SALT`, `LANGUAGE`, `THEME`, `PWA_MANIFEST`, …). Rules:
@@ -50,16 +51,25 @@ To add a setting: add it with a comment to `.env`, define the constant in `Envir
 
 | File | Purpose |
 |---|---|
-| `Dockerfile` | `php:8.4-apache`; targets `dev` (code bind-mounted) and `prod` (code and vendor baked in) |
-| `compose.yml` | Shared `app` service, port `${APP_PORT:-8000}` |
-| `compose.override.example.yml` | Local only: bind mount, MySQL 8.4, phpMyAdmin, first admin user. Copy to `compose.override.yml`. |
-| `compose.prod.yml` | Production: `APP_ENV=prod`, MySQL on the host via `host.docker.internal`, mounts `.env.prod.local` |
-| `docker/entrypoint.sh` | Installs vendor if missing, waits for the database, installs it when empty, starts Apache |
-| `docker/apache/vhost.conf` | Document root `public_html`; uses `.htaccess` if present, otherwise `.htaccess_example` |
-| `docker/php/app.ini` | PHP limits (memory, upload size, …) |
+Two containers: `web` (nginx) terminates HTTPS, serves static files from `public_html/` and passes every
+other request to `app` (php-fpm on port 9000) through `index.php`. Both use the same path, `/var/www/app`,
+because nginx sends `SCRIPT_FILENAME` to php-fpm.
+
+| File | Purpose |
+|---|---|
+| `Dockerfile` | Targets `app-dev` (php-fpm, code bind-mounted), `app-prod` (code and vendor baked in), `web` (nginx + `public_html`) |
+| `compose.yml` | Shared `app` and `web` services; `web` publishes 80 and 443 and mounts `docker/nginx/certs` |
+| `compose.override.example.yml` | Local only: bind mounts, self-signed certificate, MySQL 8.4, phpMyAdmin, first admin user. Copy to `compose.override.yml`. |
+| `compose.prod.yml` | Production: `APP_ENV=prod`, MySQL on the host via `host.docker.internal`, mounts `.env.prod.local`, certificates read-only |
+| `docker/entrypoint.sh` | app: installs vendor if missing, waits for the database, installs it when empty, starts php-fpm |
+| `docker/nginx/default.conf` | nginx version of `.htaccess_example`: 80 → 443 redirect, front controller, `/files` through `index.php`, hidden files denied |
+| `docker/nginx/10-ssl-certificate.sh` | Uses `certs/cert.pem` + `key.pem`; generates a self-signed pair only when `SSL_SELF_SIGNED=true` (local) |
+| `docker/php/app.ini` | PHP limits (memory, upload size, …); keep `post_max_size` in sync with nginx `client_max_body_size` |
+| `docker/php/fpm-pool.conf` | `clear_env = no` |
 
 Local: `cp compose.override.example.yml compose.override.yml && docker compose up`.
-App on http://localhost:8000 (`admin` / `admin`), phpMyAdmin on http://localhost:8080, MySQL on host port 3307.
+App on https://localhost (`admin` / `admin`; http redirects to https), phpMyAdmin on http://localhost:8080,
+MySQL on host port 3307. `.htaccess` files are not used in Docker; change routing rules in `docker/nginx/default.conf`.
 
 Docker compose fills `${...}` in compose files from `.env` only, not from `.env.local`.
 MySQL credentials for the local container therefore come from `.env`.
