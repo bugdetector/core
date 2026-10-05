@@ -2,6 +2,7 @@
 
 namespace Src\Form;
 
+use CoreDB\Kernel\Environment;
 use CoreDB\Kernel\Messenger;
 use Src\Entity\Cache;
 use Src\Entity\Translation;
@@ -90,7 +91,7 @@ abstract class Form extends View
 
     public function render()
     {
-        if ($this->cachable && defined("ENVIROMENT") && ENVIROMENT != "development") {
+        if ($this->cachable && !Environment::isDev()) {
             $cache = $this->getCache();
             if (!$cache) {
                 $render = CoreRenderer::getInstance()

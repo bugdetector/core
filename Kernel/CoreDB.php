@@ -3,6 +3,7 @@
 use CoreDB\Kernel\BaseController;
 use CoreDB\Kernel\ConfigurationManager;
 use CoreDB\Kernel\Database\DatabaseDriver;
+use CoreDB\Kernel\Environment;
 use CoreDB\Kernel\Events\EventsManager;
 use CoreDB\Kernel\Events\EventsManagerInterface;
 use CoreDB\Kernel\Messenger;
@@ -55,7 +56,7 @@ class CoreDB
         $fromName = null,
     )
     {
-        if(ENVIROMENT != "production"){
+        if(!Environment::isProd()){
             $message .= Translation::getTranslation("originally_send_to", [
                 $tos
             ]);
