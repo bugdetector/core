@@ -1,0 +1,26 @@
+# Production:
+#   docker compose -f compose.yml -f compose.prod.yml up -d --build
+#
+# Requires .env.prod.local next to this file (at least HASH_SALT and DB_* values).
+# MySQL runs on the host machine: use DB_SERVER=host.docker.internal.
+services:
+  app:
+    build:
+      target: prod
+    restart: unless-stopped
+    environment:
+      APP_ENV: prod
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      # Fails instead of silently creating an empty directory when the file is missing.
+      - type: bind
+        source: ./.env.prod.local
+        target: /var/www/app/.env.prod.local
+        read_only: true
+        bind:
+          create_host_path: false
+      - uploads:/var/www/app/public_html/files/uploaded
+
+volumes:
+  uploads:

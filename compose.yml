@@ -1,0 +1,9 @@
+# Shared by every environment.
+#   Local:      cp compose.override.example.yml compose.override.yml && docker compose up
+#   Production: docker compose -f compose.yml -f compose.prod.yml up -d --build
+services:
+  app:
+    build:
+      context: .
+    ports:
+      - "${APP_PORT:-8000}:80"
