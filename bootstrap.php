@@ -1,19 +1,17 @@
 <?php
 
 use CoreDB\Kernel\Database\DatabaseInstallationException;
+use CoreDB\Kernel\Environment;
 use Src\Controller\InstallController;
 
 include __DIR__ . '/vendor/autoload.php';
 include __DIR__ . '/Kernel/CoreDB.php';
 define("IS_CLI", php_sapi_name() === 'cli');
 
+Environment::load(__DIR__);
+define("CONFIGURATON_LOADED", true);
+
 try {
-    if (is_file(__DIR__ . '/config/config.php')) {
-        include __DIR__ . '/config/config.php';
-        define("CONFIGURATON_LOADED", true);
-    } else {
-        define("CONFIGURATON_LOADED", false);
-    }
     if (!IS_CLI) {
         $host = \CoreDB::baseHost();
         if (defined("TIMEZONE")) {
