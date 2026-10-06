@@ -1,19 +1,15 @@
 <?php
 
 use CoreDB\Kernel\Database\DatabaseInstallationException;
-use Src\Controller\InstallController;
+use CoreDB\Kernel\Environment;
 
 include __DIR__ . '/vendor/autoload.php';
 include __DIR__ . '/Kernel/CoreDB.php';
 define("IS_CLI", php_sapi_name() === 'cli');
 
+Environment::load(__DIR__);
+
 try {
-    if (is_file(__DIR__ . '/config/config.php')) {
-        include __DIR__ . '/config/config.php';
-        define("CONFIGURATON_LOADED", true);
-    } else {
-        define("CONFIGURATON_LOADED", false);
-    }
     if (!IS_CLI) {
         $host = \CoreDB::baseHost();
         if (defined("TIMEZONE")) {
@@ -39,9 +35,8 @@ try {
         CoreDB\Kernel\Router::getInstance()->route();
     }
 } catch (DatabaseInstallationException $ex) {
-    if (!CONFIGURATON_LOADED) {
-        CoreDB::goTo(InstallController::getUrl());
-    } else {
-        echo $ex->getMessage();
-    }
+    // Tables are missing: the database has not been installed yet.
+    http_response_code(503);
+    echo $ex->getMessage() . PHP_EOL
+        . "Install the database with: php bin/console.php config:import";
 }

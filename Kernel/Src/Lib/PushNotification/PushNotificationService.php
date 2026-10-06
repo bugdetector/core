@@ -122,7 +122,7 @@ class PushNotificationService
         } else {
             $factory = (new Factory())
             ->withServiceAccount(
-                __DIR__ . '/../../../../config/firebase-service-account.json'
+                FIREBASE_CREDENTIALS_PATH
             );
             $messaging = $factory->createMessaging();
 

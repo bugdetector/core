@@ -95,7 +95,7 @@ table_comment: 'Table Comment'
 'Contains site translations. You can add new one.': 'Contains site translations. You can add new one.'
 'Contains site Users fundemantal data. Connected with User class.': 'Contains site Users fundemantal data. Connected with User class.'
 'Constains User''s roles. Look at User::roles': 'Constains User''s roles. Look at User::roles'
-'Contains less secure site Variables. For more security use config.php. Connected via Variable class.': 'Contains less secure site Variables. For more security use config.php. Connected via Variable class.'
+'Contains less secure site Variables. Keep secrets in environment variables (.env files). Connected via Variable class.': 'Contains less secure site Variables. Keep secrets in environment variables (.env files). Connected via Variable class.'
 'Importtant log of actions.': 'Importtant log of actions.'
 email_not_available: 'This email address is currently used.'
 last_updated: 'Last Updated'
@@ -162,14 +162,6 @@ cannot_empty: '%s cannot be empty.'
 class_not_found: 'Defined class not found.'
 new_filter: 'New Filter'
 all: All
-install_welcome: 'Welcome to CoreDB'
-install_description: 'Please fill the form for provide database connection. To create an administrator user please describe your username, name, email and password.'
-db_server: 'Database server'
-db_name: 'Database name'
-db_user: 'Database username'
-db_password: 'Database password'
-cant_connect_to_database: 'Can''t connect to database.'
-all_configuration_imported: 'All configuration created successfully.'
 mainpage_welcome_message: "<div class=\"text-center\">\r\n<h2 class=\"text-primary\">Welcome to CoreDB</h2>\r\n<blockquote class=\"blockquote\">You see this page because you didn't override main page in your custom theme yet.</blockquote>\r\n<p>CoreDB is functional CMS that allows developers to look the system birds eye view.</p>\r\n<p>You can override every view you want in your custom theme.</p>\r\n<p>You can create your own entity types.</p>\r\n<p>In CoreDB every class is a module.</p>\r\n<p>CoreDB designed to provide a highly readable and easy manageable code.</p>\r\n<p><a title=\"CoreDB documentation\" href=\"https://coredb.maware.com.tr/\" target=\"_blank\" rel=\"noopener\">Check out documentation</a></p>\r\n</div>\r\n<div id=\"gtx-trans\" style=\"position: absolute; left: 63px; top: 325.349px;\">\r\n<div class=\"gtx-trans-icon\">&nbsp;</div>\r\n</div>"
 add_admin: 'Create an administrator user.'
 enter_valid_mail: 'Please enter a valid email address.'
@@ -180,7 +172,6 @@ type: Type
 value: Value
 variables: 'Configuration variables'
 mainpage: 'Main page'
-config_file_write_error: 'Config file (config/config.php) is not writable. Please give write permission before continue to config file or create your own file and use command line.'
 add_new_entity: 'Add New %s'
 username_or_email: 'Username or email'
 upload_an_image: 'Please upload an image file.'
@@ -245,6 +236,3 @@ allow_notifications: 'Allow Notifications'
 subscribe_notifications_message: "<div class=\"d-flex flex-column text-center\">\r\n<div><span class=\"fa fa-bell display-4 text-warning\"></span></div>\r\n<div class=\"fw-bolder fs-4 mt-3\">Subscribe our notifications and don't miss any updates.</div>\r\n</div>"
 thanks: Thanks
 big_integer: 'Big Integer (Unsigned)'
-db_driver: 'Database Driver'
-user_details: 'User Details'
-install: Install

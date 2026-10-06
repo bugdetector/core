@@ -8,13 +8,19 @@
         "guzzlehttp/guzzle": "^7.5",
         "symfony/event-dispatcher": "^6.3",
         "peppeocchi/php-cron-scheduler": "^4.0",
-        "kreait/firebase-php": "^7.9"
+        "kreait/firebase-php": "^7.9",
+        "symfony/dotenv": "^6.4"
     },
     "autoload": {
         "psr-4": {
         "CoreDB\\Kernel\\":"Kernel/",
         "Src\\" : "Kernel/Src/",
         "App\\" : "App/"
+        }
+    },
+    "config": {
+        "platform": {
+            "php": "8.4"
         }
     }
 }

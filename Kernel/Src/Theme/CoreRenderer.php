@@ -25,8 +25,8 @@ class CoreRenderer
         $this->theme = $theme;
         $loader = new FilesystemLoader($this->theme->getTemplateDirectories());
         $twig_options = [];
-        $enviroment = defined("ENVIROMENT") ? ENVIROMENT : "development";
-        if (in_array($enviroment, ["production", "staging"])) {
+        $isDev = \CoreDB\Kernel\Environment::isDev();
+        if (!$isDev) {
             $twig_options["cache"] = "../cache";
         } else {
             $twig_options["debug"] = true;
@@ -40,7 +40,7 @@ class CoreRenderer
             $this->twig->addExtension(new $extension());
         }
 
-        if ($enviroment == "development") {
+        if ($isDev) {
             $this->twig->addExtension(new DebugExtension());
         }
     }

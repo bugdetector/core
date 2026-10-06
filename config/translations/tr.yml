@@ -95,7 +95,7 @@ table_comment: 'Tablo Yorumu'
 'Contains site translations. You can add new one.': 'Site çevirilerini barındırır. Yeni bir tane ekleyebilirsiniz.'
 'Contains site Users fundemantal data. Connected with User class.': 'Site kullanıcılarının temel verilerini barındırır. User sınıfı ile bağlıdır.'
 'Constains User''s roles. Look at User::roles': 'Kullanıcıların rollerini barındırır. Bkz: User::roles'
-'Contains less secure site Variables. For more security use config.php. Connected via Variable class.': 'config.php üzerindekine göre daha az güvenli site değişkenlerini barındırır. Variable sınıfı ile bağlıdır.'
+'Contains less secure site Variables. Keep secrets in environment variables (.env files). Connected via Variable class.': 'Daha az güvenli site değişkenlerini barındırır. Gizli bilgileri ortam değişkenlerinde (.env dosyaları) tutun. Variable sınıfı ile bağlıdır.'
 'Importtant log of actions.': 'Önemli hareketlerin kayıtları.'
 email_not_available: 'Bu e-posta adresi kullanılmaktadır.'
 last_updated: 'Son Güncelleme'
@@ -162,14 +162,6 @@ cannot_empty: '%s boş bırakılamaz.'
 class_not_found: 'Belirtilen sınıf bulunamadı.'
 new_filter: 'Yeni Filtre'
 all: Tümü
-install_welcome: 'CoreDB''ye Hoşgeldiniz'
-install_description: 'Lütfen veritabanı bağlantısı sağlamak için aşağıdaki formu doldurun. Yönetici rolüne sahip bir kullanıcı oluşturmak için de kullanıcı adı, isim, e-posta ve şifrenizi belirtin.'
-db_server: 'Veritabanı sunucusu'
-db_name: 'Veritabanı adı'
-db_user: 'Veritabanı kullanıcı adı'
-db_password: 'Veritabanı bağlantı şifresi'
-cant_connect_to_database: 'Veritabanına bağlanılamadı.'
-all_configuration_imported: 'Tüm yapılandırma başarıyla oluşturuldu.'
 mainpage_welcome_message: "<div class=\"text-center\">\r\n<h2 class=\"text-primary\">CoreDB'ye Hoşgeldiniz</h2>\r\n<blockquote class=\"blockquote\">Bu sayfayı g&ouml;r&uuml;nt&uuml;l&uuml;yorsunuz &ccedil;&uuml;nk&uuml; hen&uuml;z kendi temanızda sayfanın yapısını değiştirmediniz.</blockquote>\r\n<p>CoreDB geliştiriciler i&ccedil;in b&uuml;t&uuml;n sisteme kuş g&ouml;z&uuml; bakılmasına imkan sağlayan bir i&ccedil;erik y&ouml;netim sistemidir.</p>\r\n<p>Kendi temanızda sistemde bulunan b&uuml;t&uuml;n g&ouml;r&uuml;n&uuml;mleri değiştirebilirsiniz.</p>\r\n<p>Yeni varlık tipleri oluşturabilirsiniz.</p>\r\n<p>CoreDB de her sınıf bir mod&uuml;ld&uuml;r.</p>\r\n<p>CoreDB y&uuml;ksek seviyede okunabilir ve y&ouml;netilebilir kod ortamı sağlamak i&ccedil;in tasarlanmıştır</p>\r\n<p><a title=\"CoreDB Dok&uuml;mantasyonu\" href=\"https://coredb.maware.com.tr/\" target=\"_blank\" rel=\"noopener\">D&ouml;k&uuml;mantasyon i&ccedil;in tıklayın</a></p>\r\n</div>"
 add_admin: 'Bir yönetici kullanıcı oluşturun.'
 enter_valid_mail: 'Lütfen geçerli bir e-posta adresi giriniz.'
@@ -180,7 +172,6 @@ type: Tip
 value: Değer
 variables: 'Yapılandırma değerleri'
 mainpage: 'Ana Sayfa'
-config_file_write_error: 'Yapılandırma dosyası (config/config.php) yazılabilir değil. Lütfen devam etmeden önce yapılandırma dosyasına yazma izni verin ya da elle dosyayı oluşturduktan sonra komut satırını kullanarak yükelemyi tamamlayın.'
 add_new_entity: 'Yeni %s Ekle'
 username_or_email: 'Kullanıcı adı ya da e-posta'
 upload_an_image: 'Lütfen bir resim dosyası yükleyin.'
@@ -245,6 +236,3 @@ allow_notifications: 'Bildirimlere İzin Ver'
 subscribe_notifications_message: "<div class=\"d-flex flex-column text-center\">\r\n<div><span class=\"fa fa-bell display-4 text-warning\"></span></div>\r\n<div class=\"fw-bolder fs-4 mt-3\">Bildirimlerimize üye olun ve güncellemeleri kaçırmayın.</div>\r\n</div>"
 thanks: Teşekkürler
 big_integer: 'Büyük Tam Sayı (İşaretsiz)'
-db_driver: 'Veritabanı Sürücüsü'
-user_details: 'Kullanıcı Bilgileri'
-install: Yükle
