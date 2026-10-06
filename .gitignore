@@ -8,3 +8,7 @@ public_html/node_modules/
 cache/
 public_html/package-lock.json
 .DS_Store
+.env.local
+.env.*.local
+compose.override.yml
+docker/nginx/certs/

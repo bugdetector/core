@@ -1,0 +1,21 @@
+# Shared by every environment.
+#   Local:      cp compose.override.example.yml compose.override.yml && docker compose up
+#   Production: docker compose -f compose.yml -f compose.prod.yml up -d --build
+services:
+  php:
+    build:
+      context: .
+      target: app-prod
+
+  web:
+    build:
+      context: .
+      target: web
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      # cert.pem and key.pem
+      - ./docker/nginx/certs:/etc/nginx/certs
+    depends_on:
+      - php

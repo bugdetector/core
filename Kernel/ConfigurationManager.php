@@ -162,7 +162,7 @@ class ConfigurationManager
     public function clearCache()
     {
         Cache::clear();
-        \CoreDB::cleanDirectory("../cache", true);
+        \CoreDB::cleanDirectory(__DIR__ . "/../cache");
     }
 
     public function getEntityList()

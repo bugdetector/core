@@ -2,6 +2,7 @@
 
 namespace Src\Theme;
 
+use CoreDB\Kernel\Environment;
 use Src\Entity\Cache;
 use Src\Entity\Translation;
 use Src\Theme\CoreRenderer;
@@ -18,7 +19,7 @@ abstract class View
 
     public function render()
     {
-        if ($this->cachable && defined("ENVIROMENT") && ENVIROMENT != "development") {
+        if ($this->cachable && !Environment::isDev()) {
             $cache = $this->getCache();
             if (!$cache) {
                 $render = CoreRenderer::getInstance()
@@ -79,7 +80,7 @@ abstract class View
 
     public function getCache(): ?Cache
     {
-        if (!$this->cache && defined("ENVIROMENT") && ENVIROMENT != "development") {
+        if (!$this->cache && !Environment::isDev()) {
             $this->cache = Cache::getByBundleAndKey("view_render", $this->getCacheKey());
         }
         return $this->cache;
