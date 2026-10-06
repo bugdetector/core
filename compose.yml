@@ -2,7 +2,7 @@
 #   Local:      cp compose.override.example.yml compose.override.yml && docker compose up
 #   Production: docker compose -f compose.yml -f compose.prod.yml up -d --build
 services:
-  app:
+  php:
     build:
       context: .
       target: app-prod
@@ -18,4 +18,4 @@ services:
       # cert.pem and key.pem
       - ./docker/nginx/certs:/etc/nginx/certs
     depends_on:
-      - app
+      - php

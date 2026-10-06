@@ -68,7 +68,7 @@ because nginx sends `SCRIPT_FILENAME` to php-fpm.
 | `docker/php/fpm-pool.conf` | `clear_env = no` |
 
 Local: `cp compose.override.example.yml compose.override.yml && docker compose up`.
-App on https://localhost (`admin` / `admin`; http redirects to https), phpMyAdmin on http://localhost:8080,
+App on https://localhost (`admin` / `admin`; http redirects to https), phpMyAdmin on http://localhost:8090,
 MySQL on host port 3307. `.htaccess` files are not used in Docker; change routing rules in `docker/nginx/default.conf`.
 
 Docker compose fills `${...}` in compose files from `.env` only, not from `.env.local`.

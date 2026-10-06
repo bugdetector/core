@@ -6,7 +6,7 @@
 #   docker/nginx/certs/cert.pem and key.pem      TLS certificate (full chain) and private key
 # MySQL runs on the host machine: use DB_SERVER=host.docker.internal.
 services:
-  app:
+  php:
     restart: unless-stopped
     environment:
       APP_ENV: prod

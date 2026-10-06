@@ -5,7 +5,7 @@
 # MySQL credentials come from .env (docker compose reads it for ${...} values).
 # Docker compose does not read .env.local: if you change DB_* there, MySQL will not see it.
 services:
-  app:
+  php:
     build:
       target: app-dev
     volumes:
@@ -51,7 +51,7 @@ services:
     environment:
       PMA_HOST: mysql
     ports:
-      - "${PMA_PORT:-8080}:80"
+      - "${PMA_PORT:-8090}:80"
     depends_on:
       - mysql
 

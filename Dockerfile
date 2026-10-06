@@ -38,7 +38,7 @@ RUN composer install --no-dev --no-interaction --prefer-dist --no-autoloader
 COPY . .
 RUN composer dump-autoload --no-dev --optimize \
     && mkdir -p cache public_html/files/uploaded \
-    && chown www-data:www-data cache public_html/files/uploaded
+    && chown -R www-data:www-data cache public_html/files/uploaded
 
 
 # ---------------------------------------------------------------------------

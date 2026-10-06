@@ -9,7 +9,7 @@ if [ ! -f vendor/autoload.php ]; then
 fi
 
 mkdir -p cache public_html/files/uploaded
-chown www-data:www-data cache public_html/files/uploaded
+chown -R www-data:www-data cache public_html/files/uploaded
 
 # Wait for the database, then install it only when it is empty.
 # config:import is not run on every start: it would overwrite table changes
