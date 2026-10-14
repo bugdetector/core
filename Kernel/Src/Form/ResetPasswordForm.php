@@ -3,6 +3,7 @@
 namespace Src\Form;
 
 use CoreDB\Kernel\ConfigurationManager;
+use Src\Controller\LoginController;
 use Src\Entity\Logins;
 use Src\Entity\ResetPassword;
 use Src\Entity\Translation;
@@ -88,8 +89,9 @@ class ResetPasswordForm extends Form
         );
         if ($sent) {
             $this->setMessage(
-                Translation::getTranslation("password_reset_mail_success")
+                Translation::getTranslation("password_reset_success")
             );
+            \CoreDB::goto(LoginController::getUrl());
         } else {
             $this->setError("email", Translation::getTranslation("an_error_occured"));
         }
