@@ -55,6 +55,7 @@ class Environment
         }
 
         define("LANGUAGE", self::get("LANGUAGE"));
+        define("APP_URL", rtrim(self::get("APP_URL"), "/"));
         define("FRONTEND_URL", self::get("FRONTEND_URL"));
         define("THEME", self::get("THEME"));
 

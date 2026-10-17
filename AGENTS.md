@@ -30,7 +30,7 @@ exists because PHP does not fill `$_ENV` by default (`variables_order`), so Dote
 php-fpm also needs `clear_env = no` (`docker/php/fpm-pool.conf`), otherwise workers get no variables at all.
 
 `Environment::load()` turns the variables into the global constants the framework uses
-(`DB_SERVER`, `HASH_SALT`, `LANGUAGE`, `THEME`, `PWA_MANIFEST`, …). Rules:
+(`DB_SERVER`, `HASH_SALT`, `APP_URL`, `LANGUAGE`, `THEME`, `PWA_MANIFEST`, …). Rules:
 
 - `APP_ENV` is `dev`, `staging` or `prod`; anything else stops the application. Use `Environment::isDev()` /
   `Environment::isProd()` instead of comparing strings.
