@@ -33,6 +33,8 @@ try {
         }
         session_start();
         CoreDB\Kernel\Router::getInstance()->route();
+    } else {
+        define("BASE_URL", APP_URL);
     }
 } catch (DatabaseInstallationException $ex) {
     // Tables are missing: the database has not been installed yet.
