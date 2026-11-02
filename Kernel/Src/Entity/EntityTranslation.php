@@ -7,6 +7,7 @@ use CoreDB\Kernel\Database\DataType\ShortText;
 use CoreDB\Kernel\Database\DataType\TableReference;
 use CoreDB\Kernel\Database\DataType\UnsignedBigInteger;
 use CoreDB\Kernel\Model;
+use PDO;
 
 abstract class EntityTranslation extends Model
 {
@@ -18,26 +19,42 @@ abstract class EntityTranslation extends Model
     public ShortText $field;
     public LongText $content;
 
-    public static function hasInCache($objectId, string $field, string $locale): bool
+    public static function hasInCache($identifier, string $locale): bool
     {
-        return isset(self::$staticCache[static::class][$objectId][$locale])
-            && array_key_exists($field, self::$staticCache[static::class][$objectId][$locale]);
+        return isset(self::$staticCache[static::class][$identifier][$locale]);
     }
 
-    public static function getFromCache($objectId, string $field, string $locale): ?string
+    public static function loadLocaleCache($identifier, string $locale): void
     {
-        return self::$staticCache[static::class][$objectId][$locale][$field] ?? null;
+        self::$staticCache[static::class][$identifier][$locale] = \CoreDB::database()
+            ->select(static::getTableName(), "t")
+            ->select("t", ["field", "content"])
+            ->condition("object_id", $identifier)
+            ->condition("locale", $locale)
+            ->execute()
+            ->fetchAll(PDO::FETCH_KEY_PAIR) ?: [];
     }
 
-    public static function setToCache($objectId, string $field, string $locale, ?string $content): void
+    public static function getFromCache($identifier, string $field, string $locale): ?string
     {
-        self::$staticCache[static::class][$objectId][$locale][$field] = $content;
+        if (!static::hasInCache($identifier, $locale)) {
+            static::loadLocaleCache($identifier, $locale);
+        }
+        return self::$staticCache[static::class][$identifier][$locale][$field] ?? null;
     }
 
-    public static function clearCache($objectId = null): void
+    public static function setToCache($identifier, string $field, string $locale, ?string $content): void
     {
-        if ($objectId !== null) {
-            unset(self::$staticCache[static::class][$objectId]);
+        if (!static::hasInCache($identifier, $locale)) {
+            static::loadLocaleCache($identifier, $locale);
+        }
+        self::$staticCache[static::class][$identifier][$locale][$field] = $content;
+    }
+
+    public static function clearCache($identifier = null): void
+    {
+        if ($identifier !== null) {
+            unset(self::$staticCache[static::class][$identifier]);
         } else {
             unset(self::$staticCache[static::class]);
         }

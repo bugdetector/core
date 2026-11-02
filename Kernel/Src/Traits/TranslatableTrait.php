@@ -14,26 +14,14 @@ trait TranslatableTrait
         $baseValue = (string) $this->{$field}->getValue();
         $fallbackValue = $fallback ? $baseValue : '';
 
-        $objectId = $this->ID->getValue();
-        if ($locale === $defaultLocale) {
+        $identifier = $this->ID->getValue();
+        if ($locale === $defaultLocale || !$identifier) {
             return $fallbackValue;
         }
 
         /** @var class-string<EntityTranslation> $transClass */
         $transClass = static::getTranslationClass();
-
-        if ($transClass::hasInCache($objectId, $field, $locale)) {
-            $cached = $transClass::getFromCache($objectId, $field, $locale);
-            return $cached ?: $fallbackValue;
-        }
-
-        $trans = $transClass::get([
-            "object_id" => $objectId,
-            "locale" => $locale,
-            "field" => $field,
-        ]);
-        $val = $trans ? $trans->content->getValue() : null;
-        $transClass::setToCache($objectId, $field, $locale, $val);
+        $val = $transClass::getFromCache($identifier, $field, $locale);
 
         return $val ?: $fallbackValue;
     }
@@ -46,21 +34,21 @@ trait TranslatableTrait
             return;
         }
 
-        $objectId = $this->ID->getValue();
+        $identifier = $this->ID->getValue();
         /** @var class-string<EntityTranslation> $transClass */
         $transClass = static::getTranslationClass();
         $trans = $transClass::get([
-            "object_id" => $objectId,
+            "object_id" => $identifier,
             "locale" => $locale,
             "field" => $field,
         ]) ?: new $transClass();
 
-        $trans->object_id->setValue($objectId);
+        $trans->object_id->setValue($identifier);
         $trans->locale->setValue($locale);
         $trans->field->setValue($field);
         $trans->content->setValue($content);
         $trans->save();
-        $transClass::setToCache($objectId, $field, $locale, $content);
+        $transClass::setToCache($identifier, $field, $locale, $content);
     }
 
     public function saveTranslations(?array $data = null): void
@@ -86,12 +74,12 @@ trait TranslatableTrait
 
     public function deleteTranslations(): void
     {
-        $objectId = $this->ID->getValue();
+        $identifier = $this->ID->getValue();
         /** @var class-string<EntityTranslation> $transClass */
         $transClass = static::getTranslationClass();
-        foreach ($transClass::getAll(["object_id" => $objectId]) as $trans) {
+        foreach ($transClass::getAll(["object_id" => $identifier]) as $trans) {
             $trans->delete();
         }
-        $transClass::clearCache($objectId);
+        $transClass::clearCache($identifier);
     }
 }
