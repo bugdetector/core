@@ -227,11 +227,69 @@ $this->form->processForm(); // submit, validation, redirect
 
 ## Translations
 
+### Static UI translations (`Src\Entity\Translation`)
+
+- Default language comes from `APP_LANGUAGE` (`Translation::getDefaultLanguage()`); active language is `Translation::getLanguage()`.
+  Direction helpers: `Translation::isRtl(?string $locale)` and `Translation::getDirection(?string $locale)`.
 - PHP: `Translation::getTranslation("key")`
-- Twig: `{{ t("key") }}`
+- Twig: `{{ t("key") }}`, `{{ language() }}`, `{{ defaultLanguage() }}`, `{{ getAvailableLanguageList() }}`, `{{ getTranslationIcons() }}`
 - JavaScript: `_t("key")` after `$this->addFrontendTranslation("key")` in the controller
 - Stored in the `translations` table, exported to `config/translations/{lang}.yml`.
   Without database tables, translations are read from the YAML files.
+
+### Entity translations (`TranslatableInterface` & `EntityTranslation`)
+
+Default-locale values are stored directly in the main entity table; non-default locale values are stored in a dedicated `{table}_translations` table (Personal Translation pattern).
+
+1. **Create the translation table** (`config/table_structure/{table}_translations.yml`) with columns:
+   - `object_id`: `table_reference` pointing to `{table}` (`isNull: false`)
+   - `locale`: `short_text` (`length: '10'`, `isNull: false`)
+   - `field`: `short_text` (`length: '100'`, `isNull: false`)
+   - `content`: `long_text` (`isNull: true`, `default: null`)
+2. **Create the translation entity** extending `Src\Entity\EntityTranslation` and register it in `config/entity_config.yml`:
+
+```php
+namespace App\Entity\Product;
+
+use Src\Entity\EntityTranslation;
+
+class ProductTranslation extends EntityTranslation
+{
+    public static function getTableName(): string
+    {
+        return "product_translations";
+    }
+}
+```
+
+3. **Implement `TranslatableInterface` and use `TranslatableTrait`** on the main entity:
+
+```php
+use CoreDB\Kernel\TranslatableInterface;
+use Src\Traits\TranslatableTrait;
+
+class Product extends Model implements TranslatableInterface
+{
+    use TranslatableTrait;
+
+    public static function getTranslatableFields(): array
+    {
+        return ["title", "description"];
+    }
+
+    public static function getTranslationClass(): string
+    {
+        return ProductTranslation::class;
+    }
+}
+```
+
+4. **Reading & writing translations**:
+   - **Read**: `$entity->getTranslatedField("title", $locale = null, $fallback = true)` (in Twig: `{{ item.getTranslatedField("title") }}`).
+     When `$fallback` is `true` (default), missing or empty translations fall back to the main table's default-locale value; pass `$fallback = false` to get `''` when untranslated (used by `InsertForm`).
+   - **Write**: `$entity->setTranslatedField("title", $content, $locale)` upserts the row in `{table}_translations` (empty/`null` updates `content` rather than deleting the row).
+   - **Forms & lifecycle**: `InsertForm` automatically renders language tabs and `translations[{locale}][{field}]` inputs for `TranslatableInterface` models. `Model::save()` calls `saveTranslations()` and `Model::delete()` calls `deleteTranslations()` automatically.
+   - **Caching**: `EntityTranslation` preloads all translatable fields for an `(identifier, locale)` pair in a single `PDO::FETCH_KEY_PAIR` query (`loadLocaleCache()`) and caches them statically in memory per request.
 
 ## Console commands
 
