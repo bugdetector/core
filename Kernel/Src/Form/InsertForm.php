@@ -195,8 +195,11 @@ class InsertForm extends Form
                         $subWidget = TextareaWidget::create($inputName)
                             ->setValue($val)
                             ->setLabel($field->label);
-                        if (str_contains($field->attributes['class'] ?? '', 'html-editor')) {
+                        if ($field->hasClass('html-editor')) {
                             $subWidget->addClass('html-editor');
+                        }
+                        if ($field->fileKey) {
+                            $subWidget->fileKey = $field->fileKey;
                         }
                     } else {
                         $subWidget = InputWidget::create($inputName)
