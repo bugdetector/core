@@ -26,16 +26,6 @@ class Navbar extends View
         return "navbar.twig";
     }
 
-    public function getTranslationIcons()
-    {
-        $translateIcons = Translation::get(["key" => "language_icon"]);
-        $iconMap = [];
-        foreach (Translation::getAvailableLanguageList() as $language) {
-            $iconMap[$language] = $translateIcons->$language->getValue();
-        }
-        return $iconMap;
-    }
-
     public function getNavbarElements($parent = null)
     {
         $navbarClass = CoreDB::config()->getEntityClassName("navbar");

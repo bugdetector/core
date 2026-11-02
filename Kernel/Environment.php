@@ -54,7 +54,7 @@ class Environment
             define("TRUSTED_HOSTS", $trustedHosts);
         }
 
-        define("LANGUAGE", self::get("LANGUAGE"));
+        define("APP_LANGUAGE", self::get("APP_LANGUAGE"));
         define("APP_URL", rtrim(self::get("APP_URL"), "/"));
         define("FRONTEND_URL", self::get("FRONTEND_URL"));
         define("THEME", self::get("THEME"));

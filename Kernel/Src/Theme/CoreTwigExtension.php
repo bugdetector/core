@@ -16,6 +16,9 @@ class CoreTwigExtension extends AbstractExtension
             new TwigFunction('getHashedFilemTime', [$this, 'getHashedFilemTime']),
             new TwigFunction('t', [Translation::class, 'getTranslation']),
             new TwigFunction("language", [Translation::class, "getLanguage"]),
+            new TwigFunction("defaultLanguage", [Translation::class, "getDefaultLanguage"]),
+            new TwigFunction("getAvailableLanguageList", [Translation::class, "getAvailableLanguageList"]),
+            new TwigFunction("getTranslationIcons", [Translation::class, "getTranslationIcons"]),
             new TwigFunction("user", [\CoreDB::class, "currentUser"]),
             new TwigFunction("variable", [$this, "getVariable"])
         ];
