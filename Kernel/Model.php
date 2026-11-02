@@ -273,7 +273,11 @@ abstract class Model implements SearchableInterface
                 $field->save();
             }
         }
-        return $this->update();
+        $result = $this->update();
+        if ($result && $this instanceof TranslatableInterface) {
+            $this->saveTranslations();
+        }
+        return $result;
     }
 
     public function delete(): bool
@@ -299,6 +303,9 @@ abstract class Model implements SearchableInterface
             }
         }
         $this->save();
+        if ($this instanceof TranslatableInterface) {
+            $this->deleteTranslations();
+        }
         $deleted = boolval(
             CoreDB::database()->delete($this->getTableName())->condition("ID", $this->ID)->execute()
         );

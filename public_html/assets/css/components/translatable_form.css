@@ -1,0 +1,26 @@
+.trans-lang-nav .btn {
+    font-weight: 500;
+    transition: all 0.15s ease-in-out;
+}
+
+.trans-lang-nav .btn.btn-light-secondary {
+    background-color: #f5f8fa;
+    border-color: #e4e6ef;
+}
+
+.trans-lang-nav .btn.btn-light-secondary:hover {
+    background-color: #e4e6ef;
+}
+
+.trans-lang-icon img {
+    max-height: 1.25rem;
+    max-width: 1.5rem;
+    height: auto;
+    width: auto;
+    display: inline-block;
+}
+
+.trans-field-wrap [dir="rtl"] {
+    direction: rtl;
+    text-align: right;
+}
