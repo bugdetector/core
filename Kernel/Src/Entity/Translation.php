@@ -50,7 +50,7 @@ class Translation extends Model
                 }
             }
             if (!Translation::$language) {
-                Translation::$language = LANGUAGE;
+                Translation::$language = APP_LANGUAGE;
             }
         }
         return self::$language;
@@ -128,6 +128,48 @@ class Translation extends Model
             }
         }
         return self::$available_languages;
+    }
+
+    public static function getDefaultLanguage(): string
+    {
+        if (defined("APP_LANGUAGE")) {
+            return APP_LANGUAGE;
+        }
+        throw new \Exception(
+            "Default language is not defined. Please define the APP_LANGUAGE environment variable in your .env file."
+        );
+    }
+
+    public static function getTranslationIcons(): array
+    {
+        $translateIcons = self::get(["key" => "language_icon"]);
+        $iconMap = [];
+        if ($translateIcons) {
+            foreach (self::getAvailableLanguageList() as $language) {
+                $iconMap[$language] = $translateIcons->$language->getValue();
+            }
+        }
+        return $iconMap;
+    }
+
+    public static function isRtl(?string $locale = null): bool
+    {
+        $locale = $locale ?: self::getLanguage();
+
+        $language = strtolower(
+            explode('-', str_replace('_', '-', (string) $locale))[0]
+        );
+
+        return in_array($language, [
+            'ar', 'arc', 'azb', 'ckb', 'dv', 'fa',
+            'he', 'khw', 'ks', 'ps', 'syr', 'ug',
+            'ur', 'yi',
+        ], true);
+    }
+
+    public static function getDirection(?string $locale = null): string
+    {
+        return self::isRtl($locale) ? 'rtl' : 'ltr';
     }
 
     public static function importTranslations()
