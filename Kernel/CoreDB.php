@@ -22,6 +22,7 @@ use Src\Views\EmailTemplate;
 class CoreDB
 {
     private static $currentUser = null;
+    private static ?string $lastMailError = null;
 
     public static function currentDate()
     {
@@ -54,66 +55,84 @@ class CoreDB
         $ccs = null,
         $bccs = null,
         $fromName = null,
+        &$error = null
     )
     {
-        if(!Environment::isProd()){
-            $message .= Translation::getTranslation("originally_send_to", [
-                $tos
-            ]);
-            $tos = Variable::getByKey("test_email_send_address")
-            ->value->getValue();
-            // Set if exist
-            $ccs = $ccs ? $tos : null;
-            // Set if exist
-            $bccs = $bccs ? $tos : null;
-        }
-        $siteMail = Variable::getByKey("email_address")->value->getValue();
-        $mail = new \PHPMailer\PHPMailer\PHPMailer();
-        $mail->IsSMTP();
-        $mail->SMTPAuth = true;
-        $mail->SMTPSecure = Variable::getByKey("email_smtp_secure")->value->getValue();
-        $mail->Host = Variable::getByKey("email_smtp_host")->value->getValue();
-        $mail->Port = Variable::getByKey("email_smtp_port")->value->getValue();
-        $mail->IsHTML(true);
-        $mail->SetLanguage(Translation::getLanguage(), "phpmailer/language");
-        $mail->CharSet  = "utf-8";
-        $mail->Username = $siteMail;
-        $mail->Password = Variable::getByKey("email_password")->value->getValue();
-        $mail->SetFrom(
-            $siteMail, 
-            $fromName ?: Variable::getByKey("email_username")->value->getValue()
-        );
-        $toUsernames = explode(";", $toUsernames);
-        foreach(explode(";", $tos) as $index => $to){
-            $mail->AddAddress($to, @$toUsernames[$index] ?: current($toUsernames));
-        }
-        $mail->Subject = $subject;
-        $mail->Body = CoreRenderer::getInstance(
-            $theme ?: CoreDB::controller()->getTheme()
-        )->renderView(new $template($message));
-        foreach($attachments as $attachment){
-            switch($attachment["type"]){
-                case "content":
-                    $mail->addStringAttachment(
-                        $attachment["content"], 
-                        $attachment["filename"]
-                    );
-                    break;
-                case "file":
-                    $mail->addAttachment(
-                        $attachment["path"],
-                        $attachment["filename"]
-                    );
-                break;
+        self::$lastMailError = null;
+        try {
+            if(!Environment::isProd()){
+                $message .= Translation::getTranslation("originally_send_to", [
+                    $tos
+                ]);
+                $tos = Variable::getByKey("test_email_send_address")
+                ->value->getValue();
+                // Set if exist
+                $ccs = $ccs ? $tos : null;
+                // Set if exist
+                $bccs = $bccs ? $tos : null;
             }
+            $siteMail = Variable::getByKey("email_address")->value->getValue();
+            $mail = new \PHPMailer\PHPMailer\PHPMailer();
+            $mail->IsSMTP();
+            $mail->SMTPAuth = true;
+            $mail->SMTPSecure = Variable::getByKey("email_smtp_secure")->value->getValue();
+            $mail->Host = Variable::getByKey("email_smtp_host")->value->getValue();
+            $mail->Port = Variable::getByKey("email_smtp_port")->value->getValue();
+            $mail->IsHTML(true);
+            $mail->SetLanguage(Translation::getLanguage(), "phpmailer/language");
+            $mail->CharSet  = "utf-8";
+            $mail->Username = $siteMail;
+            $mail->Password = Variable::getByKey("email_password")->value->getValue();
+            $mail->SetFrom(
+                $siteMail, 
+                $fromName ?: Variable::getByKey("email_username")->value->getValue()
+            );
+            $toUsernames = explode(";", $toUsernames);
+            foreach(explode(";", $tos) as $index => $to){
+                $mail->AddAddress($to, @$toUsernames[$index] ?: current($toUsernames));
+            }
+            $mail->Subject = $subject;
+            $mail->Body = CoreRenderer::getInstance(
+                $theme ?: CoreDB::controller()->getTheme()
+            )->renderView(new $template($message));
+            foreach($attachments as $attachment){
+                switch($attachment["type"]){
+                    case "content":
+                        $mail->addStringAttachment(
+                            $attachment["content"], 
+                            $attachment["filename"]
+                        );
+                        break;
+                    case "file":
+                        $mail->addAttachment(
+                            $attachment["path"],
+                            $attachment["filename"]
+                        );
+                    break;
+                }
+            }
+            foreach($ccs ? explode(";", $ccs) : [] as $cc){
+                $mail->addCC($cc);
+            }
+            foreach($bccs ? explode(";", $bccs) : [] as $bcc){
+                $mail->addBCC($bcc);
+            }
+            $sent = $mail->Send();
+            if (!$sent) {
+                $error = $mail->ErrorInfo;
+                self::$lastMailError = $mail->ErrorInfo;
+            }
+            return $sent;
+        } catch (\Throwable $e) {
+            $error = $e->getMessage();
+            self::$lastMailError = $e->getMessage();
+            return false;
         }
-        foreach($ccs ? explode(";", $ccs) : [] as $cc){
-            $mail->addCC($cc);
-        }
-        foreach($bccs ? explode(";", $bccs) : [] as $bcc){
-            $mail->addBCC($bcc);
-        }
-        return $mail->Send();
+    }
+
+    public static function getLastMailError() : ?string
+    {
+        return self::$lastMailError;
     }
 
     public static function goTo(string $uri, $params = [])
@@ -162,7 +181,7 @@ class CoreDB
         @$dom->loadHTML(mb_convert_encoding($data, 'HTML-ENTITIES', 'UTF-8'));
         $elements = $dom->getElementsByTagName('*');
         foreach ($elements as $element) {
-            $allowed_attributes = ["class", "style"];
+            $allowed_attributes = ["class", "style", "id"];
             if ($element->tagName == "a") {
                 $element->setAttribute('href', htmlspecialchars($element->getAttribute('href')));
                 $allowed_attributes[] = "href";
@@ -170,6 +189,11 @@ class CoreDB
             } elseif ($element->tagName == "img") {
                 $element->setAttribute('src', htmlspecialchars($element->getAttribute('src')));
                 $allowed_attributes[] = "src";
+            } elseif ($element->tagName == "turbo-frame") {
+                $element->setAttribute('src', htmlspecialchars($element->getAttribute('src')));
+                $allowed_attributes[] = "src";
+                $allowed_attributes[] = "loading";
+                $allowed_attributes[] = "target";
             }
             foreach ($element->attributes as $attribute) {
                 if (in_array($attribute->name, $allowed_attributes)) {
@@ -183,7 +207,8 @@ class CoreDB
         return strip_tags(
             $dom->saveHTML(),
             "<table><thead><tbody><tr><td><label><strong><p><em><i><u><ul><li><a>" .
-            "<img><blockquote><span><pre><code><br><h1><h2><h3><h4><h5><h6><div>"
+            "<img><blockquote><span><pre><code><br><h1><h2><h3><h4><h5><h6><div>" .
+            "<section><turbo-frame>"
         );
     }
 
