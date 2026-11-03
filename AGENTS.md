@@ -232,7 +232,7 @@ $this->form->processForm(); // submit, validation, redirect
 - Default language comes from `APP_LANGUAGE` (`Translation::getDefaultLanguage()`); active language is `Translation::getLanguage()`.
   Direction helpers: `Translation::isRtl(?string $locale)` and `Translation::getDirection(?string $locale)`.
 - PHP: `Translation::getTranslation("key")`
-- Twig: `{{ t("key") }}`, `{{ language() }}`, `{{ defaultLanguage() }}`, `{{ getAvailableLanguageList() }}`, `{{ getTranslationIcons() }}`
+- Twig: `{{ t("key") }}`, `{{ language() }}`, `{{ defaultLanguage() }}`, `{{ direction() }}`, `{{ getAvailableLanguageList() }}`, `{{ getTranslationIcons() }}`
 - JavaScript: `_t("key")` after `$this->addFrontendTranslation("key")` in the controller
 - Stored in the `translations` table, exported to `config/translations/{lang}.yml`.
   Without database tables, translations are read from the YAML files.
