@@ -110,12 +110,15 @@ class Environment
         return APP_ENV == self::PROD;
     }
 
-    private static function get(string $key): string
+    public static function get(string $key): string
     {
-        return trim((string) ($_ENV[$key] ?? ""));
+        if (!array_key_exists($key, $_ENV)) {
+            throw new RuntimeException("Environment variable {$key} is not defined in .env.");
+        }
+        $value = trim((string) $_ENV[$key]);
+        return $value;
     }
-
-    private static function required(string $key): string
+    public static function required(string $key): string
     {
         $value = self::get($key);
         if ($value === "") {
@@ -124,7 +127,7 @@ class Environment
         return $value;
     }
 
-    private static function getBool(string $key): bool
+    public static function getBool(string $key): bool
     {
         return filter_var(self::get($key), FILTER_VALIDATE_BOOLEAN);
     }
@@ -132,7 +135,7 @@ class Environment
     /**
      * Comma separated values. Ex: LOGIN_POLICY_ROLES=Admin,User
      */
-    private static function getList(string $key): array
+    public static function getList(string $key): array
     {
         return array_values(array_filter(array_map("trim", explode(",", self::get($key)))));
     }
@@ -140,7 +143,7 @@ class Environment
     /**
      * Relative paths are resolved from the project directory.
      */
-    private static function getPath(string $key): string
+    public static function getPath(string $key): string
     {
         $path = self::get($key);
         if ($path !== "" && $path[0] !== "/") {
