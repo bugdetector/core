@@ -7,7 +7,7 @@ use Src\Theme\ResultsViewer;
 
 interface SearchableInterface
 {
-    public const PAGE_LIMIT = 100;
+    public const PAGE_LIMIT = 25;
 
     /**
      * Return page size limit.
