@@ -3,6 +3,7 @@
 namespace Src\Theme;
 
 use CoreDB\Kernel\Database\DatabaseInstallationException;
+use Src\Entity\State;
 use Src\Entity\Translation;
 use Src\Entity\Variable;
 use Twig\Extension\AbstractExtension;
@@ -21,7 +22,8 @@ class CoreTwigExtension extends AbstractExtension
             new TwigFunction("getAvailableLanguageList", [Translation::class, "getAvailableLanguageList"]),
             new TwigFunction("getTranslationIcons", [Translation::class, "getTranslationIcons"]),
             new TwigFunction("user", [\CoreDB::class, "currentUser"]),
-            new TwigFunction("variable", [$this, "getVariable"])
+            new TwigFunction("variable", [$this, "getVariable"]),
+            new TwigFunction("state", [$this, "getState"])
         ];
     }
 
@@ -34,6 +36,15 @@ class CoreTwigExtension extends AbstractExtension
     {
         try {
             return Variable::getByKey($key);
+        } catch (DatabaseInstallationException $ex) {
+            return null;
+        }
+    }
+
+    public function getState($key)
+    {
+        try {
+            return State::getByKey($key);
         } catch (DatabaseInstallationException $ex) {
             return null;
         }
