@@ -17,7 +17,7 @@ fields:
     primary_key: false
     autoIncrement: false
     isNull: false
-    isUnique: false
+    isUnique: true
     default: null
     comment: 'Cache key.'
     length: '255'
