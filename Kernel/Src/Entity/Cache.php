@@ -48,11 +48,29 @@ class Cache extends Model
     public static function set(string $bundle, string $key, string $value)
     {
         if ($bundle && $key && $value) {
-            $cache = Cache::get(["bundle" => $bundle, "key" => $key]) ?: new Cache();
+            $cache = Cache::get(["key" => $key]) ?: new Cache();
             $cache->bundle->setValue($bundle);
             $cache->key->setValue($key);
             $cache->value->setValue($value);
-            $cache->save();
+            try {
+                $cache->save();
+            } catch (\PDOException $ex) {
+                if ($ex->getCode() == 23000 || str_contains($ex->getMessage(), 'Duplicate entry')) {
+                    $existing = Cache::get(["key" => $key]);
+                    if ($existing) {
+                        $existing->bundle->setValue($bundle);
+                        $existing->value->setValue($value);
+                        try {
+                            $existing->save();
+                            $cache = $existing;
+                        } catch (\Exception $e) {
+                            $cache = $existing;
+                        }
+                    }
+                } else {
+                    throw $ex;
+                }
+            }
             self::$staticCache[$bundle][$key] = $cache;
         }
     }
