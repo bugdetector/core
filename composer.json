@@ -4,12 +4,14 @@
         "squizlabs/php_codesniffer": "*",
         "phpmailer/phpmailer": "^6.1",
         "symfony/yaml": "^5.1",
-        "symfony/console": "^5.1",
+        "symfony/console": "^6.4",
         "guzzlehttp/guzzle": "^7.5",
         "symfony/event-dispatcher": "^6.3",
         "peppeocchi/php-cron-scheduler": "^4.0",
         "kreait/firebase-php": "^7.9",
-        "symfony/dotenv": "^6.4"
+        "symfony/dotenv": "^6.4",
+        "twig/intl-extra": "^3",
+        "ext-intl": "*"
     },
     "autoload": {
         "psr-4": {
@@ -20,7 +22,7 @@
     },
     "config": {
         "platform": {
-            "php": "8.4"
+            "php": "8.4.27"
         }
     }
 }
