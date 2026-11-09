@@ -167,6 +167,22 @@ class SearchForm extends Form
             }
 
             $this->pagination->total_count = $this->query->getResultTotalCount();
+            if ($this->pagination->total_count > 0 && empty($this->data) && $this->page > 1) {
+                $maxPage = $this->pagination->getPageCount();
+                if ($this->page > $maxPage) {
+                    $this->page = $maxPage;
+                    $this->pagination->page = $this->page;
+                    $this->query->limit(
+                        $this->pagination->limit,
+                        ($this->pagination->page - 1) * $this->pagination->limit
+                    );
+                    $queryResult = $this->query->execute();
+                    $this->data = $queryResult->fetchAll(PDO::FETCH_ASSOC);
+                    foreach ($this->data as &$row) {
+                        $this->object->postProcessRow($row);
+                    }
+                }
+            }
             $this->summary_text = Translation::getTranslation("result_summary", [
                 $this->pagination->total_count,
                 ($this->pagination->page - 1) * $this->pagination->limit + 1,
