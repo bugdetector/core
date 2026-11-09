@@ -86,7 +86,7 @@ dashboard: Dashboard
 edit_table: 'Edit Table'
 back_to_mainpage: 'Back To Mainpage'
 table_comment: 'Table Comment'
-'Contains blocked IP adresses. These IP adresses can''t login to site.': 'Contains blocked IP adresses. These IP adresses can''t login to site.'
+"Contains blocked IP adresses. These IP adresses can't login to site.": "Contains blocked IP adresses. These IP adresses can't login to site."
 'Contains cached data. You can use this table via Cache class.': 'Contains cached data. You can use this table via Cache class.'
 'Contains e-mail template in many languages. You can add new one.': 'Contains e-mail template in many languages. You can add new one.'
 'Contains failed login attempts by user and IP address to site.': 'Contains failed login attempts by user and IP address to site.'
@@ -94,7 +94,7 @@ table_comment: 'Table Comment'
 'Contains roles. You can add new one.': 'Contains roles. You can add new one.'
 'Contains site translations. You can add new one.': 'Contains site translations. You can add new one.'
 'Contains site Users fundemantal data. Connected with User class.': 'Contains site Users fundemantal data. Connected with User class.'
-'Constains User''s roles. Look at User::roles': 'Constains User''s roles. Look at User::roles'
+"Constains User's roles. Look at User::roles": "Constains User's roles. Look at User::roles"
 'Contains less secure site Variables. Keep secrets in environment variables (.env files). Connected via Variable class.': 'Contains less secure site Variables. Keep secrets in environment variables (.env files). Connected via Variable class.'
 'Importtant log of actions.': 'Importtant log of actions.'
 email_not_available: 'This email address is currently used.'

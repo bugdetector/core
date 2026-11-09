@@ -10,29 +10,29 @@ use Src\Entity\State;
 use Src\Entity\Translation;
 use Src\Entity\Variable;
 use Src\Lib\PushNotification\PNPayload;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(name: "notifications:test")]
 class SendTestPushNotificationsCommand extends Command
 {
-    protected static $defaultName = "notifications:test";
-
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription(
             Translation::getTranslation("send_test_push_notifications")
         );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
             $configManager = CoreDB::config();
             $stateClass = $configManager->getEntityClassName("states");
             /** @var State */
-            $state = $stateClass::getByKey(static::$defaultName) ?: new $stateClass(null, [
-                "key" => self::$defaultName
+            $state = $stateClass::getByKey($this->getName()) ?: new $stateClass(null, [
+                "key" => $this->getName()
             ]);
             if (!$state->value->getValue()) {
                 $state->value->setValue(1);

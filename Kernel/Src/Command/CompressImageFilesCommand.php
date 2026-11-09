@@ -5,22 +5,22 @@ namespace Src\Command;
 use Exception;
 use Src\Entity\File;
 use Src\Entity\Translation;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(name: "image:compress")]
 class CompressImageFilesCommand extends Command
 {
-    protected static $defaultName = "image:compress";
-
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription(
             Translation::getTranslation("compress_all_image_files")
         );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $imageFileIds = \CoreDB::database()->select(File::getTableName(), "f")
         ->condition("f.mime_type", 'image%', "LIKE")

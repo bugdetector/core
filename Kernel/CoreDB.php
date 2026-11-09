@@ -8,6 +8,7 @@ use CoreDB\Kernel\Events\EventsManager;
 use CoreDB\Kernel\Events\EventsManagerInterface;
 use CoreDB\Kernel\Messenger;
 use CoreDB\Kernel\Router;
+use PHPMailer\PHPMailer\PHPMailer;
 use Src\Entity\Session;
 use Src\Entity\Translation;
 use Src\Entity\User;
@@ -72,14 +73,14 @@ class CoreDB
                 $bccs = $bccs ? $tos : null;
             }
             $siteMail = Variable::getByKey("email_address")->value->getValue();
-            $mail = new \PHPMailer\PHPMailer\PHPMailer();
+            $mail = new PHPMailer();
             $mail->IsSMTP();
             $mail->SMTPAuth = true;
             $mail->SMTPSecure = Variable::getByKey("email_smtp_secure")->value->getValue();
             $mail->Host = Variable::getByKey("email_smtp_host")->value->getValue();
             $mail->Port = Variable::getByKey("email_smtp_port")->value->getValue();
             $mail->IsHTML(true);
-            $mail->SetLanguage(Translation::getLanguage(), "phpmailer/language");
+            PHPMailer::setLanguage(Translation::getLanguage());
             $mail->CharSet  = "utf-8";
             $mail->Username = $siteMail;
             $mail->Password = Variable::getByKey("email_password")->value->getValue();
