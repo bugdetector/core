@@ -1,14 +1,14 @@
-{% if view.getPageCount() %}
+{% if view.getPageCount() > 1 %}
 	<div class="col-12 mt-4" id="pagination">
 		<nav aria-label="...">
 			<div class="pagination justify-content-center">
-				<div class="page-item  {{ view.page == 1 ? " disabled" : " " }}">
+				<div class="page-item  {{ view.page <= 1 ? " disabled" : " " }}">
 					<a class="page-link" href='{{ view.query_link ~ "&page=1" }}' data-page="{{ 1 }}">
 						<span class="sr-only">first</span>
 						<i class="fa fa-angle-double-left"></i>
 					</a>
 				</div>
-				<div class="page-item {{ view.page == 1 ? " disabled" : " " }}">
+				<div class="page-item {{ view.page <= 1 ? " disabled" : " " }}">
 					<a class="page-link" href='{{ view.query_link ~ "&page=" ~ (view.page - 1) }}' data-page="{{ (view.page - 1) }}">
 						<span class="sr-only">before</span>
 						<i class="fa fa-angle-left"></i>
@@ -17,19 +17,19 @@
 				{% set totalPages = view.getPageCount() %}
 				{% set pageStart = view.page > 5 ? view.page - 4 : 1 %}
 				{% set pageStart = pageStart < totalPages ? pageStart : totalPages %}
-				{% set pageEnd = pageStart + 5 < totalPages ? pageStart + 5 : totalPages %}
+				{% set pageEnd = pageStart + 4 < totalPages ? pageStart + 4 : totalPages %}
 				{% for i in  (pageStart)..(pageEnd) %}
 					<div class='page-item {{ i == view.page ? "active" : "" }}'>
 						<a class='page-link' href='{{ view.query_link ~ "&page=" ~ i }}' data-page="{{ i }}">{{ i }}</a>
 					</div>
 				{% endfor %}
-				<div class="page-item {{ view.page == view.getPageCount() ? " disabled" : " " }}">
+				<div class="page-item {{ view.page >= view.getPageCount() ? " disabled" : " " }}">
 					<a class="page-link" href='{{ view.query_link ~ "&page=" ~ (view.page + 1) }}' data-page="{{ (view.page + 1) }}">
 						<span class="sr-only">next</span>
 						<i class="fa fa-angle-right"></i>
 					</a>
 				</div>
-				<div class="page-item {{ view.page == view.getPageCount() ? " disabled" : " " }}">
+				<div class="page-item {{ view.page >= view.getPageCount() ? " disabled" : " " }}">
 					<a class="page-link" href='{{ view.query_link ~ "&page=" ~ view.getPageCount() }}' data-page="{{ view.getPageCount() }}">
 						<span class="sr-only">last</span>
 						<i class="fa fa-angle-double-right"></i>

@@ -27,8 +27,8 @@ class Pagination extends View
         return "pagination.twig";
     }
 
-    public function getPageCount()
+    public function getPageCount(): int
     {
-        return $this->limit ? intval($this->total_count / $this->limit) + 1 : 0;
+        return $this->limit > 0 ? (int) ceil($this->total_count / $this->limit) : 0;
     }
 }
