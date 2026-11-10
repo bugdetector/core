@@ -237,6 +237,10 @@ subscribe_notifications_message: "<div class=\"d-flex flex-column text-center\">
 thanks: Thanks
 big_integer: 'Big Integer (Unsigned)'
 translation_language: 'Translation Language'
-translation_language_hint: 'Edit translatable fields in selected language'
+translation_language_hint: 'Each language is saved separately. Save your changes before switching languages.'
+translation_unsaved_title: 'Unsaved changes'
+translation_unsaved_message: 'Switching languages reloads the page. Your unsaved changes will be lost. Stay on this form to save them first.'
+translation_discard_switch: 'Switch without saving'
+translation_stay: 'Stay on this form'
 is_compressed: 'Is compressed'
 'File is compressed.': 'File is compressed.'

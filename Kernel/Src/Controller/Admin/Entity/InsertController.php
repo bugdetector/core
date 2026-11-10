@@ -7,11 +7,14 @@ use CoreDB\Kernel\Model;
 use Src\Controller\Admin\EntityController;
 use Src\Controller\NotFoundController;
 use Src\Entity\Translation;
+use Src\Form\EntityTranslationForm;
+use Src\Theme\View;
 
 class InsertController extends EntityController
 {
     public ?Model $object = null;
     public $insert_form;
+    private View $translationContent;
 
     public function preprocessPage()
     {
@@ -31,11 +34,11 @@ class InsertController extends EntityController
             Translation::getTranslation($this->entityName));
         }
         $this->insert_form = $this->object->getForm();
-        $this->insert_form->processForm();
+        $this->translationContent = EntityTranslationForm::select($this->insert_form, $this->object);
     }
 
     public function echoContent()
     {
-        return $this->insert_form;
+        return $this->translationContent ?? $this->insert_form;
     }
 }

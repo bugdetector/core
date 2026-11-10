@@ -288,7 +288,7 @@ class Product extends Model implements TranslatableInterface
    - **Read**: `$entity->getTranslatedField("title", $locale = null, $fallback = true)` (in Twig: `{{ item.getTranslatedField("title") }}`).
      When `$fallback` is `true` (default), missing or empty translations fall back to the main table's default-locale value; pass `$fallback = false` to get `''` when untranslated (used by `InsertForm`).
    - **Write**: `$entity->setTranslatedField("title", $content, $locale)` upserts the row in `{table}_translations` (empty/`null` updates `content` rather than deleting the row).
-   - **Forms & lifecycle**: `InsertForm` automatically renders language tabs and `translations[{locale}][{field}]` inputs for `TranslatableInterface` models. `Model::save()` calls `saveTranslations()` and `Model::delete()` calls `deleteTranslations()` automatically.
+   - **Forms & lifecycle**: Admin editing uses one locale at a time. The default locale uses the normal form; other locales use `EntityTranslationForm` for saved parent/child text fields only. `setTranslatableLocale()` selects the instance locale for translation methods without changing ordinary field values. Translation forms save translations directly; programmatic `Model::save()` / `delete()` lifecycle hooks remain available. Ordinary ORM mapping and relation arrays are unchanged.
    - **Caching**: `EntityTranslation` preloads all translatable fields for an `(identifier, locale)` pair in a single `PDO::FETCH_KEY_PAIR` query (`loadLocaleCache()`) and caches them statically in memory per request.
 
 ## Console commands
@@ -331,3 +331,5 @@ The Twig cache lives inside the container and starts empty with every new image.
 - Sessions support "remember me" tokens and login policies (`LOGIN_POLICY`).
 - Uploads live in `public_html/files/` and are served through `index.php`.
 - `HTTP_AUTH_ENABLED` protects the whole site with basic auth (useful for staging).
+
+See `docs/entity-translations.md` for usage examples, single-locale editing and nested translation forms.

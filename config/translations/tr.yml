@@ -237,6 +237,10 @@ subscribe_notifications_message: "<div class=\"d-flex flex-column text-center\">
 thanks: Teşekkürler
 big_integer: 'Büyük Tam Sayı (İşaretsiz)'
 translation_language: 'Çeviri Dili'
-translation_language_hint: 'Çevrilebilir alanları seçtiğiniz dilde düzenleyin'
+translation_language_hint: 'Her dil ayrı kaydedilir. Dil değiştirmeden önce değişikliklerinizi kaydedin.'
+translation_unsaved_title: 'Kaydedilmemiş değişiklikler'
+translation_unsaved_message: 'Dil değiştirmek sayfayı yeniden yükler. Kaydetmediğiniz değişiklikler kaybolacak. Önce kaydetmek için formda kalın.'
+translation_discard_switch: 'Kaydetmeden dili değiştir'
+translation_stay: 'Formda kal'
 is_compressed: Sıkıştırıldı
 'File is compressed.': 'Dosya sıkıştırıldı.'
