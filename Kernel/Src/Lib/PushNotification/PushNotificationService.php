@@ -101,8 +101,7 @@ class PushNotificationService
             $client = new Client([
                 "headers" =>
                 $pnEncrypt->getHeaders($pnVapid->getHeaders($subscription->endpoint)) + [
-                    "Content-Length" => mb_strlen($payload, '8bit'),
-                    "TTL" => 2419200
+                    "TTL" => "2419200"
                 ]
             ]);
             try {
@@ -128,18 +127,16 @@ class PushNotificationService
 
             $data = $payload->getPayload();
 
-            $message = CloudMessage::withTarget(
-                "token",
-                $subscription->keys->getValue()
-            )
+            $message = CloudMessage::new()
+                ->withToken($subscription->keys->getValue())
                 ->withNotification(Notification::create(
                     $data["title"],
                     $data["opt"]["body"],
                     @$data['opt']['icon'],
                 ))
                 ->withData([
-                    'url' => @$data['opt']['data']['url'],
-                    'image' => @$data['opt']['image']
+                    'url' => $data['opt']['data']['url'] ?? '',
+                    'image' => $data['opt']['image'] ?? ''
                 ]);
 
             try {

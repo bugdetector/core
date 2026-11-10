@@ -63,3 +63,12 @@ fields:
     values:
       temporary: temporary
       permanent: permanent
+  is_compressed:
+    type: checkbox
+    column_name: is_compressed
+    primary_key: false
+    autoIncrement: false
+    isNull: true
+    isUnique: false
+    default: null
+    comment: 'File is compressed.'
