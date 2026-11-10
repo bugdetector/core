@@ -53,6 +53,7 @@ class Translation extends Model
                 Translation::$language = APP_LANGUAGE;
             }
         }
+        \Locale::setDefault(self::$language);
         return self::$language;
     }
 

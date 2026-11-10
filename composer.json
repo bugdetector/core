@@ -1,15 +1,17 @@
 {
     "require": {
-        "twig/twig": "^3",
-        "squizlabs/php_codesniffer": "*",
-        "phpmailer/phpmailer": "^6.1",
-        "symfony/yaml": "^5.1",
-        "symfony/console": "^5.1",
-        "guzzlehttp/guzzle": "^7.5",
-        "symfony/event-dispatcher": "^6.3",
+        "twig/twig": "^3.30",
+        "squizlabs/php_codesniffer": "^4.0",
+        "phpmailer/phpmailer": "^7.2",
+        "symfony/yaml": "^8.1",
+        "symfony/console": "^8.1",
+        "guzzlehttp/guzzle": "^8.3",
+        "symfony/event-dispatcher": "^8.1",
         "peppeocchi/php-cron-scheduler": "^4.0",
-        "kreait/firebase-php": "^7.9",
-        "symfony/dotenv": "^6.4"
+        "kreait/firebase-php": "^8.6",
+        "symfony/dotenv": "^8.1",
+        "twig/intl-extra": "^3.30",
+        "ext-intl": "*"
     },
     "autoload": {
         "psr-4": {
@@ -20,7 +22,7 @@
     },
     "config": {
         "platform": {
-            "php": "8.4"
+            "php": "8.4.27"
         }
     }
 }

@@ -137,6 +137,10 @@ class ProfileForm extends Form
                     }
                 }
                 imagejpeg($image, $profilePhoto->getFilePath());
+                $profilePhoto->mime_type->setValue("image/jpeg");
+                $profilePhoto->file_size->setValue(filesize($profilePhoto->getFilePath()));
+                $profilePhoto->is_compressed->setValue(true);
+                $profilePhoto->save();
             }
         }
         return empty($this->errors);

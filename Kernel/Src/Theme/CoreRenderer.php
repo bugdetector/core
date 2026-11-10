@@ -12,6 +12,7 @@ use Symfony\Component\Yaml\Yaml;
 use Twig\Environment;
 use Twig\Extension\DebugExtension;
 use Twig\Extension\StringLoaderExtension;
+use Twig\Extra\Intl\IntlExtension;
 use Twig\Loader\FilesystemLoader;
 
 class CoreRenderer
@@ -34,6 +35,7 @@ class CoreRenderer
         $this->twig = new Environment($loader, $twig_options);
         $this->twig->addExtension(new CoreTwigExtension());
         $this->twig->addExtension(new StringLoaderExtension());
+        $this->twig->addExtension(new IntlExtension());
 
         $extensions = Yaml::parseFile(__DIR__ . "/../../../config/twig_extensions.yml");
         foreach ($extensions ?: [] as $extension) {

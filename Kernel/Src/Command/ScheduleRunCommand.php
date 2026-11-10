@@ -4,21 +4,21 @@ namespace Src\Command;
 
 use Exception;
 use GO\Scheduler;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Yaml;
 
+#[AsCommand(name: "schedule:run")]
 class ScheduleRunCommand extends Command
 {
-    protected static $defaultName = "schedule:run";
-
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription("Run the scheduled commands");
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
             $scheduledJobs = Yaml::parseFile(__DIR__ . "/../../../config/scheduled_jobs.yml");
