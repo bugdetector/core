@@ -14,6 +14,7 @@ use Src\Views\ViewGroup;
 class CollapsableWidgetGroup extends FormWidget
 {
     public ViewGroup $fieldGroup;
+    public array $translationObjects = [];
     public string $newFieldName;
     public string $entityName;
     public array $hiddenFields = [];
@@ -49,15 +50,15 @@ class CollapsableWidgetGroup extends FormWidget
 
     public function addCollapsibleObject(Model $object, int $index, bool $opened = false)
     {
-        $this->fieldGroup->addField(
-            self::getObjectCard(
-                $object,
-                $this->name,
-                $index,
-                $this->hiddenFields,
-                $this->showAddButtonAndLabel
-            )->setOpened($opened)
-        );
+        $card = self::getObjectCard(
+            $object,
+            $this->name,
+            $index,
+            $this->hiddenFields,
+            $this->showAddButtonAndLabel
+        )->setOpened($opened);
+        $this->fieldGroup->addField($card);
+        $this->translationObjects[] = [$object, $card];
     }
 
     public static function getObjectCard(

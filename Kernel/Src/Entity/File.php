@@ -3,6 +3,7 @@
 namespace Src\Entity;
 
 use CoreDB;
+use CoreDB\Kernel\Database\DataType\Checkbox;
 use CoreDB\Kernel\Database\DataType\EnumaratedList;
 use CoreDB\Kernel\Database\DataType\ShortText;
 use CoreDB\Kernel\Model;
@@ -39,7 +40,21 @@ class File extends Model
     */
     public EnumaratedList $status;
 
+    /**
+    * @var Checkbox $is_compressed
+    * File is compressed.
+    */
+    public Checkbox $is_compressed;
+
     public bool $isImage = false;
+
+    public function __construct(?string $tableName = null, array $mapData = [])
+    {
+        parent::__construct($tableName, $mapData);
+        if (!$this->ID->getValue()) {
+            $this->is_compressed->setValue(false);
+        }
+    }
     /**
      * @inheritdoc
      */
@@ -154,6 +169,7 @@ class File extends Model
             ->addAttribute("target", "_blank");
         $row["status"] = Translation::getTranslation($row["status"]);
         $row["file_size"] = $this->sizeConvertToString($row["file_size"]);
+        $row["is_compressed"] = Translation::getTranslation($row["is_compressed"] ? "yes" : "no");
         unset($row["ID"], $row["file_path"], $row["last_updated"], $row["extension"]);
     }
 

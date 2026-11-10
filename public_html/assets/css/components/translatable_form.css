@@ -12,7 +12,8 @@
     background-color: #e4e6ef;
 }
 
-.trans-lang-icon img {
+.trans-lang-icon img,
+.trans-lang-icon svg {
     max-height: 1.25rem;
     max-width: 1.5rem;
     height: auto;
@@ -20,7 +21,8 @@
     display: inline-block;
 }
 
-.trans-field-wrap [dir="rtl"] {
-    direction: rtl;
-    text-align: right;
+.trans-lang-icon p {
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
 }
