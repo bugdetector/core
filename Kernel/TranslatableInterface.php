@@ -17,9 +17,15 @@ interface TranslatableInterface
      */
     public static function getTranslationClass(): string;
 
+    public function setTranslatableLocale(string $locale): self;
+
+    public function getTranslatableLocale(): string;
+
     public function getTranslatedField(string $field, ?string $locale = null, bool $fallback = true): string;
 
     public function setTranslatedField(string $field, ?string $content, ?string $locale = null): void;
+
+    public function setTranslations(array $data): void;
 
     public function saveTranslations(?array $data = null): void;
 
