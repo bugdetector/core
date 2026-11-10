@@ -238,3 +238,5 @@ thanks: Teşekkürler
 big_integer: 'Büyük Tam Sayı (İşaretsiz)'
 translation_language: 'Çeviri Dili'
 translation_language_hint: 'Çevrilebilir alanları seçtiğiniz dilde düzenleyin'
+is_compressed: Sıkıştırıldı
+'File is compressed.': 'Dosya sıkıştırıldı.'
