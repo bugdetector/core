@@ -102,12 +102,17 @@ class Environment
 
     public static function isDev(): bool
     {
-        return APP_ENV == self::DEV;
+        return APP_ENV === self::DEV;
+    }
+
+    public static function isStaging(): bool
+    {
+        return APP_ENV === self::STAGING;
     }
 
     public static function isProd(): bool
     {
-        return APP_ENV == self::PROD;
+        return APP_ENV === self::PROD;
     }
 
     public static function get(string $key): string
