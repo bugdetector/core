@@ -3,6 +3,7 @@
 namespace Src\Theme;
 
 use CoreDB\Kernel\Database\DatabaseInstallationException;
+use CoreDB\Kernel\Environment;
 use Src\Entity\State;
 use Src\Entity\Translation;
 use Src\Entity\Variable;
@@ -23,7 +24,10 @@ class CoreTwigExtension extends AbstractExtension
             new TwigFunction("getTranslationIcons", [Translation::class, "getTranslationIcons"]),
             new TwigFunction("user", [\CoreDB::class, "currentUser"]),
             new TwigFunction("variable", [$this, "getVariable"]),
-            new TwigFunction("state", [$this, "getState"])
+            new TwigFunction("state", [$this, "getState"]),
+            new TwigFunction("isDev", [Environment::class, "isDev"]),
+            new TwigFunction("isStaging", [Environment::class, "isStaging"]),
+            new TwigFunction("isProd", [Environment::class, "isProd"]),
         ];
     }
 
