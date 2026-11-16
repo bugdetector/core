@@ -25,6 +25,7 @@ class EntityTranslationForm extends Form
         parent::__construct();
         $this->collect($source, $object);
         $this->addField(InputWidget::create('_translation_locale')->setType('hidden')->setValue($locale));
+        $icons = Translation::getTranslationIcons();
         foreach ($this->targets as $rows) {
             foreach ($rows as $target) {
                 $group = ViewGroup::create('fieldset', 'bg-light border border-gray-200 rounded p-4 mb-4');
@@ -34,8 +35,11 @@ class EntityTranslationForm extends Form
                     ->addField(TextElement::create('#' . $target['object']->ID->getValue())
                         ->addClass('ms-2 fs-7 fw-normal text-gray-700'))
                 );
-                foreach ($target['fields'] as $field) {
-                    $group->addField(ViewGroup::create('div', 'mb-3')->addField($field));
+                foreach ($target['fields'] as $fieldName => $fieldWidget) {
+                    $meta = $target['meta'][$fieldName] ?? [];
+                    $group->addField(
+                        $this->buildFieldComparisonRow($fieldName, $fieldWidget, $meta, $icons)
+                    );
                 }
                 $this->addField($group);
             }
@@ -141,14 +145,24 @@ class EntityTranslationForm extends Form
             $field = $match[1];
             $entity = $object->entityName ?: $object::getTableName();
             $id = $object->ID->getValue();
+            $defaultLocale = Translation::getDefaultLanguage();
+            $sourceValue = $object->getTranslatedField($field, $defaultLocale, false);
+            $fieldLabel = (string) ($view->label ?: Translation::getTranslation($field));
+            $isRichText = $view instanceof TextareaWidget && $view->hasClass('html-editor');
             $copy = clone $view;
             $object->setTranslatableLocale($this->locale);
             $copy->setName("translations[{$entity}][{$id}][{$field}]")
                 ->setValue($object->getTranslatedField($field, $this->locale, false))
+                ->setLabel('')
                 ->removeAttribute('id')->removeAttribute('required')
                 ->addAttribute('dir', Translation::getDirection($this->locale));
             $this->targets[$entity][$id]['object'] = $object;
             $this->targets[$entity][$id]['fields'][$field] = $copy;
+            $this->targets[$entity][$id]['meta'][$field] = [
+                'label' => $fieldLabel,
+                'sourceValue' => $sourceValue,
+                'isRichText' => $isRichText,
+            ];
         }
         if ($view instanceof CollapsableCard) {
             $this->collect($view->content, $object);
@@ -156,6 +170,125 @@ class EntityTranslationForm extends Form
         foreach ($view->fields ?? [] as $child) {
             $this->collect($child, $object);
         }
+    }
+
+    private function buildFieldComparisonRow(
+        string $fieldName,
+        View $fieldWidget,
+        array $meta,
+        array $icons
+    ): ViewGroup {
+        $defaultLocale = Translation::getDefaultLanguage();
+        $sourceValue = (string) ($meta['sourceValue'] ?? '');
+        $fieldLabel = (string) ($meta['label'] ?: $fieldName);
+
+        $row = ViewGroup::create('div', 'trans-field-row bg-white border border-gray-300 rounded p-4 mb-4');
+        $headerClasses = 'd-flex align-items-center justify-content-between pb-3 mb-3 border-bottom border-gray-200';
+        $row->addField(
+            ViewGroup::create('div', $headerClasses)
+                ->addField(
+                    TextElement::create($fieldLabel)
+                        ->setTagName('div')
+                        ->addClass('fs-6 fw-bold text-gray-900')
+                )
+                ->addField(
+                    TextElement::create($fieldName)
+                        ->setTagName('span')
+                        ->addClass('badge badge-light text-gray-600 fw-normal fs-8')
+                )
+        );
+
+        $encodedSource = json_encode(
+            $sourceValue,
+            JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE
+        );
+        $row->addField(
+            TextElement::create($encodedSource ?: '""')
+                ->setTagName('script')
+                ->setIsRaw(true)
+                ->addClass('trans-source-raw')
+                ->addAttribute('type', 'application/json')
+        );
+
+        $sourceHeader = ViewGroup::create('div', 'd-flex align-items-center justify-content-between gap-2 mb-2')
+            ->addField(
+                $this->buildLocaleBadge($defaultLocale, 'original_language', 'badge-light-primary', $icons)
+            );
+        if ($sourceValue !== '') {
+            $sourceHeader->addField(
+                ViewGroup::create('button', 'btn btn-sm btn-light-primary py-1 px-3 fs-8 trans-copy-btn')
+                    ->addAttribute('type', 'button')
+                    ->addField(ViewGroup::create('i', 'fa fa-copy me-1'))
+                    ->addField(TextElement::create(Translation::getTranslation('copy_to_translation')))
+            );
+        }
+
+        $sourceBox = ViewGroup::create('div', 'trans-source-box flex-grow-1')
+            ->addAttribute('dir', Translation::getDirection($defaultLocale));
+        if ($sourceValue === '') {
+            $sourceBox->addField(
+                TextElement::create(Translation::getTranslation('empty_original_value'))
+                    ->setTagName('div')
+                    ->addClass('text-muted fst-italic fs-7')
+            );
+        } elseif (!empty($meta['isRichText'])) {
+            $sourceBox->addField(
+                TextElement::create(\CoreDB::cleanXSS($sourceValue))
+                    ->setTagName('div')
+                    ->setIsRaw(true)
+                    ->addClass('trans-source-preview')
+            );
+        } else {
+            $sourceBox->addField(
+                TextElement::create($sourceValue)
+                    ->setTagName('div')
+                    ->addClass('trans-source-text text-break')
+            );
+        }
+
+        $sourceCol = ViewGroup::create('div', 'col-12 col-lg-6 d-flex flex-column')
+            ->addField($sourceHeader)
+            ->addField($sourceBox);
+
+        $targetHeader = ViewGroup::create('div', 'd-flex align-items-center justify-content-between gap-2 mb-2')
+            ->addField(
+                $this->buildLocaleBadge($this->locale, 'target_language', 'badge-light-success', $icons)
+            );
+        $targetCol = ViewGroup::create('div', 'col-12 col-lg-6 d-flex flex-column')
+            ->addField($targetHeader)
+            ->addField(ViewGroup::create('div', 'trans-target-input flex-grow-1')->addField($fieldWidget));
+
+        return $row->addField(
+            ViewGroup::create('div', 'row g-4 align-items-stretch')
+                ->addField($sourceCol)
+                ->addField($targetCol)
+        );
+    }
+
+    private function buildLocaleBadge(
+        string $locale,
+        string $roleKey,
+        string $badgeClass,
+        array $icons
+    ): ViewGroup {
+        $wrapper = ViewGroup::create('div', 'd-inline-flex align-items-center gap-2 flex-wrap');
+        if (!empty($icons[$locale])) {
+            $wrapper->addField(
+                ViewGroup::create('span', 'trans-lang-icon d-inline-flex align-items-center')
+                    ->addAttribute('aria-hidden', 'true')
+                    ->addField(TextElement::create($icons[$locale])->setIsRaw(true))
+            );
+        }
+        $wrapper->addField(
+            TextElement::create(Translation::getTranslation($locale))
+                ->addClass('fw-semibold text-gray-800 fs-7')
+        );
+        $wrapper->addField(
+            TextElement::create(Translation::getTranslation($roleKey))
+                ->setTagName('span')
+                ->addClass("badge {$badgeClass} fs-8")
+        );
+        return $wrapper;
     }
 
     public function getFormId(): string
