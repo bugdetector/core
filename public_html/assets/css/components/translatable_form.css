@@ -26,3 +26,39 @@
     display: inline-flex;
     align-items: center;
 }
+
+.trans-field-row {
+    transition: border-color 0.15s ease-in-out;
+}
+
+.trans-field-row:focus-within {
+    border-color: #b5b5c3 !important;
+}
+
+.trans-source-box {
+    background-color: #f9f9fb;
+    border: 1px dashed #d8dadd;
+    border-radius: 0.475rem;
+    padding: 0.85rem 1rem;
+    min-height: 44px;
+    color: #3f4254;
+}
+
+.trans-source-text {
+    white-space: pre-wrap;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.trans-source-preview {
+    max-height: 380px;
+    overflow-y: auto;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.trans-source-preview p:last-child,
+.trans-source-preview ul:last-child,
+.trans-source-preview ol:last-child {
+    margin-bottom: 0;
+}

@@ -243,4 +243,8 @@ translation_unsaved_message: 'Dil değiştirmek sayfayı yeniden yükler. Kaydet
 translation_discard_switch: 'Kaydetmeden dili değiştir'
 translation_stay: 'Formda kal'
 is_compressed: Sıkıştırıldı
-'File is compressed.': 'Dosya sıkıştırıldı.'
+original_language: Orijinal
+target_language: Çeviri
+copy_to_translation: 'Çeviriye Kopyala'
+empty_original_value: '(Orijinal değer boş)'
+file_compressed: 'Dosya sıkıştırıldı.'

@@ -9,6 +9,28 @@ $(function () {
             if (window.tinymce) window.tinymce.triggerSave();
             dirty = false;
         });
+        $(form).on('click', '.trans-copy-btn', function (event) {
+            event.preventDefault();
+            const row = $(this).closest('.trans-field-row');
+            const rawScript = row.find('script.trans-source-raw').first();
+            if (!rawScript.length) return;
+            let sourceValue = '';
+            try {
+                sourceValue = JSON.parse(rawScript.text());
+            } catch (e) {
+                return;
+            }
+            const targetInput = row.find(':input[name^="translations["]').first();
+            if (!targetInput.length) return;
+            const inputId = targetInput.attr('id');
+            if (window.tinymce && inputId && tinymce.get(inputId)) {
+                tinymce.get(inputId).setContent(sourceValue);
+                tinymce.get(inputId).fire('change');
+            } else {
+                targetInput.val(sourceValue).trigger('input').trigger('change');
+            }
+            dirty = true;
+        });
         function watchEditor(editor) {
             if (editor.targetElm.closest('form') === form) {
                 editor.on('change input', function () { dirty = true; });

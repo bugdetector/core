@@ -243,4 +243,8 @@ translation_unsaved_message: 'Switching languages reloads the page. Your unsaved
 translation_discard_switch: 'Switch without saving'
 translation_stay: 'Stay on this form'
 is_compressed: 'Is compressed'
-'File is compressed.': 'File is compressed.'
+original_language: Original
+target_language: Translation
+copy_to_translation: 'Copy to translation'
+empty_original_value: '(Original value is empty)'
+file_compressed: 'File is compressed.'
